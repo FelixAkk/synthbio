@@ -4,18 +4,21 @@
 
 \umlclass{Protein}{
   concentration \\
-  transcriptionrate \\
-  n \\
+  $K_m$ \\
+  $n$ \\
 }{}
-\umlclass[x=5]{BioBrick}{
+\umlclass[y=-6]{BioBrick}{
   proteins \\
   gates \\
 }{}
-\umlclass[y=-3]{SBML}{}{}
+\umlclass[x=6,y=-6]{Circuit}{bricks[]}{}
+
+\umlclass[x=6,y=0]{SBML}{circuit}{}
 
 
 
 \umlassoc[mult1=*, mult2=*]{Protein}{BioBrick}
-\umlinherit[geometry=-|, arg=represents]{SBML}{BioBrick}
+\umlassoc[mult1=*, mult2=*]{Circuit}{BioBrick}
+\umlinherit[geometry=-|, arg1=represents,align1=right]{SBML}{Circuit}
 \end{tikzpicture}
 

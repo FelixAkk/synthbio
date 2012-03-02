@@ -1,0 +1,6 @@
+#LaTeX files we are not interested in.
+*.log
+*.aux
+*.dvi
+*.toc
+*.out
