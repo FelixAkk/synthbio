@@ -1,0 +1,34 @@
+% activity diagram
+\begin{tikzpicture}
+
+\begin{umlstate}[x=0, y=0, name=state]{BioBrick Modeller}
+\umlstateinitial[name=initial]
+
+\umlbasicstate[y=-2, x=-3, name=import]{import}
+\umlbasicstate[y=-2, x=3, name=new]{new}
+\umlbasicstate[y=-3.5, name=edit]{edit}
+
+\umlbasicstate[y=-6, name=simulate]{simulate}
+
+\umlstatedecision[x=0, y=-7.5, name=decision]
+\umlbasicstate[y=-10, name=save]{save}
+
+\umlstatefinal[y=-12, name=final] 
+
+% transitions
+\umlHVtrans[arg={import SBML}, pos=0.5, align=above]{initial}{import}
+\umlHVtrans[arg={create new}, pos=0.5]{initial}{new}
+\umlVHtrans[arm1=-2cm, pos=0.5]{import}{edit}
+\umlVHtrans[pos=0.5]{new}{edit}
+\umltrans[pos=0.5]{edit}{simulate}
+\umltrans[pos=0.5]{simulate}{decision}
+
+\umlHVHtrans[arm2=2cm, arg={not done}]{decision}{edit}
+\umlHVHtrans[arm2=-2cm, arg={error}]{decision}{edit}
+
+\umltrans[pos=0.5, arg=done]{decision}{save}
+\umltrans[pos=0.5]{save}{final}
+
+\end{umlstate}
+
+\end{tikzpicture} 
