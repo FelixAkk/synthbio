@@ -1,0 +1,21 @@
+% documentation on tikz-uml:
+% http://www.ensta-paristech.fr/~kielbasi/tikzuml/index.php?lang=en&id=doc#t-1.1
+\begin{tikzpicture}
+
+\umlclass{Protein}{
+  concentration \\
+  transcriptionrate \\
+  n \\
+}{}
+\umlclass[x=5]{BioBrick}{
+  proteins \\
+  gates \\
+}{}
+\umlclass[y=-3]{SBML}{}{}
+
+
+
+\umlassoc[mult1=*, mult2=*]{Protein}{BioBrick}
+\umlinherit[geometry=-|, arg=represents]{SBML}{BioBrick}
+\end{tikzpicture}
+
