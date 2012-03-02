@@ -4,14 +4,14 @@
 \begin{umlstate}[x=0, y=0, name=state]{BioBrick Modeller}
 \umlstateinitial[name=initial]
 
-\umlbasicstate[y=-2, x=-3, name=import]{import}
-\umlbasicstate[y=-2, x=3, name=new]{new}
-\umlbasicstate[y=-3.5, name=edit]{edit}
+\umlusecase[y=-2, x=-3, name=import, fill=none]{import}
+\umlusecase[y=-2, x=3, name=new, fill=none]{new}
+\umlusecase[y=-3.5, name=edit,fill=none]{edit}
 
-\umlbasicstate[y=-6, name=simulate]{simulate}
+\umlusecase[y=-6, name=simulate, fill=none]{simulate}
 
 \umlstatedecision[x=0, y=-7.5, name=decision]
-\umlbasicstate[y=-10, name=save]{save}
+\umlusecase[y=-10, name=save, fill=none]{save}
 
 \umlstatefinal[y=-12, name=final] 
 
