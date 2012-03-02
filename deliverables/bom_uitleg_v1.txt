@@ -1,0 +1,3 @@
+Business Object Model explanation
+The objects of our model are the proteins, the biobricks, the circuits and the Systems Biology Markup Language.
+The protein is the smallest building block of the model, with proteins and gates we can form Biobricks. These Biobricks can then be connected to each other to form a circuit. The Systems Biology Markup Language (SBML) can be used to represent and describe these circuits. So from the circuit the resulting SBML can be obtained and vice versa.
