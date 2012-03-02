@@ -36,9 +36,9 @@ Jan Pieter Waagmeester}
 \section{Introduction} 		% (Niels)
 The purpose of biotechnology is to use micro-organisms like moulds and bacteria for the production of chemical substances. These chemical substances are used as energy (biofuels), in products (bioplastics), in food and in medicine. Not only can these micro-organisms produce, they can also be used to break down chemical substances, for example in the purification of water.\footnote{Programming Life – Contextproject assignment (Dick de Ridder, Marcel Reinders)}
 
-Using molecular biology, these micro-organisms can be altered to add, change or remove functionality. This is done by mutating the DNA of the organism. Synthetic biology is the science in which biology and engineering are combined to create new biological functionality\footnote{Programming Life – Contextproject kickoff (Dick de Ridder, Marcel Reinders)}. The engineering part is made easier by using biobricks\footnote{\url{http://biobricks.org/}}. These “bricks” are simple genetic circuits which provide a basic functionality (for example the imitation of an OR or AND gate) and share a common interface. By combining these biobricks, a new biological systems can be engineered.
+Using molecular biology, these micro-organisms can be altered to add, change or remove functionality. This is done by mutating the DNA of the organism. Synthetic biology is the science in which biology and engineering are combined to create new biological functionality\footnote{Programming Life – Contextproject kickoff (Dick de Ridder, Marcel Reinders)}. The engineering part is made easier by using biobricks\footnote{\url{http://biobricks.org/}}. These ``bricks" are simple genetic circuits which provide a basic functionality (for example the imitation of an OR or AND gate) and share a common interface. By combining these biobricks, a new biological systems can be engineered.
 
-In its abstract form, this system can be visualized as a logical circuit, but in the organism the circuit corresponds with a group of molecules (proteins, genes, RNA) that react with each other. How (and if) they will react depends on many different elements, like the concentration and reaction speed of a protein. This reaction can be simulated using a (heavily) simplified model.\footnote{see footnote 1}
+In its abstract form, this system can be visualized as a logical circuit, but in the organism the circuit corresponds with a group of molecules (proteins, genes, RNA) that react with each other. How (and if) they will react depends on many different elements, like the concentration and reaction speed of a protein. This reaction can be simulated using a (heavily) simplified model.\footnotemark[1]
 
 In this report, we will describe the design of a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using biobricks. We will clarify our proposed system using a list of requirements (2.1), a few analysis models (2.4), a business object model (2.5), a few dynamic models (2.6) and a preliminary drawing of the interface (2.7). In chapter 3 we will give a planning of the following of the project.
 
@@ -46,40 +46,85 @@ In this report, we will describe the design of a visual modeling environment for
 \subsection{Overview} 		% (Niels)
 In this document, we will provide an analysis and design proposal for a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using biobricks.
 
-\subsection{Functional requirements} % (Felix en Thomas)
-\subsection{Nonfunctional requirements and constraints} % (Felix en Thomas)
+
+In this chapter we will discuss the requirements for our BioBrick modeling application. What does the application have to do? What doesn't belong in the basic functionality? What kind of programming language will we use to develop this program and when is it due? These are the type of questions we will answer. First we will go into detail on functional requirements, so what does the program do? Secondly, we will discuss non-functional requirements. These are questions like: What programming language will we use, but also how we will increase the usability of the application. Finally we will have a look at constraints.
+
+\subsection{Functional requirements}
+The following are use cases the application must be able of completing in whatever way.
+
+
+
+\begin{enumerate}
+\item \textbf{Circuit abstraction} The application must be able to abstract a designed circuit into a BioBrick, and then treat this as a gate, so it can be used in building of subsequent circuits/BioBricks. 
+
+\item \textbf{Protein specification} The user must be able to manually specify which protein is used to represent which signal in a circuit.
+
+\item \textbf{Available proteins} The application must be able to present the user with an overview of available proteins to assign to signals. The available proteins must be predefined by a user.
+
+\item \textbf{Export XML} The application must be able to export a built circuit as a BioBrick in XML (in the SBML schema).
+\item \textbf{Import XML} The application must be able to import XML (in the SBML schema) into the application as a BioBrick.
+\item \textbf{Interfering/invalid signals} The application must be able to notify the user that the current circuit design has protein(s) assigned to multiple signals, or still has signals which do not have a protein assigned.
+\end{enumerate}
+
+\subsection{Pseudo-requirements}
+Non-functional requirements are requirements about how a the application behaves and operates (usability, accessibility, availability, performance). In this section we will also cover constraints on the source-code and development (programming language, documentation, tools/frameworks, compatibility, extensibility, maintainability, testability, deadlines).
+
+\begin{enumerate}
+\item \textbf{Documentation} For documentation we will use \LaTeX  to finalize the reports and will be written in English. GIT will be used for hosting and collaborating on documentation.
+\item \textbf{Tools/frameworks} The use of other software development tools has not been decided upon yet.
+\item \textbf{Testability} We want to be able to test every detail. We were discussion test drive development, but we have not fully decided upon that either. In any case, there should be a lot of tests, in the form of checks and sort of unit-tests, but also for user friendliness by real people.
+
+\item \textbf{Usability} Because the program is not made for information technology students so we will spend some time increasing the usability. However, the target group consists of scientists, and to be more specific, mainly bio-informatics experts. Because of this we will not create step-by-step tutorials. Our aim is to make the application basic enough so that a regular scientist can work with the application.
+
+\item \textbf{Extensibility} We want to create our application in such a way that BioBricks can be exported and re-used later as part of even greater BioBricks. As for the application, it is always best practice to make the application extendable, and so we shall aim for that.
+
+\item \textbf{Maintainability} Maintainability is actually not one of our focuses. Because the application works on its own, and is only required to be developed until the end of this semester, this is not a major concern.
+
+\item \textbf{Accessibility} Because our application frontend will be written for the web, we will host it somewhere and it should be accessible from anywhere, if there is internet. From the time of launch of our first version until the end of the project, there should always be a testable version hosted somewhere. It's also likely that we will use modern frameworks such as Bootstrap CSS to provide a high start-level of usability, although this has not been decided yet. The use of such well developed frameworks guarantees a high accessibility of the website.
+
+\item \textbf{Deadline} The first version is up for evaluation on the fourth of May (04-05-212). The final version of the application is due on the fifteenth of June (15-06-2012).
+\item \textbf{Biological plausibility} The application does \textit{not} have to give an biologically accurate or plausible simulation.
+
+\item \textbf{Frontend} The GUI frontend of the application will be a website written in HTML+CSS+JavaScript. This means our application frontend will be compatible with all the big operating systems that support web browsers.\item \textbf{Backend} The backend will be written in Java Server Pages.
+ 
+\end{enumerate}
+\pagebreak
 \subsection{Analysis models}
 \subsubsection{Use case model, descriptions and scenarios}
 \begin{figure}[h!]
 	\caption{Use cases}
-	\begin{center}
-	\include{pictures/usecase}
-	\end{center}
+	\centering\include{pictures/usecase}
 \end{figure}
 \subsection{Business Object model} % (Albert)
 \begin{figure}[h!]
 	\caption{Business Object model}
-	\begin{center}
-		\include{pictures/bom}
-	\end{center}
+	\centering\include{pictures/bom}
 \end{figure}
 
 \subsection{Dynamic models}
+
+\pagebreak
 \subsection{Interface} % (Jan Pieter)
+To model a network of circuit from the basic gates provided, a simple GUI is proposed in figure \ref{fig-gui}. Three different actions can be performed in the main working area: adding wires, AND- and NOT-gates. For each wire/signal a protein can be selected.
+
+The simulation can be run, and the result will be displayed in a simple graph.
 \begin{figure}[h!]
+	\label{fig-gui}	
 	\caption{Quick mockup of the Graphical user interface}
-	\begin{center}
-		\include{pictures/interface}
-	\end{center}
+	
+		\centering\include{pictures/interface}
+	
 \end{figure}
 
 \section{Planning}  % (Felix)
+\pagebreak
 \section{Glossary} % (Jan Pieter)
 \begin{description}
-	\item[Bio brick] blah
+	\item[BioBrick] Isolated and documented cell function to be reused in future projects. For example, the production of a light emitting protein when some other protein is available.
 	\item[DNA] \text{Deoxyribonucleic acid} is a very long molecule containing the information needed to support the life in allmost all creatures.
-	\item[Protein] is a complex molecule
-	\item[RNA] Working copy of the
+	\item[Protein] a complex molecule produces by certain processes in the cell. In turn it can activate other processes, or perform functions such as emission of light or change color.
+	\item[RNA] Working copy of the information in the DNA. This copy is then used to synthesize proteins.
 	\item[SBML] \textit{Systems Biology Markup Language} is a XML-based format for storage of various computermodels of biological processes.
+	\item[Simulation] Execution of a set of differential equations in order to predict the output of the modelled circuit
 \end{description}
 \end{document}
