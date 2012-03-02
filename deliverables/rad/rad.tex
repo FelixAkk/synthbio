@@ -24,11 +24,7 @@ Jan Pieter Waagmeester}
 
 \begin{document}
 \maketitle
-\begin{center}
 
-\end{center}
-
-%
 \vfill
 
 \small{\tableofcontents}
@@ -46,13 +42,17 @@ In this report, we will describe the design of a visual modeling environment for
 \subsection{Overview} 		% (Niels)
 In this document, we will provide an analysis and design proposal for a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using biobricks.
 
+We have made up a list of requirements which answer the following questions.  What does the application have to do? What doesn't belong in the basic functionality? What kind of programming language will we use to develop this program and when is it due? First we will go into detail on functional requirements (2.2), so what does the program do? Secondly, we will discuss non-functional requirements (2.3). These answer questions like: What programming language will we use, but also how we will increase the usability of the application. Finally we will have a look at constraints (2.4).
 
-In this chapter we will discuss the requirements for our BioBrick modeling application. What does the application have to do? What doesn't belong in the basic functionality? What kind of programming language will we use to develop this program and when is it due? These are the type of questions we will answer. First we will go into detail on functional requirements, so what does the program do? Secondly, we will discuss non-functional requirements. These are questions like: What programming language will we use, but also how we will increase the usability of the application. Finally we will have a look at constraints.
+Following the requirements we will specify a few use case models (2.5). These models describe specific scenarios of the program, what steps the user has to take to reach a goal and how the system should react to these steps. The main scenarios we will specify are loading/saving, modeling and simulating. Dynamic models such as sequence diagrams and activity diagrams will visualize the steps and interaction of the user and system in chapter 2.7.
 
+Our business object model (2.5) will clarify the key concepts and their roles of our application. It will give a simplified overview of how proteins, biobricks and the System Biology Markup Language (SBML) relate to each other.
+
+Last but not least, we will show a preliminary drawing of our interface (2.8) and explain why we have chosen for this interface and how it will work. Chapter 3 contains a planning for the rest of the project. This schedule is built up around the deadlines for the other documents and has a preliminary planning for the implementation fase.
+
+\pagebreak
 \subsection{Functional requirements}
 The following are use cases the application must be able of completing in whatever way.
-
-
 
 \begin{enumerate}
 \item \textbf{Circuit abstraction} The application must be able to abstract a designed circuit into a BioBrick, and then treat this as a gate, so it can be used in building of subsequent circuits/BioBricks. 
@@ -96,6 +96,9 @@ Non-functional requirements are requirements about how a the application behaves
 	\centering\include{pictures/usecase}
 \end{figure}
 \subsection{Business Object model} % (Albert)
+The objects of our model are the proteins, the biobricks, the circuits and the Systems Biology Markup Language.
+
+The protein is the smallest building block of the model, with proteins and gates we can form Biobricks. These Biobricks can then be connected to each other to form a circuit. The Systems Biology Markup Language (SBML) can be used to represent and describe these circuits. So from the circuit the resulting SBML can be obtained and vice versa.
 \begin{figure}[h!]
 	\caption{Business Object model}
 	\centering\include{pictures/bom}
@@ -116,7 +119,9 @@ The simulation can be run, and the result will be displayed in a simple graph.
 	
 \end{figure}
 
+\pagebreak
 \section{Planning}  % (Felix)
+
 \pagebreak
 \section{Glossary} % (Jan Pieter)
 \begin{description}
@@ -126,5 +131,6 @@ The simulation can be run, and the result will be displayed in a simple graph.
 	\item[RNA] Working copy of the information in the DNA. This copy is then used to synthesize proteins.
 	\item[SBML] \textit{Systems Biology Markup Language} is a XML-based format for storage of various computermodels of biological processes.
 	\item[Simulation] Execution of a set of differential equations in order to predict the output of the modelled circuit
+	\item[Transcription] Process of making the mRNA-copy of the DNA master.
 \end{description}
 \end{document}
