@@ -1,0 +1,17 @@
+%simple use case, depending on tikz-uml
+\begin{tikzpicture}
+\begin{umlsystem}[x=4, fill=red!10]{Biobrick modeler}
+	\umlusecase{Import SBML}
+	\umlusecase[y=-2]{Model Biobrick}
+	\umlusecase[x=4, y=-2]{Simulate}
+	\umlusecase[y=-4]{Export SBML}
+\end{umlsystem}
+
+\umlactor{user}
+
+\umlassoc{user}{usecase-1}
+\umlassoc{user}{usecase-2}
+\umlassoc{user}{usecase-3}
+\umlassoc{user}{usecase-4}
+
+\end{tikzpicture}
