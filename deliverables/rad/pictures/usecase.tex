@@ -1,10 +1,16 @@
 %simple use case, depending on tikz-uml
 \begin{tikzpicture}
-\begin{umlsystem}[x=4, fill=red!10]{Biobrick modeller}
-	\umlusecase{Import SBML}
-	\umlusecase[y=-2]{Model Biobrick}
-	\umlusecase[x=4, y=-2]{Simulate}
-	\umlusecase[y=-4]{Export SBML}
+\begin{umlsystem}[x=4.5, y=4, fill=red!10]{Biobrick modeller/simulator}
+	\umlusecase[y=-0.5, x=-1.5]{Start application}
+	\umlusecase[y=-5.5, x=4]{Model Biobrick}
+	\umlusecase[y=-8, x=4]{Simulate}
+	\umlusecase[y=-3.5, x=4]{Export SBML}
+	\umlusecase[y=-1.5, x=4]{Import SBML}
+	
+	\umlusecase[y=-7, x=10]{Specify protein}
+	\umlusecase[y=-3, x=10]{View available proteins}
+	
+	\umlusecase[y=-9, x=0]{Quit application}
 \end{umlsystem}
 
 \umlactor{user}
@@ -13,5 +19,14 @@
 \umlassoc{user}{usecase-2}
 \umlassoc{user}{usecase-3}
 \umlassoc{user}{usecase-4}
+\umlassoc{user}{usecase-5}
+\umlassoc{user}{usecase-8}
+\umlinclude{usecase-2}{usecase-6}
+\umlinclude{usecase-2}{usecase-1}
+\umlinclude{usecase-3}{usecase-1}
+\umlinclude{usecase-4}{usecase-1}
+\umlinclude{usecase-5}{usecase-1}
+\umlextend{usecase-2}{usecase-3}
+\umlextend{usecase-2}{usecase-7}
 
 \end{tikzpicture}
