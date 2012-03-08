@@ -1,0 +1,59 @@
+\subsection{Interface} % (Jan Pieter)
+
+% include common command to define the windows.
+\input{pictures/interface-common}
+
+When starting the program for the first time, the user is presented with window in build mode (\ref{fig-interface-empty}) containing a sidebar with the three elemental building blocks: wire, an AND-gate and a NOT-gate. The lower part of the sidebar is reserved for user-defined \textit{substructures}, as mentioned in functional requirement 1.
+The remainder of the window is a working area which is initially empty.
+On the top bar two menu items are present. One for basic file actions like export, save and import, the second for actions concerning the simulation of the brick.
+
+\begin{figure}[h!]
+	\label{fig-interface-empty}
+	\caption{Initial program state.}
+	\centering\begin{tikzpicture}
+		\programGUI{untitled.sbml}
+
+		\sidebar
+	\end{tikzpicture}
+\end{figure}
+
+\noindent To model a circuit, the elemental parts can be dragged into the working area, the gates may be connected using wires. The interface state after adding some wires is proposed in figure \ref{fig-interface-building}.
+
+\begin{figure}[h!]
+	\label{fig-interface-building}
+	\caption{After adding some gates to the working area.}
+	\centering
+	\begin{tikzpicture}
+		\programGUI{example42.sbml}
+		\sidebar
+
+		%define some gates in working area
+		\draw ( -2.5, 2.5) \gateAND -- ++(1, 0) \gateNOT -- ++(1, 0) -- ++(0, -1) \gateAND \terminal;
+
+		\draw ( -2.5, .9)  \gateAND -- ++( 4,0);
+		
+	\end{tikzpicture}
+\end{figure}
+
+\pagebreak
+\noindent After building the circuit, the user has to select which protein to use for each signal. This can be done during the building process aswell. In figure \ref{fig-interface-selectProtein} the protein selection dialog is shown for one signal, for some other signals the representing protein is shown above.
+\begin{figure}[h!]
+	\label{fig-interface-selectProtein}
+	\caption{Selecting a protein for the signal.}
+	\centering
+	\begin{tikzpicture}
+		\programGUI{example42.sbml}
+		\sidebar
+
+		\draw ( -2.5, 2.5) node[above right] {A} \gateAND -- node [above] {C} ++(1, 0) \gateNOT -- node [above] {F} ++(1, 0) -- ++(0, -1) \gateAND node[above left] {G} \terminal ;
+	
+		\draw ( -2.5, .9)  \gateAND -- ++( 4,0);
+
+		\draw ( 0, 1) [fill=black!30,line width=1pt] rectangle ++(3, -3)
+			++(-3, 3) node [anchor=north west] {\textit{Select signal}} rectangle ++(3, -.6)
+			++(-3, 0) node [anchor=north west] {protein A} rectangle ++(3, -.6)
+			++(-3, 0) node [anchor=north west] {protein B} rectangle ++(3, -.6)
+			++(-3, 0) node [anchor=north west] {protein C} rectangle ++(3, -.6)
+			++(-3, 0) node [anchor=north west] {protein D} rectangle ++(3, -.6);
+	\end{tikzpicture}
+\end{figure}
