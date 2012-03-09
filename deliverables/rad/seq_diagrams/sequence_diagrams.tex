@@ -1,0 +1,53 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usepackage[english]{babel}
+\usepackage{tikz-uml}
+
+\title{ Sequence diagrammen, requirements document }
+
+\begin{document}
+\maketitle
+
+\section{Use case \#1: Start application}
+\begin{tikzpicture}
+\begin{umlseqdiag}
+\umlactor{User}
+\umlobject{System}
+\umlobject{Interface}
+\begin{umlcall}[op={Start application}]{User}{System}
+\begin{umlcall}[op={Open initial program state}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\end{umlseqdiag} 
+\end{tikzpicture}
+
+\section{Use case \#2: Quit application}
+\begin{tikzpicture}
+\begin{umlseqdiag}
+\umlactor{User}
+\umlobject{System}
+\begin{umlcall}[op={Press close button}]{User}{System}
+\begin{umlcallself}[op={Abort actions}, type=asynchron, dt=5]{System}
+\end{umlcallself}
+\begin{umlcallself}[op={Close program}, type=asynchron, dt=5]{System}
+\end{umlcallself}
+\end{umlcall}
+\end{umlseqdiag} 
+\end{tikzpicture}
+
+\section{Use case \#3: Import SBML}
+\begin{tikzpicture}
+\begin{umlseqdiag}
+\umlactor{User}
+\umlobject{System}
+\begin{umlcall}[op={Press close button}]{User}{System}
+\begin{umlcallself}[op={Abort actions}, type=asynchron, dt = 5]{System}
+\end{umlcallself}
+\begin{umlcallself}[op={Close program}, type=asynchron, dt = 5]{System}
+\end{umlcallself}
+\end{umlcall}
+\end{umlseqdiag} 
+\end{tikzpicture}
+
+\end{document}
