@@ -111,12 +111,12 @@ We will describe some example scenario's to further explain this diagram.
 \end{figure}
 
 {\bf Start application}\\
-\begin{tabular}{ | l |@{}l@{}| } \hline
+\begin{tabular}{ | p{4cm} |@{}p{12cm}@{}| } \hline
 Primary Actor	& \; User \\  \hline
 Pre-condition	& \; The application was closed. \\  \hline
 Post-condition	& \; The application is ready for modeling.	\\  \hline
 Flow of events	& 
-	\begin{tabular}{c | l | l}
+	\begin{tabular}{p{0.7cm} | p{5cm} | p{5cm}}
 	   & Actor Input 	& System Response 	\\  \hline
 	1. & Start application. &				\\  \hline
 	2. & & The application opens and displays the initial program state. \\
@@ -124,12 +124,12 @@ Flow of events	&
 \end{tabular}\\
 
 {\bf Quit application}\\
-\begin{tabular}{ | l |@{}l@{}| } \hline
+\begin{tabular}{ | p{4cm} |@{}p{12cm}@{}| } \hline
 Primary Actor	& \; User \\  \hline
 Pre-condition	& \; The application is running. \\  \hline
 Post-condition	& \; The application has stopped running and is closed.	\\  \hline
 Flow of events	& 
-	\begin{tabular}{c | l | l}
+	\begin{tabular}{p{0.7cm} | p{5cm} | p{5cm}}
 	   & Actor Input 	& System Response 	\\  \hline
 	1. & Press close button. &				\\  \hline
 	2. & & The application will abort its actions and close. \\
@@ -137,12 +137,12 @@ Flow of events	&
 \end{tabular}\\
 
 {\bf Specify protein for signal}\\
-\begin{tabular}{ | l |@{}l@{}| } \hline
+\begin{tabular}{ | p{4cm} |@{}p{12cm}@{}| } \hline
 Primary Actor	& \; User \\  \hline
 Pre-condition	& \; The working area is showing at least one wire. \\  \hline
 Post-condition	& \; The wire has a specific protein appointed to it.	\\  \hline
 Flow of events	& 
-	\begin{tabular}{c | l | l}
+	\begin{tabular}{p{0.7cm} | p{5cm} | p{5cm}}
 	   & Actor Input 	& System Response 	\\  \hline
 	1. & Click the wire or its connector. &	\\  \hline
 	2. & & The selection dialog with available proteins is showed. \\  \hline
@@ -152,12 +152,12 @@ Flow of events	&
 \end{tabular}\\
 
 {\bf Model BioBrick}\\
-\begin{tabular}{ | l |@{}l@{}| } \hline
+\begin{tabular}{ | p{4cm} |@{}p{12cm}@{}| } \hline
 Primary Actor	& \; User \\  \hline
 Pre-condition	& \; The application is in its initial state. \\  \hline
 Post-condition	& \; The application is showing the modeled BioBrick.	\\  \hline
 Flow of events	& 
-	\begin{tabular}{c | l | l}
+	\begin{tabular}{p{0.7cm} | p{5cm} | p{5cm}}
 	   & Actor Input 	& System Response 	\\  \hline
 	1. & Drag and drop elemental parts into the working area. &	\\  \hline
 	2. & & The working area is showing the specified elemental parts. \\  \hline
@@ -169,12 +169,12 @@ Flow of events	&
 \end{tabular}\\
 
 {\bf Simulate BioBrick model}\\
-\begin{tabular}{ | l |@{}l@{}| } \hline
+\begin{tabular}{ | p{4cm} |@{}p{12cm}@{}| } \hline
 Primary Actor	& \; User \\  \hline
 Pre-condition	& \; The application is showing a valid model. \\  \hline
 Post-condition	& \; The application is showing a simulation of the output signal(s) over time.	\\  \hline
 Flow of events	& 
-	\begin{tabular}{c | l | l}
+	\begin{tabular}{p{0.7cm} | p{5cm} | p{5cm}}
 	   & Actor Input 	& System Response 	 \\  \hline
 	1. & Press simulate button in menu. &	 \\  \hline
 	2. & & The simulate menu is displayed.	 \\  \hline
@@ -184,12 +184,12 @@ Flow of events	&
 \end{tabular}\\
 
 {\bf Import SMBL}\\
-\begin{tabular}{ | l |@{}l@{}| } \hline
+\begin{tabular}{ | p{4cm} |@{}p{12cm}@{}| } \hline
 Primary Actor	& \; User \\  \hline
 Pre-condition	& \; The application is ready to model and file is a valid SBML file. \\  \hline
 Post-condition	& \; The application has imported an SBML file and the circuit is displayed.	\\  \hline
 Flow of events	& 
-	\begin{tabular}{c | l | l}
+	\begin{tabular}{p{0.7cm} | p{5cm} | p{5cm}}
 	   & Actor Input 	& System Response 	\\  \hline
 	1. & Press brick button in menu. &		\\  \hline
 	2. & & The brick menu is displayed. 	\\  \hline
@@ -201,12 +201,12 @@ Flow of events	&
 \end{tabular}\\
 
 {\bf Import invalid SMBL}\\
-\begin{tabular}{ | l |@{}l@{}| } \hline
+\begin{tabular}{ | p{4cm} |@{}p{12cm}@{}| } \hline
 Primary Actor	& \; User \\  \hline
 Pre-condition	& \; The application is ready to model and file is an invalid SBML file. \\  \hline
 Post-condition	& \; The application has shown an error message and has not imported anything.	\\  \hline
 Flow of events	& 
-	\begin{tabular}{c | l | l}
+	\begin{tabular}{p{0.7cm} | p{5cm} | p{5cm}}
 	   & Actor Input 	& System Response 	\\  \hline
 	1. & Press brick button in menu. &		\\  \hline
 	2. & & The brick menu is displayed. 	\\  \hline
@@ -218,12 +218,12 @@ Flow of events	&
 \end{tabular}\\
 
 {\bf Export SBML}\\
-\begin{tabular}{ | l |@{}l@{}| } \hline
+\begin{tabular}{ | p{4cm} |@{}p{12cm}@{}| } \hline
 Primary Actor	& \; User \\  \hline
 Pre-condition	& \; The application is showing a model. \\  \hline
 Post-condition	& \; The application has exported an SBML file.	\\  \hline
 Flow of events	& 
-	\begin{tabular}{c | l | l}
+	\begin{tabular}{p{0.7cm} | p{5cm} | p{5cm}}
 	   & Actor Input 	& System Response 	\\  \hline
 	1. & Press brick button in menu. &		\\  \hline
 	2. & & The brick menu is displayed. 	\\  \hline
