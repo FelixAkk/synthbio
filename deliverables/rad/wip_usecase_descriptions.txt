@@ -22,7 +22,7 @@ Pre-condition: The working area is showing at least one wire. \\
 Post-condition: The wire has a specific protein appointed to it. \\
 Flow of events: \\
 Actor Input - System Response \\
-1. Click the wire or a wire connector on a gate - .. \\
+1. Click the wire or its connector - .. \\
 2. .. - The selection dialog with available proteins is showed. \\
 3. Double click the wanted the protein - .. \\
 4. .. - The selected protein is appointed to the wire. \\
@@ -33,7 +33,7 @@ Pre-condition: The application is its initial state. \\
 Post-condition: The application is showing the modeled Biobrick. \\
 Flow of events: \\
 Actor Input - System Response \\
-1. Drag elemental parts into the working area - .. \\
+1. Drag and drop elemental parts into the working area - .. \\
 2. .. - The working area is showing the specified elemental parts. \\
 3. Connect the gates with wires - .. \\
 4. .. - The working area is showing a connected biological circuit. \\
@@ -43,7 +43,7 @@ Actor Input - System Response \\
 Simulate Biobrick model \\
 Primary actor: User \\
 Pre-condition: The application is showing a valid model. \\
-Post-condition: The application showing a simulation of the output signal(s) over time. \\
+Post-condition: The application is showing a simulation of the output signal(s) over time. \\
 Flow of events: \\
 Actor Input - System Response \\
 1. Press simulate button in menu - .. \\
