@@ -27,11 +27,14 @@
 \begin{umlseqdiag}
 \umlactor{User}
 \umlobject{System}
-\begin{umlcall}[op={Press close button}]{User}{System}
-\begin{umlcallself}[op={Abort actions}, type=asynchron, dt=5]{System}
+\umlobject{Interface}
+\begin{umlcall}[op={Press close button}]{User}{Interface}
+\begin{umlcall}[op={Close}]{Interface}{System}
+\begin{umlcallself}[op={Abort actions}, dt=5]{System}
 \end{umlcallself}
-\begin{umlcallself}[op={Close program}, type=asynchron, dt=5]{System}
+\begin{umlcallself}[op={Close program}, dt=5]{System}
 \end{umlcallself}
+\end{umlcall}
 \end{umlcall}
 \end{umlseqdiag} 
 \end{tikzpicture}
@@ -43,7 +46,36 @@
 \umlobject{System}
 \umlobject{Interface}
 \umlobject{SBML}
-\begin{umlcall}[op={Press Brick button}]{User}{System}
+
+\begin{umlcall}[op={Press Brick button}]{User}{Interface}
+\begin{umlcallself}[op={Display Brick menu}]{Interface}
+\end{umlcallself}
+\end{umlcall}
+
+\begin{umlcall}[op={Press import SBML button}]{User}{Interface}
+\begin{umlcallself}[op={Display ``choose file'' dialog}]{Interface}
+\end{umlcallself}
+\end{umlcall}
+
+\begin{umlcall}[op={Choose file and press OK}]{User}{Interface}
+\begin{umlcall}[op={Load SBML model}]{Interface}{System}
+\begin{umlcall}[op={Load SBML model from file}]{System}{SBML}
+\end{umlcall}
+\end{umlcall}
+\begin{umlcallself}[op={Display SBML model}]{Interface}
+\end{umlcallself}
+\end{umlcall}
+
+\end{umlseqdiag} 
+\end{tikzpicture}
+
+\section{Use case \#4: Specify protein for signal}
+\begin{tikzpicture}
+\begin{umlseqdiag}
+\umlactor{User}
+\umlobject{System}
+\umlobject{Interface}
+\begin{umlcall}[op={Click the wire or it's connector}]{User}{System}
 \begin{umlcall}[op={Display Brick menu}]{System}{Interface}
 \end{umlcall}
 \end{umlcall}
@@ -59,7 +91,5 @@
 \end{umlcall}
 \end{umlseqdiag} 
 \end{tikzpicture}
-
-
 
 \end{document}
