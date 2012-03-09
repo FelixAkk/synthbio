@@ -99,6 +99,130 @@ Non-functional requirements are requirements about how the application behaves a
 	\centering\include{pictures/usecase}
 \end{figure}
 
+{\bf Start application}\\
+\begin{tabular}{ | l |@{}l@{}| } \hline
+Primary Actor	& \; User \\  \hline
+Pre-condition	& \; The application was closed. \\  \hline
+Post-condition	& \; The application is ready for modeling.	\\  \hline
+Flow of events	& 
+	\begin{tabular}{c | l | l}
+	   & Actor Input 	& System Response 	\\  \hline
+	1. & Start application. &				\\  \hline
+	2. & & The application opens and displays the initial program state. \\
+	\end{tabular} \\ \hline
+\end{tabular}\\
+
+{\bf Quit application}\\
+\begin{tabular}{ | l |@{}l@{}| } \hline
+Primary Actor	& \; User \\  \hline
+Pre-condition	& \; The application is running. \\  \hline
+Post-condition	& \; The application has stopped running and is closed.	\\  \hline
+Flow of events	& 
+	\begin{tabular}{c | l | l}
+	   & Actor Input 	& System Response 	\\  \hline
+	1. & Press close button. &				\\  \hline
+	2. & & The application will abort its actions and close. \\
+	\end{tabular} \\ \hline
+\end{tabular}\\
+
+{\bf Specify protein for signal}\\
+\begin{tabular}{ | l |@{}l@{}| } \hline
+Primary Actor	& \; User \\  \hline
+Pre-condition	& \; The working area is showing at least one wire. \\  \hline
+Post-condition	& \; The wire has a specific protein appointed to it.	\\  \hline
+Flow of events	& 
+	\begin{tabular}{c | l | l}
+	   & Actor Input 	& System Response 	\\  \hline
+	1. & Click the wire or its connector. &	\\  \hline
+	2. & & The selection dialog with available proteins is showed. \\  \hline
+	3. & Double click the wanted protein. &	\\  \hline
+	4. & & The selected protein is appointed to the wire. \\
+	\end{tabular} \\ \hline
+\end{tabular}\\
+
+{\bf Model BioBrick}\\
+\begin{tabular}{ | l |@{}l@{}| } \hline
+Primary Actor	& \; User \\  \hline
+Pre-condition	& \; The application is in its initial state. \\  \hline
+Post-condition	& \; The application is showing the modeled BioBrick.	\\  \hline
+Flow of events	& 
+	\begin{tabular}{c | l | l}
+	   & Actor Input 	& System Response 	\\  \hline
+	1. & Drag and drop elemental parts into the working area. &	\\  \hline
+	2. & & The working area is showing the specified elemental parts. \\  \hline
+	3. & Connect the gates with wires. &	\\  \hline
+	4. & & The working area is showing a connected biological circuit. \\  \hline
+	5. & Select the protein signals for each wire. &	\\  \hline
+	6. & & The working area is showing a connected biological circuit. \\
+	\end{tabular} \\ \hline
+\end{tabular}\\
+
+{\bf Simulate BioBrick model}\\
+\begin{tabular}{ | l |@{}l@{}| } \hline
+Primary Actor	& \; User \\  \hline
+Pre-condition	& \; The application is showing a valid model. \\  \hline
+Post-condition	& \; The application is showing a simulation of the output signal(s) over time.	\\  \hline
+Flow of events	& 
+	\begin{tabular}{c | l | l}
+	   & Actor Input 	& System Response 	 \\  \hline
+	1. & Press simulate button in menu. &	 \\  \hline
+	2. & & The simulate menu is displayed.	 \\  \hline
+	3. & Press the start simulation button & \\  \hline
+	4. & & The application will show a simulation of the output signal(s) over time. \\
+	\end{tabular} \\ \hline
+\end{tabular}\\
+
+{\bf Import SMBL}\\
+\begin{tabular}{ | l |@{}l@{}| } \hline
+Primary Actor	& \; User \\  \hline
+Pre-condition	& \; The application is ready to model and file is a valid SBML file. \\  \hline
+Post-condition	& \; The application has imported an SBML file and the circuit is displayed.	\\  \hline
+Flow of events	& 
+	\begin{tabular}{c | l | l}
+	   & Actor Input 	& System Response 	\\  \hline
+	1. & Press brick button in menu. &		\\  \hline
+	2. & & The brick menu is displayed. 	\\  \hline
+	3. & Press the import SBML button. &	\\  \hline
+	4. & & Choose file dialog is displayed. \\  \hline
+	5. & Choose file and press OK. &		\\  \hline
+	6. & & The SBML model is loaded from the specified file and displayed. \\
+	\end{tabular} \\ \hline
+\end{tabular}\\
+
+{\bf Import invalid SMBL}\\
+\begin{tabular}{ | l |@{}l@{}| } \hline
+Primary Actor	& \; User \\  \hline
+Pre-condition	& \; The application is ready to model and file is an invalid SBML file. \\  \hline
+Post-condition	& \; The application has shown an error message and has not imported anything.	\\  \hline
+Flow of events	& 
+	\begin{tabular}{c | l | l}
+	   & Actor Input 	& System Response 	\\  \hline
+	1. & Press brick button in menu. &		\\  \hline
+	2. & & The brick menu is displayed. 	\\  \hline
+	3. & Press the import SBML button. &	\\  \hline
+	4. & & Choose file dialog is displayed. \\  \hline
+	5. & Choose file and press OK. &		\\  \hline
+	6. & & An error message is shown stating that given file is corrupt and the application has not imported anything. \\
+	\end{tabular} \\ \hline
+\end{tabular}\\
+
+{\bf Export SBML}\\
+\begin{tabular}{ | l |@{}l@{}| } \hline
+Primary Actor	& \; User \\  \hline
+Pre-condition	& \; The application is showing a model. \\  \hline
+Post-condition	& \; The application has exported an SBML file.	\\  \hline
+Flow of events	& 
+	\begin{tabular}{c | l | l}
+	   & Actor Input 	& System Response 	\\  \hline
+	1. & Press brick button in menu. &		\\  \hline
+	2. & & The brick menu is displayed. 	\\  \hline
+	3. & Press the export SBML button. &	\\  \hline
+	4. & & Choose file dialog is displayed. \\  \hline
+	5. & Choose file and press OK. &		\\  \hline
+	6. & & The SBML is saved to the specified file. \\
+	\end{tabular} \\ \hline
+\end{tabular}\\
+
 \pagebreak
 \subsection{Business Object model} % (Albert)
 The objects of our model are the proteins, the biobricks, the circuits and the Systems Biology Markup Language.
