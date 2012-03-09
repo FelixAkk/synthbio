@@ -1,0 +1,78 @@
+Start application \\
+Primary actor: User \\
+Pre-condition: The application was closed. \\
+Post-condition: The application is ready for modeling. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Start application - .. \\
+2. .. - The application opens and displays the initial program state.\\
+
+Quit application \\
+Primary actor: User \\
+Pre-condition: The application is running. \\
+Post-condition: The application has stopped running and is closed. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Press close button - .. \\
+2. .. - The application will abort its actions and close. \\
+
+Specify protein for signal \\
+Primary actor: User \\
+Pre-condition: The working area is showing at least one wire. \\
+Post-condition: The wire has a specific protein appointed to it. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Click the wire or its connector - .. \\
+2. .. - The selection dialog with available proteins is showed. \\
+3. Double click the wanted the protein - .. \\
+4. .. - The selected protein is appointed to the wire. \\
+
+Model Biobrick \\
+Primary actor: User \\
+Pre-condition: The application is its initial state. \\
+Post-condition: The application is showing the modeled Biobrick. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Drag and drop elemental parts into the working area - .. \\
+2. .. - The working area is showing the specified elemental parts. \\
+3. Connect the gates with wires - .. \\
+4. .. - The working area is showing a connected biological circuit. \\
+5. Select the protein signals for each wire. - .. \\
+6. .. - The working area is showing a connected biological circuit. \\
+
+Simulate Biobrick model \\
+Primary actor: User \\
+Pre-condition: The application is showing a valid model. \\
+Post-condition: The application is showing a simulation of the output signal(s) over time. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Press simulate button in menu - .. \\
+2. .. - The similate menu is displayed. \\
+3. Press the start simulation button - .. \\
+4. .. - The application will show a simulation of the output signal(s) over time. \\
+
+Import SBML \\
+Primary actor: User \\
+Pre-condition: The application is ready to model and file is a valid SBML file. \\
+Post-condition: The application has imported an SBML file. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Press brick button in menu - .. \\
+2. .. - The brick menu is displayed. \\
+3. Press the import SBML button - .. \\
+4. .. - Choose file dialog is displayed. \\
+5. Choose file and press OK. - .. \\
+6. .. - The SBML model is loaded from the specified file and displayed. \\
+
+Export SBML \\
+Primary actor: User \\
+Pre-condition: The application is showing a model. \\
+Post-condition: The application has exported an SMBL file. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Press brick button in menu - .. \\
+2. .. - The brick menu is displayed. \\
+3. Press the export SBML button - .. \\
+4. .. - Choose file dialog is displayed. \\
+5. Choose file and press OK. - .. \\
+6. .. - The SBML is saved to the specified file. \\
