@@ -1,0 +1,7 @@
+In this usecase diagram you can see all the different option available for our user. 
+Inbetween starting and closing the application, the user can model BioBricks. 
+Once these BioBricks are modeled they can be exported to SBML. 
+These SBML files can be imported again and used to create more complex BioBricks. 
+During the modeling, the user can specify which proteins will be used as input.
+Once the BioBricks have been modeled, their output can be simulated.
+We will describe some example scenario's to further explain this diagram.
