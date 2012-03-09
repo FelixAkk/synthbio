@@ -1,0 +1,44 @@
+% (Niels)
+Start application \\
+Primary actor: User \\
+Pre-condition: The application was closed. \\
+Post-condition: The application is ready for modeling. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Start application - .. \\
+2. .. - The application opens and displays the initial program state.\\
+
+Quit application \\
+Primary actor: User \\
+Pre-condition: The application is running. \\
+Post-condition: The application has stopped running and is closed. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Press close button - .. \\
+2. .. - The application will abort its actions and close.\\
+
+Import SBML \\
+Primary actor: User \\
+Pre-condition: The application is ready to model and file is a valid SBML file. \\
+Post-condition: The application has imported an SBML file. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Press brick button in menu - .. \\
+2. .. - The brick menu is displayed. \\
+3. Press the import SBML button - .. \\
+4. .. - Choose file dialog is displayed. \\
+5. Choose file and press OK. - .. \\
+6. .. - The SBML model is loaded from the specified file and displayed. \\
+
+Export SBML \\
+Primary actor: User \\
+Pre-condition: The application is showing a model. \\
+Post-condition: The application has exported an SMBL file. \\
+Flow of events: \\
+Actor Input - System Response \\
+1. Press brick button in menu - .. \\
+2. .. - The brick menu is displayed. \\
+3. Press the export SBML button - .. \\
+4. .. - Choose file dialog is displayed. \\
+5. Choose file and press OK. - .. \\
+6. .. - The SBML is saved to the specified file. \\
