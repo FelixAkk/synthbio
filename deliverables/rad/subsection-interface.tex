@@ -3,25 +3,24 @@
 % include common command to define the windows.
 \input{pictures/interface-common}
 
-When starting the program for the first time, the user is presented with window in build mode (\ref{fig-interface-empty}) containing a sidebar with the three elemental building blocks: wire, an AND-gate and a NOT-gate. The lower part of the sidebar is reserved for user-defined \textit{substructures}, as mentioned in functional requirement 1.
+When starting the program for the first time, the user is presented with window in build mode (figure~\ref{fig-interface-empty}) containing a sidebar with the three elemental building blocks: wire, an AND-gate and a NOT-gate. The lower part of the sidebar is reserved for user-defined \textit{substructures}, as mentioned in functional requirement 1.
 The remainder of the window is a working area which is initially empty.
 On the top bar two menu items are present. One for basic file actions like export, save and import, the second for actions concerning the simulation of the brick.
 
 \begin{figure}[h!]
-	\label{fig-interface-empty}
 	\caption{Initial program state.}
+	\label{fig-interface-empty}
 	\centering\begin{tikzpicture}
 		\programGUI{untitled.sbml}
-
 		\sidebar
 	\end{tikzpicture}
 \end{figure}
 
-\noindent To model a circuit, the elemental parts can be dragged into the working area, the gates may be connected using wires. The interface state after adding some wires is proposed in figure \ref{fig-interface-building}.
+\noindent To model a circuit, the elemental parts can be dragged into the working area, the gates may be connected using wires. The interface state after adding some wires is proposed in figure~\ref{fig-interface-building}.
 
 \begin{figure}[h!]
-	\label{fig-interface-building}
 	\caption{After adding some gates to the working area.}
+	\label{fig-interface-building}
 	\centering
 	\begin{tikzpicture}
 		\programGUI{example42.sbml}
@@ -36,10 +35,10 @@ On the top bar two menu items are present. One for basic file actions like expor
 \end{figure}
 
 \pagebreak
-\noindent After building the circuit, the user has to select which protein to use for each signal. This can be done during the building process aswell. In figure \ref{fig-interface-selectProtein} the protein selection dialog is shown for one signal, for some other signals the representing protein is shown above.
+\noindent After building the circuit, the user has to select which protein to use for each signal. This can be done during the building process aswell. In figure~\ref{fig-interface-selectProtein} the protein selection dialog is shown for one signal, for some other signals the representing protein is shown above.
 \begin{figure}[h!]
-	\label{fig-interface-selectProtein}
 	\caption{Selecting a protein for the signal.}
+	\label{fig-interface-selectProtein}
 	\centering
 	\begin{tikzpicture}
 		\programGUI{example42.sbml}
@@ -59,10 +58,10 @@ On the top bar two menu items are present. One for basic file actions like expor
 \end{figure}
 
 
-\noindent If the user is satisfied with the circuit, the simulate mode can be selected. For each input protein, the concentration as a function of time can be changed. The program will calculate and display the results as shown in figure \ref{fig-interface-simulation}.
+\noindent If the user is satisfied with the circuit, the simulate mode can be selected. For each input protein, the concentration as a function of time can be changed. The program will calculate and display the results as shown in figure~\ref{fig-interface-simulation}.
 \begin{figure}[h!]
+	\caption{Simulation of the BioBrick}
 	\label{fig-interface-simulation}
-	\caption{Simulation of the BioBrick} 
 	\centering\begin{tikzpicture}
 		\programGUI{simulate.sbml}
 
