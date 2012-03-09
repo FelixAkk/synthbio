@@ -21,3 +21,25 @@
 \end{umlcall}
 \end{umlseqdiag} 
 \end{tikzpicture}
+
+\section{Use case \#6: Model BioBrick}
+\begin{tikzpicture}
+\begin{umlseqdiag}
+\umlactor{User}
+\umlobject{System}
+\umlobject{Interface}
+\begin{umlfragment}[type=alt, name=Modeling]
+\begin{umlcall}[op={Drag and drop elements from elements-bar to workspace}]{User}{System}
+\begin{umlcall}[op={Show the BioBrick element in the workspace}]{System}{Interface}
+\begin{umlcall}[op={Connect BioBrick partswith wires}]{User}{System}
+\begin{umlcall}[op={Show biological circuit}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\end{umlcall}
+\end{umlfragment}
+\begin{umlcall}[op={Assign proteins to wires}]{User}{System}
+\begin{umlcall}[op={Show full circuit or error message}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\end{umlseqdiag} 
+\end{tikzpicture}
