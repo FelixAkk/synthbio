@@ -93,9 +93,20 @@ Non-functional requirements are requirements about how the application behaves a
 \end{enumerate}
 \pagebreak
 \subsection{Analysis models}
+In this section, we discribe
+
+
 \subsubsection{Use case model, descriptions and scenarios}
+In the usecase diagram in figure~\ref{fig-usecase} you can see all the different option available for our user. 
+Inbetween starting and closing the application, the user can model BioBricks. 
+Once these BioBricks are modeled they can be exported to SBML. 
+These SBML files can be imported again and used to create more complex BioBricks. 
+During the modeling, the user can specify which proteins will be used as input.
+Once the BioBricks have been modeled, their output can be simulated.
+We will describe some example scenario's to further explain this diagram.
 \begin{figure}[h!]
 	\caption{Usecase diagram}
+	\label{fig-usecase}
 	\centering\include{pictures/usecase}
 \end{figure}
 
@@ -224,7 +235,7 @@ Flow of events	&
 \end{tabular}\\
 
 \pagebreak
-\subsection{Business Object model} % (Albert)
+\subsubsection{Business Object model} % (Albert)
 The objects of our model are the proteins, the biobricks, the circuits and the Systems Biology Markup Language.
 
 The protein is the smallest building block of the model, with proteins and gates we can form Biobricks. These Biobricks can then be connected to each other to form a circuit. The Systems Biology Markup Language (SBML) can be used to represent and describe these circuits. So from the circuit the resulting SBML can be obtained and vice versa.
@@ -233,7 +244,7 @@ The protein is the smallest building block of the model, with proteins and gates
 	\centering\include{pictures/bom}
 \end{figure}
 
-\subsection{Dynamic models}
+\subsubsection{Dynamic models}
 When the user enters the program, two options are available, he can import an existing circuit (SBML-file) or create a new one. The user then edits the circuit to suit his needs. After the editing the circuit can be simulated, if the user choses the proteins wrong an error will occur and more editing will be in order, if the user decides he is not done yet with editing he can continue after the simulation. When the user is done he can save the circuit as a SBML-file.
 \begin{figure}[h!]
 	\caption{Activity diagram}
