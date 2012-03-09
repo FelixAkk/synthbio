@@ -35,9 +35,9 @@ The purpose of biotechnology is to use micro-organisms like moulds and bacteria 
 
 Using molecular biology, these micro-organisms can be altered to add, change or remove functionality. This is done by mutating the DNA of the organism. Synthetic biology is the science in which biology and engineering are combined to create new biological functionality\footnote{Programming Life – Contextproject kickoff (Dick de Ridder, Marcel Reinders)}. The engineering part is made easier by using biobricks\footnote{\url{http://biobricks.org/}}. These ``bricks" are simple genetic circuits which provide a basic functionality (for example the imitation of an OR or AND gate) and share a common interface. By combining these biobricks, a new biological systems can be engineered.
 
-In its abstract form, this system can be visualized as a logical circuit, but in the organism the circuit corresponds with a group of molecules (proteins, genes, RNA) that react with each other. How (and if) they will react depends on many different elements, like the concentration and reaction speed of a protein. This reaction can be simulated using a (heavily) simplified model.\footnotemark[1]
+In its abstract form, this system can be visualized as a logical circuit, but in the organism the circuit corresponds with a group of molecules (proteins, genes, RNA) that react with each other. How (and if) they will react depends on many different elements, like the concentration and reaction speed of a protein. This reaction can be simulated using a (heavily) simplified model\footnotemark[1].
 
-A logical circuit of biobricks can be defined using the System Biology Markup Language (SBML). SBML is a free and open interchange format for computer models of biological processes. \footnote{\url{http://sbml.org/Main_Page}} It is a widely supported format that continues to evolve and expand.
+A logical circuit of biobricks can be defined using the System Biology Markup Language (SBML). SBML is a free and open interchange format for computer models of biological processes\footnote{\url{http://sbml.org/Main_Page}}. It is a widely supported format that continues to evolve and expand.
 
 In this report, we will describe the design of a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using biobricks. We will clarify our proposed system using a list of requirements (2.2-2.4), a few analysis models (2.5), a business object model (2.6), a few dynamic models (2.7) and a preliminary drawing of the interface (2.8). In chapter 3 we will give a planning of the following of the project.
 
@@ -74,14 +74,14 @@ Non-functional requirements are requirements about how the application behaves a
 
 \begin{enumerate}
 \item \textbf{Documentation} For documentation we will use \LaTeX  to finalize the reports and will be written in English. GIT will be used for hosting and collaborating on documentation.
-\item \textbf{Tools/frameworks} The use of other software development tools has not been decided upon yet.
-\item \textbf{Testability} We want to be able to test every detail. We were discussion test drive development, but we have not fully decided upon that either. In any case, there should be a lot of tests, in the form of checks and sort of unit-tests, but also for user friendliness by real people.
+\item \textbf{Tools/frameworks} As mentioned before, we will use GIT and \LaTeX, but also other tools for this project. The program will be written in mutiple languages. We will create the GUI and frontend in JavaScript. The backend will be implemented in Java. The tools we will use to test this are JUnit and Crawljax. Furthermore, we will use the Java library LibSBML to implement the saving/exporting of our BioBricks.
+\item \textbf{Testability} We want to be able to test every detail. We will look at three major subjects: user-friendliness, errors in the web application and errors in the java backend. To test user-friendliness we will have normal people try our program to test the feel of the program. We will use crawljax to find as many errors in the web application as possible. Crawljax is a sort of bot which tries every possible option in a webbased application. We will use JUnit to test the java backend.
 
-\item \textbf{Usability} Because the program is not made for information technology students so we will spend some time increasing the usability. However, the target group consists of scientists, and to be more specific, mainly bio-informatics experts. Because of this we will not create step-by-step tutorials. Our aim is to make the application basic enough so that a regular scientist can work with the application.
+\item \textbf{Usability} Because the program is not made for information technology students, we will spend some time increasing the usability. However, the target group consists of scientists, and to be more specific, mainly bio-informatics experts. Because of this, we will not create step-by-step tutorials. Our aim is to make the application basic enough so a regular scientist can work with the application, without detailed tutorials.
 
 \item \textbf{Extensibility} We want to create our application in such a way that BioBricks can be exported and re-used later as part of even greater BioBricks. As for the application, it is always best practice to make the application extendable, and so we shall aim for that.
 
-\item \textbf{Maintainability} Maintainability is actually not one of our focuses. Because the application works on its own, and is only required to be developed until the end of this semester, this is not a major concern.
+\item \textbf{Maintainability} Maintainability is also very important, not only for future use but also for the development process. Because of the agile workform we will be maintaining, it is crucial to keep an oversight and a well defined structure within our program. If we lose this, there is a high risk of bugs and superfluous code.
 
 \item \textbf{Accessibility} Because our application frontend will be written for the web, we will host it somewhere and it should be accessible from anywhere, if there is internet. From the time of launch of our first version until the end of the project, there should always be a testable version hosted somewhere. It's also likely that we will use modern frameworks such as Bootstrap CSS to provide a high start-level of usability, although this has not been decided yet. The use of such well developed frameworks guarantees a high accessibility of the website.
 
@@ -98,6 +98,8 @@ Non-functional requirements are requirements about how the application behaves a
 	\caption{Usecase diagram}
 	\centering\include{pictures/usecase}
 \end{figure}
+
+\pagebreak
 \subsection{Business Object model} % (Albert)
 The objects of our model are the proteins, the biobricks, the circuits and the Systems Biology Markup Language.
 
