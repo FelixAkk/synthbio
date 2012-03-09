@@ -41,13 +41,25 @@
 \begin{umlseqdiag}
 \umlactor{User}
 \umlobject{System}
-\begin{umlcall}[op={Press close button}]{User}{System}
-\begin{umlcallself}[op={Abort actions}, type=asynchron, dt = 5]{System}
-\end{umlcallself}
-\begin{umlcallself}[op={Close program}, type=asynchron, dt = 5]{System}
-\end{umlcallself}
+\umlobject{Interface}
+\umlobject{SBML}
+\begin{umlcall}[op={Press Brick button}]{User}{System}
+\begin{umlcall}[op={Display Brick menu}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\begin{umlcall}[op={Press import SBML button}]{User}{System}
+\begin{umlcall}[op={Display ``choose file'' dialog}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\begin{umlcall}[op={Choose file and press OK}]{User}{System}
+\begin{umlcall}[op={Load SBML model from file}]{System}{SBML}
+\end{umlcall}
+\begin{umlcall}[op={Display SBML model}]{System}{Interface}
+\end{umlcall}
 \end{umlcall}
 \end{umlseqdiag} 
 \end{tikzpicture}
+
+
 
 \end{document}
