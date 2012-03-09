@@ -33,23 +33,23 @@ Jan Pieter Waagmeester}
 \section{Introduction} 		% (Niels)
 The purpose of biotechnology is to use micro-organisms like moulds and bacteria for the production of chemical substances. These chemical substances are used as energy (biofuels), in products (bioplastics), in food and in medicine. Not only can these micro-organisms produce, they can also be used to break down chemical substances, for example in the purification of water\footnote{Programming Life – Contextproject assignment (Dick de Ridder, Marcel Reinders)}.
 
-Using molecular biology, these micro-organisms can be altered to add, change or remove functionality. This is done by mutating the DNA of the organism. Synthetic biology is the science in which biology and engineering are combined to create new biological functionality\footnote{Programming Life – Contextproject kickoff (Dick de Ridder, Marcel Reinders)}. The engineering part is made easier by using biobricks\footnote{\url{http://biobricks.org/}}. These ``bricks" are simple genetic circuits which provide a basic functionality (for example the imitation of an OR or AND gate) and share a common interface. By combining these biobricks, a new biological systems can be engineered.
+Using molecular biology, these micro-organisms can be altered to add, change or remove functionality. This is done by mutating the DNA of the organism. Synthetic biology is the science in which biology and engineering are combined to create new biological functionality\footnote{Programming Life – Contextproject kickoff (Dick de Ridder, Marcel Reinders)}. The engineering part is made easier by using BioBricks\footnote{\url{http://biobricks.org/}}. These ``bricks" are simple genetic circuits which provide a basic functionality (for example the imitation of an OR or AND gate) and share a common interface. By combining these BioBricks, a new biological systems can be engineered.
 
 In its abstract form, this system can be visualized as a logical circuit, but in the organism the circuit corresponds with a group of molecules (proteins, genes, RNA) that react with each other. How (and if) they will react depends on many different elements, like the concentration and reaction speed of a protein. This reaction can be simulated using a (heavily) simplified model\footnotemark[1].
 
-A logical circuit of biobricks can be defined using the System Biology Markup Language (SBML). SBML is a free and open interchange format for computer models of biological processes\footnote{\url{http://sbml.org/Main_Page}}. It is a widely supported format that continues to evolve and expand.
+A logical circuit of BioBricks can be defined using the System Biology Markup Language (SBML). SBML is a free and open interchange format for computer models of biological processes\footnote{\url{http://sbml.org/Main_Page}}. It is a widely supported format that continues to evolve and expand.
 
-In this report, we will describe the design of a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using biobricks. We will clarify our proposed system using a list of requirements (2.2-2.4), a few analysis models (2.5), a business object model (2.6), a few dynamic models (2.7) and a preliminary drawing of the interface (2.8). In chapter 3 we will give a planning of the following of the project.
+In this report, we will describe the design of a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using BioBricks. We will clarify our proposed system using a list of requirements (2.2-2.4), a few analysis models (2.5), a business object model (2.6), a few dynamic models (2.7) and a preliminary drawing of the interface (2.8). In chapter 3 we will give a planning of the following of the project.
 
 \section{Proposed system}
 \subsection{Overview} 		% (Niels)
-In this document, we will provide an analysis and design proposal for a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using biobricks.
+In this document, we will provide an analysis and design proposal for a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using BioBricks.
 
 We have made up a list of requirements which answer the following questions.  What does the application have to do? What doesn't belong in the basic functionality? What kind of programming language will we use to develop this program and when is it due? First we will go into detail on functional requirements (2.2), so what does the program do? Secondly, we will discuss non-functional requirements (2.3). These answer questions like: What programming language will we use, but also how we will increase the usability of the application. Finally we will have a look at constraints (2.4).
 
 Following the requirements we will specify a few use case models (2.5). These models describe specific scenarios of the program, what steps the user has to take to reach a goal and how the system should react to these steps. The main scenarios we will specify are loading/saving, modeling and simulating. Dynamic models such as sequence diagrams and activity diagrams will visualize the steps and interaction of the user and system in chapter 2.7.
 
-Our business object model (2.5) will clarify the key concepts and their roles of our application. It will give a simplified overview of how proteins, biobricks and the System Biology Markup Language (SBML) relate to each other.
+Our business object model (2.5) will clarify the key concepts and their roles of our application. It will give a simplified overview of how proteins, BioBricks and the System Biology Markup Language (SBML) relate to each other.
 
 Last but not least, we will show a preliminary drawing of our interface (2.8) and explain why we have chosen for this interface and how it will work. Chapter 3 contains a planning for the rest of the project. This schedule is built up around the deadlines for the other documents and has a preliminary planning for the implementation fase.
 
@@ -113,9 +113,9 @@ We will describe some example scenario's to further explain this diagram.
 \include{scenarios}
 
 \subsubsection{Business Object model} % (Albert)
-The objects of our model are the proteins, the biobricks, the circuits and the Systems Biology Markup Language.
+The objects of our model are the proteins, the BioBricks, the circuits and the Systems Biology Markup Language.
 
-The protein is the smallest building block of the model, with proteins and gates we can form Biobricks. These Biobricks can then be connected to each other to form a circuit. The Systems Biology Markup Language (SBML) can be used to represent and describe these circuits. So from the circuit the resulting SBML can be obtained and vice versa.
+The protein is the smallest building block of the model, with proteins and gates we can form BioBricks. These BioBricks can then be connected to each other to form a circuit. The Systems Biology Markup Language (SBML) can be used to represent and describe these circuits. So from the circuit the resulting SBML can be obtained and vice versa.
 \begin{figure}[h!]
 	\caption{Business Object model}
 	\label{fig-bom}
