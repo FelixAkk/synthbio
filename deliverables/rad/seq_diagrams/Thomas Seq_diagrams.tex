@@ -1,0 +1,73 @@
+\section{Use case \#4: Export SBML}
+\begin{tikzpicture}
+\begin{umlseqdiag}
+\umlactor{User}
+\umlobject{System}
+\umlobject{Interface}
+\umlobject{SBML}
+\begin{umlcall}[op={Press Brick button}]{User}{System}
+\begin{umlcall}[op={Display Brick menu}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\begin{umlcall}[op={Press export SBML button}]{User}{System}
+\begin{umlcall}[op={Display file dialog}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\begin{umlcall}[op={Choose location and name and press OK}]{User}{System}
+\begin{umlcall}[op={Save BioBrick as SBML file at location}]{System}{SBML}
+\end{umlcall}
+\begin{umlcall}[op={Succes message}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\end{umlseqdiag} 
+\end{tikzpicture}
+
+\section{Use case \#6: Model BioBrick}
+\begin{tikzpicture}
+\begin{umlseqdiag}
+\umlactor{User}
+\umlobject{System}
+\umlobject{Interface}
+\begin{umlfragment}[type=alt, name=Modeling]
+\begin{umlcall}[op={Drag and drop elements from elements-bar to workspace}]{User}{System}
+\begin{umlcall}[op={Show the BioBrick element in the workspace}]{System}{Interface}
+\begin{umlcall}[op={Connect BioBrick partswith wires}]{User}{System}
+\begin{umlcall}[op={Show biological circuit}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\end{umlcall}
+\end{umlcall}
+\end{umlfragment}
+\begin{umlcall}[op={Assign proteins to wires}]{User}{System}
+\begin{umlcall}[op={Show full circuit or error message}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\end{umlseqdiag} 
+\end{tikzpicture}
+
+\section{Use case \#7: Simulate BioBrick}
+\begin{tikzpicture}
+\begin{umlseqdiag}
+\umlactor{User}
+\umlobject{System}
+\umlobject{Interface}
+\begin{umlcall}[op={Press Simulate menu button}]{User}{System}
+\begin{umlcall}[op={Show simulation menu}]{System}{Interface}
+\begin{umlcall}[op={Press Assign Proteins button}]{User}{System}
+\begin{umlcall}[op={Show protein bars}]{System}{Interface}
+\begin{umlcall}[op={Adjust protein values}]{User}{System}
+\end{umlcall}
+\end{umlcall}
+\end{umlcall}
+\end{umlcall}
+\end{umlcall}
+\begin{umlcall}[op={Press Simulate menu button}]{User}{System}
+\begin{umlcall}[op={Show simulation menu}]{System}{Interface}
+\begin{umlcall}[op={Press Simulate button}]{User}{System}
+\begin{umlcall}[op={Show simulation}]{System}{Interface}
+\end{umlcall}
+\end{umlcall}
+\end{umlcall}
+\end{umlcall}
+\end{umlseqdiag} 
+\end{tikzpicture}

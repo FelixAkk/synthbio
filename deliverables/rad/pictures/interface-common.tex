@@ -1,0 +1,42 @@
+% Define some common stuff to draw circuits. The commands defined can be
+% used in a draw command, i.e.:
+% \draw (x, y) \gateAND -- ++( 1, 0) \gateNOT ++( 1, 0) \terminal;
+\tikzstyle{terminal}=[circle,fill=black,inner sep=1.5pt]
+\newcommand{\terminal}{node[terminal]{}}
+
+% define a wire command. out= ++(2, 0)
+\newcommand{\wire}{\terminal -- ++( 2, 0) }
+
+% define a AND gate with start coord first in-terminal, coords from in1:
+% in2= ++(0, -.6)
+% out= ++(2, -.3)
+\newcommand{\gateAND}{
+	\terminal -- ++(.5, 0) -- ++(0,-0.6) -- ++(-.5, 0) \terminal -- ++(.5, 0) -- ++(0, -.2) [rounded corners=15pt] --  ++(1, 0)  -- ++(0, 1) [sharp corners] -- ++(-1, 0) -- ++(0, -.2)  ++(1, -0.3) -- ++(0.5, 0)
+}
+
+% define a NOT gate with start coord on in-terminal, coord from in:
+% out= ++(2, 0)
+\newcommand{\gateNOT}{
+	\terminal -- ++(.5, 0) --  ++(0, .5) -- ++(1, -.5) -- ++(-1, -.5) -- ++(0, .5) ++(1, 0) -- ++(0.5, 0)
+}
+
+\newcommand{\programGUI}[1]{
+	\draw[fill=black!20,line width=1] (-6,4) rectangle ++(12, -7.5);
+
+	% window title bar
+	\draw[fill=black!15,line width=1] (-6,4) rectangle (6, 3.5);
+	\node[draw, anchor=north west] at (-6, 4) {Brick};
+	\node[draw, anchor=north west] at (-4.8, 4) {Simulate};
+	\node [anchor=north] at (0, 4) {Synthbio - #1}; %file title
+	\node [anchor=east] at (6, 3.75) {\_ [] X}; % minimize maximize close
+
+}
+\newcommand{\sidebar}{
+	% sidebar
+	\draw[fill=black!20,line width=1] (-6, 3.5) rectangle ++(3, -3.5) rectangle ++(-3, -3.5);
+	\draw (-5.5, 3) \wire \terminal;
+	\draw (-5.5, 2.5) \gateAND \terminal;
+	\draw (-5.5, 1) \gateNOT \terminal;{}
+
+	\node[anchor=north west] at( -6, 0) {\tiny User defined bricks};
+}
