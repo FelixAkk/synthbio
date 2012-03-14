@@ -31,23 +31,24 @@ The purpose of our system is to create a modeling environment for biology expert
 \subsection{Design Goals}
 Our design goal for this project is to successfully implement the system mentioned above. We aim to make the system easy to use for people without too much knowledge of computer science.
 \subsection{Definitions, acronyms and abbreviations}
-BioBrick is the key word in this project. A BioBrick is a logical gate representation of a manipulated cell. The idea behind this is: Genes can be manipulated to work as gates. By doing this we can create logical structures using cells. A BioBrick is a model for this. The term Bio comes from Biology. The term Brick comes from the idea that these BioBricks should be building blocks for a larger system. With Bricks you can build bigger structures. 
+\begin{description}
+	\item[BioBrick] is the key word in this project. A BioBrick is a logical gate representation of a manipulated cell. The idea behind this is: Genes can be manipulated to work as gates. By doing this we can create logical structures using cells. A BioBrick is a model for this. The term Bio comes from Biology. The term Brick comes from the idea that these BioBricks should be building blocks for a larger system. With Bricks you can build bigger structures. 
+	\item[Client-side] is the part of the program which takes place on the computer of the client/user. The opposite is server-side. For our program, the client-side is a GUI implemented in JavaScript. 
+	\item[Server-side] is the part of the program which takes place on the server. In our case it is implemented in Java. This part will do the heavier computations, so the client-side only has to display the results.
+	\item[GUI] is a Graphical User Interface. This is the part of the program which you actually see as a user. It is the screen which shows you the program and allows you to do things. 
+	\item[JSON] (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.
+	\item[AJAX] (Asynchronous JavaScript and XML) is a format in which data can be exchanged between client and server side. This can be done asynchronously, meaning your main program does not have to wait for the results of the data transaction before it can continue. We will use this as a part of our communication between our JavaScript client-side and our Java server-side.
+	\item[SBML] is a Markup Language specially designed for Synthetic Biology. We will use this to represent BioBricks. We can read and write from and to this format and easily save BioBricks as SBML files.
 
-Client-side is the part of the program which takes place on the computer of the client/user. The opposite is server-side. For our program, the client-side is a GUI implemented in JavaScript. 
+	\item[MVC] stands for Model View Controller. It is an architectural structure which separates the display(View) of the program from the input/output handling(Controller) and the data representing part(Model). By doing this your application remains structured, can be tested in separate parts and is easier to maintain or change.
+\end{description}
 
-Server-side is the part of the program which takes place on the server. In our case it is implemented in Java. This part will do the heavier computations, so the client-side only has to display the results.
-
-A GUI is a Graphical User Interface. This is the part of the program which you actually see as a user. It is the screen which shows you the program and allows you to do things. 
-
-JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.
-
-AJAX (Asynchronous JavaScript and XML) is a format in which data can be exchanged between client and server side. This can be done asynchronously, meaning your main program does not have to wait for the results of the data transaction before it can continue. We will use this as a part of our communication between our JavaScript client-side and our Java server-side.
-
-SBML is a Markup Language specially designed for Synthetic Biology. We will use this to represent BioBricks. We can read and write from and to this format and easily save BioBricks as SBML files.
-
-MVC stands for Model View Controller. It is an architectural structure which separates the display(View) of the program from the input/output handling(Controller) and the data representing part(Model). By doing this your application remains structured, can be tested in separate parts and is easier to maintain or change.
 \subsection{References}
-http://www.json.org/
+\begin{description}
+	\item[\url{http://www.json.org/}]
+	\item[\url{http://www.sbml.org/}]
+\end{description}
+
 \subsection{Overview}
 So this chapter was all about what we wanted to achieve globally. We want to create a modeling environment for biologists and genetics experts to model BioBricks. These BioBricks represent genetically modified cells or genes which act as logical gates. The Definitions section explains some of the major concepts. The full architectural design will be explained in detail how we intend to implement everything.
 
@@ -124,11 +125,13 @@ Response for getFile(fileName) for a non-existing file:
 \subsection{Hardware/Software Mapping}
 Our architecture is composed of two major elements, the client implemented as a web application and the server, implemented in Java. The browser has to be a recent version of one of the major browser\footnote{We'll test in Google Chrome and Firefox}, the supporting system is not relevant. The server can be run on the same machine, which is likely to be the same machine during the development stage.
 
-\subsection{Persistent Data Management}
-(file/ database, database design)
-\subsection{Global Resource Handling and Access Control for the different actors}
-\subsection{Concurrency}
-(which processes run in parallel, how do they communicate, how are deadlocks prevented?)
+\include{raw-in/Pers_Data_Acces_Control_Concurrency}
+%\subsection{Persistent Data Management}
+%(file/ database, database design)
+%\subsection{Global Resource Handling and Access Control for the different actors}
+%\subsection{Concurrency}
+%(which processes run in parallel, how do they communicate, how are deadlocks prevented?)
+
 \subsection{Boundary Conditions}
 (how is the system started and stopped, what happens
 in case of a system crash)
