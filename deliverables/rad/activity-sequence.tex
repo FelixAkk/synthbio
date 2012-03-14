@@ -1,0 +1,184 @@
+\textbf{Sequence Diagrams} \\
+Following are sequence diagrams for each of the use cases. They visually describe the flow of events. Note that these diagrams are all high level and the technicalities might differ in the architectural report.
+
+\tikzumlset{font=\tiny}
+
+\textbf{Use case \#1: Start application} \\
+\begin{figure}[h!]
+	\centering\begin{tikzpicture}
+	\begin{umlseqdiag}
+	\umlactor[scale=0.5]{User}
+	\umlobject{System}
+	\umlobject{Interface}
+	\begin{umlcall}[op={Start application}]{User}{System}
+	\begin{umlcall}[op={Open initial program state}]{System}{Interface}
+	\end{umlcall}
+	\end{umlcall}
+	\end{umlseqdiag} 
+	\end{tikzpicture}
+\end{figure}
+
+\textbf{Use case \#2: Quit application} \\
+\begin{figure}[h!]
+	\centering\begin{tikzpicture}
+	\begin{umlseqdiag}
+	\umlactor[scale=0.5]{User}
+	\umlobject{System}
+	\umlobject{Interface}
+	\begin{umlcall}[op={Press close button}]{User}{Interface}
+	\begin{umlcall}[op={Close}]{Interface}{System}
+	\begin{umlcallself}[op={Abort actions}, dt=5]{System}
+	\end{umlcallself}
+	\begin{umlcallself}[op={Close program}, dt=5]{System}
+	\end{umlcallself}
+	\end{umlcall}
+	\end{umlcall}
+	\end{umlseqdiag} 
+	\end{tikzpicture}
+\end{figure}
+
+\textbf{Use case \#3: Import SBML} \\
+\begin{figure}[h!]
+	\centering\begin{tikzpicture}
+	\begin{umlseqdiag}
+	\umlactor[scale=0.5]{User}
+	\umlobject{System}
+	\umlobject{Interface}
+	\umlobject{SBML}
+
+	\begin{umlcall}[op={Press Brick button}]{User}{Interface}
+	\begin{umlcallself}[op={Display Brick menu}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+
+	\begin{umlcall}[op={Press import SBML button}]{User}{Interface}
+	\begin{umlcallself}[op={Display ``choose file'' dialog}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+
+	\begin{umlcall}[op={Choose file and press OK}]{User}{Interface}
+	\begin{umlcall}[op={Load SBML model}]{Interface}{System}
+	\begin{umlcall}[op={Load SBML model from file}]{System}{SBML}
+	\end{umlcall}
+	\end{umlcall}
+	\begin{umlcallself}[op={Display SBML model}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+
+	\end{umlseqdiag} 
+	\end{tikzpicture}
+\end{figure}
+
+\textbf{Use case \#4: Export SBML} \\
+\begin{figure}[h!]
+	\centering\begin{tikzpicture}
+	\begin{umlseqdiag}
+	\umlactor[scale=0.5]{User}
+	\umlobject{System}
+	\umlobject{Interface}
+	\umlobject{SBML}
+	\begin{umlcall}[op={Press Brick button}]{User}{Interface}
+	\begin{umlcallself}[op={Display Brick menu}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+	\begin{umlcall}[op={Press export SBML button}]{User}{Interface}
+	\begin{umlcallself}[op={Display file dialog}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+	\begin{umlcall}[op={Choose location and name and press OK}]{User}{Interface}
+	\begin{umlcall}[op={Save BioBrick}]{Interface}{System}
+	\begin{umlcall}[op={Save BioBrick as SBML file at location}]{System}{SBML}
+
+	\end{umlcall}
+	\end{umlcall}
+
+	\begin{umlcallself}[op={Display success message}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+	\end{umlseqdiag} 
+	\end{tikzpicture}
+\end{figure}
+
+\textbf{Use case \#5: Specify protein for signal} \\
+\begin{figure}[h!]
+	\centering\begin{tikzpicture}
+	\begin{umlseqdiag}
+	\umlactor[scale=0.5]{User}
+	\umlobject{System}
+	\umlobject{Interface}
+	\begin{umlcall}[op={Click the wire or it's connector}]{User}{Interface}
+	\begin{umlcallself}[op={Show selection dialog}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+	\begin{umlcall}[op={Double click the wanted protein}]{User}{Interface}
+	\begin{umlcall}[op={Appoint protein to wire}]{Interface}{System}
+	\end{umlcall}
+	\end{umlcall}
+	\end{umlseqdiag}
+	\end{tikzpicture}
+\end{figure}
+
+\pagebreak
+\textbf{Use case \#6: Model BioBrick} \\
+\begin{figure}[h!]
+	\centering\begin{tikzpicture}
+	\begin{umlseqdiag}
+	\umlactor[scale=0.5]{User}
+	\umlobject{System}
+	\umlobject{Interface}
+
+	\begin{umlcall}[op={Drag and drop elements from elements-bar to workspace}]{User}{Interface}
+	\begin{umlcallself}[op={Show the BioBrick element in the workspace}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+
+	\begin{umlcall}[op={Connect BioBricks with wires}]{User}{Interface}
+	\begin{umlcallself}[op={Show biological circuit}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+
+	\begin{umlcall}[op={Assign proteins to wires}]{User}{Interface}
+	\begin{umlcallself}[op={Show full circuit or error message}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+	\end{umlseqdiag} 
+	\end{tikzpicture}
+\end{figure}
+
+\textbf{Use case \#7: Simulate BioBrick} \\
+\begin{figure}[h!]
+	\centering\begin{tikzpicture}
+	\begin{umlseqdiag}
+	\umlactor[scale=0.5]{User}
+	\umlobject{System}
+	\umlobject{Interface}
+
+	\begin{umlcall}[op={Press Simulate menu button}]{User}{Interface}
+	\begin{umlcallself}[op={Show simulation menu}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+
+	\begin{umlcall}[op={Press Assign Proteins button}]{User}{Interface}
+	\begin{umlcallself}[op={Show protein bars}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+
+	\begin{umlcall}[op={Adjust protein values}]{User}{Interface}
+	\begin{umlcall}[op={Save adjusted values}]{Interface}{System}
+	\end{umlcall}
+	\end{umlcall}
+
+	\begin{umlcall}[op={Press Simulate menu button}]{User}{Interface}
+	\begin{umlcallself}[op={Show simulation menu}]{Interface}
+	\end{umlcallself}
+	\end{umlcall}
+
+	\begin{umlcall}[op={Press Simulate button}]{User}{Interface}
+	\begin{umlcall}[op={Simulate}]{Interface}{System}
+	\begin{umlcall}[op={Show simulation results}]{System}{Interface}
+	\end{umlcall}
+	\end{umlcall}
+	\end{umlcall}
+	\end{umlseqdiag} 
+	\end{tikzpicture}
+\end{figure}
