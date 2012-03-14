@@ -38,6 +38,7 @@ Jan Pieter Waagmeester}
 (which sub-systems and dependencies are there between the sub-systems?)
 
 \subsubsection{Interface (API) of each sub-system}
+
 We propose the following API for the server-side of our application. Every model is represented by an object which stores the needed information. It is basically a directed graph with building blocks as nodes. \\
 \begin{description}
 	\item[listFiles(): list of filenames] -
@@ -66,10 +67,43 @@ We propose the following API for the server-side of our application. Every model
 		Validates the model and returns true if model has everything defined to simulate it, and returns false otherwise.\\
 \end{description}
 
-For the client-side of our application, we will not follow a predefined API. As the client will only implement the view part of the model, view controller (MVC) system, it will only reuse the API of the server and not implement an API of its own.
+For the client-side of our application, we will not follow a predefined API. As the client will only implement the view part of the model, view controller (MVC) system, it will only reuse the API of the server and not implement an API of its own. Messages between server and client will be passed using JSON objects. \\
+
+\begin{figure}[h!]
+\caption{Examples of JSON responses}
+Generic response:
+\begin{verbatim}
+{
+  "success": boolean,
+  "message": string,
+  "data": object
+}
+\end{verbatim}
+Response of getFiles(): \begin{verbatim}
+{
+  "success": true,
+  "message": "",
+  "data": [
+    "example1.syn",
+    "d-flipflop.syn",
+    "xor-gate.syn"
+  ]
+}
+\end{verbatim}
+Response for getFile(fileName) for a non-existing file:
+\begin{verbatim}
+
+{
+  "success": false,
+  "message": "Requested file not found.",
+  "data": {}
+}
+\end{verbatim}
+\end{figure}
 
 \subsection{Hardware/Software Mapping}
-(mapping of sub-systems to processes and computers, communication between computers),
+Our architecture is composed of two major elements, the client implemented as a web application and the server, implemented in Java. The browser has to be a recent version of one of the major browser\footnote{We'll test in Google Chrome and Firefox}, the supporting system is not relevant. The server can be run on the same machine, which is likely to be the same machine during the development stage.
+
 \subsection{Persistent Data Management}
 (file/ database, database design)
 \subsection{Global Resource Handling and Access Control for the different actors}
