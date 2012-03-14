@@ -1,0 +1,38 @@
+%&latex
+\documentclass{article}
+
+\usepackage[UKenglish]{babel}
+\begin{document}
+
+\subsection{Persistent Data Management}
+The application will persistently store data serverside on the disk. A database seems overkill for the rudimentary data storage that is required, and the already existent and mature text formats are good candidates to save our data in. The application will store data using the following files:
+\begin{enumerate}
+\item \textbf{.xml (SBML)} \\
+A \verb=text/xml= file in the Systems Biology Markup Language schema that describes the abstract model of the biological system. Within the domain of our application it will primarily be used to describe the biological processes of a modeled circuit/BioBrick.
+
+\item \textbf{.sym (JSON)} \\
+A \verb=text/json= file in our made up extension
+that embodies the entire modeled circuit/BioBrick in JavaScript Object Notation. The object structure has to comply with that of the application to be read.\end{enumerate}
+
+\subsection{Global Resource Handling and Access Control}
+The application will be controlled through a web interface. As is dictated in the requirements, the application will only work will a single user at a single point in time, and there is no access control implemented. A browser will connect to the server and without authorization will be able to access the functionality. The decision on this was made because the focus should be on implementing the required functionality. We agreed that security and multi-user operation would be a nice-to-have, but to ambitious with the current goals in mind.
+
+This means that in theory anyone who has access to the network where the server runs could operate the application, so users of the application should be aware that they do not work on and/or save sensitive information.
+
+\subsection{Concurrency}
+As is described in the previous section, our system will not support multi-user operation, so operation is only guaranteed for one client-server connection at the same time. This reduces concurrency issues, but leaves some scenarios to be thought about. Because user interaction is a dominant part of our application, concurrency problems may not hinder the workflow or be very problematic. This implies multi-threading, and the following subsystems will have to run on a separate thread with concurrency handling:
+
+\begin{enumerate}
+\item \textbf{Main controller} \\
+The main controller will have to be able to handle calls from multiple subsystems at the same time. For example the user must still be able to interact with the server when the server is reading/writing a lengthy XML file.\item \textbf{HTTP request handler} \\
+See next item.
+\item \textbf{Web server} \\
+These two subsystem must be able to terminate when hung in the processing of a HTTP request or serving HTTP to a client. Therefore it must be isolated in a separate thread. Also if we decide to implement multi-user support this would be a lot easier to implement as we could easily start multiple of these threads. 
+\item \textbf{XML parser/writer} \\
+This subsystem must also be able to terminate when hung without crashing the rest of the server.
+\item \textbf{Simulation math} \\
+This subsystem must also be able to operate independently of the rest of the server systems so in case lengthy simulations are performed, the server can still interact with the client and the simulation can be aborted.
+\item \textbf{GUI} \\
+This is essentially the browser, and in this sense should also be considered a separate thread. This has the benefits as described in the system decomposition. Because we only support recent versions of the major browsers concurrency problems with the GUI are already covered.\end{enumerate}
+
+\end{document}

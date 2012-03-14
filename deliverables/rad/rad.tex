@@ -14,7 +14,7 @@
 %~ \usepackage{listings}
 %~ \lstset{language=java, tabsize=4, frame=single,basicstyle=\scriptsize}
 
-\title{Programming Life - Requirements Analysis and Design }
+\title{{\sc Draft} \\Programming Life - Requirements Analysis and Design }
 
 \author{Group 5/E:\\
 Felix Akkermans \\
@@ -24,32 +24,33 @@ Albert ten Napel \\
 Jan Pieter Waagmeester}
 
 \begin{document}
+
 \maketitle
 
 \vfill
 
 \small{\tableofcontents}
 \pagebreak
-\section{Introduction} 		% (Niels)
-The purpose of biotechnology is to use micro-organisms like moulds and bacteria for the production of chemical substances. These chemical substances are used as energy (biofuels), in products (bioplastics), in food and in medicine. Not only can these micro-organisms produce, they can also be used to break down chemical substances, for example in the purification of water\footnote{Programming Life – Contextproject assignment (Dick de Ridder, Marcel Reinders)}.
+\section{Introduction}          % (Niels)
+The purpose of biotechnology is to use micro-organisms like moulds and bacteria for the production of chemical substances. These chemical substances are used as energy (biofuels), in products (bioplastics), in food and in medicine. Not only can these micro-organisms produce, they can also be used to break down chemical substances, for example in the purification of water.\footnote{Programming Life – Contextproject assignment (Dick de Ridder, Marcel Reinders)}
 
-Using molecular biology, these micro-organisms can be altered to add, change or remove functionality. This is done by mutating the DNA of the organism. Synthetic biology is the science in which biology and engineering are combined to create new biological functionality\footnote{Programming Life – Contextproject kickoff (Dick de Ridder, Marcel Reinders)}. The engineering part is made easier by using BioBricks\footnote{\url{http://biobricks.org/}}. These ``bricks" are simple genetic circuits which provide a basic functionality (for example the imitation of an OR or AND gate) and share a common interface. By combining these BioBricks, a new biological systems can be engineered.
+Using molecular biology, these micro-organisms can be altered to add, change or remove functionality. This is done by mutating the DNA of the organism. Synthetic biology is the science in which biology and engineering are combined to create new biological functionality\footnote{Programming Life – Contextproject kickoff (Dick de Ridder, Marcel Reinders)}. The engineering part is made easier by using biobricks\footnote{\url{http://biobricks.org/}}. These ``bricks" are simple genetic circuits which provide a basic functionality (for example the imitation of an OR or AND gate) and share a common interface. By combining these biobricks, a new biological systems can be engineered.
 
-In its abstract form, this system can be visualized as a logical circuit, but in the organism the circuit corresponds with a group of molecules (proteins, genes, RNA) that react with each other. How (and if) they will react depends on many different elements, like the concentration and reaction speed of a protein. This reaction can be simulated using a (heavily) simplified model\footnotemark[1].
+In its abstract form, this system can be visualized as a logical circuit, but in the organism the circuit corresponds with a group of molecules (proteins, genes, RNA) that react with each other. How (and if) they will react depends on many different elements, like the concentration and reaction speed of a protein. This reaction can be simulated using a (heavily) simplified model.\footnotemark[1]
 
-A logical circuit of BioBricks can be defined using the System Biology Markup Language (SBML). SBML is a free and open interchange format for computer models of biological processes\footnote{\url{http://sbml.org/Main_Page}}. It is a widely supported format that continues to evolve and expand.
+A logical circuit of biobricks can be defined using the System Biology Markup Language (SBML). SBML is a free and open interchange format for computer models of biological processes. \footnote{\url{http://sbml.org/Main_Page}} It is a widely supported format that continues to evolve and expand.
 
-In this report, we will describe the design of a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using BioBricks. We will clarify our proposed system using a list of requirements (2.2-2.4), a few analysis models (2.5), a business object model (2.6), a few dynamic models (2.7) and a preliminary drawing of the interface (2.8). In chapter 3 we will give a planning of the following of the project.
+In this report, we will describe the design of a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using biobricks. We will clarify our proposed system using a list of requirements (2.2-2.4), a few analysis models (2.5), a business object model (2.6), a few dynamic models (2.7) and a preliminary drawing of the interface (2.8). In chapter 3 we will give a planning of the following of the project.
 
 \section{Proposed system}
-\subsection{Overview} 		% (Niels)
-In this document, we will provide an analysis and design proposal for a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using BioBricks.
+\subsection{Overview}           % (Niels)
+In this document, we will provide an analysis and design proposal for a visual modeling environment for synthetic biology, in which biotechnologists can design, simulate and validate a logical circuit built using biobricks.
 
 We have made up a list of requirements which answer the following questions.  What does the application have to do? What doesn't belong in the basic functionality? What kind of programming language will we use to develop this program and when is it due? First we will go into detail on functional requirements (2.2), so what does the program do? Secondly, we will discuss non-functional requirements (2.3). These answer questions like: What programming language will we use, but also how we will increase the usability of the application. Finally we will have a look at constraints (2.4).
 
 Following the requirements we will specify a few use case models (2.5). These models describe specific scenarios of the program, what steps the user has to take to reach a goal and how the system should react to these steps. The main scenarios we will specify are loading/saving, modeling and simulating. Dynamic models such as sequence diagrams and activity diagrams will visualize the steps and interaction of the user and system in chapter 2.7.
 
-Our business object model (2.5) will clarify the key concepts and their roles of our application. It will give a simplified overview of how proteins, BioBricks and the System Biology Markup Language (SBML) relate to each other.
+Our business object model (2.5) will clarify the key concepts and their roles of our application. It will give a simplified overview of how proteins, biobricks and the System Biology Markup Language (SBML) relate to each other.
 
 Last but not least, we will show a preliminary drawing of our interface (2.8) and explain why we have chosen for this interface and how it will work. Chapter 3 contains a planning for the rest of the project. This schedule is built up around the deadlines for the other documents and has a preliminary planning for the implementation fase.
 
@@ -73,19 +74,19 @@ The following are use cases the application must be able of completing in whatev
 Non-functional requirements are requirements about how the application behaves and operates (usability, accessibility, availability, performance). In this section we will also cover constraints on the source-code and development (programming language, documentation, tools/frameworks, compatibility, extensibility, maintainability, testability, deadlines).
 
 \begin{enumerate}
-\item \textbf{Documentation} For documentation we will use \LaTeX  to finalize the reports and will be written in English. GIT will be used for hosting and collaborating on documentation\footnote{Git repository @github: \url{https://github.com/FelixAkk/synthbio}}.
-\item \textbf{Tools/frameworks} As mentioned before, we will use GIT and \LaTeX, but also other tools for this project. The program will be written in mutiple languages. We will create the GUI and frontend in JavaScript. The backend will be implemented in Java. The tools we will use to test this are JUnit and Crawljax. Furthermore, we will use the Java library LibSBML to implement the saving/exporting of our BioBricks.
-\item \textbf{Testability} We want to be able to test every detail. We will look at three major subjects: user-friendliness, errors in the web application and errors in the java backend. To test user-friendliness we will have normal people try our program to test the feel of the program. We will use crawljax to find as many errors in the web application as possible. Crawljax is a sort of bot which tries every possible option in a webbased application. We will use JUnit to test the java backend.
+\item \textbf{Documentation} For documentation we will use \LaTeX  to finalize the reports and will be written in English. GIT will be used for hosting and collaborating on documentation.
+\item \textbf{Tools/frameworks} The use of other software development tools has not been decided upon yet.
+\item \textbf{Testability} We want to be able to test every detail. We were discussion test drive development, but we have not fully decided upon that either. In any case, there should be a lot of tests, in the form of checks and sort of unit-tests, but also for user friendliness by real people.
 
-\item \textbf{Usability} Because the program is not made for information technology students, we will spend some time increasing the usability. However, the target group consists of scientists, and to be more specific, mainly bio-informatics experts. Because of this, we will not create step-by-step tutorials. Our aim is to make the application basic enough so a regular scientist can work with the application, without detailed tutorials.
+\item \textbf{Usability} Because the program is not made for information technology students so we will spend some time increasing the usability. However, the target group consists of scientists, and to be more specific, mainly bio-informatics experts. Because of this we will not create step-by-step tutorials. Our aim is to make the application basic enough so that a regular scientist can work with the application.
 
 \item \textbf{Extensibility} We want to create our application in such a way that BioBricks can be exported and re-used later as part of even greater BioBricks. As for the application, it is always best practice to make the application extendable, and so we shall aim for that.
 
-\item \textbf{Maintainability} Maintainability is also very important, not only for future use but also for the development process. Because of the agile workform we will be maintaining, it is crucial to keep an oversight and a well defined structure within our program. If we lose this, there is a high risk of bugs and superfluous code.
+\item \textbf{Maintainability} Maintainability is actually not one of our focuses. Because the application works on its own, and is only required to be developed until the end of this semester, this is not a major concern.
 
 \item \textbf{Accessibility} Because our application frontend will be written for the web, we will host it somewhere and it should be accessible from anywhere, if there is internet. From the time of launch of our first version until the end of the project, there should always be a testable version hosted somewhere. It's also likely that we will use modern frameworks such as Bootstrap CSS to provide a high start-level of usability, although this has not been decided yet. The use of such well developed frameworks guarantees a high accessibility of the website.
 
-\item \textbf{Deadline} The architectural design will be finished on the 16th of March (16-03-2012). The test and implementation plan will be done on the 23rd of March (23-03-2012). The first version is up for evaluation on the 4th of May (04-05-2012). The final version of the application and the final report are due on the 15th of June (15-06-2012).
+\item \textbf{Deadline} The first version is up for evaluation on the fourth of May (04-05-212). The final version of the application is due on the fifteenth of June (15-06-2012).
 \item \textbf{Biological plausibility} The application does \textit{not} have to give an biologically accurate or plausible simulation.
 
 \item \textbf{Frontend} The GUI frontend of the application will be a website written in HTML+CSS+JavaScript. This means our application frontend will be compatible with all the big operating systems that support web browsers.\item \textbf{Backend} The backend will be written in Java Server Pages.
@@ -93,49 +94,37 @@ Non-functional requirements are requirements about how the application behaves a
 \end{enumerate}
 \pagebreak
 \subsection{Analysis models}
-In this section, we first present some use cases, a Business Object model and some dynamic models.
-
-
 \subsubsection{Use case model, descriptions and scenarios}
-In the usecase diagram in figure~\ref{fig-usecase} you can see all the different option available for our user. 
-Inbetween starting and closing the application, the user can model BioBricks. 
-Once these BioBricks are modeled they can be exported to SBML. 
-These SBML files can be imported again and used to create more complex BioBricks. 
-During the modeling, the user can specify which proteins will be used as input.
-Once the BioBricks have been modeled, their output can be simulated.
-We will describe some example scenario's to further explain this diagram.
 \begin{figure}[h!]
-	\caption{Usecase diagram}
-	\label{fig-usecase}
-	\centering\include{pictures/usecase}
+        \caption{Usecase diagram}
+        \centering\include{pictures/usecase}
+\end{figure}
+\subsection{Business Object model} % (Albert)
+The objects of our model are the proteins, the biobricks, the circuits and the Systems Biology Markup Language.
+
+The protein is the smallest building block of the model, with proteins and gates we can form Biobricks. These Biobricks can then be connected to each other to form a circuit. The Systems Biology Markup Language (SBML) can be used to represent and describe these circuits. So from the circuit the resulting SBML can be obtained and vice versa.
+\begin{figure}[h!]
+        \caption{Business Object model}
+        \centering\include{pictures/bom}
 \end{figure}
 
-\include{scenarios}
-
-\subsubsection{Business Object model} % (Albert)
-The objects of our model are the proteins, the BioBricks, the circuits and the Systems Biology Markup Language.
-
-The protein is the smallest building block of the model, with proteins and gates we can form BioBricks. These BioBricks can then be connected to each other to form a circuit. The Systems Biology Markup Language (SBML) can be used to represent and describe these circuits. So from the circuit the resulting SBML can be obtained and vice versa.
+\subsection{Dynamic models}
+When the user enters the program, two options are availible, he can import an existing circuit (SBML-file) or create a new one. The user then edits the circuit to suit his needs. After the editing the circuit can be simulated, if the user choses the proteins wrong an error will occur and more editing will be in order, if the user decides he is not done yet with editing he can continue after the simulation. When the user is done he can save the circuit as a SBML-file.
 \begin{figure}[h!]
-	\caption{Business Object model}
-	\label{fig-bom}
-	\centering\include{pictures/bom}
+        \label{fig-gui} 
+        \caption{Activity diagram}
+        \centering\include{pictures/activity}
 \end{figure}
 \pagebreak
+\subsection{Interface} % (Jan Pieter)
+To model a network of circuit from the basic gates provided, a simple GUI is proposed in figure \ref{fig-gui}. Three different actions can be performed in the main working area: adding wires, AND- and NOT-gates. For each wire/signal a protein can be selected.
 
-\subsubsection{Dynamic models}
-When the user enters the program, two options are available, he can import an existing circuit (SBML-file) or create a new one. The user then edits the circuit to suit his needs. After the editing the circuit can be simulated, if the user choses the proteins wrong an error will occur and more editing will be in order, if the user decides he is not done yet with editing he can continue after the simulation. When the user is done he can save the circuit as a SBML-file.
+The simulation can be run, and the result will be displayed in a simple graph.
 \begin{figure}[h!]
-	\caption{Activity diagram}
-	\centering\include{pictures/activity}
+        \label{fig-gui} 
+        \caption{Quick mockup of the Graphical user interface}
+        \centering\include{pictures/interface}
 \end{figure}
-
-\include{activity-sequence}
-
-\pagebreak
-
-% interface subsection is in a separate file
-\include{subsection-interface}
 
 \pagebreak
 \section{Planning}  % (Felix)
@@ -160,13 +149,13 @@ When the user enters the program, two options are available, he can import an ex
 \pagebreak
 \section{Glossary} % (Jan Pieter)
 \begin{description}
-	\item[BioBrick] Isolated and documented cell function to be reused in future projects. For example, the production of a light emitting protein when some other protein is available.
-	\item[Circuit] What we think of as a circuit is actually just a cell wherein all signals and gates are proteins and parts of the DNA, mixed together without any separation.
-	\item[DNA] \text{Deoxyribonucleic acid} is a very long molecule containing the information needed to support the life in allmost all creatures.
-	\item[Protein] a complex molecule produces by certain processes in the cell. In turn it can activate other processes, or perform functions such as emission of light or change color.
-	\item[RNA] Working copy of the information in the DNA. This copy is then used to synthesize proteins.
-	\item[SBML] \textit{Systems Biology Markup Language} is a XML-based format for storage of various computermodels of biological processes.
-	\item[Simulation] Execution of a set of differential equations in order to predict the output of the modelled circuit
-	\item[Transcription] Process of making the mRNA-copy of the DNA master.
+        \item[BioBrick] Isolated and documented cell function to be reused in future projects. For example, the production of a light emitting protein when some other protein is available.
+        \item[Circuit] What we think of as a circuit is actually just a cell wherein all signals and gates are proteins and parts of the DNA, mixed together without any separation.
+        \item[DNA] \text{Deoxyribonucleic acid} is a very long molecule containing the information needed to support the life in allmost all creatures.
+        \item[Protein] a complex molecule produces by certain processes in the cell. In turn it can activate other processes, or perform functions such as emission of light or change color.
+        \item[RNA] Working copy of the information in the DNA. This copy is then used to synthesize proteins.
+        \item[SBML] \textit{Systems Biology Markup Language} is a XML-based format for storage of various computermodels of biological processes.
+        \item[Simulation] Execution of a set of differential equations in order to predict the output of the modelled circuit
+        \item[Transcription] Process of making the mRNA-copy of the DNA master.
 \end{description}
 \end{document}
