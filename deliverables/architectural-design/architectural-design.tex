@@ -51,6 +51,37 @@ In this chapter we will discuss the exact architectural design of our applicatio
 (which sub-systems and dependencies are there between the sub-systems?)
 
 \subsubsection{Interface (API) of each sub-system}
+
+We propose the following API for the server-side of our application. Every model is represented by an object which stores the needed information. It is basically a directed graph with building blocks as nodes. \\
+\begin{description}
+	\item[listFiles(): list of filenames] -
+		Returns a list of available models.\\
+		If there are no available files, then it returns an empty list.
+	\item[getFile(fileName): model] -
+		Returns the BioBrick model stored in fileName.\\
+		If the file does not exist or if the file is corrupt, it will give an error.
+	\item[putFile(fileName, model)] -
+		Stores model in a file called fileName.\\
+		If something goes wrong while saving, it will give an error.
+	\item[listProteins(): list of proteins] -
+		Returns a list of proteins, including their meta-data.\\
+		With absence of information, it will give an error.
+	\item[listModels(): list of models] -
+		Returns a list with a model for all available files.\\
+		Returns an empty list when there are no available files.
+	\item[modelToSBML(model, fileName)] -
+		Exports model to an SBML file and saves it to a file called fileName.\\
+		Returns an error if model is not a valid model.\\
+		Returns an error if saving failed.
+	\item[simulate(fileName, inputValues): outputValues] -
+		Simulates the SMBL model saved in fileName with given input values and returns the matching outputvalues.\\
+		Returns an error if the simulation of the file failed.
+	\item[validate(model): boolean] -
+		Validates the model and returns true if model has everything defined to simulate it, and returns false otherwise.\\
+\end{description}
+
+For the client-side of our application, we will not follow a predefined API. As the client will only implement the view part of the model, view controller (MVC) system, it will only reuse the API of the server and not implement an API of its own. Messages between server and client will be passed using JSON objects. \\
+
 \begin{figure}[h!]
 \caption{Examples of JSON responses}
 Generic response:
@@ -82,6 +113,7 @@ Response for getFile(fileName) for a non-existing file:
 }
 \end{verbatim}
 \end{figure}
+
 \subsection{Hardware/Software Mapping}
 Our architecture is composed of two major elements, the client implemented as a web application and the server, implemented in Java. The browser has to be a recent version of one of the major browser\footnote{We'll test in Google Chrome and Firefox}, the supporting system is not relevant. The server can be run on the same machine, which is likely to be the same machine during the development stage.
 
