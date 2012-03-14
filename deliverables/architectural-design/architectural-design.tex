@@ -27,13 +27,33 @@ Jan Pieter Waagmeester}
 \pagebreak
 \section{Introduction}
 \subsection{Purpose of the System}
+The purpose of our system is to create a modeling environment for biology experts and people who work in the field of genetics. Within this modeling environment, you can easily model BioBricks. BioBricks are biological gates, which are created by gene manipulation. Our system should be able to create BioBricks with basic components, like AND and NOT gates. The system should also be able to import and export BioBricks, making it possible to create larger constructions with earlier designed BioBricks.
 \subsection{Design Goals}
+Our design goal for this project is to successfully implement the system mentioned above. We aim to make the system easy to use for people without too much knowledge of computer science.
 \subsection{Definitions, acronyms and abbreviations}
+BioBrick is the key word in this project. A BioBrick is a logical gate representation of a manipulated cell. The idea behind this is: Genes can be manipulated to work as gates. By doing this we can create logical structures using cells. A BioBrick is a model for this. The term Bio comes from Biology. The term Brick comes from the idea that these BioBricks should be building blocks for a larger system. With Bricks you can build bigger structures. 
+
+Client-side is the part of the program which takes place on the computer of the client/user. The opposite is server-side. For our program, the client-side is a GUI implemented in JavaScript. 
+
+Server-side is the part of the program which takes place on the server. In our case it is implemented in Java. This part will do the heavier computations, so the client-side only has to display the results.
+
+A GUI is a Graphical User Interface. This is the part of the program which you actually see as a user. It is the screen which shows you the program and allows you to do things. 
+
+JSON (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.
+
+AJAX (Asynchronous JavaScript and XML) is a format in which data can be exchanged between client and server side. This can be done asynchronously, meaning your main program does not have to wait for the results of the data transaction before it can continue. We will use this as a part of our communication between our JavaScript client-side and our Java server-side.
+
+SBML is a Markup Language specially designed for Synthetic Biology. We will use this to represent BioBricks. We can read and write from and to this format and easily save BioBricks as SBML files.
+
+MVC stands for Model View Controller. It is an architectural structure which separates the display(View) of the program from the input/output handling(Controller) and the data representing part(Model). By doing this your application remains structured, can be tested in separate parts and is easier to maintain or change.
 \subsection{References}
+http://www.json.org/
 \subsection{Overview}
+So this chapter was all about what we wanted to achieve globally. We want to create a modeling environment for biologists and genetics experts to model BioBricks. These BioBricks represent genetically modified cells or genes which act as logical gates. The Definitions section explains some of the major concepts. The full architectural design will be explained in detail how we intend to implement everything.
 
 \section{Proposed software architecture}
 \subsection{Overview}
+In this chapter we will discuss the exact architectural design of our application. We will go into detail about how is system is build up. There will be a short explanation of every sub-system. This will all be done in chapter 3.2. There is a mapping of how different parts of our application interact with each other in chapter 3.3. In 3.4 there will be an explanation of how we manage data. Where and how will we save our BioBricks? Which format will we use? These are all questions we will answer. In chapter 3.5 we will tell something about how the application handles global recourses. There we will also explain why we chose not to have a complex access structure. Concurrency, how communication is handled in our system, will be discussed in chapter 3.6. Finally we will discuss the boundaries of our system. Where does our system end and what happens in case of errors or crashes? 
 \subsection{Subsystem Decomposition}
 (which sub-systems and dependencies are there between the sub-systems?)
 
