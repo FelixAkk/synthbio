@@ -38,8 +38,40 @@ Jan Pieter Waagmeester}
 (which sub-systems and dependencies are there between the sub-systems?)
 
 \subsubsection{Interface (API) of each sub-system}
+\begin{figure}[h!]
+\caption{Examples of JSON responses}
+Generic response:
+\begin{verbatim}
+{
+  "success": boolean,
+  "message": string,
+  "data": object
+}
+\end{verbatim}
+Response of getFiles(): \begin{verbatim}
+{
+  "success": true,
+  "message": "",
+  "data": [
+    "example1.syn",
+    "d-flipflop.syn",
+    "xor-gate.syn"
+  ]
+}
+\end{verbatim}
+Response for getFile(fileName) for a non-existing file:
+\begin{verbatim}
+
+{
+  "success": false,
+  "message": "Requested file not found.",
+  "data": {}
+}
+\end{verbatim}
+\end{figure}
 \subsection{Hardware/Software Mapping}
-(mapping of sub-systems to processes and computers, communication between computers),
+Our architecture is composed of two major elements, the client implemented as a web application and the server, implemented in Java. The browser has to be a recent version of one of the major browser\footnote{We'll test in Google Chrome and Firefox}, the supporting system is not relevant. The server can be run on the same machine, which is likely to be the same machine during the development stage.
+
 \subsection{Persistent Data Management}
 (file/ database, database design)
 \subsection{Global Resource Handling and Access Control for the different actors}
