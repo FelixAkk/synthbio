@@ -1,9 +1,4 @@
 %&latex
-\documentclass{article}
-
-\usepackage[UKenglish]{babel}
-\begin{document}
-
 \subsection{Persistent Data Management}
 The application will persistently store data serverside on the disk. A database seems overkill for the rudimentary data storage that is required, and the already existent and mature text formats are good candidates to save our data in. The application will store data using the following files:
 \begin{enumerate}
@@ -34,5 +29,3 @@ This subsystem must also be able to terminate when hung without crashing the res
 This subsystem must also be able to operate independently of the rest of the server systems so in case lengthy simulations are performed, the server can still interact with the client and the simulation can be aborted.
 \item \textbf{GUI} \\
 This is essentially the browser, and in this sense should also be considered a separate thread. This has the benefits as described in the system decomposition. Because we only support recent versions of the major browsers concurrency problems with the GUI are already covered.\end{enumerate}
-
-\end{document}

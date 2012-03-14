@@ -104,11 +104,13 @@ Response for getFile(fileName) for a non-existing file:
 \subsection{Hardware/Software Mapping}
 Our architecture is composed of two major elements, the client implemented as a web application and the server, implemented in Java. The browser has to be a recent version of one of the major browser\footnote{We'll test in Google Chrome and Firefox}, the supporting system is not relevant. The server can be run on the same machine, which is likely to be the same machine during the development stage.
 
-\subsection{Persistent Data Management}
-(file/ database, database design)
-\subsection{Global Resource Handling and Access Control for the different actors}
-\subsection{Concurrency}
-(which processes run in parallel, how do they communicate, how are deadlocks prevented?)
+\include{raw-in/Pers_Data_Acces_Control_Concurrency}
+%\subsection{Persistent Data Management}
+%(file/ database, database design)
+%\subsection{Global Resource Handling and Access Control for the different actors}
+%\subsection{Concurrency}
+%(which processes run in parallel, how do they communicate, how are deadlocks prevented?)
+
 \subsection{Boundary Conditions}
 (how is the system started and stopped, what happens
 in case of a system crash)
