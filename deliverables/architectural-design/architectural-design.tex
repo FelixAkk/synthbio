@@ -11,12 +11,16 @@
 
 \usepackage{enumerate}
 \usepackage{multirow}
+
+% new line after paragraph title.
 \makeatletter
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
   {-3.25ex\@plus -1ex \@minus -.2ex}%
   {1.5ex \@plus .2ex}%
   {\normalfont\normalsize\bfseries}}
 \makeatother
+
+
 \title{Programming Life - Architectural Design }
 
 \author{Group 5/E:\\
@@ -85,11 +89,11 @@ User generated circuits will be stored in simple text files. Since the communica
 	\item The circuit as a directed graph,
 	\item Protein assignments for each edge,
 	\item Position information for each elemental gate,
-	\item grouping information to support user generated `gates'\footnote{As discussed in requirement 1, see RAD.}
+	\item Grouping information to support user generated `gates'\footnote{As discussed in requirement 1, see RAD.}.
 \end{enumerate}
 
 \paragraph{SBML export}
-Since SBML is an available standard and defferential equation solvers exist for this format, we'll use it to run the simulation. The circuit will be represented in SBML and imported in the solver. The solver well respond with concentrations of different species\footnote{SBML term for different signals in the simulation} as a function of time.
+Since SBML is an available standard and defferential equation solvers exist for this format, we'll use it to run the simulation. The circuit will be represented in SBML and imported in the solver. The solver well respond with calculated concentrations of different species\footnote{SBML-term for different signals in the simulation} as a function of time.
 
 \paragraph{HTTP interface} 
 We propose the following API for the server-side of our application. Every model is represented by an object which stores the needed information. It is basically a directed graph with building blocks as nodes. \\
@@ -184,8 +188,13 @@ Our architecture is composed of two major elements, the client implemented as a 
 %(which processes run in parallel, how do they communicate, how are deadlocks prevented?)
 
 \subsection{Boundary Conditions}
-(how is the system started and stopped, what happens
-in case of a system crash)
+%~ (how is the system started and stopped, what happens
+%~ in case of a system crash)
 
+In a deployment context, the server will run somewhere on a server indefenately. At any point, the user can start a browser on a random device and start to use it.
+
+During the development stage, the server will run locally, and has t be started by the user before the user can start using it.
+
+The user's work will be saved at regular time intervals to prevent loss of work in case of a browser crash.
 
 \end{document}
