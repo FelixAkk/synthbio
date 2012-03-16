@@ -72,7 +72,7 @@ So this chapter was all about what we wanted to achieve globally. We want to cre
 In this chapter we will discuss the exact architectural design of our application. We will go into detail about how the system is build up. There will be a short explanation of every sub-system. This will all be done in chapter~2.2. There is a mapping of how different parts of our application interact with each other in chapter~2.3. In 2.4 there will be an explanation of how we manage data. Where and how will we save our BioBricks? Which format will we use? These are all questions we will answer. In chapter~2.5 we will tell something about how the application handles global recourses. There we will also explain why we chose not to have a complex access structure. Concurrency, how communication is handled in our system, will be discussed in chapter~2.6. Finally we will discuss the boundaries of our system. Where does our system end and what happens in case of errors or crashes? 
 
 \subsection{Subsystem Decomposition}
-The main decomposition in our system is the devision between the client and the server. The server is responsible for file operations and the more heavy calculations, while the client is mainly just a GUI. A schematic view of this decomposition can be found in figure~\ref{fig-decomposition}. In rest of this section we'll discuss each interaction in more detail.
+The main decomposition in our system is the devision between the client and the server. The server is essentially a servlet on top of Tomcat, responsible for file operations and the more heavy calculations, while the client is mainly just a GUI. A schematic view of this decomposition can be found in figure~\ref{fig-decomposition}. In rest of this section we'll discuss each interaction in more detail.
 
 \begin{figure}[h!]
 	\caption{The system decomposition}
@@ -90,7 +90,7 @@ User generated circuits will be stored in simple text files. Since the communica
 	\item The circuit as a directed graph,
 	\item Protein assignments for each edge,
 	\item Position information for each elemental gate,
-	\item Grouping information to support user generated `gates'\footnote{As discussed in requirement 1, see RAD.}.
+	\item Grouping information to support user generated `compound gates'\footnote{As discussed in requirement 1, see RAD.}.
 \end{enumerate}
 
 \paragraph{SBML export}
@@ -194,7 +194,7 @@ Our architecture is composed of two major elements, the client implemented as a 
 %~ in case of a system crash)
 
 In a deployment context, the server will run somewhere on a server indefinately. At any point, the user can start a browser on a random device and start to use it.
-During the development stage, the server will run locally, and has t be started by the user before the user can start using it.
+During the development stage, the server will run locally, and has t be started by the user before the user can start using it through someting like \url{http://localhost:8080/}, depending on Tomcat's configuration.
 The user's work will be saved at regular time intervals to prevent loss of work in case of a browser crash.
 
 \end{document}
