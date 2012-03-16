@@ -53,9 +53,7 @@ Our design goal for this project is to successfully implement the system mention
 	\item[GUI] is a Graphical User Interface. This is the part of the program which you actually see as a user. It is the screen which shows you the program and allows you to do things. 
 	\item[JSON] (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.
 	\item[AJAX] (Asynchronous JavaScript and XML) is a technique in which data can be exchanged between client and server side. This can be done asynchronously, meaning your main program does not have to wait for the results of the data transaction before it can continue. We will use this as a part of our communication between our JavaScript client-side and our Java server-side.
-	\item[SBML] is a Markup Language specially designed for Synthetic Biology. We will use this to simulate BioBricks. An external SBML solver application will be used for simulating the BioBricks.\\
-
-	\item[MVC] stands for Model View Controller. It is an architectural structure which separates the display(View) of the program from the input/output handling(Controller) and the data representing part(Model). By doing this your application remains structured, can be tested in separate parts and is easier to maintain or change.
+	\item[SBML] is a Markup Language specially designed for Synthetic Biology. We will use this to simulate BioBricks. An external SBML solver application will be used for simulating the BioBricks.
 \end{description}
 
 \subsection{References}
@@ -72,10 +70,10 @@ In the next chapter we will discuss the exact architectural design of our applic
 This chapter is about what we actually want to build. We want to create a modeling environment for biologists and genetics experts to model BioBricks. These BioBricks represent genetically modified cells or genes which act as logical gates. 
 
 
-Our program will consist of two major parts: A server and a client. The server will be implemented in Java and will handle the big computations and storage of data. The client will mainly display results. This is where the user will model the BioBricks and see the simulations of the outcome. The client will be implemented in JavaScript. The client will send requests to the server. The server, in turn, will respond to the requests. The type of response will depend on the request. Some example requests are: Storing data, checks if models are valid and importing BioBricks. 
+Our program will consist of two major parts: A server and a client. The server will be implemented in Java as a servlet on top of Apache Tomcat and will handle the big computations and storage of data. The client will mainly display results. This is where the user will model the BioBricks and see the simulations of the outcome. The client will be implemented in JavaScript. The client will send requests to the server. The server, in turn, will respond to the requests. The type of response will depend on the request. Some example requests are: Storing data, checks if models are valid and importing BioBricks. 
 
 
-There will be two major formats in which we store and transfer data. SBML is a synthetic biology XML variant. The main advantage of using SBML is that we can easily export and import BioBricks, since Java already supports this. JSON is a format in which we can easily transfer data from our Java server to our JavaScript client. 
+There will be two major formats in which we store and transfer data. SBML is a synthetic biology XML variant. The main advantage of using SBML is that we can easily export and import BioBricks, since Java already supports this. JSON is a format in which we can easily transfer data from our Java server to our JavaScript client and vice versa. 
 
 \subsection{Subsystem Decomposition}
 The main decomposition in our system is the devision between the client and the server. The server is essentially a servlet on top of Tomcat, responsible for file operations and the more heavy calculations, while the client is mainly just a GUI. A schematic view of this decomposition can be found in figure~\ref{fig-decomposition}. In rest of this section we'll discuss each interaction in more detail.
@@ -188,7 +186,7 @@ For the client-side of our application, we will not follow a predefined API. As 
 \subsection{Hardware/Software Mapping}
 Our architecture is composed of two major elements, the client implemented as a web application and the server, implemented as a Java servlet on top of Apache Tomcat. The browser has to be Chrome~15+ or Firefox~7+, the supporting system hardware and operating system is not relevant. The server can be run on the same machine, which will be the case during the development stage. When the server and the client are not on the same machine, a reliable network connection has to be available.
 
-\include{raw-in/Pers_Data_Acces_Control_Concurrency}
+\input{raw-in/Pers_Data_Acces_Control_Concurrency}
 %\subsection{Persistent Data Management}
 %(file/ database, database design)
 %\subsection{Global Resource Handling and Access Control for the different actors}
@@ -200,7 +198,7 @@ Our architecture is composed of two major elements, the client implemented as a 
 %~ in case of a system crash)
 
 In a deployment context, the server will run somewhere on a server indefinately. At any point, the user can start a browser on a random device and start to use it.
-During the development stage, the server will run locally, and has t be started by the user before the user can start using it through someting like \url{http://localhost:8080/}, depending on Tomcat's configuration.
-The user's work will be saved at regular time intervals to prevent loss of work in case of a browser crash.
+During the development stage, the server will run locally, and has to be started by the user before he can start using it through someting like \url{http://localhost:8080/}, depending on Tomcat's configuration.
+The user's work will be saved to the server at regular time intervals to prevent loss of work in case of a browser crash.
 
 \end{document}

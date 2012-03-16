@@ -2,17 +2,18 @@
 \subsection{Persistent Data Management}
 \label{ss-persitance}
 The application will persistently store data serverside on the disk. A database seems overkill for the rudimentary data storage that is required, and the already existent and mature text formats are good candidates to save our data in. The application will store data using the following file:
-\begin{enumerate}
-\item \textbf{.syn (JSON)} \\
+
+\paragraph{.syn (JSON)}
 A \verb=text/json= file in our made up extension
 that embodies the entire modeled circuit/BioBrick, and possibly later also simulation output data series, all written down in JavaScript Object Notation. The object structure has to comply with that of the application to be read.
-\end{enumerate}
+
 
 \subsection{Global Resource Handling and Access Control}
 The application will be controlled through a web interface. Upon reflection we decided that it would be harder to ensure that only a single user can interact at one point in time, than to give some rudimentary support for multiple users. This however does not mean that we implement access control. Anyone with a browser can connect to the server and without authorization will be able to access the functionality. The decision on this was made because the focus should be on implementing the required functionality, and at first we only aim to support in the order of 5 users interacting at the same time. We agreed that security  would be a nice-to-have, but to ambitious to implement with the current goals in mind.
 
 This means that in theory anyone who has access to the network where the server runs could operate the application, so users of the application should be aware that they do not work on and/or save sensitive information.
 
+\pagebreak
 \subsection{Concurrency}
 As is described in the previous section, our system will implicitly support multi-user operation, so the server must be able to handle requests from different browsers. This is possible because the client can model locally without continuous synchronisation with the model on the server, and the server does not distinguish between calls from different browsers. To handle the concurrency problems of a multi-user environment, we launch certain subsystems in separate threads. Because user interaction is a dominant part of our application, concurrency problems may not hinder the workflow or be very problematic. This implies multi-threading, and the following subsystems will have to run on a separate thread with concurrency handling:
 
