@@ -1,33 +1,36 @@
 %
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
-\usepackage{fullpage}
+%~ \usepackage{fullpage}
 \usepackage{amsmath,amssymb}
 \usepackage[colorlinks]{hyperref} % use colored text in stead of ugly boxes
-\usepackage[toc]{multitoc} % Nice two-column TOC
+%~ \usepackage[toc]{multitoc} % Nice two-column TOC
 \usepackage{pdfpages}
-\usepackage{pgf}
-\usepackage{tikz}
+%~ \usepackage{pgf}
+%~ \usepackage{tikz}
 
 
 \title{Programming Life - Seminar report}
 
-\author{Group 5/E:\\
-Felix Akkermans \\
-Niels Doekemeijer \\
-Thomas van Helden \\
-Albert ten Napel \\
-Jan Pieter Waagmeester}
+\author{
+Group 5/E: 
+ Felix Akkermans,  
+Niels Doekemeijer, \\
+Thomas van Helden, 
+Albert ten Napel,
+Jan Pieter Waagmeester 
+}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-For the  development of a modeling and simulation package for BioBricks we attended a seminar in synthetic biology, in which essential knowledge from this domain was gathered. Together with an abstract of  this, a reflection on the relationship of this project with synthetic biology is given, motivating the value of the effort that this project makes at applying computer science in the field of synthetic biology. Along we provide a reflection what we think is the role of computer science with biology in general.\end{abstract}
+\noindent For the  development of a modeling and simulation package for BioBricks we attended a seminar in synthetic biology, in which essential knowledge from this domain was gathered. Together with an abstract of  this, a reflection on the relationship of this project with synthetic biology is given, motivating the value of the effort that this project makes at applying computer science in the field of synthetic biology. Along we provide a reflection what we think is the role of computer science with biology in general.
+\end{abstract}
 
 \section{Abstracts of the seminar}
-For each seminar a summary was made. This provides an abstract of each summary in chronological order. The summaries themselves are provided in Appendix A.
+For each seminar a summary was made. This provides an abstract of each summary in chronological order. The summaries themselves are provided in appendix~\ref{abstracts}.
 
 \subsection{Introduction to molecular cell biology}
 DNA is a molecule that provides the information for the construction of proteins. This molecule can be divided in several ways to provide pieces to describe the buildup of DNA. Messenger RNA (mRNA) relays the information in DNA to the protein synthesis machinery. mRNA shares a similarity with DNA but is directly used in protein construction, because mRNA encodes for the amino acids that  make up the protein. In this chain of translation, the expression of a gene, several factors that interact play a role in promoting or suppressing of this process. The transfer, expression of DNA varies based on the the type of cell and the life form. Based on the study of this, the ability to influence this arises, and allows for manipulation of DNA and the partial prediction of it's outcome. 
@@ -58,13 +61,16 @@ We will create a modelling and simulation package for BioBricks. The power of a 
 
 \section{The role of computer science in biology}
 Computer science came about not with the purpose to study itself. It was a means to and end, a aid to accelerate technology and fields of science where it could be applied at the time. Biology was so much not among at first. Since the discovery of DNA and the development of technologies to read and synthesize these, together with the development of technologies to observe and analyse molecular processes such as cells, this exploded the bandwidth of digital data that biology produces constantly. Exactly like how computers were developed for, and deployed in fields of science to work on their data, now computer science will have to make a quick catch-up in this novel domain. We think that in order to do this, it should not have to walk the same path as other fields did and work with antique technologies, but should immediately benefit from the latest improvements in computer science. We also think that the marriage of computer science and biology holds a very exiting future with it's application in society, and with a lot of potential which will probably spawn a lot of new fields in science. We think it could very well play a key role in solving the most important problems facing humanity, and could greatly determine the shape of our future, and therefore we think that it deserves special attention. This could be in the form of contests to motivate students to pick up this field, or consciousness raising of the general public to create more support for this field among policy makers.
+\appendix
 
 \section{Seminar summaries}
+\label{abstracts}
 Here the summary of each seminar is given in chronological order.
 
 \includepdf{abstracts/lecture-1.pdf}
 \includepdf{abstracts/lecture-2.pdf}
 \includepdf{abstracts/lecture-3.pdf}
 \includepdf{abstracts/lecture-4.pdf}
+
 
 \end{document}
