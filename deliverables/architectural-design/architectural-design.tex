@@ -39,7 +39,7 @@ Jan Pieter Waagmeester}
 \pagebreak
 \section{Introduction}
 \subsection{Purpose of the System}
-The purpose of our system is to create a modeling environment for biology experts and people who work in the field of genetics. Within this modeling environment, you can easily model BioBricks. BioBricks are biological gates, which are created by gene manipulation. Our system should be able to create BioBricks with basic components, like AND and NOT gates. The system should also be able to import and export BioBricks, making it possible to create larger constructions with earlier designed BioBricks.
+The purpose of our system is to create a modeling environment for biology experts and people who work in the field of genetics. Within this modeling environment, you can easily model BioBricks. BioBricks are biological gates, which are created by gene manipulation. Our system should be able to create BioBricks with basic components, like AND and NOT gates. The system should also be able to import and export BioBricks, making it possible to create larger constructions with earlier designed BioBricks. This will allow the construction of more complex gates. From NOT and AND you can create OR and eventually implement flip-flops and other gates.
 
 \subsection{Design Goals}
 Our design goal for this project is to successfully implement the system mentioned above. We aim to make the system easy to use for people without too much knowledge of computers.
@@ -47,9 +47,9 @@ Our design goal for this project is to successfully implement the system mention
 
 \subsection{Definitions, acronyms and abbreviations}
 \begin{description}
-	\item[BioBrick] is the key word in this project. A BioBrick is a logical gate representation of a manipulated cell. The idea behind this is: Genes can be manipulated to work as gates. By doing this we can create logical structures using cells. A BioBrick is a model for this. The term Bio comes from Biology. The term Brick comes from the idea that these BioBricks should be building blocks for a larger system. With BioBricks you can build bigger structures. 
-	\item[Client-side] is the part of the program which takes place on the computer of the client/user. The opposite is server-side. For our program, the client-side is a GUI implemented in JavaScript. 
-	\item[Server-side] is the part of the program which takes place on the server. In our case it is implemented in Java. This part will do the heavier computations, so the client-side only has to display the results.
+	\item[BioBrick] is the key word in this project. A BioBrick is a logical gate representation of a manipulated cell. The idea behind this is: Genes can be manipulated to work as gates. By doing this we can create logical structures using cells. A BioBrick is a model for this. The term Bio comes from Biology. The term Brick comes from the idea that these BioBricks should be building blocks for a larger system. With Bricks you can build bigger structures.  
+	\item[Client-side] is the part of the program which takes place on the computer of the client/user. The opposite is server-side. For our program, the client-side is a GUI implemented in JavaScript. These two parts will interact using AJAX. The handling of this will be done on both sides. 
+	\item[Server-side]  is the part of the program which takes place on the server. In our case it is implemented in Java. This part will do the heavier computations, so the client-side only has to display the results. The client will send requests to the server, the server will compute the result of the request and send it back to the client.
 	\item[GUI] is a Graphical User Interface. This is the part of the program which you actually see as a user. It is the screen which shows you the program and allows you to do things. 
 	\item[JSON] (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.
 	\item[AJAX] (Asynchronous JavaScript and XML) is a technique in which data can be exchanged between client and server side. This can be done asynchronously, meaning your main program does not have to wait for the results of the data transaction before it can continue. We will use this as a part of our communication between our JavaScript client-side and our Java server-side.
@@ -65,11 +65,17 @@ Our design goal for this project is to successfully implement the system mention
 \end{description}
 
 \subsection{Overview}
-So this chapter was all about what we wanted to achieve globally. We want to create a modeling environment for biologists and genetics experts to model BioBricks. These BioBricks represent genetically modified cells or genes which act as logical gates. The Definitions section explains some of the major concepts. The full architectural design will be explained in detail how we intend to implement everything.
+In the next chapter we will discuss the exact architectural design of our application. We will go into detail about how is system is build up. There will be a short explanation of every sub-system. This will all be done in chapter 3.2. The mapping of how different parts of our application interact with each other will be given in chapter 3.3. In 3.4 there will be an explanation of how we manage data. Where and how will we save our BioBricks? Which format will we use? These are all questions we will answer. In chapter 3.5 we will tell something about how the application handles global recourses. There we will also explain why we chose not to have a complex access structure. Concurrency, how communication is handled in our system, will be discussed in chapter 3.6. Finally we will discuss the boundaries of our system. Where does our system end and what happens in case of errors or crashes? 
 
 \section{Proposed software architecture}
 \subsection{Overview}
-In this chapter we will discuss the exact architectural design of our application. We will go into detail about how the system is build up. There will be a short explanation of every sub-system. This will all be done in chapter~2.2. There is a mapping of how different parts of our application interact with each other in chapter~2.3. In 2.4 there will be an explanation of how we manage data. Where and how will we save our BioBricks? Which format will we use? These are all questions we will answer. In chapter~2.5 we will tell something about how the application handles global recourses. There we will also explain why we chose not to have a complex access structure. Concurrency, how communication is handled in our system, will be discussed in chapter~2.6. Finally we will discuss the boundaries of our system. Where does our system end and what happens in case of errors or crashes? 
+This chapter is about what we actually want to build. We want to create a modeling environment for biologists and genetics experts to model BioBricks. These BioBricks represent genetically modified cells or genes which act as logical gates. 
+
+
+Our program will consist of two major parts: A server and a client. The server will be implemented in Java and will handle the big computations and storage of data. The client will mainly display results. This is where the user will model the BioBricks and see the simulations of the outcome. The client will be implemented in JavaScript. The client will send requests to the server. The server, in turn, will respond to the requests. The type of response will depend on the request. Some example requests are: Storing data, checks if models are valid and importing BioBricks. 
+
+
+There will be two major formats in which we store and transfer data. SBML is a synthetic biology XML variant. The main advantage of using SBML is that we can easily export and import BioBricks, since Java already supports this. JSON is a format in which we can easily transfer data from our Java server to our JavaScript client. 
 
 \subsection{Subsystem Decomposition}
 The main decomposition in our system is the devision between the client and the server. The server is responsible for file operations and the more heavy calculations, while the client is mainly just a GUI. A schematic view of this decomposition can be found in figure~\ref{fig-decomposition}. In rest of this section we'll discuss each interaction in more detail.
