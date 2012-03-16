@@ -69,7 +69,7 @@ So this chapter was all about what we wanted to achieve globally. We want to cre
 
 \section{Proposed software architecture}
 \subsection{Overview}
-In this chapter we will discuss the exact architectural design of our application. We will go into detail about how the system is build up. There will be a short explanation of every sub-system. This will all be done in chapter 3.2. There is a mapping of how different parts of our application interact with each other in chapter 2.3. In 2.4 there will be an explanation of how we manage data. Where and how will we save our BioBricks? Which format will we use? These are all questions we will answer. In chapter 2.5 we will tell something about how the application handles global recourses. There we will also explain why we chose not to have a complex access structure. Concurrency, how communication is handled in our system, will be discussed in chapter 2.6. Finally we will discuss the boundaries of our system. Where does our system end and what happens in case of errors or crashes? 
+In this chapter we will discuss the exact architectural design of our application. We will go into detail about how the system is build up. There will be a short explanation of every sub-system. This will all be done in chapter~2.2. There is a mapping of how different parts of our application interact with each other in chapter~2.3. In 2.4 there will be an explanation of how we manage data. Where and how will we save our BioBricks? Which format will we use? These are all questions we will answer. In chapter~2.5 we will tell something about how the application handles global recourses. There we will also explain why we chose not to have a complex access structure. Concurrency, how communication is handled in our system, will be discussed in chapter~2.6. Finally we will discuss the boundaries of our system. Where does our system end and what happens in case of errors or crashes? 
 
 \subsection{Subsystem Decomposition}
 The main decomposition in our system is the devision between the client and the server. The server is responsible for file operations and the more heavy calculations, while the client is mainly just a GUI. A schematic view of this decomposition can be found in figure~\ref{fig-decomposition}. In rest of this section we'll discuss each interaction in more detail.
@@ -117,7 +117,8 @@ We propose the following API for the server-side of our application. Every model
 	\item[modelToSBML(model, fileName)] -
 		Exports model to an SBML file and saves it to a file called fileName.\\
 		Returns an error if model is not a valid model.\\
-		Returns an error if saving failed.
+		Returns an error if saving failed. \\
+	\footnote{\textbf{SBMLToModel} seems a logical counterpart, but because SBML is such a low level format, not all the information required to rebuild the model can be extracted. Therefore we will not implement it}
 	\item[simulate(fileName, inputValues): outputValues] -
 		Simulates the SMBL model saved in fileName with given input values and returns the matching outputvalues.\\
 		Returns an error if the simulation of the file failed.
@@ -128,7 +129,7 @@ We propose the following API for the server-side of our application. Every model
 For the client-side of our application, we will not follow a predefined API. As the client will only implement the view part of the model, view controller (MVC) system, it will only reuse the API of the server and not implement an API of its own. The server will respond to the API calls with a standard JSON object, as proposed in figure~\ref{fig-jsonDefault}. The response always contains a success field. When the server cannot respond with success, the reason will be given in the message field. In case of a response with data, the client can find it in the data field of the servers response. \\
 
 \begin{figure}[h!]
-\caption{Examples of JSON responses}
+\caption{Some examples of JSON responses in a generic wrapper}
 \label{fig-jsonDefault}
 {\footnotesize
 \begin{tabular}{p{4.3cm} p{4.3cm} p{4.3cm}}
@@ -179,7 +180,7 @@ For the client-side of our application, we will not follow a predefined API. As 
 \pagebreak
 
 \subsection{Hardware/Software Mapping}
-Our architecture is composed of two major elements, the client implemented as a web application and the server, implemented in Java. The browser has to be a recent version of one of the major browser\footnote{We'll test in Google Chrome and Firefox}, the supporting system is not relevant. The server can be run on the same machine, which is likely to be the same machine during the development stage.
+Our architecture is composed of two major elements, the client implemented as a web application and the server, implemented as a Java servlet on top of Apache Tomcat. The browser has to be Chrome~15+ or Firefox~7+, the supporting system hardware and operating system is not relevant. The server can be run on the same machine, which will be the case during the development stage. When the server and the client are not on the same machine, a reliable network connection has to be available.
 
 \include{raw-in/Pers_Data_Acces_Control_Concurrency}
 %\subsection{Persistent Data Management}
@@ -192,7 +193,7 @@ Our architecture is composed of two major elements, the client implemented as a 
 %~ (how is the system started and stopped, what happens
 %~ in case of a system crash)
 
-In a deployment context, the server will run somewhere on a server indefenately. At any point, the user can start a browser on a random device and start to use it.
+In a deployment context, the server will run somewhere on a server indefinately. At any point, the user can start a browser on a random device and start to use it.
 During the development stage, the server will run locally, and has t be started by the user before the user can start using it.
 The user's work will be saved at regular time intervals to prevent loss of work in case of a browser crash.
 
