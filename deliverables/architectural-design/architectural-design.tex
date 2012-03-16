@@ -63,7 +63,7 @@ Our design goal for this project is to successfully implement the system mention
 \end{description}
 
 \subsection{Overview}
-In the next chapter we will discuss the exact architectural design of our application. We will go into detail about how is system is build up. There will be a short explanation of every sub-system. This will all be done in chapter 3.2. The mapping of how different parts of our application interact with each other will be given in chapter 3.3. In 3.4 there will be an explanation of how we manage data. Where and how will we save our BioBricks? Which format will we use? These are all questions we will answer. In chapter 3.5 we will tell something about how the application handles global recourses. There we will also explain why we chose not to have a complex access structure. Concurrency, how communication is handled in our system, will be discussed in chapter 3.6. Finally we will discuss the boundaries of our system. Where does our system end and what happens in case of errors or crashes? 
+In the next chapter we will discuss the exact architectural design of our application. We will go into detail about how is system is build up. There will be a short explanation of every sub-system. This will all be done in chapter 2.2. The mapping of how different parts of our application interact with each other will be given in chapter 2.3. In 2.4 there will be an explanation of how we manage data. Where and how will we save our BioBricks? Which format will we use? These are all questions we will answer. In chapter 2.5 we will tell something about how the application handles global recourses. There we will also explain why we chose not to have a complex access structure. Concurrency, how communication is handled in our system, will be discussed in chapter 2.6. Finally we will discuss the boundaries of our system. Where does our system end and what happens in case of errors or crashes? 
 
 \section{Proposed software architecture}
 \subsection{Overview}
@@ -73,7 +73,7 @@ This chapter is about what we actually want to build. We want to create a modeli
 Our program will consist of two major parts: A server and a client. The server will be implemented in Java as a servlet on top of Apache Tomcat and will handle the big computations and storage of data. The client will mainly display results. This is where the user will model the BioBricks and see the simulations of the outcome. The client will be implemented in JavaScript. The client will send requests to the server. The server, in turn, will respond to the requests. The type of response will depend on the request. Some example requests are: Storing data, checks if models are valid and importing BioBricks. 
 
 
-There will be two major formats in which we store and transfer data. SBML is a synthetic biology XML variant. The main advantage of using SBML is that we can easily export and import BioBricks, since Java already supports this. JSON is a format in which we can easily transfer data from our Java server to our JavaScript client and vice versa. 
+There will be two major formats in which we store and transfer data. SBML is a synthetic biology XML variant. The main advantage of using SBML is that we can easily simulate, as there are several simulators which use this format. JSON is a format in which we can easily transfer data from our Java server to our JavaScript client and vice versa. 
 
 \subsection{Subsystem Decomposition}
 The main decomposition in our system is the devision between the client and the server. The server is essentially a servlet on top of Tomcat, responsible for file operations and the more heavy calculations, while the client is mainly just a GUI. A schematic view of this decomposition can be found in figure~\ref{fig-decomposition}. In rest of this section we'll discuss each interaction in more detail.
@@ -198,7 +198,7 @@ Our architecture is composed of two major elements, the client implemented as a 
 %~ in case of a system crash)
 
 In a deployment context, the server will run somewhere on a server indefinately. At any point, the user can start a browser on a random device and start to use it.
-During the development stage, the server will run locally, and has to be started by the user before he can start using it through someting like \url{http://localhost:8080/}, depending on Tomcat's configuration.
+During the development stage, the server will run locally, and has to be started by the user before he/she can start using it through something like \url{http://localhost:8080/}, depending on Tomcat's configuration.
 The user's work will be saved to the server at regular time intervals to prevent loss of work in case of a browser crash.
 
 \end{document}
