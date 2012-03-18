@@ -66,10 +66,33 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \section{Implementation and tests}
 
 \subsection{Order of implementation of features}
+The concept of Scrum is to always have a working product. We will try to follow this concept. Because there is a distinction between the server and client side in our application, it should be easy for the group to work at the same time. The first steps of the building process would be to create a framework for sending/receiving messages between these two subsystems. \\
+
+After that, steps can be made to gradually build up the application. This is our planning, in order of implementation:
+\begin{itemize}
+\item Server-Client communication (including definition of object formats);
+\item List available proteins and gates;
+\item Design circuit;
+\item Specify proteins;
+\item Validate circuit;
+\item Import/Export circuits;
+\item Specify input values;
+\item Simulate circuit;
+\item Re-use circuits;
+\item Local back-up
+\end{itemize}
 
 \subsubsection{Iterations}
+In our process of building the application, we will have Scrum iterations of two weeks each. This means that we only decide what to implement for the coming two weeks. After these two weeks, the application should have been improved (and still working!) and we will decide again for the coming two weeks. \\
 
-\subsubsection{Milestones}
+We will have five iterations in total before delivering the final product. This is our planning:
+\begin{enumerate}
+\item Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
+\item The user should be able to model a circuit and specify the proteins for the signals.
+\item Importing, exporting and specifying input values should work. Server side must be able to validate and simulate a circuit.
+\item Client side must be able to show the simulation and be able to re-use circuits as new gates.
+\item Margin for finishing touches and perhaps extra features such as local back-ups.
+\end{enumerate}
 
 \include{subsection-server-testing}
 \include{subsection-client-testing}
