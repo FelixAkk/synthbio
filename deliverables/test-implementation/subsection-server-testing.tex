@@ -1,6 +1,48 @@
 \subsection{Server Test plan}
 \subsubsection{Unit testing}
+\textbf{Filesystem read testing:
+}\begin{enumerate}
+\item Read a .syn file that contains the a relatively simple graph  and a list with enough proteins, which are all assigned to edges.
+
+\item Read a .syn file that contains the a relatively simple graph  and a list with not enough proteins, where undefined proteins are assigned to edges. Validate that an exception is thrown.\item Read a .syn file that contains the  model of item 1, with two simulation data series.
+\item Read a corrupt .syn file that contains the above model, but with corruptions in each part.
+Validate that the reader will detect this and throw an exception.
+\item Read a .syn file that contains the an extremely large model. Validate that the function call ends within a certain time.\end{enumerate}
+
+\noindent \textbf{Filesystem write testing:}
+
+\begin{enumerate}
+\item Write a .syn file that contains the a relatively simple graph  and a list with enough proteins, which are all assigned to edges.
+
+\item Write a .syn file that contains the a relatively simple graph  and a list with not enough proteins, where undefined proteins are assigned to edges. Validate that an exception is thrown.\item Write a .syn file that contains the  model of item 1, with two simulation data series.
+\item Write a corrupt .syn file that contains the above model, but with corruptions in each part.
+Validate that the reader will detect this and throw an exception.
+\item Write a .syn file that contains the an extremely large model. Validate that the function call ends within a certain time.\end{enumerate}
+
+\noindent \textbf{HTTP API:
+}\begin{enumerate}
+\item Issue a listFiles() call and validate that all .syn files in the specified folder are returned, and also validate that interactions with the filesystem subsystem have been made.\item Issue a getFile() call with an existing filename and validate that the correct call is made to the filesystem reader to read the given filename.
+\item Issue a getFile() call with an non-existent filename and validate that the filesystem reader throws an exception.
+\item Issue a getFile() call with an existent filename of a corrupt file, and validate that the filesystem reader throws and exception.
+\item Issue a putFile() call with a provided model and filename, and validate that the file is written,  and also validate that interactions with the filesystem subsystem have been made.\item Issue a listProteins() call when a model is loaded and ensure that all the proteins are returned with their meta-data.
+\item Issue a modelToSBML() call when a model is loaded and ensure that all the model is written correctly, by checking for written data and validating that is complies with the SBML schema. Also validate that interactions with filesystem subsystem have been made.
+\item Issue a simulate() call with an existent filename and validate that the correct call is made to the simulation subsystem, and a call is made to validate the model first. Input values can be arbitrary.
+\item Issue a simulate() call when with an existent filename, of which the model is corrupt, and ensure that a call is made to validate the model and that an exception is thrown. Input values can be arbitrary.\item  Issue a simulate() call with a non-existent filename  to the simulation subsystem and ensure that an exception is thrown. Input values can be arbitrary.\end{enumerate}
+\textbf{JSBML Solver testing/simulator:}
+\begin{enumerate}
+\item 
+Call the simulator  to solve a relatively simple model and ensure that a new thread is started and output values are returned within a certain time.
+\item Call the simulator to solve a extremely large model and ensure that a new solver thread is started. If the solver crashes or hangs for longer than a specified time, ensure that an exception is thrown and the thread is terminated.
+\end{enumerate}
+\textbf{Webserver testing}
+\begin{enumerate}
+\item Request a connection with the webserver with the request to send the GUI and validate that a connection is set up and the GUI page is  served. 
+\item Ensure that after a certain time and idle connection is discarded.
+\end{enumerate}
 
 \subsubsection{Integration testing}
+On integration testing a
+
+
 
 \subsubsection{Acceptance testing}
