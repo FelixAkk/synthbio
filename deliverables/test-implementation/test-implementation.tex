@@ -30,30 +30,69 @@ Jan Pieter Waagmeester}
 In this report the different testing techniques we will use for this project will be explained. Because our solution has a clear division between server and client and because these will be developed in different programming environments, we will also need different testing strategies for the client and server. In chapter 2 a prioritization of the requirements can be found using the MoSCoW system. Chapter 3 will explain how we will test the server and client, and what strategies we will use. Lastly chapter 4 will cover the risk analysis, describing the risks for the successful implementation of the system.
 
 \section{MoSCoW prioritization}
-% (prioritization of requirements: Must, Should, Could, Wont)
-\begin{tabular}{ll}
-Requirement & MoSCoW\\[2mm] \hline
-Circuit Abstraction & Must \\
-Protein specification & Must \\
-Available proteins & Must \\
-Export XML & Must \\
-Interfering signals & Must \\
-Invalid signals & Should \\
-Re-use BioBricks & Should \\
-Multi-client & Could \\
-Local back-up & Could \\
-Import XML & Wont \\
-Biological plausibility & Wont \\
+In this chapter we will specify our priorities of requirements using the MoSCoW model. This model divides requirements on how viable it is to implement certain features: Must-Haves are features that the application cannot do without. These are all necessary for the program to function properly. Should-Haves group the features that are high-priority, but are not critical for the system. Could-Haves are features that would be nice to be have, should the time allow it and Wont-Haves are features that will not be implemented (in this version of the program).
 
-\end{tabular}
+\subsection{Must Haves}
+\begin{description}
+\item[Available gates] The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.
+\item[Design circuit] The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.
+\item[Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals.
+\item[Protein specification] The user must be able to specify which protein is used for a certain signal.
+\item[Export circuit] The application must to able to save a circuit.
+\item[Import circuit] The application must be able to load an exported circuit.
+\item[Input values specification] The user must be able to specify the input values used for the simulation of the circuit.
+\item[Circuit simulation] The application must be able to simulate a valid circuit and present the output values to the user.
+\end{description}
+
+\subsection{Should Haves}
+\begin{description}
+\item[Re-use BioBricks] The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.
+\item[Circuit validation] The user must to be able validate his circuit in the application. This is not a must as simulation will fail if the circuit is invalid, but modeling will be faster if the user can easily get feedback.
+\end{description}
+
+\subsection{Could Haves}
+\begin{description}
+\item[Determine proteins by specifying circuit, input and output values] It is possible to let an algorithm choose the best proteins for the signals in a circuit, given user specified input and output values. This feature should be a nice extra and will be implemented if time allows it.
+\item[Local back-up] If, for whatever reason, a crash occurs (the connection drops, the server stops functioning, etc.), it would be nice to provide the user with a backup of his/her work. This feature has not much to do with the main goal of this application (creating and simulating a circuit), so that is why it is a could-have feature.
+\item[Multi-client] The application must be able to handle multiple clients concurrently. This is not a point of attention, as modeling can easily be done one circuit at a time. Another issue is that implementing and properly testing this feature desires significant attention, that is why we will do it if we have enough time.
+\end{description}
+
+\subsection{Wont Haves}
+\begin{description}
+\item[Determine cirtcuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is impossible to do properly in our limited timespan.
+\item[Biological plausibility] It is near impossible to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
+\end{description}
 
 \section{Implementation and tests}
 
 \subsection{Order of implementation of features}
+The concept of Scrum is to always have a working product. We will try to follow this concept. Because there is a distinction between the server and client side in our application, it should be easy for the group to work at the same time. The first steps of the building process would be to create a framework for sending/receiving messages between these two subsystems. \\
+
+After that, steps can be made to gradually build up the application. This is our planning, in order of implementation:
+\begin{itemize}
+\item Server-Client communication (including definition of object formats);
+\item List available proteins and gates;
+\item Design circuit;
+\item Specify proteins;
+\item Validate circuit;
+\item Import/Export circuits;
+\item Specify input values;
+\item Simulate circuit;
+\item Re-use circuits;
+\item Local back-up
+\end{itemize}
 
 \subsubsection{Iterations}
+In our process of building the application, we will have Scrum iterations of two weeks each. This means that we only decide what to implement for the coming two weeks. After these two weeks, the application should have been improved (and still working!) and we will decide again for the coming two weeks. \\
 
-\subsubsection{Milestones}
+We will have five iterations in total before delivering the final product. This is our planning:
+\begin{enumerate}
+\item Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
+\item The user should be able to model a circuit and specify the proteins for the signals.
+\item Importing, exporting and specifying input values should work. Server side must be able to validate and simulate a circuit.
+\item Client side must be able to show the simulation and be able to re-use circuits as new gates.
+\item Margin for finishing touches and perhaps extra features such as local back-ups.
+\end{enumerate}
 
 \include{subsection-server-testing}
 \include{subsection-client-testing}
