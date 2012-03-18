@@ -1,6 +1,15 @@
 \subsection{Client Test plan}
+Client testing can be separated from the development of the server by mocking different server-replies in simple text-files. These different test files contain replies the server might give to certain requests from te client and must be interpreted by the client code. 
+
 \subsubsection{Unit testing}
+In order to test various small parts of the system we'll use unit tests. Defining unit tests is a good way to test for expected functionality but also ensure stability in functionality while changes to other parts of te code are made. Since we'll use the JQuery-framework in our frontend code, its unit testing framework QUnit\footnote{Documentation for QUnit: \url{http://docs.jquery.com/QUnit}} seems a logical choice. 
 
 \subsubsection{Integration testing}
+Some integration can be tested through the use of QUnit as well, but it might be usefull to use Crawljax\footnote{Home of Crawljax: \url{http://crawljax.com/}}, especially for some more complex interaction tests.
+
+The core of our integration tests will consist of behaviour of several \text{unit}s, covered with unit tests, functioning together.
 
 \subsubsection{Acceptance testing}
+User stories developed for each development run provide valuable information about acceptance tests to be executed. For each user story we'll create one or more acceptence tests, which may consist of unit and integration testing.
+
+For some things not really measureable, like usability, we'll use additional manual tests, both performed by the members of the development team and volunteers around us.
