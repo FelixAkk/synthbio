@@ -1,5 +1,7 @@
 \subsection{Server Test plan}
+
 \subsubsection{Unit testing}
+Unit testing is performed by both structural and functional testing using JUnit, as well as interaction testing using Mockito \footnote{Home page of Mockito for QUnit: \url{http://docs.jquery.com/QUnit}}.\\
 \textbf{Filesystem read testing:
 }\begin{enumerate}
 \item Read a .syn file that contains the a relatively simple graph  and a list with enough proteins, which are all assigned to edges.
@@ -41,8 +43,7 @@ Call the simulator  to solve a relatively simple model and ensure that a new thr
 \end{enumerate}
 
 \subsubsection{Integration testing}
-On integration testing a
-
-
+Testing of the integration with the client will be done by testing the HTTP API, and testing of the integration of the the server subsystems will be covered by the unit tests.
 
 \subsubsection{Acceptance testing}
+User stories developed for each development run provide valuable information about how much the server side weighs in the result. For each user story we'll create one or more acceptance tests, and for those that also include server calls, most can be valued by the responsiveness and stability of the server. For some tests this is already defined as a certain time within which the server has to finish the job.
