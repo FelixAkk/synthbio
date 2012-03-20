@@ -7,7 +7,7 @@
 
 \usepackage{pgf}
 \usepackage{tikz}
-\usepackage{pictures/tikz-uml}
+\usepackage{D:/ContextProject/GIT/synthbio/deliverables/test-implementation/pictures/tikz-uml}
 
 \title{Programming Life - Test and implementation plan }
 
@@ -101,7 +101,15 @@ We will have five iterations in total before delivering the final product. This 
 Integration testing is done when the individual software modules are combined and need to be tested as a whole. One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit tests can test these two components.
 
 \section{Risk analysis}
-(what are the risks for the successful implementation of the system?)
+Our program will be used by several users. These users all work in high end research teams and information should be secure. To help do this we will install some safeguards. But what risks are we looking at? Where are the potential threats? And how do we counter them. We will look at what information is visible to other users and security login. We will also have a look at what type of data transfer we will use and how safe they are. The final thing we look at is what happens when the application has an emergency shutdown of some sort and how files will be backed up.
 
+\subsection{Users and their files}
+Users working with our application will be working in high end research teams. Their data might be classified or, in any case, should be hidden for other users. To do this one would need a secure user account for each user. However, due to the time issues we have, we will not implement this. This could be a future function to be implemented.
+
+\subsection{Data transfer}
+The data transfer will happen between the server and the client. This has no major security threats. There could be some sort of injections, but this will prove to be difficult. We will check if everything saved on the server is a valid BioBrick or another datatype which we use. Any other stored data will produce error messages and will be blocked off.
+
+\subsection{Emergency shutdown}
+What will happen in case of an emergency shutdown. There are two things that should occur. The program should shutdown clearly, leaving no room for messing around. Secondly, the program should backup all the last changes. This will be done as a separate file, because we do not want to override the main project. Due to time issues, we cannot ensure the implementation of this.
 
 \end{document}
