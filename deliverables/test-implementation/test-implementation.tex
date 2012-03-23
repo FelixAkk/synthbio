@@ -68,7 +68,7 @@ Promotors are parts of the gene which facilitate the polymerase to bind to the D
 A gate is defined by an promotor and a \textit{CDS}. The promotor defines the input(s) of the gate, the \textit{CDS} defines the output. In the case of an NOT-promotor, one transcription factor disables the binding of the polymerase. In the case of an AND-promotor, two transcription factors are required for the polymerase to bind and start the transcription reaction.
 
 \paragraph{Circuit}
-The circuit is the collection of \textit{gates} connected by \textit{signals}.
+The circuit is the collection of \textit{gates} connected by \textit{signals} in the pure electrical sense. Translated to the biological world, the circuit is a cell in which all \textit{signals} are concentrations of \textit{transcription factors}.
 
 \paragraph{SBML}
 Being a little unfamiliar with the format, we were not careful enough when formulating the requirements about this format. SBML is a format targeted at the biological part of the project, we need to save more information than possible in the standard SBML. We choose to persist the circuits in a different format: \verb|.syn|, as discribed in our Architectural design document. SBML will be used as an export-format and as the interface to the simulator.
@@ -217,21 +217,8 @@ Milestones in our project, including their planned deadlines, are:
 \include{subsection-client-testing}
 
 \subsection{System Integration testing}
-The server and client will be tested as described in the preceding chapters. Once those modules are tested the client and server need to be integrated and tested. To test these different methods will be used:\\
-\begin{itemize}
-\item Unit tests will be made that will be ran with the server and client both running. With these tests we need to think about possible network delay, so while testing the server needs to be running on a different machine than the client.
-\item Crawljax will again be used on the client, but this time with the server running.\\
-\end{itemize}
-
-% % %
-%Integration testing is done when the individual software modules are combined and need to be tested as a whole. There are several methods one %can use to test combined modules, these are bottom up testing, top down testing and sandwich testing. We will use the bottom up approach. With %this approach the lower level modules are integrated and tested first, then these are used to test the higher level modules. With this approach %bugs can be found more easily because the lowest level is tested first. The approach also complements our development strategy since we will %develop the lowest components first.
-% % %
-
-% % %
-%One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit %tests can test these two components.
-% % %
-
-\noindent After this, validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. The third party in our case will be fellow students and volunteers. After the testing the participants will be interviewed to see what they thought of the system. Was the system intuitive? Did the system feel safe? did the system do what you wanted? etc.
+The server and client will be tested as described in the preceding chapters. Once those modules are tested the client and server need to be integrated and tested. Unit tests will be made that will be ran with the server and client both running. With these tests we need to think about possible network delay, so while testing the server needs to be running on a different machine than the client. Furthermore we will be doing extensive manual testing. These two techniques are really the only way to test the integration.\\
+After this, validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. The third party in our case will be fellow students and volunteers. After the testing the participants will be interviewed to see what they thought of the system. Was the system intuitive? Did the system feel safe? did the system do what you wanted? etc.
 
 \section{Risk analysis}
 In this chapter we will discuss what we see as possible risks to our project. We will look at the difficulty of several implementation steps. After that, testing difficulties will be discussed. Third point of attention is external parties. Who do we need beside our own team to finish this project successfully and how does that invoke issues? Furthermore we will examine what we will do if the project stumbles upon unforeseen problems. Finally we will have a look at every persons schedule to estimate their work pressure.
@@ -259,9 +246,10 @@ Our project is not heavily dependent upon external parties. However, we do occas
 
 \subsection{Unforeseen problems}
 What happens if something unexpected happens? If we stumble upon a problem we did not foresee? We might have to add additional features to our application or we find a bug which we cannot easily fix. If problems like these occur we need to use our spare time to fix these problems. We have a strict planning of when everything is due, and in planning this we kept some spare time to deal with unexpected issues.\\
-If a deadline of the implementation of a requirement is missed, than the following will happen based on priority of the requirement.\\
+If a deadline of the implementation of a requirement is missed, than the following will happen based on priority of the requirement:\\
 In each Scrum iteration the Must-Haves\footnote{Chapter 3} have the highest priority and requirements with a lower priority will be delayed or cancelled if a Must-Have is running behind on schedule.\\
-If a component that is earlier in the critical path is not yet finished than a component further down in the critical path or not in the critical path will be delayed or cancelled. For example if Design Circuit\footnote{Requirement X} is not yet finished than work on pro\footnote{Requirement X} must be delayed because Specify Protein needs Design Circuit to be implemented.\\
+The critical path contains an ordering of the requirements such that the component that has less dependencies on other components comes earlier.\\
+If there are only Must-Haves in the current iteration then the component that is earlier in the critical path gets a higher priority. For example if Design Circuit\footnote{Requirement 3} is not yet finished than work on Specify Protein\footnote{Requirement 5} must be delayed because Specify Protein needs Design Circuit to be implemented.\\
 
 
 \subsection{Work stress of every team member}
