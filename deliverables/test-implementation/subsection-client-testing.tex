@@ -1,7 +1,7 @@
 \subsection{Client Test plan}
 Client testing can be separated from the development of the server by mocking different server-replies in simple text-files. These different test files contain replies the server might give to certain requests from te client and must be interpreted by the client code. They will be served as a static file from a webserver, so the only part we remove from the `normal equation' is the server \textit{deciding} what to reply.
 
-Making these mockups costs time, but we think de decoupling of the development and testing of the client and the server is a valuable
+Making these mockups costs time, but we think de decoupling of the development and testing of the client and the server is a valuable effort.
 
 \subsubsection{Unit testing}
 In order to test various small parts of the system we'll use unit tests. Defining unit tests is a good way to test for expected functionality but also ensure stability in functionality while changes to other parts of te code are made. Since we'll use the JQuery-framework in our frontend code, its unit testing framework QUnit\footnote{QUnit: a powerfull, easy-to-use, JavaScript test suite. \url{http://docs.jquery.com/QUnit}} seems a logical choice. It can be used just like JUnit to define small unit tests before implemtation of certain functionality during Test Driven Development and to prevent regression of implemented features. Some examples of unit tests include:
