@@ -97,7 +97,7 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \item[Available gates] The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.
 \item[Design circuit] The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.
 	\begin{itemize}
-	\item The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the AND symbol normally used in circuit design.
+	\item The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the distinctive AND symbol\footnote{IEEE Standard 91-1984} normally used in circuit design.
 	\item The user must be able to drag and drop gates from the list into the working area.
 	\item The user must be able freely to move the gate around in the working area, but gates snap to grid points on the working area.
 	\item The user must be able to draw relations between the gates in the form of wires.
@@ -124,7 +124,7 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \item[Multi-client] The application must be able to handle multiple clients concurrently. This is not a point of attention, as modeling can easily be done one circuit at a time. Another issue is that implementing and properly testing this feature desires significant attention, that is why we will do it if we have enough time.
 \end{description}
 
-\subsection{Wont Haves}
+\subsection{Won't Haves}
 \begin{description}
 \item[Determine circuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is very difficult to do properly given our limited timespan.
 \item[Biological plausibility] It is very hard to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
@@ -135,31 +135,31 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \subsection{Order of implementation of features}
 The concept of Scrum is to always have a working product. We will try to follow this concept. Because there is a distinction between the server and client side in our application, it should be easy for the group to work at the same time. The first steps of the building process would be to create a framework for sending/receiving messages between these two subsystems. \\
 
-After that, steps can be made to gradually build up the application.The following list is our planning, in order of implementation. For each point we specify whether it will be work on server side (S), on the client side (C) or both (SC). Also specified is how much time we think is needed to implement this feature. S is a small task (around a day of work), M a task of medium size (a week) and B a big task (more than a week). These times are just indications and can be used for comparison.
+After that, steps can be made to gradually build up the application.The following list is our planning, in order of implementation. For each point we specify whether it will be work on server side (S), on the client side (C) or both (SC). Also specified is how much time we think is needed to implement this feature. A small task (s) should take around a day of work, a task of medium size (m) a week and big task (b) more than a week. These times are just indications and can be used for comparison.
 \begin{itemize}
-\item Server-Client communication (including definition of object formats);	\tabto{13.8cm} SC \tabto{14.6cm} M
-\item List available proteins and gates; 									\tabto{13.8cm} SC \tabto{14.6cm} S
-\item Design circuit:													% 	\tabto{13.8cm}  C \tabto{14.6cm} B
+\item Server-Client communication (including definition of object formats);	\tabto{13.8cm} SC \tabto{14.6cm} m
+\item List available proteins and gates; 									\tabto{13.8cm} SC \tabto{14.6cm} s
+\item Design circuit:													% 	\tabto{13.8cm}  C \tabto{14.6cm} b
 	\begin{itemize}
-	\item Visualize gates using a simplified images;						\tabto{13cm}  C \tabto{13.8cm} S
-	\item Drag-and-drop gates into the working area;						\tabto{13cm}  C \tabto{13.8cm} S
-	\item Moves gates around in the working area;							\tabto{13cm}  C \tabto{13.8cm} M
-	\item Draw wires between gates;											\tabto{13cm}  C \tabto{13.8cm} M
-	\item Draw input and output wires;										\tabto{13cm}  C \tabto{13.8cm} S
+	\item Visualize gates using a simplified images;						\tabto{13cm}  C \tabto{13.8cm} s
+	\item Drag-and-drop gates into the working area;						\tabto{13cm}  C \tabto{13.8cm} s
+	\item Moves gates around in the working area;							\tabto{13cm}  C \tabto{13.8cm} m
+	\item Draw wires between gates;											\tabto{13cm}  C \tabto{13.8cm} m
+	\item Draw input and output wires;										\tabto{13cm}  C \tabto{13.8cm} s
 	\end{itemize}
-\item Specify proteins;														\tabto{13.8cm}  C \tabto{14.6cm} M
-\item Validate circuit;														\tabto{13.8cm} SC \tabto{14.6cm} S
-\item Import/Export circuits;												\tabto{13.8cm} SC \tabto{14.6cm} S
-\item Specify input values;													\tabto{13.8cm}  C \tabto{14.6cm} M
-\item Simulate circuit														\tabto{13.8cm} SC \tabto{14.6cm} M
+\item Specify proteins;														\tabto{13.8cm}  C \tabto{14.6cm} m
+\item Validate circuit;														\tabto{13.8cm} SC \tabto{14.6cm} s
+\item Import/Export circuits;												\tabto{13.8cm} SC \tabto{14.6cm} s
+\item Specify input values;													\tabto{13.8cm}  C \tabto{14.6cm} m
+\item Simulate circuit														\tabto{13.8cm} SC \tabto{14.6cm} m
 \end{itemize}~\\
 
 Should there be enough time left, we will try to implement the following features in the given order:
 \begin{itemize}
-\item Re-use circuits;											\tabto{13.8cm} SC \tabto{14.6cm} M
-\item Local back-up;											\tabto{13.8cm}  C \tabto{14.6cm} M
-\item Determine proteins using given input and output values;	\tabto{13.8cm} SC \tabto{14.6cm} B
-\item Multi-client												\tabto{13.8cm} SC \tabto{14.6cm} B
+\item Re-use circuits;											\tabto{13.8cm} SC \tabto{14.6cm} m
+\item Local back-up;											\tabto{13.8cm}  C \tabto{14.6cm} m
+\item Determine proteins using given input and output values;	\tabto{13.8cm} SC \tabto{14.6cm} b
+\item Multi-client												\tabto{13.8cm} SC \tabto{14.6cm} b
 \end{itemize}
 
 \subsubsection{Iterations}
