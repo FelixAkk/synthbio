@@ -99,8 +99,8 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 	\begin{itemize}
 	\item The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the AND symbol normally used in circuit design.
 	\item The user must be able to drag and drop gates from the list into the working area.
-	\item The user must be able freely to move the gate around in the working area, but gates snap to grid points on the working area.
-	\item The user must be able to draw relations between the gates in the form of wires.
+	\item The user must be able freely to move the gate around in the working area, but gates will snap to grid points on the working area.
+	\item The user must be able to draw connections between the gates in the form of wires.
 	\item The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.
 	\end{itemize}
 \item[Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).
@@ -124,7 +124,7 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \item[Multi-client] The application must be able to handle multiple clients concurrently. This is not a point of attention, as modeling can easily be done one circuit at a time. Another issue is that implementing and properly testing this feature desires significant attention, that is why we will do it if we have enough time.
 \end{description}
 
-\subsection{Wont Haves}
+\subsection{Won't Haves}
 \begin{description}
 \item[Determine cirtcuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is very difficult to do properly given our limited timespan.
 \item[Biological plausibility] It is very hard to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
@@ -162,10 +162,11 @@ Should there be enough time left, we will try to implement the following feature
 \item Multi-client												\tabto{13.8cm} SC \tabto{14.6cm} B
 \end{itemize}
 
+\pagebreak
 \subsubsection{Iterations}
-In our process of building the application, we will have Scrum iterations of two weeks each. This means that we only decide what to implement for the coming two weeks. After these weeks, the application should have been improved (and still working!) and we will decide again for the coming two weeks. \\
+In our process of building the application, we will have Scrum iterations of two weeks each. This means that we only decide what to implement for the coming two weeks. After each iteration, the application should have been improved, while still working and the next iteration will be started by deciding what to implement in the two coming weeks. \\
 
-We will have five iterations in total before delivering the final product. This is our planning:
+\noindent We will have a total of five iterations before delivering the final product. This is our planning:
 \begin{enumerate}
 \item \emph{(26-03 until 06-04-2012)} Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
 	\begin{itemize}
@@ -200,7 +201,7 @@ We will have five iterations in total before delivering the final product. This 
 \end{enumerate}
 
 \subsubsection{Milestones}
-Milestones in our project, including their planned deadline, are:
+Milestones in our project, including their planned deadlines, are:
 \begin{itemize}
 \item \textbf{Version 0.1}: A working client and server base which can report the state of the connection \emph{(27-03-2012)};
 \item \textbf{Version 0.5}: The user can design a basic circuit (gates and wires with specified proteins) \emph{(03-05-2012)};
