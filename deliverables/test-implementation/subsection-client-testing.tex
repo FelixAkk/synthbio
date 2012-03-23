@@ -4,14 +4,14 @@ Client testing can be separated from the development of the server by mocking di
 Making these mockups costs time, but we think de decoupling of the development and testing of the client and the server is a valuable effort.
 
 \subsubsection{Unit testing}
-In order to test various small parts of the system we'll use unit tests. Defining unit tests is a good way to test for expected functionality but also ensure stability in functionality while changes to other parts of te code are made. Since we'll use the JQuery-framework in our frontend code, its unit testing framework QUnit\footnote{QUnit: a powerfull, easy-to-use, JavaScript test suite. \url{http://docs.jquery.com/QUnit}} seems a logical choice. It can be used just like JUnit to define small unit tests before implemtation of certain functionality during Test Driven Development and to prevent regression of implemented features. Some examples of unit tests include:
+In order to test various small parts of the system we'll use unit tests. Defining unit tests is a good way to test for expected functionality but also ensure stability in functionality while changes to other parts of te code are made. Since we'll use the JQuery-framework in our frontend code, its unit testing framework QUnit\footnote{QUnit: a powerful, easy-to-use, JavaScript test suite. \url{http://docs.jquery.com/QUnit}} seems a logical choice. It can be used just like JUnit to define small unit tests before implementation of certain functionality during Test Driven Development and to prevent regression of implemented features. Some examples of unit tests include:
 \begin{enumerate}
 	\item The circuit and the smaller parts of it will exist in JavaScript as objects. They'll have \verb|toJSON()|-methods which can be tested.
-	\item The circuit parts parsing from from small JSON-snippets to JavaScript-objects can be tested.
+	\item The circuit parts parsing from small JSON-snippets to JavaScript-objects can be tested.
 \end{enumerate}
 
 \subsubsection{Integration testing}
-Some integration can be tested through the use of QUnit as well, but it might be usefull to use Crawljax\footnote{Home of Crawljax: \url{http://crawljax.com/}}, especially for some more complex interaction tests.
+Some integration can be tested through the use of QUnit as well, but it might be useful to use Crawljax\footnote{Home of Crawljax: \url{http://crawljax.com/}}, especially for some more complex interaction tests. Crawljax will find all click able elements on our client page and try them out in different orders. This way we can see what orders fail and need to be fixed.
 
 The core of our integration tests will consist of behaviour of several \text{unit}s, covered with unit tests, functioning together. Some examples include:
 \begin{enumerate}
@@ -20,6 +20,6 @@ The core of our integration tests will consist of behaviour of several \text{uni
 \end{enumerate}
 
 \subsubsection{Acceptance testing}
-User stories developed for each development run provide valuable information about acceptance tests to be executed. For each user story we'll create one or more acceptence tests, which may consist of unit and integration testing.
+User stories developed for each development run provide valuable information about acceptance tests to be executed. For each user story we'll create one or more acceptance tests, which may consist of unit and integration testing.
 
-For some things not really measureable, like usability, we'll use additional manual tests, both performed by the members of the development team and volunteers around us.
+For some things not really measurable, like usability, we'll use additional manual tests, both performed by the members of the development team and volunteers around us.
