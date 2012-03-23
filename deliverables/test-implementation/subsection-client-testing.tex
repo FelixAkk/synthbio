@@ -1,5 +1,5 @@
 \subsection{Client Test plan}
-Client testing can be separated from the development of the server by mocking different server-replies in simple text-files. These different test files contain replies the server might give to certain requests from te client and must be interpreted by the client code. They will be served as a static file from a webserver, so the only part we remove from the `normal equation' is the server \textit{deciding} what to reply.
+Client testing can be separated from the development of the server by mocking different server-replies in simple text-files. By mocking we mean creating test replies the server might give to certain requests from te client and saving them to a file. These files will be served statically from a webserver, so the only part we remove from the `normal equation' is the server \textit{deciding} what to reply.
 
 Making these mockups costs time, but we think de decoupling of the development and testing of the client and the server is a valuable effort.
 
