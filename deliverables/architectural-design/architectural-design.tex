@@ -1,3 +1,4 @@
+%
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
@@ -31,6 +32,7 @@ Albert ten Napel \\
 Jan Pieter Waagmeester}
 
 \begin{document}
+
 \maketitle
 
 \vfill
@@ -47,19 +49,19 @@ Our design goal for this project is to successfully implement the system mention
 
 \subsection{Definitions, acronyms and abbreviations}
 \begin{description}
-	\item[BioBrick] is the key word in this project. A BioBrick is a logical gate representation of a manipulated cell. The idea behind this is: Genes can be manipulated to work as gates. By doing this we can create logical structures using cells. A BioBrick is a model for this. The term Bio comes from Biology. The term Brick comes from the idea that these BioBricks should be building blocks for a larger system. With Bricks you can build bigger structures.  
-	\item[Client-side] is the part of the program which takes place on the computer of the client/user. The opposite is server-side. For our program, the client-side is a GUI implemented in JavaScript. These two parts will interact using AJAX. The handling of this will be done on both sides. 
-	\item[Server-side]  is the part of the program which takes place on the server. In our case it is implemented in Java. This part will do the heavier computations, so the client-side only has to display the results. The client will send requests to the server, the server will compute the result of the request and send it back to the client.
-	\item[GUI] is a Graphical User Interface. This is the part of the program which you actually see as a user. It is the screen which shows you the program and allows you to do things. 
-	\item[JSON] (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.
-	\item[AJAX] (Asynchronous JavaScript and XML) is a technique in which data can be exchanged between client and server side. This can be done asynchronously, meaning your main program does not have to wait for the results of the data transaction before it can continue. We will use this as a part of our communication between our JavaScript client-side and our Java server-side.
-	\item[SBML] is a Markup Language specially designed for Synthetic Biology. We will use this to simulate BioBricks. An external SBML solver application will be used for simulating the BioBricks.
+        \item[BioBrick] is the key word in this project. A BioBrick is a logical gate representation of a manipulated cell. The idea behind this is: Genes can be manipulated to work as gates. By doing this we can create logical structures using cells. A BioBrick is a model for this. The term Bio comes from Biology. The term Brick comes from the idea that these BioBricks should be building blocks for a larger system. With Bricks you can build bigger structures.  
+        \item[Client-side] is the part of the program which takes place on the computer of the client/user. The opposite is server-side. For our program, the client-side is a GUI implemented in JavaScript. These two parts will interact using AJAX. The handling of this will be done on both sides. 
+        \item[Server-side]  is the part of the program which takes place on the server. In our case it is implemented in Java. This part will do the heavier computations, so the client-side only has to display the results. The client will send requests to the server, the server will compute the result of the request and send it back to the client.
+        \item[GUI] is a Graphical User Interface. This is the part of the program which you actually see as a user. It is the screen which shows you the program and allows you to do things. 
+        \item[JSON] (JavaScript Object Notation) is a lightweight data-interchange format. It is easy for humans to read and write. It is easy for machines to parse and generate.
+        \item[AJAX] (Asynchronous JavaScript and XML) is a technique in which data can be exchanged between client and server side. This can be done asynchronously, meaning your main program does not have to wait for the results of the data transaction before it can continue. We will use this as a part of our communication between our JavaScript client-side and our Java server-side.
+        \item[SBML] is a Markup Language specially designed for Synthetic Biology. We will use this to simulate BioBricks. An external SBML solver application will be used for simulating the BioBricks.
 \end{description}
 
 \subsection{References}
 \begin{description}
-	\item[\url{http://www.json.org/}] The JavaScript Object Notation.
-	\item[\url{http://www.sbml.org/}] The Systems Biology Markup Language
+        \item[\url{http://www.json.org/}] The JavaScript Object Notation.
+        \item[\url{http://www.sbml.org/}] The Systems Biology Markup Language
 \end{description}
 
 \subsection{Overview}
@@ -70,7 +72,7 @@ In the next chapter we will discuss the exact architectural design of our applic
 This chapter is about what we actually want to build. We want to create a modeling environment for biologists and genetics experts to model BioBricks. These BioBricks represent genetically modified cells or genes which act as logical gates. 
 
 
-Our program will consist of two major parts: A server and a client. The server will be implemented in Java as a servlet on top of Apache Tomcat and will handle the big computations and storage of data. The client will mainly display results. This is where the user will model the BioBricks and see the simulations of the outcome. The client will be implemented in JavaScript. The client will send requests to the server. The server, in turn, will respond to the requests. The type of response will depend on the request. Some example requests are: Storing data, checks if models are valid and importing BioBricks. 
+Our program will consist of two major parts: A server and a client. The server will be implemented in Java as a servlet on top of Apache Tomcat and will handle the big computations and storage of data. The client will mainly display results. This is where the user will model the BioBricks and see the simulations of the outcome. The client will be implemented in JavaScript. The client will send requests to the server. The server, in turn, will respond to the requests. The type of response will depend on the request. Some example requests are: Storing data, checks if circuits are valid and importing BioBricks. 
 
 
 There will be two major formats in which we store and transfer data. SBML is a synthetic biology XML variant. The main advantage of using SBML is that we can easily simulate, as there are several simulators which use this format. JSON is a format in which we can easily transfer data from our Java server to our JavaScript client and vice versa. 
@@ -79,9 +81,9 @@ There will be two major formats in which we store and transfer data. SBML is a s
 The main decomposition in our system is the devision between the client and the server. The server is essentially a servlet on top of Tomcat, responsible for file operations and the more heavy calculations, while the client is mainly just a GUI. A schematic view of this decomposition can be found in figure~\ref{fig-decomposition}. In rest of this section we'll discuss each interaction in more detail.
 
 \begin{figure}[h!]
-	\caption{The system decomposition}
-	\label{fig-decomposition}
-	\centering\include{pictures/decomposition}
+        \caption{The system decomposition}
+        \label{fig-decomposition}
+        \centering\include{pictures/decomposition}
 \end{figure}
 
 \pagebreak
@@ -91,43 +93,43 @@ The main decomposition in our system is the devision between the client and the 
 \paragraph{Persistent storage}
 User generated circuits will be stored in simple text files. Since the communication between the client and the server is in JSON already, it is convenient to use that format for persitent storage aswell. The format will include:
 \begin{enumerate}[-]
-	\item The circuit as a directed graph,
-	\item Protein assignments for each edge,
-	\item Position information for each elemental gate,
-	\item Grouping information to support user generated `compound gates'\footnote{As discussed in requirement 1, see RAD.}.
+        \item The circuit as a directed graph,
+        \item Protein assignments for each edge,
+        \item Position information for each elemental gate,
+        \item Grouping information to support user generated `compound gates'\footnote{As discussed in requirement 1, see RAD.}.
 \end{enumerate}
 
 \paragraph{SBML export}
 Since SBML is an available standard and differential equation solvers exist for this format, we'll use it to run the simulation. The circuit will be represented in SBML and imported in the solver. The solver will respond with calculated concentrations of different species\footnote{SBML-term for different signals in the simulation} as a function of time.
 
 \paragraph{HTTP interface} 
-We propose the following API for the server-side of our application. Every model is represented by an object which stores the needed information. It is basically a directed graph with building blocks as nodes. \\
+We propose the following API for the server-side of our application. Every circuit is represented by an object which stores the needed information. It is basically a directed graph with building blocks as nodes. \\
 \begin{description}
-	\item[listFiles(): list of filenames] -
-		Returns a list of available models.\\
-		If there are no available files, then it returns an empty list.
-	\item[getFile(fileName): model] -
-		Returns the BioBrick model stored in fileName.\\
-		If the file does not exist or if the file is corrupt, it will give an error.
-	\item[putFile(fileName, model): boolean] -
-		Stores model in a file called fileName.\\
-		If something goes wrong while saving, it will give an error.
-	\item[listProteins(): list of proteins] -
-		Returns a list of proteins, including their meta-data.\\
-		With absence of information, it will give an error.
-	\item[listModels(): list of models] -
-		Returns a list with a model for all available files.\\
-		Returns an empty list when there are no available files.
-	\item[modelToSBML(model, fileName)] -
-		Exports model to an SBML file and saves it to a file called fileName.\\
-		Returns an error if model is not a valid model.\\
-		Returns an error if saving failed. \\
-	\footnote{\textbf{SBMLToModel} seems a logical counterpart, but because SBML is such a low level format, not all the information required to rebuild the model can be extracted. Therefore we will not implement it}
-	\item[simulate(fileName, inputValues): outputValues] -
-		Simulates the SMBL model saved in fileName with given input values and returns the matching outputvalues.\\
-		Returns an error if the simulation of the file failed.
-	\item[validate(model): boolean] -
-		Validates the model and returns true if model has everything defined to simulate it, and returns false otherwise.\\
+        \item[listFiles(): list of filenames] -
+                Returns a list of available models.\\
+                If there are no available files, then it returns an empty list.
+        \item[getFile(fileName): circuit] -
+                Returns the BioBrick circuit stored in fileName.\\
+                If the file does not exist or if the file is corrupt, it will give an error.
+        \item[putFile(fileName, circuit): boolean] -
+                Stores circuit in a file called fileName.\\
+                If something goes wrong while saving, it will give an error.
+        \item[listProteins(): list of proteins] -
+                Returns a list of proteins, including their meta-data.\\
+                With absence of information, it will give an error.
+        \item[listCircuits(): list of circuits] -
+                Returns a list with a circuit for all available files.\\
+                Returns an empty list when there are no available files.
+        \item[circuitToSBML(circuit, fileName)] -
+                Exports a circuit to an SBML file and saves it to a file called fileName.\\
+                Returns an error if circuit is not a valid circuit.\\
+                Returns an error if saving failed. \\
+        \footnote{\textbf{SBMLToCircuit} seems a logical counterpart, but because SBML is such a low level format, not all the information required to rebuild the circuit can be extracted. Therefore we will not implement it}
+        \item[simulate(fileName, inputValues): outputValues] -
+                Simulates the SMBL circuit saved in fileName with given input values and returns the matching outputvalues.\\
+                Returns an error if the simulation of the file failed.
+        \item[validate(circuit): boolean] -
+                Validates the circuit and returns true if circuit has everything defined to simulate it, and returns false otherwise.\\
 \end{description}
 
 For the client-side of our application, we will not follow a predefined API. As the client will only implement the view part of the model, view controller (MVC) system, it will only reuse the API of the server and not implement an API of its own. The server will respond to the API calls with a standard JSON object, as proposed in figure~\ref{fig-jsonDefault}. The response always contains a success field. When the server cannot respond with success, the reason will be given in the message field. In case of a response with data, the client can find it in the data field of the servers response. \\
@@ -137,11 +139,11 @@ For the client-side of our application, we will not follow a predefined API. As 
 \label{fig-jsonDefault}
 {\footnotesize
 \begin{tabular}{p{4.3cm} p{4.3cm} p{4.3cm}}
-	%empty row
+        %empty row
 \\
-	Generic response: &
-	Response of getFiles(): &
-	Response for getFile(fileName) for a non-existing file: \\
+        Generic response: &
+        Response of getFiles(): &
+        Response for getFile(fileName) for a non-existing file: \\
 \begin{verbatim}
 {
   "success": boolean,
