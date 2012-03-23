@@ -38,13 +38,13 @@ Jan Pieter Waagmeester}
 \pagebreak
 
 \section{Introduction}
-In this report the different testing techniques we will use for this project will be explained. Because our solution has a clear division between server and client and because these will be developed in different programming environments, we will also need different testing strategies for the client and server. In chapter 2 a prioritization of the requirements can be found using the MoSCoW system. Chapter 3 will explain how we will test the server and client, and what strategies we will use. Lastly chapter 4 will cover the risk analysis, describing the risks for the successful implementation of the system.
+In this report the different testing techniques we will use for this project will be explained. Because our solution has a clear division between server and client and because these will be developed in different programming environments, we will also need different testing strategies for the client and server. Firstly, we will clarify some definitions proposed earlier in chapter~2. In chapter~3 a prioritization of the requirements can be found using the MoSCoW method. Chapter~4 will explain how we will test the server and client, and what strategies we will use. Lastly chapter~5 will cover the risk analysis, describing the risks for the successful implementation of the system.
 
 \section{Clarification of some definitions}
 In previous reports we were not very careful in the choice of our words. In this section, we will clarify some definitions.
 
 \paragraph{BioBrick}
-The somewhat broad definition we presented before:
+The somewhat broad definition we presented before was:
 \begin{quote}Isolated and documented cell function to be reused in future projects. For example, the production of a light emitting protein when some other protein is available.
 \end{quote}
 is not the way we used it in our documentation. Technically, any sequence of genes which is somewhat isolated and documented could be called a BioBrick, even the whole \textit{circuit} in the modeller to be developed, however, the handout\footnote{PDF handout: BioBricks construction for Context Project 2011/2012} uses a more narrow definition:
@@ -55,7 +55,7 @@ is not the way we used it in our documentation. Technically, any sequence of gen
 From now on, when we talk about BioBricks we'll use this definition.
 
 \paragraph{Transcription factor}
-Before, we used different terms to refer to signals in the circuit, depending on the context we were talking about. The signals in the circuit can be modelled by wires and are represented by \textit{transcription factors} (TF) in the cell. These transcription factors are of course proteins, so 'list of proteins' is equivalent to 'list of \text{transcription factors}' in our text.
+We use different terms to refer to signals in the circuit, depending on the context we were talking about. The signals in the circuit can be modelled by wires and are represented by \textit{transcription factors} (TF) in the cell. Signals are a more abstract term, TFs can be assigned to them. These transcription factors are of course proteins, so `list of proteins' is equivalent to `list of \text{transcription factors}' in our text.
 
 
 \paragraph{Gene coding sequence}
