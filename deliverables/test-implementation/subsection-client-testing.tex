@@ -4,20 +4,22 @@ Client testing can be separated from the development of the server by mocking di
 Making these mockups costs time, but we think de decoupling of the development and testing of the client and the server is a valuable effort.
 
 \subsubsection{Unit testing}
-In order to test various small parts of the system we'll use unit tests. Defining unit tests is a good way to test for expected functionality but also ensure stability in functionality while changes to other parts of te code are made. Since we'll use the JQuery-framework in our frontend code, its unit testing framework QUnit\footnote{QUnit: a powerful, easy-to-use, JavaScript test suite. \url{http://docs.jquery.com/QUnit}} seems a logical choice. It can be used just like JUnit to define small unit tests before implementation of certain functionality during Test Driven Development and to prevent regression of implemented features. Some examples of unit tests include:
+In order to test various small parts of the system we'll use unit tests. Defining unit tests is a good way to test for expected functionality but also ensure stability in functionality while changes to other parts of the code are made. Since we'll use the jQuery-framework in our frontend code, its unit testing framework QUnit\footnote{QUnit: a powerful, easy-to-use, JavaScript test suite. \url{http://docs.jquery.com/QUnit}} seems a logical choice. It can be used just like JUnit to define small unit tests before implementation of certain functionality during Test Driven Development and to prevent regression of implemented features. Because we will write action listeners to GUI elements as separate functions, these can easily be called in unit tests to simulate user input.
 \begin{enumerate}
-	\item The circuit and the smaller parts of it will exist in JavaScript as objects. They'll have \verb|toJSON()|-methods which can be tested.
-	\item The circuit parts parsing from small JSON-snippets to JavaScript-objects can be tested.
+\item Ensure the functioning of each GUI element that applies some changes (for example rendering a \verb-<div>- invisible, or inserting/removing a HTML element) by calling it's JavaScript action listener, and then validating it's functioning by checking the effects in the Document Object Model of the page. This can be done by inspecting styling properties or checking the insertion/deletion of nodes.
+\item Circuit design can be tested by a series of action listener calls, or direct modifications to the circuit in the containing JavaScript object, and validating that the structure of the circuit is correct.
+For circuit design operations that are hard to model with tests (such as dragging and dropping, checking correct rendering or connecting wires) we will likely use explorative testing.\item The circuit and the smaller parts of it will exist in JavaScript as objects. They'll have \verb|toJSON()|-methods which can be tested to generate correct output.
+\item The circuit parts parsing from small JSON-snippets to JavaScript-objects can be tested.
 \end{enumerate}
 
 \subsubsection{Integration testing}
-Integration can be testen through the use of QUnit as well.
+Integration can be tested through the use of QUnit as well.
 %~ Some integration can be tested through the use of QUnit as well, but it might be useful to use Crawljax\footnote{Home of Crawljax: \url{http://crawljax.com/}}, especially for some more complex interaction tests. Crawljax will find all clickable elements on our client page and try them out in different orders. This way we can see what orders fail and need to be fixed. 
 
 The core of our integration tests will consist of behaviour of several \text{unit}s, covered with unit tests, functioning together. Some examples include:
 \begin{enumerate}
-	\item Parsing the (mocked) JSON-input from the server to JavaScript objects and than back to JSON. Input and output should be equal.
-	\item Loading a file from the server by using Crawljax to push buttons and checking the resulting JavaScript objects.
+\item Parsing the (mocked) JSON-input from the server to JavaScript objects and than back to JSON. Input and output should be equal.
+\item Loading a file from the server by using Crawljax to push buttons and checking the resulting JavaScript objects.
 \end{enumerate}
 
 \subsubsection{Acceptance testing}

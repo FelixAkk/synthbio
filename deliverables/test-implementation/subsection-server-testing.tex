@@ -70,7 +70,10 @@ Testing of the integration with the client will be done by testing the HTTP API,
 \item Issue a putFile(circuit) call with a relatively simple model and then a getFile(circuit) call on the just saved circuit and validate that the same circuit is returned.
 \item Issue a simulate() call with a relatively simple model and arbitrary input values and ensure that a output values data series is returned. Then issue a putFile(circuit) call with the current circuit, and then a getFile(circuit) call on the previously saved circuit. Ensure that the same circuit is loaded with the simulation data series.
 \item Issue two putFile(cricuit) calls at almost the same  time, but with different models and the same filename. Ensure that the filesystem writer handled the requests consecutively and only the last circuit
-persists on the filesystem.\end{enumerate}
+persists on the filesystem.
+\item Issue two simulate(circuit, inputValues) calls at almost the same time, with relatively heavy equal circuits, and arbitrary input values. Validate that two simulation threads are started, and that while the second simulation thread is still running, the output values of the first are returned and the second thread continues simulation until it also returns the output values.\end{enumerate}
+
+\noindent Because the filesystem is not a multi-threaded subsystem, and only the single controller calls it, there are no concurrent method calls possible, and we test the 2 method calls are executed consecutively. For the simulator this is not so, so there we test that two instances of the solver can run at the same time.
 
 \subsubsection{Acceptance testing}
 User stories developed for each development run provide valuable information about how much the server side weighs in the result. For each user story we'll create one or more acceptance tests, and for those that also include server calls, most can be valued by the responsiveness and stability of the server. For some tests this is already defined as a certain time within which the server has to finish the job. What these times should be will be decided during acceptance testing based on feedback from the user on the responsiveness of the application.
