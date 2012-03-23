@@ -7,6 +7,7 @@
 
 \usepackage{pgf}
 \usepackage{tikz}
+\usepackage{tabto}
 \usepackage{pictures/tikz-uml}
 
 \title{Programming Life - Test and implementation plan }
@@ -34,15 +35,16 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 
 \subsection{Must Haves}
 \begin{description}
+\item[Connection] Client and server must be able to communicate. If there is no connection, the user should be notified.
 \item[Available gates] The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.
 \item[Design circuit] The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.
-\begin{itemize}
-\item The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the AND symbol normally used in circuit design.
-\item The user must be able to drag and drop gates from the list into the working area.
-\item The user must be able freely to move the gate around in the working area, but gates snap to grid points on the working area.
-\item The user must be able to draw relaties between the gates in the form of wires.
-\item The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.
-\end{itemize}
+	\begin{itemize}
+	\item The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the AND symbol normally used in circuit design.
+	\item The user must be able to drag and drop gates from the list into the working area.
+	\item The user must be able freely to move the gate around in the working area, but gates snap to grid points on the working area.
+	\item The user must be able to draw relations between the gates in the form of wires.
+	\item The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.
+	\end{itemize}
 \item[Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).
 \item[Protein specification] The user must be able to specify which protein is used for a certain signal.
 \item[Export circuit] The application must to able to save a circuit.
@@ -75,22 +77,35 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \subsection{Order of implementation of features}
 The concept of Scrum is to always have a working product. We will try to follow this concept. Because there is a distinction between the server and client side in our application, it should be easy for the group to work at the same time. The first steps of the building process would be to create a framework for sending/receiving messages between these two subsystems. \\
 
-After that, steps can be made to gradually build up the application. This is our planning, in order of implementation:
+After that, steps can be made to gradually build up the application.The following list is our planning, in order of implementation. For each point we specify whether it will be work on server side (S), on the client side (C) or both (SC). Also specified is how much time we think is needed to implement this feature. S is a small task (around a day of work), M a task of medium size (a week) and B a big task (more than a week). These times are just indications and can be used for comparison.
 \begin{itemize}
-\item Server-Client communication (including definition of object formats);
-\item List available proteins and gates;
-\item Design circuit;
-\item Specify proteins;
-\item Validate circuit;
-\item Import/Export circuits;
-\item Specify input values;
-\item Simulate circuit;
-\item Re-use circuits;
-\item Local back-up
+\item Server-Client communication (including definition of object formats);	\tabto{13.8cm} SC \tabto{14.6cm} M
+\item List available proteins and gates; 									\tabto{13.8cm} SC \tabto{14.6cm} S
+\item Design circuit:													% 	\tabto{13.8cm}  C \tabto{14.6cm} B
+	\begin{itemize}
+	\item Visualize gates using a simplified images;						\tabto{13cm}  C \tabto{13.8cm} S
+	\item Drag-and-drop gates into the working area;						\tabto{13cm}  C \tabto{13.8cm} S
+	\item Moves gates aroun in the working area;							\tabto{13cm}  C \tabto{13.8cm} M
+	\item Draw wires between gates;											\tabto{13cm}  C \tabto{13.8cm} M
+	\item Draw input and output wires;										\tabto{13cm}  C \tabto{13.8cm} S
+	\end{itemize}
+\item Specify proteins;														\tabto{13.8cm}  C \tabto{14.6cm} M
+\item Validate circuit;														\tabto{13.8cm} SC \tabto{14.6cm} S
+\item Import/Export circuits;												\tabto{13.8cm} SC \tabto{14.6cm} S
+\item Specify input values;													\tabto{13.8cm}  C \tabto{14.6cm} M
+\item Simulate circuit														\tabto{13.8cm} SC \tabto{14.6cm} M
+\end{itemize}~\\
+
+Should there be enough time left, we will try to implement the following features in the given order:
+\begin{itemize}
+\item Re-use circuits;											\tabto{13.8cm} SC \tabto{14.6cm} M
+\item Local back-up;											\tabto{13.8cm}  C \tabto{14.6cm} M
+\item Determine proteins using given input and output values;	\tabto{13.8cm} SC \tabto{14.6cm} B
+\item Multi-client												\tabto{13.8cm} SC \tabto{14.6cm} B
 \end{itemize}
 
 \subsubsection{Iterations}
-In our process of building the application, we will have Scrum iterations of two weeks each. This means that we only decide what to implement for the coming two weeks. After these two weeks, the application should have been improved (and still working!) and we will decide again for the coming two weeks. \\
+In our process of building the application, we will have Scrum iterations of two weeks each. This means that we only decide what to implement for the coming two weeks. After these weeks, the application should have been improved (and still working!) and we will decide again for the coming two weeks. \\
 
 We will have five iterations in total before delivering the final product. This is our planning:
 \begin{enumerate}
