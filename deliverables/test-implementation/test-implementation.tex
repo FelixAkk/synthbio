@@ -214,12 +214,20 @@ Milestones in our project, including their planned deadlines, are:
 \include{subsection-server-testing}
 \include{subsection-client-testing}
 
-\subsection{Integration testing}
-Integration testing is done when the individual software modules are combined and need to be tested as a whole. There are several methods one can use to test combined modules, these are bottom up testing, top down testing and sandwich testing. We will use the bottom up approach. With this approach the lower level modules are integrated and tested first, then these are used to test the higher level modules. With this approach bugs can be found more easily because the lowest level is tested first. The approach also complements our development strategy since we will develop the lowest components first.
+\subsection{System Integration testing}
+The server and client will be tested as described in the preceding chapters. Once those modules are tested the client and server need to be integrated and tested. To test these different methods will be used.\\
+First unit tests will be made that will be ran with the server and client both running.\\
+Secondly Crawljax\footnote{ Project home: \url{http://www.crawljax.com}} will be used. Crawljax will find all click able elements on our client page and try them out in different orders. This way we can see what orders fail and need to be fixed.\\
 
-When both the server and client have been developed these need to be combined and tested. One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit tests can test these two components.
+% % %
+%Integration testing is done when the individual software modules are combined and need to be tested as a whole. There are several methods one %can use to test combined modules, these are bottom up testing, top down testing and sandwich testing. We will use the bottom up approach. With %this approach the lower level modules are integrated and tested first, then these are used to test the higher level modules. With this approach %bugs can be found more easily because the lowest level is tested first. The approach also complements our development strategy since we will %develop the lowest components first.
+% % %
 
-After this validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. After the testing the participants will be interviewed.
+% % %
+%One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit %tests can test these two components.
+% % %
+
+After this validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. The third party in our case will be fellow students and volunteers. After the testing the participants will be interviewed to see what they thought of the system. Was the system intuitive? Did the system feel safe? did the system do what you wanted? etc.
 
 \section{Risk analysis}
 In this chapter we will discuss what we see as possible risks to our project. We will look at the difficulty of several implementation steps. After that, testing difficulties will be discussed. Third point of attention is external parties. Who do we need beside our own team to finish this project successfully and how does that invoke issues? Furthermore we will examine what we will do if the project stumbles upon unforeseen problems. Finally we will have a look at every persons schedule to estimate their work pressure.
