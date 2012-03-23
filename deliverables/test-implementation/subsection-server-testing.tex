@@ -1,32 +1,37 @@
 \subsection{Server Test plan}
+
 \subsubsection{Unit testing}
+Unit testing is performed by both structural and functional testing using JUnit\footnote{Home page of JUnit: \url{www.junit.org/}}.\, as well as interaction testing using Mockito \footnote{Home page of Mockito for JUnit: \url{code.google.com/p/mockito/}}.\\
 \textbf{Filesystem read testing:
 }\begin{enumerate}
-\item Read a .syn file that contains the a relatively simple graph  and a list with enough proteins, which are all assigned to edges.
+\item Issue a getFile() call on a .syn file that contains the a relatively simple graph  and a list with enough proteins, which are all assigned to edges.
 
-\item Read a .syn file that contains the a relatively simple graph  and a list with not enough proteins, where undefined proteins are assigned to edges. Validate that an exception is thrown.\item Read a .syn file that contains the  model of item 1, with two simulation data series.
-\item Read a corrupt .syn file that contains the above model, but with corruptions in each part.
+\item Issue a getFile() call on a .syn file that contains the a relatively simple graph  and a list with not enough proteins, where undefined proteins are assigned to edges. Validate that an exception is thrown.\item Issue a getFile() call on  a .syn file that contains the  model of item 1, with two simulation data series.
+\item Issue a getFile() call on  a corrupt .syn file that contains the above model, but with corruptions in each part.
 Validate that the reader will detect this and throw an exception.
-\item Read a .syn file that contains the an extremely large model. Validate that the function call ends within a certain time.\end{enumerate}
+\item Issue a getFile() call on  a .syn file that contains the an extremely large model. Validate that the function call ends within a certain time. 
+\item Issue a listFiles() call and validate that all .syn files in the specified folder are returned.
+
+\item Issue a listProteins() call when a valid document listing the TF's and CDS's is present and validate that all the listed elements are read.
+ Boundary test by varying the number of elements from 0 to 3, and also one with in the order of 1000 elements.\item Issue a listProteins() call when an  invalid document listing TF's and CDS's is present and validate that an exception is thrown.
+\item Issue a listProteins() call when no document listing TF's and CDS's is present and validate that an exception is thrown.\end{enumerate}
 
 \noindent \textbf{Filesystem write testing:}
 
 \begin{enumerate}
-\item Write a .syn file that contains the a relatively simple graph  and a list with enough proteins, which are all assigned to edges.
-
-\item Write a .syn file that contains the a relatively simple graph  and a list with not enough proteins, where undefined proteins are assigned to edges. Validate that an exception is thrown.\item Write a .syn file that contains the  model of item 1, with two simulation data series.
-\item Write a corrupt .syn file that contains the above model, but with corruptions in each part.
-Validate that the reader will detect this and throw an exception.
-\item Write a .syn file that contains the an extremely large model. Validate that the function call ends within a certain time.\end{enumerate}
+\item Issue a putFile() call with a .syn filename, and a relatively simple graph JSON.
+\item  Issue a putFile() call with a .syn filename, and a  relatively simple graph JSON, with two simulation data series.
+\item  Issue a putFile() call with a .syn filename and corrupt graph JSON and validate that an exception is thrown. 
+\item when a model is loaded and ensure that all the model is written correctly, by checking for written data and validating that is complies with the SBML schema. Also validate that interactions with filesystem subsystem have been made.
+\end{enumerate}
 
 \noindent \textbf{HTTP API:
 }\begin{enumerate}
-\item Issue a listFiles() call and validate that all .syn files in the specified folder are returned, and also validate that interactions with the filesystem subsystem have been made.\item Issue a getFile() call with an existing filename and validate that the correct call is made to the filesystem reader to read the given filename.
-\item Issue a getFile() call with an non-existent filename and validate that the filesystem reader throws an exception.
-\item Issue a getFile() call with an existent filename of a corrupt file, and validate that the filesystem reader throws and exception.
-\item Issue a putFile() call with a provided model and filename, and validate that the file is written,  and also validate that interactions with the filesystem subsystem have been made.\item Issue a listProteins() call when a model is loaded and ensure that all the proteins are returned with their meta-data.
-\item Issue a modelToSBML() call when a model is loaded and ensure that all the model is written correctly, by checking for written data and validating that is complies with the SBML schema. Also validate that interactions with filesystem subsystem have been made.
-\item Issue a simulate() call with an existent filename and validate that the correct call is made to the simulation subsystem, and a call is made to validate the model first. Input values can be arbitrary.
+\item Issue a listFiles() call and validate that interactions with the filesystem subsystem have been made. Stub the filesystem and to make it return a certain set of files, and validate that the correct JSON is generated.
+\item Issue a getFile(filename) call with an existent filename and validate that the correct call is made to the filesystem reader to read the given filename.
+\item Issue a getFile(filename) call with an non-existent filename and validate that the filesystem reader throws an exception.
+\item Issue a getFile(filename) call with an existent filename of a corrupt file, and validate that the filesystem reader throws and exception.
+\item Issue a putFile(model, filename) call with a provided model and filename, and validate  that the correct call to the filesystem has been made. Stub the filesystem to make it return true and false for separate test. Validate that the correct JSON is generated.\item Issue a listProteins() call. Stub the filesystem reader to provide predefined sets of return values, and validate that the correct JSON is generated. Boundary test by varying the set of return values from 0 to 3, and one with in the order of 1000. \item Issue a modelToSBML() call with a model and ensure the correct call is made to the filesystem writer. \item Issue a simulate() call with an existent filename and validate that the correct call is made to the simulation subsystem, and a call is made to validate the model first. Input values can be arbitrary.
 \item Issue a simulate() call when with an existent filename, of which the model is corrupt, and ensure that a call is made to validate the model and that an exception is thrown. Input values can be arbitrary.\item  Issue a simulate() call with a non-existent filename  to the simulation subsystem and ensure that an exception is thrown. Input values can be arbitrary.\end{enumerate}
 \textbf{JSBML Solver testing/simulator:}
 \begin{enumerate}
@@ -41,8 +46,7 @@ Call the simulator  to solve a relatively simple model and ensure that a new thr
 \end{enumerate}
 
 \subsubsection{Integration testing}
-On integration testing a
-
-
+Testing of the integration with the client will be done by testing the HTTP API, and testing of the integration of the the server subsystems will be covered by the unit tests.
 
 \subsubsection{Acceptance testing}
+User stories developed for each development run provide valuable information about how much the server side weighs in the result. For each user story we'll create one or more acceptance tests, and for those that also include server calls, most can be valued by the responsiveness and stability of the server. For some tests this is already defined as a certain time within which the server has to finish the job.
