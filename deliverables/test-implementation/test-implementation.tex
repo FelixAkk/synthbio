@@ -85,7 +85,7 @@ After that, steps can be made to gradually build up the application.The followin
 	\begin{itemize}
 	\item Visualize gates using a simplified images;						\tabto{13cm}  C \tabto{13.8cm} S
 	\item Drag-and-drop gates into the working area;						\tabto{13cm}  C \tabto{13.8cm} S
-	\item Moves gates aroun in the working area;							\tabto{13cm}  C \tabto{13.8cm} M
+	\item Moves gates around in the working area;							\tabto{13cm}  C \tabto{13.8cm} M
 	\item Draw wires between gates;											\tabto{13cm}  C \tabto{13.8cm} M
 	\item Draw input and output wires;										\tabto{13cm}  C \tabto{13.8cm} S
 	\end{itemize}
@@ -110,9 +110,34 @@ In our process of building the application, we will have Scrum iterations of two
 We will have five iterations in total before delivering the final product. This is our planning:
 \begin{enumerate}
 \item Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
-\item The user should be able to model a circuit and specify the proteins for the signals.
+	\begin{itemize}
+	\item Server: Tomcat server that handles HTTP requests;\footnote[1]{To be finished as soons as possible in this iteration}
+	\item Server: Basic MVC framework, so that future components can easily be integrated;\footnotemark[1]
+	\item Server: Serve available proteins and gates;
+	\item Client: Create an \emph{index.html} with a basic GUI;\footnotemark[1]
+	\item Client: Show the connection state;
+	\item Client: Show available gates
+	\end{itemize}
+\item The user should be able to design a circuit and specify the proteins for the signals.
+	\begin{itemize}
+	\item Client: Drag-and-drop gates in the working area and move them around;\footnote[2]{To be finished in the first week of this iteration}
+	\item Client: Draw wires between gates and draw input/output wires;
+	\item Client: Specify proteins for wires
+	\end{itemize}
 \item Importing, exporting and specifying input values should work. Server side must be able to validate and simulate a circuit.
+	\begin{itemize}
+	\item Server/Client: Save circuit;\footnotemark[2]
+	\item Server/Client: Load circuits;\footnotemark[2]
+	\item Server/Client: Validate circuit;\footnotemark[2]
+	\item Server: Simulate circuit;
+	\item Client: Specify input values
+	\end{itemize}
 \item Client side must be able to show the simulation and be able to re-use circuits as new gates.
+	\begin{itemize}
+	\item Server: Serve output values for simulation;\footnotemark[2]
+	\item Client: Display simulation;
+	\item Server/Client: Re-use circuits
+	\end{itemize}
 \item Margin for finishing touches and perhaps extra features such as local back-ups.
 \end{enumerate}
 
