@@ -1,7 +1,8 @@
 \subsection{Server Test plan}
-
+The server
+will be tested in the form of unit tests. These will run tests that check a specific piece of functionality of each subsystem. To ensure that all systems operate together integration testing will be performed. To ensure proper performance acceptance testing will also be ran.
 \subsubsection{Unit testing}
-Unit testing is performed per function used one or a series of functional testing and interaction tests. Because the server is written using Java, we will use the Java testing frameworks JUnit\footnote{Testing framework used to automate testing in Java. Home page of JUnit: \url{www.junit.org/}} for functional testing, and for interaction testing we will use Mockito \footnote{Testing framework for JUnit, used to mock classes and let them performed predefined interactions, and test on interactions made between objects. Home page of Mockito for JUnit: \url{code.google.com/p/mockito/}}.
+Unit testing is performed per function used one or a series of functional testing and interaction tests. Functional testing concerns the behaviour of systems tested on based on input and output. Interaction testing concerns behaviour of multiple systems based on their interactions in the form of function call patterns. Because the server is written using Java, we will use the Java testing frameworks JUnit\footnote{Testing framework used to automate testing in Java. Home page of JUnit: \url{www.junit.org/}} for functional testing, and for interaction testing we will use Mockito \footnote{Testing framework for JUnit, used to mock classes and let them performed predefined interactions, and test on interactions made between objects. Home page of Mockito for JUnit: \url{code.google.com/p/mockito/}}.
 
 \paragraph{Filesystem read testing:}
 
