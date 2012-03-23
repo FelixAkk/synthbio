@@ -68,7 +68,7 @@ Promotors are parts of the gene which facilitate the polymerase to bind to the D
 A gate is defined by an promotor and a \textit{CDS}. The promotor defines the input(s) of the gate, the \textit{CDS} defines the output. In the case of an NOT-promotor, one transcription factor disables the binding of the polymerase. In the case of an AND-promotor, two transcription factors are required for the polymerase to bind and start the transcription reaction.
 
 \paragraph{Circuit}
-The circuit is the collection of \textit{gates} connected by \textit{signals} in the pure electrical sense. Translated to the biological world, the circuit is a cell in which all \textit{signals} are concentrations of \textit{transcription factors}
+The circuit is the collection of \textit{gates} connected by \textit{signals} in the pure electrical sense. Translated to the biological world, the circuit is a cell in which all \textit{signals} are concentrations of \textit{transcription factors}.
 
 \paragraph{SBML}
 Being a little unfamiliar with the format, we were not careful enough when formulating the requirements about this format. SBML is a format targeted at the biological part of the project, we need to save more information than possible in the standard SBML. We choose to persist the circuits in a different format: \verb|.syn|, as discribed in our Architectural design document. SBML will be used as an export-format and as the interface to the simulator.
