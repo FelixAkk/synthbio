@@ -36,18 +36,25 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \begin{description}
 \item[Available gates] The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.
 \item[Design circuit] The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.
-\item[Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals.
+\begin{itemize}
+\item The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the AND symbol normally used in circuit design.
+\item The user must be able to drag and drop gates from the list into the working area.
+\item The user must be able freely to move the gate around in the working area, but gates snap to grid points on the working area.
+\item The user must be able to draw relaties between the gates in the form of wires.
+\item The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.
+\end{itemize}
+\item[Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).
 \item[Protein specification] The user must be able to specify which protein is used for a certain signal.
 \item[Export circuit] The application must to able to save a circuit.
 \item[Import circuit] The application must be able to load an exported circuit.
 \item[Input values specification] The user must be able to specify the input values used for the simulation of the circuit.
+\item[Circuit validation] The user must to be able validate his circuit in the application and get feedback over where there are conflicts.
 \item[Circuit simulation] The application must be able to simulate a valid circuit and present the output values to the user.
 \end{description}
 
 \subsection{Should Haves}
 \begin{description}
-\item[Re-use BioBricks] The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.
-\item[Circuit validation] The user must to be able validate his circuit in the application. This is not a must as simulation will fail if the circuit is invalid, but modeling will be faster if the user can easily get feedback.
+\item[Re-use circuits] The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.
 \end{description}
 
 \subsection{Could Haves}
@@ -59,8 +66,8 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 
 \subsection{Wont Haves}
 \begin{description}
-\item[Determine cirtcuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is impossible to do properly in our limited timespan.
-\item[Biological plausibility] It is near impossible to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
+\item[Determine cirtcuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is very difficult to do properly given our limited timespan.
+\item[Biological plausibility] It is very hard to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
 \end{description}
 
 \section{Implementation and tests}
