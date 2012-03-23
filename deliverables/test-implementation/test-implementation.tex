@@ -2,12 +2,23 @@
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
 \usepackage{amsmath,amssymb}
-\usepackage[colorlinks]{hyperref} % use colored text in stead of ugly boxes
+\usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
 \usepackage[toc]{multitoc} % Nice two-column TOC
 
-\usepackage{pgf}
-\usepackage{tikz}
-\usepackage{pictures/tikz-uml}
+\usepackage{tabto}
+
+%~ TikZ is not in use in this document
+%~ \usepackage{pgf}
+%~ \usepackage{tikz}
+%~ \usepackage{pictures/tikz-uml}
+
+% new line after paragraph title.
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
 
 \title{Programming Life - Test and implementation plan }
 
@@ -29,25 +40,81 @@ Jan Pieter Waagmeester}
 \section{Introduction}
 In this report the different testing techniques we will use for this project will be explained. Because our solution has a clear division between server and client and because these will be developed in different programming environments, we will also need different testing strategies for the client and server. In chapter 2 a prioritization of the requirements can be found using the MoSCoW system. Chapter 3 will explain how we will test the server and client, and what strategies we will use. Lastly chapter 4 will cover the risk analysis, describing the risks for the successful implementation of the system.
 
+\section{Clarification of some defenitions}
+In previous reports we were not very careful in the choice of our words. In this section, we will clarify some defenitions.
+
+\paragraph{BioBrick}
+The somewhat broad defenition we presented before:
+\begin{quote}Isolated and documented cell function to be reused in future projects. For example, the production of a light emitting protein when some other protein is available.
+\end{quote}
+is not the way we used it in our documentation. Technically, any sequence of genes which is somewhat isolated and documented could be called a BioBrick, even the whole \textit{circuit} in the modeller to be developed, however, the handout\footnote{PDF handout: BioBricks construction for Context Project 2011/2012} uses a more narrow defenition:
+\begin{quote}
+	\dots \\
+	, it is reasonable to choose genes (coding sequences) and promotors as the smallest building blocks (BioBricks) for this project.\\ \dots
+\end{quote}
+From now on, when we talk about BioBricks we'll use this defenition.
+
+\paragraph{Transcription factor}
+Before, we used different terms to refer to signals in the circuit, depending on the context we were talking about. The signals in the circuit can be modelled by wires and are represented by \textit{transcription factors} (TF) in the cell. These transcription factors are of course proteins, so 'list of proteins' is equivalent to 'list of \text{transcription factors}' in our text.
+
+
+\paragraph{Gene coding sequence}
+Gene coding sequences (CDS) are parts of the gene that encode for a certain \textit{transcription factor}. For each \textit{gate} the CDS can be freely choosen.
+
+\paragraph{Promotor}
+Promotors are parts of the gene which facilitate the polymerase to bind to the DNA, starting the transcription process for the CDS region after the promotor region. These promotors may need certain \textit{transcription factors} to be present before the polymerase can bind.
+
+\paragraph{Gate}
+A gate is defined by an promotor and a \textit{CDS}. The promotor defines the input(s) of the gate, the \textit{CDS} defines the output. In the case of an NOT-promotor, one transcription factor disables the binding of the ribosome. In the case 
+
+\paragraph{Circuit}
+The circuit is the collection of \textit{gates} connected by \textit{signals}.
+
+\paragraph{SBML}
+Being a little unfamiliar with the format, we were not careful enough when we formulated the requirements about them. SBML is a format targeted at the biological part of the project, we need to save more information than possible in the standard SBML. We choose to persist the circuits in a different format: \verb|.syn|. SBML will be used as an export-format and as the interface to the simulator.
+
+\paragraph{Simulation}
+In order to simulate the behavoir of the circuit, we'll use a SBML solver as mentioned before. The SOSLib\footnote{ Project home: \url{http://www.tbi.univie.ac.at/~raim/odeSolver/}, Github page: \url{https://github.com/raim/SBML_odeSolver}}, which is a library to simulate SBML files written in C. It has a simple command-line interface and produces simple, easy to parse text-files containing the simulation results.
+
+	% rad glossary
+
+%~ \item[BioBrick] Isolated and documented cell function to be reused in future projects. For example, the production of a light emitting protein when some other protein is available.
+%~ \item[Circuit] What we think of as a circuit is actually just a cell wherein all signals and gates are proteins and parts of the DNA, mixed together without any separation.
+%~ \item[DNA] \text{Deoxyribonucleic acid} is a very long molecule containing the information needed to support the life in allmost all creatures.
+%~ \item[Protein] a complex molecule produces by certain processes in the cell. In turn it can activate other processes, or perform functions such as emission of light or change color.
+%~ \item[RNA] Working copy of the information in the DNA. This copy is then used to synthesize proteins.
+%~ \item[SBML] \textit{Systems Biology Markup Language} is a XML-based format for storage of various computermodels of biological processes.
+%~ \item[Simulation] Execution of a set of differential equations in order to predict the output of the modelled circuit
+%~ \item[Transcription] Process of making the mRNA-copy of the DNA master.
+
+\pagebreak
 \section{MoSCoW prioritization}
 In this chapter we will specify our priorities of requirements using the MoSCoW model. This model divides requirements on how viable it is to implement certain features: Must-Haves are features that the application cannot do without. These are all necessary for the program to function properly. Should-Haves group the features that are high-priority, but are not critical for the system. Could-Haves are features that would be nice to be have, should the time allow it and Wont-Haves are features that will not be implemented (in this version of the program).
 
 \subsection{Must Haves}
 \begin{description}
+\item[Connection] Client and server must be able to communicate. If there is no connection, the user should be notified.
 \item[Available gates] The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.
 \item[Design circuit] The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.
-\item[Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals.
+	\begin{itemize}
+	\item The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the AND symbol normally used in circuit design.
+	\item The user must be able to drag and drop gates from the list into the working area.
+	\item The user must be able freely to move the gate around in the working area, but gates snap to grid points on the working area.
+	\item The user must be able to draw relations between the gates in the form of wires.
+	\item The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.
+	\end{itemize}
+\item[Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).
 \item[Protein specification] The user must be able to specify which protein is used for a certain signal.
 \item[Export circuit] The application must to able to save a circuit.
 \item[Import circuit] The application must be able to load an exported circuit.
 \item[Input values specification] The user must be able to specify the input values used for the simulation of the circuit.
+\item[Circuit validation] The user must to be able validate his circuit in the application and get feedback over where there are conflicts.
 \item[Circuit simulation] The application must be able to simulate a valid circuit and present the output values to the user.
 \end{description}
 
 \subsection{Should Haves}
 \begin{description}
-\item[Re-use BioBricks] The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.
-\item[Circuit validation] The user must to be able validate his circuit in the application. This is not a must as simulation will fail if the circuit is invalid, but modeling will be faster if the user can easily get feedback.
+\item[Re-use circuits] The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.
 \end{description}
 
 \subsection{Could Haves}
@@ -59,8 +126,8 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 
 \subsection{Wont Haves}
 \begin{description}
-\item[Determine circuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is impossible to do properly in our limited timespan.
-\item[Biological plausibility] It is near impossible to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
+\item[Determine circuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is very difficult to do properly given our limited timespan.
+\item[Biological plausibility] It is very hard to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
 \end{description}
 
 \section{Implementation and tests}
@@ -68,40 +135,119 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \subsection{Order of implementation of features}
 The concept of Scrum is to always have a working product. We will try to follow this concept. Because there is a distinction between the server and client side in our application, it should be easy for the group to work at the same time. The first steps of the building process would be to create a framework for sending/receiving messages between these two subsystems. \\
 
-After that, steps can be made to gradually build up the application. This is our planning, in order of implementation:
+After that, steps can be made to gradually build up the application.The following list is our planning, in order of implementation. For each point we specify whether it will be work on server side (S), on the client side (C) or both (SC). Also specified is how much time we think is needed to implement this feature. S is a small task (around a day of work), M a task of medium size (a week) and B a big task (more than a week). These times are just indications and can be used for comparison.
 \begin{itemize}
-\item Server-Client communication (including definition of object formats);
-\item List available proteins and gates;
-\item Design circuit;
-\item Specify proteins;
-\item Validate circuit;
-\item Import/Export circuits;
-\item Specify input values;
-\item Simulate circuit;
-\item Re-use circuits;
-\item Local back-up
+\item Server-Client communication (including definition of object formats);	\tabto{13.8cm} SC \tabto{14.6cm} M
+\item List available proteins and gates; 									\tabto{13.8cm} SC \tabto{14.6cm} S
+\item Design circuit:													% 	\tabto{13.8cm}  C \tabto{14.6cm} B
+	\begin{itemize}
+	\item Visualize gates using a simplified images;						\tabto{13cm}  C \tabto{13.8cm} S
+	\item Drag-and-drop gates into the working area;						\tabto{13cm}  C \tabto{13.8cm} S
+	\item Moves gates around in the working area;							\tabto{13cm}  C \tabto{13.8cm} M
+	\item Draw wires between gates;											\tabto{13cm}  C \tabto{13.8cm} M
+	\item Draw input and output wires;										\tabto{13cm}  C \tabto{13.8cm} S
+	\end{itemize}
+\item Specify proteins;														\tabto{13.8cm}  C \tabto{14.6cm} M
+\item Validate circuit;														\tabto{13.8cm} SC \tabto{14.6cm} S
+\item Import/Export circuits;												\tabto{13.8cm} SC \tabto{14.6cm} S
+\item Specify input values;													\tabto{13.8cm}  C \tabto{14.6cm} M
+\item Simulate circuit														\tabto{13.8cm} SC \tabto{14.6cm} M
+\end{itemize}~\\
+
+Should there be enough time left, we will try to implement the following features in the given order:
+\begin{itemize}
+\item Re-use circuits;											\tabto{13.8cm} SC \tabto{14.6cm} M
+\item Local back-up;											\tabto{13.8cm}  C \tabto{14.6cm} M
+\item Determine proteins using given input and output values;	\tabto{13.8cm} SC \tabto{14.6cm} B
+\item Multi-client												\tabto{13.8cm} SC \tabto{14.6cm} B
 \end{itemize}
 
 \subsubsection{Iterations}
-In our process of building the application, we will have Scrum iterations of two weeks each. This means that we only decide what to implement for the coming two weeks. After these two weeks, the application should have been improved (and still working!) and we will decide again for the coming two weeks. \\
+In our process of building the application, we will have Scrum iterations of two weeks each. This means that we only decide what to implement for the coming two weeks. After these weeks, the application should have been improved (and still working!) and we will decide again for the coming two weeks. \\
 
 We will have five iterations in total before delivering the final product. This is our planning:
 \begin{enumerate}
-\item Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
-\item The user should be able to model a circuit and specify the proteins for the signals.
-\item Importing, exporting and specifying input values should work. Server side must be able to validate and simulate a circuit.
-\item Client side must be able to show the simulation and be able to re-use circuits as new gates.
-\item Margin for finishing touches and perhaps extra features such as local back-ups.
+\item \emph{(26-03 until 06-04-2012)} Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
+	\begin{itemize}
+	\item Server: Tomcat server that handles HTTP requests;\footnote[1]{To be finished as soons as possible in this iteration}
+	\item Server: Basic MVC framework, so that future components can easily be integrated;\footnotemark[1]
+	\item Server: Serve available proteins and gates;
+	\item Client: Create an \emph{index.html} with a basic GUI;\footnotemark[1]
+	\item Client: Show the connection state;
+	\item Client: Show available gates
+	\end{itemize}
+\item \emph{(23-04 until 04-05-2012)} The user should be able to design a circuit and specify the proteins for the signals.
+	\begin{itemize}
+	\item Client: Drag-and-drop gates in the working area and move them around;\footnote[2]{To be finished in the first week of this iteration}
+	\item Client: Draw wires between gates and draw input/output wires;
+	\item Client: Specify proteins for wires
+	\end{itemize}
+\item \emph{(07-05 until 18-05-2012)} Importing, exporting and specifying input values should work. Server side must be able to validate and simulate a circuit.
+	\begin{itemize}
+	\item Server/Client: Save circuit;\footnotemark[2]
+	\item Server/Client: Load circuits;\footnotemark[2]
+	\item Server/Client: Validate circuit;\footnotemark[2]
+	\item Server: Simulate circuit;
+	\item Client: Specify input values
+	\end{itemize}
+\item \emph{(21-05 until 01-06-2012)} Client side must be able to show the simulation and be able to re-use circuits as new gates.
+	\begin{itemize}
+	\item Server: Serve output values for simulation;\footnotemark[2]
+	\item Client: Display simulation;
+	\item Server/Client: Re-use circuits
+	\end{itemize}
+\item \emph{(04-06 until 15-06-2012)} Margin for finishing touches and perhaps extra features such as local back-ups.
 \end{enumerate}
+
+\subsubsection{Milestones}
+Milestones in our project, including their planned deadline, are:
+\begin{itemize}
+\item \textbf{Version 0.1}: A working client and server base which can report the state of the connection \emph{(27-03-2012)};
+\item \textbf{Version 0.5}: The user can design a basic circuit (gates and wires with specified proteins) \emph{(03-05-2012)};
+\item \textbf{Version 1}: The application can load, save and validate circuits \emph{(10-05-2012)};
+\item \textbf{Version 2}: The application can simulate a circuit \emph{(17-05-2012)};
+\item \textbf{Version 3}: Circuits can be reused when designing \emph{(01-06-2012)};
+\item \textbf{Version 4}: Fully tested final product \emph{(18-06-2012)}
+\end{itemize}~\\
 
 \include{subsection-server-testing}
 \include{subsection-client-testing}
 
-\subsection{Testing Client-server integration}
-Integration testing is done when the individual software modules are combined and need to be tested as a whole. One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit tests can test these two components.
+\subsection{Integration testing}
+Integration testing is done when the individual software modules are combined and need to be tested as a whole. There are several methods one can use to test combined modules, these are bottom up testing, top down testing and sandwich testing. We will use the bottom up approach. With this approach the lower level modules are integrated and tested first, then these are used to test the higher level modules. With this approach bugs can be found more easily because the lowest level is tested first. The approach also complements our development strategy since we will develop the lowest components first.
+
+When both the server and client have been developed these need to be combined and tested. One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit tests can test these two components.
+
+After this validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. After the testing the participants will be interviewed.
 
 \section{Risk analysis}
-(what are the risks for the successful implementation of the system?)
+In this chapter we will discuss what we see as possible risks to our project. We will look at the difficulty of serveral implementation steps. After that, testing difficulties will be discussed. Third point of attention is external parties. Who do we need beside our own team to finish this project successfully and how does that invoke issues? Furthermore we will examine what we will do if the project stumbles upon unforeseen problems. Finally we will have a look at every person’s schedule to estimate their work pressure.
 
+\subsection{Difficulties while implementing}
+During the implementation of the program we might encounter some difficulties. This is only normal, but still we need to analyze what could happen and how we will respond. Our development process will be test driven. This means we will first write tests for what our program should do and afterwards work out how our application will succeed in passing this test.
+ 
+One of the problems we might be facing lies in the general structure of our program. We have a client and a server. They need to communicate. Communication is a well-known area for problems. To counter this problem we do intensive testing using mock-ups for both the server and the client to test each part first. After both parts have been tested, we will have integration tests to see how both sides work together in a real environment. 
+
+Another problem during implementation Is the client itself, or rather the GUI presented in the client. The GUI has to work with dragging and dropping gates into place. We do have an idea how this should be implemented, but during the designing process we already stumbled upon some scenario’s where gates might be hard to connect. We want the GUI to remain clear and not filled with gates and wires connecting them, losing sight of what belongs where.
+
+The third problem we might face is of course the server. Problems in this sector will probably occur during the saving of data. The server is responsible for storing data and retrieving it if requested. We realize that this might go wrong, and errors might occur if the data is not stored properly or is edited by some other program. 
+
+Because we are working with a five man team, there is always a chance that some people might name things differently. One person might call a function getApplicationName, while another might call it getAppName. Miscommunications like these can cause a lot of redundant code and errors, especially if different persons keep changing classes. It is hard to keep an overview of which function has been used where, so removing a function might damage a totally different class. This problem can be easily countered with a good design and a proper ontology.
+
+\subsection{Difficulties with testing}
+As said before our development is test driven. This means that testing is extremely important and problems during testing should be countered early on in the development process. So what kind of problems do we expect during testing. 
+
+Creating tests is rather difficult. You have your set of requirements, but you also need to test some of the boundaries of your application. You also need to think about how intensively you are going to test every aspect of your application. This is stated in the previous chapters of this document, but still it remains a challenge not to be underestimated.
+
+If a test is constructed properly and it fails, the application has a bug somewhere. But how do we find this bug and how do we fix it. So bug-tracking is also very important. Even though Java has some really good tools to help find bugs, it remains time consuming and we need to take this into account.
+
+\subsection{External parties}
+Our project is not heavily dependent upon external parties. However, we do occasionally have to wait for feedback from instructors. We are sometimes fully reliant upon information given by instructors. However we do not expect a lot of difficulties with this.
+
+\subsection{Unforeseen problems}
+What happens if something unexpected happens? If we stumble upon a problem we did not foresee? We might have to add additional features to our application or we find a bug which we cannot easily fix. If problems like these occur we need to use our spare time to fix these problems. We have a strict planning of when everything is due, and in planning this we kept some spare time to deal with unexpected issues.
+
+\subsection{Work stress of every team member}
+The work stress of most members of our team is pretty high. Four out of five follow a lot of courses, which leads to more practical work than just this project. We need to take into account deadlines of other projects. The fifth member, during the 3rd semester, only does this course. However, he is a board member of a student association which takes a lot of time as well. We do take this into account but not as much, simply because it is not a constant pressure.
 
 \end{document}
