@@ -8,8 +8,9 @@ In order to test various small parts of the system we'll use unit tests. Definin
 \begin{enumerate}
 \item Ensure the functioning of each GUI element that applies some changes (for example rendering a \verb-<div>- invisible, or inserting/removing a HTML element) by calling it's JavaScript action listener, and then validating it's functioning by checking the effects in the Document Object Model of the page. This can be done by inspecting styling properties or checking the insertion/deletion of nodes.
 \item Circuit design can be tested by a series of action listener calls, or direct modifications to the circuit in the containing JavaScript object, and validating that the structure of the circuit is correct.
-For circuit design operations that are hard to model with tests (such as dragging and dropping, checking correct rendering or connecting wires) we will likely use explorative testing.\item The circuit and the smaller parts of it will exist in JavaScript as objects. They'll have \verb|toJSON()|-methods which can be tested to generate correct output.
-\item The circuit parts parsing from small JSON-snippets to JavaScript-objects can be tested.
+For circuit design operations that are hard to model with tests (such as dragging and dropping, checking correct rendering or connecting wires) we will likely use explorative testing.
+\item The circuit and the smaller parts of it will exist in JavaScript as objects. They'll have \verb|toJSON()|-methods which can be tested to generate correct output.
+\item The circuit parts parsing from small JSON-snippets to JavaScript-objects can be tested. 
 \end{enumerate}
 
 \subsubsection{Integration testing}
@@ -20,7 +21,7 @@ The core of our integration tests will consist of behaviour of several \text{uni
 \begin{enumerate}
 \item Parsing the (mocked) JSON-input from the server to JavaScript objects and than back to JSON. Input and output should be equal.
 \item Loading a file from the server by using Crawljax to push buttons and checking the resulting JavaScript objects.
-\end{enumerate}
+\item For HTTP API calls that return data, validate that the return data is stored in JavaScript objects and if required; displayed in the GUI. This is done by testing testing on the leve of the DOM by for example counting the amount representing nodes.\end{enumerate}
 
 \subsubsection{Acceptance testing}
 User stories developed for each development run provide valuable information about acceptance tests to be executed. For each user story we'll create one or more acceptance tests, which may consist of unit and integration testing.
