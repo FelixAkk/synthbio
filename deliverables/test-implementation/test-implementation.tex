@@ -93,49 +93,51 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 
 \subsection{Must-Haves}
 \begin{description}
-\item[Connection] Client and server must be able to communicate. If there is no connection, the user should be notified.
-\item[Available gates] The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.
-\item[Design circuit] The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.
+\item[1. Connection] Client and server must be able to communicate. If there is no connection, the user should be notified.
+\item[2. Available gates] The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.
+\item[3. Design circuit] The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.
 	\begin{itemize}
-	\item The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the distinctive AND symbol\footnote{IEEE Standard 91-1984} normally used in circuit design.
-	\item The user must be able to drag and drop gates from the list into the working area.
-	\item The user must be able freely to move the gate around in the working area, but gates will snap to grid points on the working area.
-	\item The user must be able to draw connections between the gates in the form of wires.
-	\item The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.
+	\item \textbf{3.1} The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the distinctive AND symbol\footnote{IEEE Standard 91-1984} normally used in circuit design.
+	\item \textbf{3.2} The user must be able to drag and drop gates from the list into the working area.
+	\item \textbf{3.3} The user must be able freely to move the gate around in the working area, but gates will snap to grid points on the working area.
+	\item \textbf{3.4} The user must be able to draw connections between the gates in the form of wires.
+	\item \textbf{3.5} The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.
 	\end{itemize}
-\item[Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).
-\item[Protein specification] The user must be able to specify which protein is used for a certain signal.
-\item[Export circuit] The application must to able to save a circuit.
-\item[Import circuit] The application must be able to load an exported circuit.
-\item[Input values specification] The user must be able to specify the input values used for the simulation of the circuit.
-\item[Circuit validation] The user must to be able validate his circuit in the application and get feedback over where there are conflicts.
-\item[Circuit simulation] The application must be able to simulate a valid circuit and present the output values to the user.
+\item[4. Available proteins] The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).
+\item[5. Protein specification] The user must be able to specify which protein is used for a certain signal.
+\item[6. Export circuit] The application must to able to save a circuit to a .syn file.
+\item[7. Import circuit] The application must be able to load an exported circuit from a .syn file.
+\item[8. Input values specification] The user must be able to specify the input values used for the simulation of the circuit.
+\item[9. Circuit validation] The user must to be able validate his circuit in the application and get feedback over where there are conflicts.
+\item[10. Circuit simulation] The application must be able to simulate a valid circuit and present the output values to the user.
 \end{description}
 
 \subsection{Should-Haves}
 \begin{description}
-\item[Re-use circuits] The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.
+\item[11. Re-use circuits] The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.
 \end{description}
 
 \subsection{Could-Haves}
 \begin{description}
-\item[Determine proteins by specifying circuit, input and output values] It is possible to let an algorithm choose the best proteins for the signals in a circuit, given user specified input and output values. This feature should be a nice extra and will be implemented if time allows it.
-\item[Local back-up] If, for whatever reason, a crash occurs (the connection drops, the server stops functioning, etc.), it would be nice to provide the user with a backup of his/her work. This feature has not much to do with the main goal of this application (creating and simulating a circuit), so that is why it is a could-have feature.
-\item[Multi-client] The application must be able to handle multiple clients concurrently. This is not a point of attention, as modeling can easily be done one circuit at a time. Another issue is that implementing and properly testing this feature desires significant attention, that is why we will do it if we have enough time.
+\item[12. Determine proteins by specifying circuit, input and output values] It is possible to let an algorithm choose the best proteins for the signals in a circuit, given user specified input and output values. This feature should be a nice extra and will be implemented if time allows it.
+\item[13. Local back-up] If, for whatever reason, a crash occurs (the connection drops, the server stops functioning, etc.), it would be nice to provide the user with a backup of his/her work. This feature has not much to do with the main goal of this application (creating and simulating a circuit), so that is why it is a could-have feature.
+\item[14. Multi-client] The application must be able to handle multiple clients concurrently. This is not a point of attention, as modeling can easily be done one circuit at a time. Another issue is that implementing and properly testing this feature desires significant attention, that is why we will do it if we have enough time.
 \end{description}
 
 \subsection{Won't-Haves}
 \begin{description}
-\item[Determine circuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is very difficult to do properly given our limited timespan.
-\item[Biological plausibility] It is very hard to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
+\item[15. Determine circuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. This is an extension to point \emph{12}, but in this case the circuit is not given. We deem designing such an algorithm takes up a lot of time and is very difficult to do properly given our limited timespan.
+\item[16. Biological plausibility] The first goal for this application is to let users design a biological circuit. We will work with the supplied data for this project and cannot guarantee a biological plausible outcome.
 \end{description}
 
 \section{Implementation and tests}
 
+In this chapter we will clarify how we want to approach our development process. First we lay down in which order features should be implemented. Secondly, we will elaborate on when these features should be implemented and finally how they will be tested. The development process will be test driven, which means we will write tests for new features before actually implementing them.
+
 \subsection{Order of implementation of features}
 The concept of Scrum is to always have a working product. We will try to follow this concept. Because there is a distinction between the server and client side in our application, it should be easy for the group to work at the same time. The first steps of the building process would be to create a framework for sending/receiving messages between these two subsystems. \\
 
-After that, steps can be made to gradually build up the application.The following list is our planning, in order of implementation. For each point we specify whether it will be work on server side (S), on the client side (C) or both (SC). Also specified is how much time we think is needed to implement this feature. A small task (s) should take around a day of work, a task of medium size (m) a week and big task (b) more than a week. These times are just indications and can be used for comparison.
+After that, steps can be made to gradually build up the application. The following list is our planning, in order of implementation. For each point we specify whether it will be work on server side (S), on the client side (C) or both (SC). Also specified is how much time we think is needed to implement this feature. A small task (s) should take around 5 hours of work (or less), a task of medium size (m) 10 hours and big task (b) more than 10 hours. These times are just indications and can be used for comparison.
 \begin{itemize}
 \item Server-Client communication (including definition of object formats);	\tabto{13.8cm} SC \tabto{14.6cm} m
 \item List available proteins and gates; 									\tabto{13.8cm} SC \tabto{14.6cm} s
@@ -207,8 +209,8 @@ Milestones in our project, including their planned deadlines, are:
 \item \textbf{Version 0.5}: The user can design a basic circuit (gates and wires with specified proteins) \emph{(03-05-2012)};
 \item \textbf{Version 1}: The application can load, save and validate circuits \emph{(10-05-2012)};
 \item \textbf{Version 2}: The application can simulate a circuit \emph{(17-05-2012)};
-\item \textbf{Version 3}: Circuits can be reused when designing \emph{(01-06-2012)};
-\item \textbf{Version 4}: Fully tested final product \emph{(18-06-2012)}
+\item \textbf{Version 3}: Circuits can be reused when designing \emph{(31-05-2012)};
+\item \textbf{Version 4}: Fully tested final product \emph{(15-06-2012)}
 \end{itemize}~\\
 
 \include{subsection-server-testing}
