@@ -155,7 +155,7 @@ In our process of building the application, we will have Scrum iterations of two
 
 We will have five iterations in total before delivering the final product. This is our planning:
 \begin{enumerate}
-\item Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
+\item \emph{(26-03 until 06-04-2012)} Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
 	\begin{itemize}
 	\item Server: Tomcat server that handles HTTP requests;\footnote[1]{To be finished as soons as possible in this iteration}
 	\item Server: Basic MVC framework, so that future components can easily be integrated;\footnotemark[1]
@@ -164,13 +164,13 @@ We will have five iterations in total before delivering the final product. This 
 	\item Client: Show the connection state;
 	\item Client: Show available gates
 	\end{itemize}
-\item The user should be able to design a circuit and specify the proteins for the signals.
+\item \emph{(23-04 until 04-05-2012)} The user should be able to design a circuit and specify the proteins for the signals.
 	\begin{itemize}
 	\item Client: Drag-and-drop gates in the working area and move them around;\footnote[2]{To be finished in the first week of this iteration}
 	\item Client: Draw wires between gates and draw input/output wires;
 	\item Client: Specify proteins for wires
 	\end{itemize}
-\item Importing, exporting and specifying input values should work. Server side must be able to validate and simulate a circuit.
+\item \emph{(07-05 until 18-05-2012)} Importing, exporting and specifying input values should work. Server side must be able to validate and simulate a circuit.
 	\begin{itemize}
 	\item Server/Client: Save circuit;\footnotemark[2]
 	\item Server/Client: Load circuits;\footnotemark[2]
@@ -178,14 +178,25 @@ We will have five iterations in total before delivering the final product. This 
 	\item Server: Simulate circuit;
 	\item Client: Specify input values
 	\end{itemize}
-\item Client side must be able to show the simulation and be able to re-use circuits as new gates.
+\item \emph{(21-05 until 01-06-2012)} Client side must be able to show the simulation and be able to re-use circuits as new gates.
 	\begin{itemize}
 	\item Server: Serve output values for simulation;\footnotemark[2]
 	\item Client: Display simulation;
 	\item Server/Client: Re-use circuits
 	\end{itemize}
-\item Margin for finishing touches and perhaps extra features such as local back-ups.
+\item \emph{(04-06 until 15-06-2012)} Margin for finishing touches and perhaps extra features such as local back-ups.
 \end{enumerate}
+
+\subsubsection{Milestones}
+Milestones in our project, including their planned deadline, are:
+\begin{itemize}
+\item \textbf{Version 0.1}: A working client and server base which can report the state of the connection \emph{(27-03-2012)};
+\item \textbf{Version 0.5}: The user can design a basic circuit (gates and wires with specified proteins) \emph{(03-05-2012)};
+\item \textbf{Version 1}: The application can load, save and validate circuits \emph{(10-05-2012)};
+\item \textbf{Version 2}: The application can simulate a circuit \emph{(17-05-2012)};
+\item \textbf{Version 3}: Circuits can be reused when designing \emph{(01-06-2012)};
+\item \textbf{Version 4}: Fully tested final product \emph{(18-06-2012)}
+\end{itemize}~\\
 
 \include{subsection-server-testing}
 \include{subsection-client-testing}
