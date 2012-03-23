@@ -40,26 +40,26 @@ Jan Pieter Waagmeester}
 \section{Introduction}
 In this report the different testing techniques we will use for this project will be explained. Because our solution has a clear division between server and client and because these will be developed in different programming environments, we will also need different testing strategies for the client and server. In chapter 2 a prioritization of the requirements can be found using the MoSCoW system. Chapter 3 will explain how we will test the server and client, and what strategies we will use. Lastly chapter 4 will cover the risk analysis, describing the risks for the successful implementation of the system.
 
-\section{Clarification of some defenitions}
-In previous reports we were not very careful in the choice of our words. In this section, we will clarify some defenitions.
+\section{Clarification of some definitions}
+In previous reports we were not very careful in the choice of our words. In this section, we will clarify some definitions.
 
 \paragraph{BioBrick}
-The somewhat broad defenition we presented before:
+The somewhat broad definition we presented before:
 \begin{quote}Isolated and documented cell function to be reused in future projects. For example, the production of a light emitting protein when some other protein is available.
 \end{quote}
-is not the way we used it in our documentation. Technically, any sequence of genes which is somewhat isolated and documented could be called a BioBrick, even the whole \textit{circuit} in the modeller to be developed, however, the handout\footnote{PDF handout: BioBricks construction for Context Project 2011/2012} uses a more narrow defenition:
+is not the way we used it in our documentation. Technically, any sequence of genes which is somewhat isolated and documented could be called a BioBrick, even the whole \textit{circuit} in the modeller to be developed, however, the handout\footnote{PDF handout: BioBricks construction for Context Project 2011/2012} uses a more narrow definition:
 \begin{quote}
 	\dots \\
-	, it is reasonable to choose genes (coding sequences) and promotors as the smallest building blocks (BioBricks) for this project.\\ \dots
+	, it is reasonable to choose genes (coding sequences) and promoters as the smallest building blocks (BioBricks) for this project.\\ \dots
 \end{quote}
-From now on, when we talk about BioBricks we'll use this defenition.
+From now on, when we talk about BioBricks we'll use this definition.
 
 \paragraph{Transcription factor}
 Before, we used different terms to refer to signals in the circuit, depending on the context we were talking about. The signals in the circuit can be modelled by wires and are represented by \textit{transcription factors} (TF) in the cell. These transcription factors are of course proteins, so 'list of proteins' is equivalent to 'list of \text{transcription factors}' in our text.
 
 
 \paragraph{Gene coding sequence}
-Gene coding sequences (CDS) are parts of the gene that encode for a certain \textit{transcription factor}. For each \textit{gate} the CDS can be freely choosen.
+Gene coding sequences (CDS) are parts of the gene that encode for a certain \textit{transcription factor}. For each \textit{gate} the CDS can be freely chosen.
 
 \paragraph{Promotor}
 Promotors are parts of the gene which facilitate the polymerase to bind to the DNA, starting the transcription process for the CDS region after the promotor region. These promotors may need certain \textit{transcription factors} to be present before the polymerase can bind.
@@ -74,7 +74,7 @@ The circuit is the collection of \textit{gates} connected by \textit{signals}.
 Being a little unfamiliar with the format, we were not careful enough when we formulated the requirements about them. SBML is a format targeted at the biological part of the project, we need to save more information than possible in the standard SBML. We choose to persist the circuits in a different format: \verb|.syn|. SBML will be used as an export-format and as the interface to the simulator.
 
 \paragraph{Simulation}
-In order to simulate the behavoir of the circuit, we'll use a SBML solver as mentioned before. The SOSLib\footnote{ Project home: \url{http://www.tbi.univie.ac.at/~raim/odeSolver/}, Github page: \url{https://github.com/raim/SBML_odeSolver}}, which is a library to simulate SBML files written in C. It has a simple command-line interface and produces simple, easy to parse text-files containing the simulation results.
+In order to simulate the behaviour of the circuit, we'll use a SBML solver as mentioned before. The SOSLib\footnote{ Project home: \url{http://www.tbi.univie.ac.at/~raim/odeSolver/}, GitHub page: \url{https://github.com/raim/SBML_odeSolver}}, which is a library to simulate SBML files written in C. It has a simple command-line interface and produces simple, easy to parse text-files containing the simulation results.
 
 	% rad glossary
 
@@ -170,7 +170,7 @@ In our process of building the application, we will have Scrum iterations of two
 \begin{enumerate}
 \item \emph{(26-03 until 06-04-2012)} Set up a basic back-end for the client and server side. It should be able to communicate the list of proteins and available gates.
 	\begin{itemize}
-	\item Server: Tomcat server that handles HTTP requests;\footnote[1]{To be finished as soons as possible in this iteration}
+	\item Server: Tomcat server that handles HTTP requests;\footnote[1]{To be finished as soon as possible in this iteration}
 	\item Server: Basic MVC framework, so that future components can easily be integrated;\footnotemark[1]
 	\item Server: Serve available proteins and gates;
 	\item Client: Create an \emph{index.html} with a basic GUI;\footnotemark[1]
@@ -222,18 +222,18 @@ When both the server and client have been developed these need to be combined an
 After this validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. After the testing the participants will be interviewed.
 
 \section{Risk analysis}
-In this chapter we will discuss what we see as possible risks to our project. We will look at the difficulty of serveral implementation steps. After that, testing difficulties will be discussed. Third point of attention is external parties. Who do we need beside our own team to finish this project successfully and how does that invoke issues? Furthermore we will examine what we will do if the project stumbles upon unforeseen problems. Finally we will have a look at every person’s schedule to estimate their work pressure.
+In this chapter we will discuss what we see as possible risks to our project. We will look at the difficulty of several implementation steps. After that, testing difficulties will be discussed. Third point of attention is external parties. Who do we need beside our own team to finish this project successfully and how does that invoke issues? Furthermore we will examine what we will do if the project stumbles upon unforeseen problems. Finally we will have a look at every persons schedule to estimate their work pressure.
 
 \subsection{Difficulties while implementing}
-During the implementation of the program we might encounter some difficulties. This is only normal, but still we need to analyze what could happen and how we will respond. Our development process will be test driven. This means we will first write tests for what our program should do and afterwards work out how our application will succeed in passing this test.
+During the implementation of the program we might encounter some difficulties. This is only normal, but still we need to analyse what could happen and how we will respond. Our development process will be test driven. This means we will first write tests for what our program should do and afterwards work out how our application will succeed in passing this test.
  
 One of the problems we might be facing lies in the general structure of our program. We have a client and a server. They need to communicate. Communication is a well-known area for problems. To counter this problem we do intensive testing using mock-ups for both the server and the client to test each part first. After both parts have been tested, we will have integration tests to see how both sides work together in a real environment. 
 
-Another problem during implementation Is the client itself, or rather the GUI presented in the client. The GUI has to work with dragging and dropping gates into place. We do have an idea how this should be implemented, but during the designing process we already stumbled upon some scenario’s where gates might be hard to connect. We want the GUI to remain clear and not filled with gates and wires connecting them, losing sight of what belongs where.
+Another problem during implementation Is the client itself, or rather the GUI presented in the client. The GUI has to work with dragging and dropping gates into place. We do have an idea how this should be implemented, but during the designing process we already stumbled upon some scenarios where gates might be hard to connect. We want the GUI to remain clear and not filled with gates and wires connecting them, losing sight of what belongs where.
 
 The third problem we might face is of course the server. Problems in this sector will probably occur during the saving of data. The server is responsible for storing data and retrieving it if requested. We realize that this might go wrong, and errors might occur if the data is not stored properly or is edited by some other program. 
 
-Because we are working with a five man team, there is always a chance that some people might name things differently. One person might call a function getApplicationName, while another might call it getAppName. Miscommunications like these can cause a lot of redundant code and errors, especially if different persons keep changing classes. It is hard to keep an overview of which function has been used where, so removing a function might damage a totally different class. This problem can be easily countered with a good design and a proper ontology.
+Because we are working with a five man team, there is always a chance that some people might name things differently. One person might call a function getApplicationName, while another might call it getAppName. Miscommunication like this can cause a lot of redundant code and errors, especially if different persons keep changing classes. It is hard to keep an overview of which function has been used where, so removing a function might damage a totally different class. This problem can be easily countered with a good design and a proper ontology.
 
 \subsection{Difficulties with testing}
 As said before our development is test driven. This means that testing is extremely important and problems during testing should be countered early on in the development process. So what kind of problems do we expect during testing. 
