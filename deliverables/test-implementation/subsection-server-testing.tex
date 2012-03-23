@@ -1,9 +1,11 @@
 \subsection{Server Test plan}
 
 \subsubsection{Unit testing}
-Unit testing is performed by both structural and functional testing using JUnit\footnote{Home page of JUnit: \url{www.junit.org/}}.\, as well as interaction testing using Mockito \footnote{Home page of Mockito for JUnit: \url{code.google.com/p/mockito/}}.\\
-\textbf{Filesystem read testing:
-}\begin{enumerate}
+Unit testing is performed per function used one or a series of functional testing and interaction tests. Because the server is written using Java, we will use the Java testing frameworks JUnit\footnote{Testing framework used to automate testing in Java. Home page of JUnit: \url{www.junit.org/}} for functional testing, and for interaction testing we will use Mockito \footnote{Testing framework for JUnit, used to stub classes and let them performed predefined interactions, and test on interactions made between objects. Home page of Mockito for JUnit: \url{code.google.com/p/mockito/}}.
+
+\paragraph{Filesystem read testing:}
+
+\begin{enumerate}
 \item Issue a getFile() call on a .syn file that contains the a relatively simple graph  and a list with enough proteins, which are all assigned to edges.
 
 \item Issue a getFile() call on a .syn file that contains the a relatively simple graph  and a list with not enough proteins, where undefined proteins are assigned to edges. Validate that an exception is thrown.\item Issue a getFile() call on  a .syn file that contains the  model of item 1, with two simulation data series.
@@ -16,7 +18,7 @@ Validate that the reader will detect this and throw an exception.
  Boundary test by varying the number of elements from 0 to 3, and also one with in the order of 1000 elements.\item Issue a listProteins() call when an  invalid document listing TF's and CDS's is present and validate that an exception is thrown.
 \item Issue a listProteins() call when no document listing TF's and CDS's is present and validate that an exception is thrown.\end{enumerate}
 
-\noindent \textbf{Filesystem write testing:}
+\paragraph{Filesystem write testing:}
 
 \begin{enumerate}
 \item Issue a putFile() call with a .syn filename, and a relatively simple graph JSON.
@@ -25,25 +27,42 @@ Validate that the reader will detect this and throw an exception.
 \item when a model is loaded and ensure that all the model is written correctly, by checking for written data and validating that is complies with the SBML schema. Also validate that interactions with filesystem subsystem have been made.
 \end{enumerate}
 
-\noindent \textbf{HTTP API:
+\paragraph{HTTP API:
 }\begin{enumerate}
 \item Issue a listFiles() call and validate that interactions with the filesystem subsystem have been made. Stub the filesystem and to make it return a certain set of files, and validate that the correct JSON is generated.
 \item Issue a getFile(filename) call with an existent filename and validate that the correct call is made to the filesystem reader to read the given filename.
 \item Issue a getFile(filename) call with an non-existent filename and validate that the filesystem reader throws an exception.
 \item Issue a getFile(filename) call with an existent filename of a corrupt file, and validate that the filesystem reader throws and exception.
-\item Issue a putFile(model, filename) call with a provided model and filename, and validate  that the correct call to the filesystem has been made. Stub the filesystem to make it return true and false for separate test. Validate that the correct JSON is generated.\item Issue a listProteins() call. Stub the filesystem reader to provide predefined sets of return values, and validate that the correct JSON is generated. Boundary test by varying the set of return values from 0 to 3, and one with in the order of 1000. \item Issue a modelToSBML() call with a model and ensure the correct call is made to the filesystem writer. \item Issue a simulate() call with an existent filename and validate that the correct call is made to the simulation subsystem, and a call is made to validate the model first. Input values can be arbitrary.
-\item Issue a simulate() call when with an existent filename, of which the model is corrupt, and ensure that a call is made to validate the model and that an exception is thrown. Input values can be arbitrary.\item  Issue a simulate() call with a non-existent filename  to the simulation subsystem and ensure that an exception is thrown. Input values can be arbitrary.\end{enumerate}
-\textbf{JSBML Solver testing/simulator:}
+\item Issue a putFile(model, filename) call with a provided model and filename, and validate  that the correct call to the filesystem has been made. Stub the filesystem to make it return true and false with all possible exceptions for separate test. Validate that the correct JSON is generated.\item Issue a listProteins() call. Stub the filesystem reader to provide predefined sets of return values, and validate that the correct JSON is generated. Boundary test by varying the set of return values from 0 to 3, and one with in the order of 1000. \item Issue a modelToSBML() call with a model and ensure the correct call is made to the filesystem writer.\item Issue several validate(model) calls and ensure that the correct call has been made to the validation subsystem. Stub the validation subsystem to return true and false with all possible exceptions and ensure that the right JSON is generated.
+\item Issue several simulate(model, inputValues) calls and ensure that the the simulation subsystem is called after the validate() function is called. Stub the validation subsystem as described in test 8 and stub the simulation subsystem. Test that when the validation subsystem returns true that the simulation subsystem is not called. When the validation subsystem returns true, the simulation subsystem should be called and should return an output values object. Stub the simulator to return output values data series of length 0 to 3. Validate that the correct JSON is generated.\end{enumerate}
+\paragraph{JSBML Solver testing/simulator testing:}
 \begin{enumerate}
 \item 
 Call the simulator  to solve a relatively simple model and ensure that a new thread is started and output values are returned within a certain time.
-\item Call the simulator to solve a extremely large model and ensure that a new solver thread is started. If the solver crashes or hangs for longer than a specified time, ensure that an exception is thrown and the thread is terminated.
+\item Issue a simulate() call with  to solve a extremely large model and ensure that a new solver thread is started. If the solver crashes or hangs for longer than a specified time, ensure that an exception is thrown and the thread is terminated.
+\end{enumerate}
+
+\paragraph{Validator testing:}
+
+\begin{enumerate}
+\item Issue a validate() call with a valid model and ensure that true is returned.
+\item Issue a validate() call with a set of invalid models, in which there is a invalid model for each type of exception that can be thrown by the validator. Ensure that for each model the correct exception is thrown. 
 \end{enumerate}
 \textbf{Webserver testing}
 \begin{enumerate}
 \item Request a connection with the webserver with the request to send the GUI and validate that a connection is set up and the GUI page is  served. 
 \item Ensure that after a certain time and idle connection is discarded.
 \end{enumerate}
+\textbf{Controller testing}
+\begin{enumerate}
+\item Stub the filesystem reader to make take forever to complete a function call. Ensure that after a certain time, the filesystem reader thread is terminated.
+\item Stub the filesystem writer to make take forever to complete a function call. Ensure that after a certain time, the filesystem writer thread is terminated.
+
+\item Stub the simulator to make take forever to complete a function call. Ensure that after a certain time, the  simulator thread is terminated.
+
+\item Stub the validator to make take forever to complete a function call. Ensure that after a certain time, the  validator thread is terminated.
+
+\item Stub the webserver to make take forever to complete a function call. Ensure that after a certain time, the  webserver thread is terminated and restarted.\end{enumerate}
 
 \subsubsection{Integration testing}
 Testing of the integration with the client will be done by testing the HTTP API, and testing of the integration of the the server subsystems will be covered by the unit tests.
