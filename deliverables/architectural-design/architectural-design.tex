@@ -109,7 +109,7 @@ We propose the following API for the server-side of our application. Every model
 	\item[getFile(fileName): model] -
 		Returns the BioBrick model stored in fileName.\\
 		If the file does not exist or if the file is corrupt, it will give an error.
-	\item[putFile(fileName, model)] -
+	\item[putFile(fileName, model): boolean] -
 		Stores model in a file called fileName.\\
 		If something goes wrong while saving, it will give an error.
 	\item[listProteins(): list of proteins] -
