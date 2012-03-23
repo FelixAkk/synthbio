@@ -89,9 +89,9 @@ In order to simulate the behaviour of the circuit, we'll use a SBML solver as me
 
 \pagebreak
 \section{MoSCoW prioritization}
-In this chapter we will specify our priorities of requirements using the MoSCoW model. This model divides requirements on how viable it is to implement certain features: Must-Haves are features that the application cannot do without. These are all necessary for the program to function properly. Should-Haves group the features that are high-priority, but are not critical for the system. Could-Haves are features that would be nice to be have, should the time allow it and Wont-Haves are features that will not be implemented (in this version of the program).
+In this chapter we will specify our priorities of requirements using the MoSCoW model. This model divides requirements on how viable it is to implement certain features: Must-Haves are features that the application cannot do without. These are all necessary for the program to function properly. Should-Haves group the features that are high-priority, but are not critical for the system. Could-Haves are features that would be nice to be have, should the time allow it and Won't-Haves are features that will not be implemented (in this version of the program).
 
-\subsection{Must Haves}
+\subsection{Must-Haves}
 \begin{description}
 \item[Connection] Client and server must be able to communicate. If there is no connection, the user should be notified.
 \item[Available gates] The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.
@@ -112,7 +112,7 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \item[Circuit simulation] The application must be able to simulate a valid circuit and present the output values to the user.
 \end{description}
 
-\subsection{Should Haves}
+\subsection{Should-Haves}
 \begin{description}
 \item[Re-use circuits] The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.
 \end{description}
@@ -124,7 +124,7 @@ In this chapter we will specify our priorities of requirements using the MoSCoW 
 \item[Multi-client] The application must be able to handle multiple clients concurrently. This is not a point of attention, as modeling can easily be done one circuit at a time. Another issue is that implementing and properly testing this feature desires significant attention, that is why we will do it if we have enough time.
 \end{description}
 
-\subsection{Won't Haves}
+\subsection{Won't-Haves}
 \begin{description}
 \item[Determine circuit and proteins by specifying input and output values] It is possible to let an algorithm design a circuit based on merely given input and output signals. We deem designing such an algorithm takes up a lot of time and is very difficult to do properly given our limited timespan.
 \item[Biological plausibility] It is very hard to create a program in which a user can model a biological circuit that will work in the real world as there are just too much (unpredictable) factors to take into account. With our limited knowledge of the subject, we will not try to pursue a biological plausible implementation.
