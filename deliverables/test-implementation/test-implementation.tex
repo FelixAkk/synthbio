@@ -214,10 +214,12 @@ Milestones in our project, including their planned deadlines, are:
 \include{subsection-server-testing}
 \include{subsection-client-testing}
 
-\subsection{System Integration testing}
-The server and client will be tested as described in the preceding chapters. Once those modules are tested the client and server need to be integrated and tested. To test these different methods will be used.\\
-First unit tests will be made that will be ran with the server and client both running.\\
-Secondly Crawljax\footnote{ Project home: \url{http://www.crawljax.com}} will be used. Crawljax will find all click able elements on our client page and try them out in different orders. This way we can see what orders fail and need to be fixed.\\
+\subsection{System integration testing}
+The server and client will be tested as described in the preceding chapters. Once those modules are tested the client and server need to be integrated and tested. To test these different methods will be used:\\
+\begin{itemize}
+\item Unit tests will be made that will be ran with the server and client both running. With these tests we need to think about possible network delay, so while testing the server needs to be running on a different machine than the client.
+\item Crawljax will again be used on the client, but this time with the server running.\\
+\end{itemize}
 
 % % %
 %Integration testing is done when the individual software modules are combined and need to be tested as a whole. There are several methods one %can use to test combined modules, these are bottom up testing, top down testing and sandwich testing. We will use the bottom up approach. With %this approach the lower level modules are integrated and tested first, then these are used to test the higher level modules. With this approach %bugs can be found more easily because the lowest level is tested first. The approach also complements our development strategy since we will %develop the lowest components first.
@@ -227,7 +229,7 @@ Secondly Crawljax\footnote{ Project home: \url{http://www.crawljax.com}} will be
 %One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit %tests can test these two components.
 % % %
 
-After this validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. The third party in our case will be fellow students and volunteers. After the testing the participants will be interviewed to see what they thought of the system. Was the system intuitive? Did the system feel safe? did the system do what you wanted? etc.
+\noindent After this, validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. The third party in our case will be fellow students and volunteers. After the testing the participants will be interviewed to see what they thought of the system. Was the system intuitive? Did the system feel safe? did the system do what you wanted? etc.
 
 \section{Risk analysis}
 In this chapter we will discuss what we see as possible risks to our project. We will look at the difficulty of several implementation steps. After that, testing difficulties will be discussed. Third point of attention is external parties. Who do we need beside our own team to finish this project successfully and how does that invoke issues? Furthermore we will examine what we will do if the project stumbles upon unforeseen problems. Finally we will have a look at every persons schedule to estimate their work pressure.
@@ -254,7 +256,11 @@ If a test is constructed properly and it fails, the application has a bug somewh
 Our project is not heavily dependent upon external parties. However, we do occasionally have to wait for feedback from instructors. We are sometimes fully reliant upon information given by instructors. However we do not expect a lot of difficulties with this.
 
 \subsection{Unforeseen problems}
-What happens if something unexpected happens? If we stumble upon a problem we did not foresee? We might have to add additional features to our application or we find a bug which we cannot easily fix. If problems like these occur we need to use our spare time to fix these problems. We have a strict planning of when everything is due, and in planning this we kept some spare time to deal with unexpected issues.
+What happens if something unexpected happens? If we stumble upon a problem we did not foresee? We might have to add additional features to our application or we find a bug which we cannot easily fix. If problems like these occur we need to use our spare time to fix these problems. We have a strict planning of when everything is due, and in planning this we kept some spare time to deal with unexpected issues.\\
+If a deadline of the implementation of a requirement is missed, than the following will happen based on priority of the requirement.\\
+In each Scrum iteration the Must-Haves\footnote{Chapter 3} have the highest priority and requirements with a lower priority will be delayed or cancelled if a Must-Have is running behind on schedule.\\
+If a component that is earlier in the critical path is not yet finished than a component further down in the critical path or not in the critical path will be delayed or cancelled. For example if Design Circuit\footnote{Requirement X} is not yet finished than work on pro\footnote{Requirement X} must be delayed because Specify Protein needs Design Circuit to be implemented.\\
+
 
 \subsection{Work stress of every team member}
 The work stress of most members of our team is pretty high. Four out of five follow a lot of courses, which leads to more practical work than just this project. We need to take into account deadlines of other projects. The fifth member, during the 3rd semester, only does this course. However, he is a board member of a student association which takes a lot of time as well. We do take this into account but not as much, simply because it is not a constant pressure.
