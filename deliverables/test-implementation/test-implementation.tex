@@ -190,8 +190,11 @@ We will have five iterations in total before delivering the final product. This 
 \include{subsection-server-testing}
 \include{subsection-client-testing}
 
-\subsection{Testing Client-server integration}
-Integration testing is done when the individual software modules are combined and need to be tested as a whole. One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit tests can test these two components.
+\subsection{Integration testing}
+Integration testing is done when the individual software modules are combined and need to be tested as a whole. There are several methods one can use to test combined modules, these are bottom up testing, top down testing and sandwich testing. We will use the bottom up approach. With this approach the lower level modules are integrated and tested first, then these are used to test the higher level modules. With this approach bugs can be found more easily because the lowest level is tested first. The approach also complements our development strategy since we will develop the lowest components first.
+
+When both the server and client have been developed these need to be combined and tested. One approach is to use unit tests which test the whole system. The server can be run on the same machine as the client, in this way the unit tests can test these two components.
+
 After this validation testing needs to be done, the system needs to be validated if it conforms to the requirements. This will be done by letting a third party test the software. After the testing the participants will be interviewed.
 
 \section{Risk analysis}
