@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
 \usepackage{amsmath,amssymb}
-
+\usepackage{tabularx}
 \usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
 %~ \usepackage[toc]{multitoc} % Nice two-column TOC
 
@@ -36,6 +36,19 @@ Jan Pieter Waagmeester}
 \section{Introduction}
 
 \section{Selection and assignment of tasks}
+
+\begin{tabularx}{\textwidth}{p{9cm} l p{1.4cm}p{1.2cm}}
+Task & Developer & estimated effort & actual effort \\
+\hline
+Server: Tomcat server that handles HTTP requests & & & \\
+Server: Basic MVC framework, so that future components can easily be integrated & & & \\
+Client: Create an index.html with a basic GUI & & & \\
+Server: Serve available proteins and gates; & & & \\
+Client: Show the connection state; & & & \\
+Client: Show available gates & & & \\ \hline
+
+
+\end{tabularx}
 
 %~ \section{Actual effort}
 
