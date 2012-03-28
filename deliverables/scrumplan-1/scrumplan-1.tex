@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
 \usepackage{amsmath,amssymb}
-\usepackage{tabularx}
+\usepackage{tabularx,multirow}
 \usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
 %~ \usepackage[toc]{multitoc} % Nice two-column TOC
 
@@ -36,20 +36,39 @@ Jan Pieter Waagmeester}
 \section{Introduction}
 
 \section{Selection and assignment of tasks}
+Since this is the first iteration, it is hard to predict how things work out. Lots of things are to be sorted out and we have to become familiar with the tools to be used.
 
-\begin{tabularx}{\textwidth}{p{9cm} l p{1.4cm}p{1.2cm}}
-Task & Developer & estimated effort & actual effort \\
+The time available is two afternoons in two weeks by five people. That's about sixteen hours per person, however, some time should be reserved for the scheduled meeting on wednesday. So the total effort available is about 40 man hours.
+
+\begin{table}[h!]
+	
+
+\begin{tabularx}{\textwidth}{p{9cm} l cc}
+	& & \multicolumn{2}{c}{Effort} \\	
+Task & Developer & estimated & actual \\
 \hline
-Server: Tomcat server that handles HTTP requests & & & \\
-Server: Basic MVC framework, so that future components can easily be integrated & & & \\
-Client: Create an index.html with a basic GUI & & & \\
-Server: Serve available proteins and gates; & & & \\
-Client: Show the connection state; & & & \\
-Client: Show available gates & & & \\ \hline
+Server: Tomcat server that handles HTTP requests &
+ & 8 & \\
+ 
+Server: Basic MVC framework, so that future components can easily be integrated &
+ & 8 & \\
+ 
+Client: Create an index.html with a basic GUI &
+ & 8 & \\
+ 
+Server: Serve available proteins and gates &
+ & 8 & \\
+ 
+Client: Show the connection state; &
+ & 4 & \\
+ 
+Client: Show available gates &
+ & 8 & \\ \hline
 
-
+\textbf{Total} &
+ & 44 & 
 \end{tabularx}
-
-%~ \section{Actual effort}
+\end{table}
+%~ \section{Reflection on this iteration}
 
 \end{document}
