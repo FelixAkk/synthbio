@@ -1,7 +1,6 @@
-/*
+/**
  * Synthetic Biology project (Biobrick Modeller/Simulator)
  * https://github.com/FelixAkk/synthbio
- *
  */
 
 import java.io.IOException;
@@ -12,9 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/*
+/**
  * Servlet Ping returns Pong.
  *
+ * This servlet can be used to check the connection status.
+ * The client requests "Ping" and knows the server is running when "Pong" is succesfully returned.
  */
 public class Ping extends HttpServlet {
 
