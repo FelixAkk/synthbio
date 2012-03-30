@@ -31,9 +31,14 @@
 		<servlet-class>HelloWorldExample</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>Ping</servlet-name>
+		<servlet-class>Ping</servlet-class>
+	</servlet>
+
 	<servlet-mapping>
-		<servlet-name>HelloWorldExample</servlet-name>
-		<url-pattern>/Hello</url-pattern>
+		<servlet-name>Ping</servlet-name>
+		<url-pattern>/Ping</url-pattern>
 	</servlet-mapping>
 
 </web-app>
