@@ -6,9 +6,18 @@
 	<path id="project-classpath">
 		<fileset dir="lib" includes="*.jar" />
 	</path>
-	<target name="compile">
+
+	<target name="init">
+		<mkdir dir="${build}"/> 
+	</target>
+
+	<target name="compile" depends="init">
 		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false"/>
 	</target>
+
+	<target name="build" depends="compile">
+	</target>
+	
 	<target name="test" depends="compile">
 		<junit fork="yes" printsummary="yes" showoutput="yes">
 			<classpath>
