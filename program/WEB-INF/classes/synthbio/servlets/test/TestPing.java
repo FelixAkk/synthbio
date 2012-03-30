@@ -20,7 +20,7 @@ import
  *
  * Unit tests for the Ping Servlet
  */
-public class PingTest extends HttpServlet {
+public class TestPing extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
