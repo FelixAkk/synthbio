@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <project name="synthbio" default="compile" basedir=".">
-	<property name="src" value="classes"/>
+	<property name="src" value="src"/>
 	<property name="build" value="classes"/>
-	
+
 	<path id="project-classpath">
 		<fileset dir="lib" includes="*.jar" />
 	</path>
@@ -10,6 +10,25 @@
 		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false"/>
 	</target>
 	<target name="test" depends="compile">
-
+		<junit fork="yes" printsummary="yes" showoutput="yes">
+			<classpath>
+				<path refid="project-classpath" />
+				<pathelement path="${build}"/>
+			</classpath>
+			
+			<batchtest haltonfailure="yes">
+				<formatter type="brief" usefile="false" />
+				<fileset dir="${src}">
+					<exclude name="**/json/tests/*"/>
+					<include name="**/Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit> 
 	</target>
+
+	<target name="clean">
+		<delete dir="${build}" />
+		<mkdir dir="${build}"/> 
+	</target>
+
 </project>

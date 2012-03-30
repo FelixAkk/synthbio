@@ -7,13 +7,18 @@ package synthbio.models.test;
 
 import synthbio.models.Protein;
 
-import junit.framework.TestCase;
+import org.junit.*;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class TestProtein extends TestCase{
 
+public class TestProtein{
+	double delta=0.0001;
+	
 	/**
 	 * Test if what comes out equals what we put in.
 	 */
+	@Test
 	public void testConstructorGet(){
 		String name="A";
 		double k2=4.6337;
@@ -23,14 +28,15 @@ public class TestProtein extends TestCase{
 		Protein a=new Protein(name, k2, d1, d2);
 
 		assertEquals(name, a.name);
-		assertEquals(k2, a.k2);
-		assertEquals(d1, a.d1);
-		assertEquals(d2, a.d2);
+		assertEquals(k2, a.k2, delta);
+		assertEquals(d1, a.d1, delta);
+		assertEquals(d2, a.d2, delta);
 	}
 
 	/**
 	 * Test if object produces sane JSON string.
 	 */
+	@Test
 	public void testToJSONString(){
 		String name="A";
 		double k2=4.6337;
