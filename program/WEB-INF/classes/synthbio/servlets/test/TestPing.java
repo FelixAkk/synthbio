@@ -3,6 +3,8 @@
  * https://github.com/FelixAkk/synthbio
  */
 
+ package synthbio.servlets.test;
+ 
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -11,13 +13,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import 
+
 /**
- * Servlet Ping returns Pong.
+ * Servlet Ping returns Pong Test.
  *
- * This servlet can be used to check the connection status.
- * The client requests "Ping" and knows the server is running when "Pong" is succesfully returned.
+ * Unit tests for the Ping Servlet
  */
-public class Ping extends HttpServlet {
+public class TestPing extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
