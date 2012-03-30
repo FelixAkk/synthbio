@@ -3,6 +3,8 @@
  * https://github.com/FelixAkk/synthbio
  */
 
+package synthbio.servlets;
+ 
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -18,15 +20,11 @@ import javax.servlet.http.HttpServletResponse;
  * The client requests "Ping" and knows the server is running when "Pong" is succesfully returned.
  */
 public class Ping extends HttpServlet {
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		response.setContentType("text/plain");
+		PrintWriter out = response.getWriter();
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        response.setContentType("text/plain");
-        PrintWriter out = response.getWriter();
-
-        out.println("Pong");
-    }
+		out.println("Pong");
+	}
 }
-
-
-
