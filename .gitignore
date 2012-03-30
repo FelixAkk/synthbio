@@ -4,3 +4,6 @@
 *.dvi
 *.toc
 *.out
+
+#java class files we are not interested in.
+*.class

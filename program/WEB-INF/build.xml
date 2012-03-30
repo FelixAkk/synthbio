@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<project name="synthbio" default="compile" basedir=".">
+	<property name="src" value="classes"/>
+	<property name="build" value="classes"/>
+	
+	<path id="project-classpath">
+		<fileset dir="lib" includes="*.jar" />
+	</path>
+	<target name="compile">
+		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false"/>
+	</target>
+	<target name="test" depends="compile">
+
+	</target>
+</project>
