@@ -29,7 +29,24 @@ public class AndPromotor extends Promotor implements JSONString{
 		this.km=km;
 		this.n=n;
 	}
-
+	
+	/**
+	 * Parse from CSV row.
+	 */
+	public static AndPromotor fromCSV(String row){
+		String[] tokens=row.split(",");
+		if(tokens.length!=5){
+			throw new IllegalArgumentException("CSV row must have exactly five fields");
+		}
+		
+		return new AndPromotor(
+			tokens[0],
+			tokens[1],
+			Double.parseDouble(tokens[2]),
+			Double.parseDouble(tokens[3]),
+			Integer.parseInt(tokens[4])
+		);
+	}
 	/**
 	 * Returns a String containing a JSON representation for the current
 	 * object state.

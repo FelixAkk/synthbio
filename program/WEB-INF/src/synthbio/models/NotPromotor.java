@@ -30,6 +30,22 @@ public class NotPromotor extends Promotor implements JSONString{
 	}
 
 	/**
+	 * Parse from CSV row.
+	 */
+	public static NotPromotor fromCSV(String row){
+		String[] tokens=row.split(",");
+		if(tokens.length!=4){
+			throw new IllegalArgumentException("CSV row must have exactly four fields");
+		}
+		
+		return new NotPromotor(
+			tokens[0],
+			Double.parseDouble(tokens[1]),
+			Double.parseDouble(tokens[2]),
+			Integer.parseInt(tokens[3])
+		);
+	}
+	/**
 	 * Returns a String containing a JSON representation for the current
 	 * object state.
 	 */

@@ -13,8 +13,71 @@ import static org.junit.Assert.*;
 
 
 public class TestAndPromotor{
+	double delta=0.0001;
+	
+	/**
+	 * Test if what comes out equals what we put in.
+	 */
 	@Test
-	public void testStub(){
-		assertEquals(true, true);
+	public void testConstructor(){
+		String tf1="A";
+		String tf2="B";
+		double k1=4.5272;
+		double km=238.9569;
+		int n=3;
+		
+		AndPromotor AND_ab=new AndPromotor(tf1, tf2, k1, km, n);
+
+		assertEquals(tf1, AND_ab.tf1);
+		assertEquals(tf2, AND_ab.tf2);
+		assertEquals(k1, AND_ab.k1, delta);
+		assertEquals(km, AND_ab.km, delta);
+		assertEquals(n, AND_ab.n);
+	
+	}
+
+	/**
+	 * Test if object produces sane JSON string.
+	 */
+	@Test
+	public void testToJSONString(){
+		String tf1="A";
+		String tf2="B";
+		double k1=4.5272;
+		double km=238.9569;
+		int n=3;
+		
+		AndPromotor AND_ab=new AndPromotor(tf1, tf2, k1, km, n);
+
+		String expect=
+			"{\"tf1\":\""+tf1+"\","+
+			"\"tf2\":\""+tf2+"\","+
+			"\"k1\":"+k1+","+
+			"\"km\":"+km+","+
+			"\"n\":"+n+"}";
+		
+		assertEquals(expect, AND_ab.toJSONString());
+	}
+
+	/**
+	 * Test fromCSV
+	 */
+	@Test
+	public void testFromCSV(){
+		String tf1="A";
+		String tf2="B";
+		double k1=4.5272;
+		double km=238.9569;
+		int n=3;
+		
+		String csv=tf1+","+tf2+","+k1+","+km+","+n;
+
+		AndPromotor AND_ab=AndPromotor.fromCSV(csv);
+
+		assertEquals(tf1, AND_ab.tf1);
+		assertEquals(tf2, AND_ab.tf2);
+		assertEquals(k1, AND_ab.k1, delta);
+		assertEquals(km, AND_ab.km, delta);
+		assertEquals(n, AND_ab.n);
 	}
 }
