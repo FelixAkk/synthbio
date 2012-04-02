@@ -4,34 +4,26 @@
  */
 
 package synthbio.servlets.test;
- 
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-/*
-import 
-*/
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.TextPage;
 
 /**
- * Servlet Ping returns Pong Test.
+ * Testing the Servlet ListProteins
  *
- * Unit tests for the Ping Servlet
  */
-public class TestPing extends HttpServlet {
+public class TestPing{
+	 public static final String url="http://localhost:8080/Ping";
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        response.setContentType("text/plain");
-        PrintWriter out = response.getWriter();
+	@Test
+	public void testResponse() throws Exception{
+		WebClient webClient = new WebClient();
+		TextPage page = webClient.getPage(url);
+		assertEquals("Pong", page.getContent());
+		webClient.closeAllWindows();
+	}
 
-        out.println("Pong");
-    }
 }
-
-
-

@@ -24,6 +24,7 @@ public class JSONResponse implements JSONString{
 	public static final String keyMessage = "message";
 	public static final String keyData = "data";
 
+	//TODO: final?
 	public boolean success;
 	public String message="";
 

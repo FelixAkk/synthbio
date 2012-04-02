@@ -24,7 +24,7 @@ public class TestListProteins{
 	/**
 	 * Server location
 	 */
-	 public String url="http://localhost:8080/ListProteins";
+	 public static final String url="http://localhost:8080/ListProteins";
 
 
 	
@@ -40,7 +40,7 @@ public class TestListProteins{
 		final TextPage page = webClient.getPage(url);
 
 		String expected=fileToString("src/synthbio/servlets/test/listProteins-expected.json").trim();
-		
+
 		assertEquals(
 			expected,
 			page.getContent().trim()
