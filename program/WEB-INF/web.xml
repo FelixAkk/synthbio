@@ -23,7 +23,7 @@
   version="3.0"
   metadata-complete="true">
 
-	<display-name>Synthbio groep E</display-name>
+	<display-name>Synthbio group E</display-name>
 	<description>Welcome to</description>
 
 	<servlet>
@@ -35,10 +35,18 @@
 		<servlet-name>Ping</servlet-name>
 		<servlet-class>synthbio.servlets.Ping</servlet-class>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>Ping</servlet-name>
 		<url-pattern>/Ping</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ListProteins</servlet-name>
+		<servlet-class>synthbio.servlets.ListProteins</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ListProteins</servlet-name>
+		<url-pattern>/ListProteins</url-pattern>
 	</servlet-mapping>
 
 </web-app>

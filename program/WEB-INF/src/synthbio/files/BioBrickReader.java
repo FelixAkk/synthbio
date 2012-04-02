@@ -21,7 +21,10 @@ public class BioBrickReader{
 
 	private AndPromotor[] andPromotors;
 
-	
+
+	public BioBrickReader() throws Exception{
+		this("biobricks/");
+	}
 	/**
 	 * loads BioBrick information from the location specified.
 	 *

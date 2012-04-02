@@ -14,26 +14,45 @@ import org.json.JSONString;
 import org.json.JSONStringer;
 import org.json.JSONWriter;
 
- 
+/**
+ * JSONResponse is the default wrapper for all the date in response to
+ * client requests.
+ */
 public class JSONResponse implements JSONString{
 
 	public boolean success;
 	public String message="";
-	public Object data;
-	
-	public String toJSONString(){
-		//convert array to JSONArray to make it serializeable.
-		if(this.data instanceof Collection){
-			try{
-				this.data=new JSONArray(this.data);
-			}catch(Exception e){
-				this.data=null;	
-				this.message=
-					"JSON convert error: could not convert array to JSONArray "+
-					e.getMessage();
-			}
-		}
 
+	/**
+	 * Data to be sent.
+	 * May be a lot of things which can be converted to String.
+	 */
+	public Object data;
+
+	public JSONResponse(){
+		this.success=true;
+	}
+	public JSONResponse(boolean success){
+		this.success=success;
+	}
+	public JSONResponse(boolean success, String message){
+		this(success);
+		this.message=message;
+	}
+
+	
+	/**
+	 * toJSONString returns a String with the JSON representatation of
+	 * the current object state.
+	 *
+	 * The implementation of JSONString takes care of converting types
+	 * to compatible types and will throw an exception if it fails to do
+	 * so. In case of an exception, a reply with success=false and the
+	 * Exceptions error message will be returned.
+	 *
+	 * @return String
+	 */
+	public String toJSONString(){
 		JSONWriter json=null;
 		try{
 			json=new JSONStringer()
@@ -44,7 +63,8 @@ public class JSONResponse implements JSONString{
 				.endObject();
 			return json.toString();
 		}catch(JSONException e){
-			return "{exception:\""+e.getMessage()+"\"}";
+			return new JSONResponse(false,
+				"JSON convert error: "+e.getMessage()).toJSONString();
 		}
 		
 	}

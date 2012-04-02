@@ -13,15 +13,13 @@ import synthbio.files.BioBrickReader;
 
 public class TestBioBrickReader{
 
-	String biobrickPath="biobricks/";
+	public String biobrickPath="biobricks/";
 
-	public static BioBrickReader bbr;
-	/**
-	 * Verify that no exceptions are thrown.
-	 */
-	@Test
-	public void testLoading() throws Exception{
-		bbr=new BioBrickReader(this.biobrickPath);
+	public BioBrickReader bbr;
+
+	 @Before
+	public void setUp() throws Exception {
+		this.bbr=new BioBrickReader(this.biobrickPath);
 	}
 
 	/**
