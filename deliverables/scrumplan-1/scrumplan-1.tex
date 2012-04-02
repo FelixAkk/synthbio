@@ -14,6 +14,8 @@
   {1.5ex \@plus .2ex}%
   {\normalfont\normalsize\bfseries}}
 \makeatother
+{}
+\newcommand{\githubissue}[1]{\href{https://github.com/FelixAkk/synthbio/issues/#1}{\##1}}
 
 \title{Programming Life - Scrum plan iteration 1}
 
@@ -48,35 +50,39 @@ Results for this iteration will be presented thursday april 5, 14:30 at DW-PC ro
 \multicolumn{2}{c}{}& \multicolumn{2}{c}{Effort} \\	
 \textbf{Task} & Developer & estimated & actual \\
 \hline
+\githubissue{2}
 Server: Tomcat server that handles HTTP requests {\sc Hello World} and class scaffolding &
 Niels/Albert & 10 & \\
 
-Server/Client: Design and document JSON format for circuit (\verb|.syn|) and protein list &
+\githubissue{3} Server/Client: Design and document JSON format for circuit (\verb|.syn|) and protein list &
 Jan Pieter & 4 & \\
 
-Client: JavaScript scaffolding &
+\githubissue{4} Client: JavaScript scaffolding &
 Thomas & 8 & \\
  
-Client: Create basic GUI &
+\githubissue{5} Client: Create basic GUI &
 Felix & 8 & \\
  
-Server/client: create and display connection state by ping/pong heartbeat &
+\githubissue{6} Server/client: create and display connection state by ping/pong heartbeat &
 Niels/Albert & 2 & \\
  
-Client: Show available basic gates &
+\githubissue{7} Client: Show available basic gates &
 Jan Pieter & 3 & \\ \hline
 
-\multicolumn{2}{c}{\textbf{Total}  }
+\multicolumn{2}{r}{\textbf{Total}  }
  & 35 & \\[8mm]
  
 \multicolumn{2}{l}{Optional\footnote{Things from next iterations that could be done if sufficient time is available}} \\ \hline
-Server: Parse and serve list of Proteins\footnote{After list is supplied by Alexey} &
+
+\githubissue{8} Server: Parse and serve list of Proteins\footnote{Only after list is supplied by Alexey} &
 Niels/Albert & 4 & \\
-Client: Display list of Proteins &
+
+\githubissue{9} Client: Display list of Proteins &
  & 2 & \\
 \hline 
 \end{tabularx}
 
-%~ \section{Reflection on this iteration}
+\section{Reflection on this iteration}
+
 
 \end{document}
