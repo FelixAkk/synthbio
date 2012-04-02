@@ -16,9 +16,12 @@
 		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false"/>
 	</target>
 
-	<target name="build" depends="compile">
-	</target>
-	
+	<!-- Just an alias -->
+	<target name="build" depends="compile" />
+
+	<!--
+	Test all non-servlet tests.
+	-->
 	<target name="test" depends="compile">
 		<junit fork="yes" printsummary="yes" showoutput="yes">
 			<classpath>
@@ -30,12 +33,36 @@
 				<formatter type="brief" usefile="false" />
 				<fileset dir="${src}">
 					<exclude name="**/json/tests/*"/>
+					<exclude name="**/servlets/test/*"/>
 					<include name="**/Test*.java" />
 				</fileset>
 			</batchtest>
 		</junit> 
 	</target>
 
+	<!--
+	Adding another test-target to test the servlets.
+	Seperate, because they take a lot of time.
+	-->
+	<target name="test-servlets" depends="compile">
+		<junit fork="yes" printsummary="yes" showoutput="yes">
+			<classpath>
+				<path refid="project-classpath" />
+				<pathelement path="${build}"/>
+			</classpath>
+			
+			<batchtest haltonfailure="yes">
+				<formatter type="brief" usefile="false" />
+				<fileset dir="${src}">
+					<exclude name="**/json/tests/*"/>
+					<include name="**/servlets/test/*"/>
+				</fileset>
+			</batchtest>
+		</junit> 
+	</target>
+
+	<target name="test-all" depends="test,test-servlets" />
+	
 	<target name="clean">
 		<delete dir="${build}" />
 		<mkdir dir="${build}"/> 
