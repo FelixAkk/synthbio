@@ -14,19 +14,18 @@ import org.json.JSONWriter;
 /**
  * NotPromotor value object.
  */
-public class NotPromotor extends Promotor implements JSONString{
+public class NotPromotor extends Promotor {
+
+	public static final String keyTf = "tf";
 
 	/**
 	 * Name of the transcription factor
 	 */
-	public String tf;
+	public final String tf;
 		
 	public NotPromotor(String tf, double k1, double km, int n){
+		super(k1, km, n);
 		this.tf=tf;
-		
-		this.k1=k1;
-		this.km=km;
-		this.n=n;
 	}
 
 	/**
@@ -50,19 +49,19 @@ public class NotPromotor extends Promotor implements JSONString{
 	 * object state.
 	 */
 	public String toJSONString(){
-		JSONWriter json=null;
 		try{
-			json=new JSONStringer()
+			JSONWriter json=new JSONStringer()
 				.object()
-					.key("tf").value(this.tf)
-					.key("k1").value(this.k1)
-					.key("km").value(this.km)
-					.key("n").value(this.n)
+					.key(this.keyTf).value(this.tf)
+					//todo: Reuse possible parent toJSONString for following?
+					.key(this.keyK1).value(this.k1)
+					.key(this.keyKm).value(this.km)
+					.key(this.keyN).value(this.n)
 				.endObject();
+			return json.toString();
 		}catch(JSONException e){
 			return "{}";
 		}
-		return json.toString();
 	}
 	
 }

@@ -20,6 +20,10 @@ import org.json.JSONWriter;
  */
 public class JSONResponse implements JSONString{
 
+	public static final String keySuccess = "success";
+	public static final String keyMessage = "message";
+	public static final String keyData = "data";
+
 	public boolean success;
 	public String message="";
 
@@ -53,16 +57,16 @@ public class JSONResponse implements JSONString{
 	 * @return String
 	 */
 	public String toJSONString(){
-		JSONWriter json=null;
 		try{
-			json=new JSONStringer()
+			JSONWriter json=new JSONStringer()
 				.object()
-					.key("success").value(this.success)
-					.key("message").value(this.message)
-					.key("data").value(this.data)
+					.key(this.keySuccess).value(this.success)
+					.key(this.keyMessage).value(this.message)
+					.key(this.keyData).value(this.data)
 				.endObject();
 			return json.toString();
 		}catch(JSONException e){
+			//TODO: Possibly endless loop?
 			return new JSONResponse(false,
 				"JSON convert error: "+e.getMessage()).toJSONString();
 		}

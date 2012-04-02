@@ -25,6 +25,6 @@ public class Ping extends HttpServlet {
 		response.setContentType("text/plain");
 		PrintWriter out = response.getWriter();
 
-		out.println("Pong");
+		out.print("Pong");
 	}
 }

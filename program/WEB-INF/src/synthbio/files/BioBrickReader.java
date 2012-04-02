@@ -30,7 +30,7 @@ public class BioBrickReader{
 	 *
 	 * Expects three files in path: and.csv, cds.csv and not.csv
 	 *
-	 * @param 	path
+	 * @param  path
 	 * @throws FileNotFoundException 
 	 */
 	public BioBrickReader(String path) throws Exception{

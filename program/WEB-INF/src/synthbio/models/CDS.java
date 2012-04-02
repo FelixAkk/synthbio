@@ -18,10 +18,15 @@ import org.json.JSONWriter;
  */
 public class CDS implements JSONString{
 	
-	public String name;
-	public double k2;
-	public double d1;
-	public double d2;
+	public static final String keyName = "name";
+	public static final String keyK2 = "k2";
+	public static final String keyD1 = "d1";
+	public static final String keyD2 = "d2";
+
+	public final String name;
+	public final double k2;
+	public final double d1;
+	public final double d2;
 
 	public CDS(String name, double k2, double d1, double d2){
 		this.name=name;
@@ -53,19 +58,17 @@ public class CDS implements JSONString{
 	 * object state.
 	 */
 	public String toJSONString(){
-		JSONWriter json=null;
 		try{
-			json=new JSONStringer()
+			JSONWriter json=new JSONStringer()
 				.object()
-					.key("name").value(this.name)
-					.key("k2").value(this.k2)
-					.key("d1").value(this.d1)
-					.key("d2").value(this.d2)
+					.key(this.keyName).value(this.name)
+					.key(this.keyK2).value(this.k2)
+					.key(this.keyD1).value(this.d1)
+					.key(this.keyD2).value(this.d2)
 				.endObject();
-				
+			return json.toString();
 		}catch(JSONException e){
 			return "{}";
 		}
-		return json.toString();
 	}
 }

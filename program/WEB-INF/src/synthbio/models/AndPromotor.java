@@ -13,21 +13,21 @@ import org.json.JSONWriter;
 /**
  * AndPromotor value object.
  */
-public class AndPromotor extends Promotor implements JSONString{
+public class AndPromotor extends Promotor {
+
+	public static final String keyTf1 = "tf1";
+	public static final String keyTf2 = "tf2";
 
 	/**
 	 * Names of the Transcription factors
 	 */
-	public String tf1;
-	public String tf2;
+	public final String tf1;
+	public final String tf2;
 	
 	public AndPromotor(String tf1, String tf2, double k1, double km, int n){
+		super(k1, km, n);		
 		this.tf1=tf1;
 		this.tf2=tf2;
-
-		this.k1=k1;
-		this.km=km;
-		this.n=n;
 	}
 	
 	/**
@@ -52,20 +52,20 @@ public class AndPromotor extends Promotor implements JSONString{
 	 * object state.
 	 */
 	public String toJSONString(){
-		JSONWriter json=null;
 		try{
-			json=new JSONStringer()
+			JSONWriter json=new JSONStringer()
 				.object()
-					.key("tf1").value(this.tf1)
-					.key("tf2").value(this.tf2)
-					.key("k1").value(this.k1)
-					.key("km").value(this.km)
-					.key("n").value(this.n)
+					.key(this.keyTf1).value(this.tf1)
+					.key(this.keyTf2).value(this.tf2)
+					//todo: Reuse possible parent toJSONString for following?
+					.key(this.keyK1).value(this.k1)
+					.key(this.keyKm).value(this.km)
+					.key(this.keyN).value(this.n)
 				.endObject();
+			return json.toString();
 		}catch(JSONException e){
 			return "{}";
 		}
-		return json.toString();
 	}
 	
 }
