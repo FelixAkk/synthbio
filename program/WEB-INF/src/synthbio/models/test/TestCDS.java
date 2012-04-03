@@ -46,11 +46,13 @@ public class TestCDS{
 		CDS a=new CDS(name, k2, d1, d2);
 
 		String expect=
-			"{\"name\":\""+name+"\","+
-			"\"k2\":"+k2+","+
+			"{"+
 			"\"d1\":"+d1+","+
-			"\"d2\":"+d2+"}";
-		
+			"\"d2\":"+d2+","+
+			"\"name\":\""+name+"\","+
+			"\"k2\":"+k2+""+
+			"}";
+
 		assertEquals(expect, a.toJSONString());
 	}
 

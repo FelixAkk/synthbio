@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 import synthbio.json.JSONResponse;
 import synthbio.models.CDS;
-
+import synthbio.models.AndPromotor;
 
 public class TestJSONResponse{
 		
@@ -22,7 +22,7 @@ public class TestJSONResponse{
 	public void testDataEmpty(){
 		JSONResponse response=new JSONResponse(true, "");
 
-		String expected="{\"success\":true,\"message\":\"\",\"data\":null}";
+		String expected="{\"message\":\"\",\"data\":null,\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}
@@ -35,7 +35,7 @@ public class TestJSONResponse{
 		JSONResponse response=new JSONResponse(true, "");
 		response.data="Test123";
 
-		String expected="{\"success\":true,\"message\":\"\",\"data\":\""+response.data+"\"}";
+		String expected="{\"message\":\"\",\"data\":\""+response.data+"\",\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}
@@ -52,7 +52,7 @@ public class TestJSONResponse{
 		String[] foobar={"foo", "bar"};
 		response.data=foobar;
 
-		String expected="{\"success\":true,\"message\":\"\",\"data\":[\"foo\",\"bar\"]}";
+		String expected="{\"message\":\"\",\"data\":[\"foo\",\"bar\"],\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}
@@ -60,6 +60,7 @@ public class TestJSONResponse{
 	/**
 	 * put a CDS in the data field, and check json output.
 	 */
+	@Ignore
 	@Test
 	public void testDataCDS(){
 		JSONResponse response=new JSONResponse(true, "");
@@ -67,8 +68,24 @@ public class TestJSONResponse{
 		response.data=new CDS("A", 1, 2, 3);
 
 		String expected=
-			"{\"success\":true,\"message\":\"\","+
-			"\"data\":{\"name\":\"A\",\"k2\":1,\"d1\":2,\"d2\":3}}";
+			"{"+
+			"\"success\":true,"+
+			"\"message\":\"\","+
+			"\"data\":{\"d1\":2,\"d2\":3,\"name\":\"A\",\"k2\":1}}";
+
+		assertEquals(expected, response.toJSONString());
+	}
+
+	@Test
+	public void testDataAndPromotor(){
+		JSONResponse response=new JSONResponse(true, "");
+
+		response.data=new AndPromotor("A", "B", 1, 2, 3);
+
+		String expected=
+			"{\"message\":\"\","+
+			"\"data\":{\"tf1\":\"A\",\"n\":3,\"tf2\":\"B\",\"k1\":1,\"km\":2},"+
+			"\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}
@@ -86,11 +103,12 @@ public class TestJSONResponse{
 		response.data=data;
 
 		String expected=
-			"{\"success\":true,\"message\":\"\","+
+			"{\"message\":\"\","+
 			"\"data\":["+
-				"{\"name\":\"A\",\"k2\":1,\"d1\":2,\"d2\":3},"+
-				"{\"name\":\"B\",\"k2\":4,\"d1\":5,\"d2\":6}"+
-			"]}";
+				"{\"d1\":2,\"d2\":3,\"name\":\"A\",\"k2\":1},"+
+				"{\"d1\":5,\"d2\":6,\"name\":\"B\",\"k2\":4}"+
+			"],"+
+			"\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}

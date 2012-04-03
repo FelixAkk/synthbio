@@ -47,10 +47,12 @@ public class TestNotPromotor{
 		NotPromotor NOT_a=new NotPromotor(tf, k1, km, n);
 
 		String expect=
-			"{\"tf\":\""+tf+"\","+
+			"{"+
+			"\"n\":"+n+","+
+			"\"tf\":\""+tf+"\","+
 			"\"k1\":"+k1+","+
-			"\"km\":"+km+","+
-			"\"n\":"+n+"}";
+			"\"km\":"+km+""+
+			"}";
 		
 		assertEquals(expect, NOT_a.toJSONString());
 	}

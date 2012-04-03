@@ -49,14 +49,21 @@ public class TestAndPromotor{
 		
 		AndPromotor AND_ab=new AndPromotor(tf1, tf2, k1, km, n);
 
+		/*
+		 * properties are not in order. We should not care about that,
+		 * and have a JSON assertion which does not care, but for the
+		 * time being, this works.
+		 */
 		String expect=
 			"{\"tf1\":\""+tf1+"\","+
+			"\"n\":"+n+","+
 			"\"tf2\":\""+tf2+"\","+
 			"\"k1\":"+k1+","+
-			"\"km\":"+km+","+
-			"\"n\":"+n+"}";
-		
+			"\"km\":"+km+""+
+			"}";
+
 		assertEquals(expect, AND_ab.toJSONString());
+		
 	}
 
 	/**

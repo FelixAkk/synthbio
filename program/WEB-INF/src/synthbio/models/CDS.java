@@ -6,9 +6,8 @@
 package synthbio.models;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.json.JSONString;
-import org.json.JSONStringer;
-import org.json.JSONWriter;
 
 
 /**
@@ -16,12 +15,7 @@ import org.json.JSONWriter;
  * 
  * CDS == Gene coding sequence 
  */
-public class CDS implements JSONString{
-	
-	public static final String keyName = "name";
-	public static final String keyK2 = "k2";
-	public static final String keyD1 = "d1";
-	public static final String keyD2 = "d2";
+public class CDS extends BioBrick{
 
 	public final String name;
 	public final double k2;
@@ -34,6 +28,19 @@ public class CDS implements JSONString{
 		this.k2=k2;
 		this.d1=d1;
 		this.d2=d2;
+	}
+
+	public String getName(){
+		return this.name;
+	}
+	public double getK2(){
+		return this.k2;
+	}
+	public double getD1(){
+		return this.d1;
+	}
+	public double getD2(){
+		return this.d2;
 	}
 
 	/**
@@ -51,24 +58,5 @@ public class CDS implements JSONString{
 			Double.parseDouble(tokens[2]),
 			Double.parseDouble(tokens[3])
 		);
-	}
-	
-	/**
-	 * Returns a String containing a JSON representation for the current
-	 * object state.
-	 */
-	public String toJSONString(){
-		try{
-			JSONWriter json=new JSONStringer()
-				.object()
-					.key(this.keyName).value(this.name)
-					.key(this.keyK2).value(this.k2)
-					.key(this.keyD1).value(this.d1)
-					.key(this.keyD2).value(this.d2)
-				.endObject();
-			return json.toString();
-		}catch(JSONException e){
-			return "{}";
-		}
 	}
 }

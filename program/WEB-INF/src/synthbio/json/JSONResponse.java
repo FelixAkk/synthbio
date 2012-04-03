@@ -8,21 +8,14 @@ package synthbio.json;
 import java.util.Collection;
 
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONString;
-import org.json.JSONStringer;
-import org.json.JSONWriter;
+import org.json.JSONObject;
 
 /**
  * JSONResponse is the default wrapper for all the date in response to
  * client requests.
  */
 public class JSONResponse implements JSONString{
-
-	public static final String keySuccess = "success";
-	public static final String keyMessage = "message";
-	public static final String keyData = "data";
 
 	//TODO: final?
 	public boolean success;
@@ -31,8 +24,10 @@ public class JSONResponse implements JSONString{
 	/**
 	 * Data to be sent.
 	 * May be a lot of things which can be converted to String.
+	 *
+	 * Default to JSONOBjecect.NULL to correctly serialize to null in JSON.
 	 */
-	public Object data;
+	public Object data=JSONObject.NULL;
 
 	public JSONResponse(){
 		this.success=true;
@@ -45,6 +40,17 @@ public class JSONResponse implements JSONString{
 		this.message=message;
 	}
 
+	//define getters for JSONObject() serialisation.
+	public boolean getSuccess(){
+		return this.success;
+	}
+	public String getMessage(){
+		return this.message;
+	}
+	public Object getData(){
+		return this.data;
+	}
+	
 	
 	/**
 	 * toJSONString returns a String with the JSON representatation of
@@ -58,19 +64,7 @@ public class JSONResponse implements JSONString{
 	 * @return String
 	 */
 	public String toJSONString(){
-		try{
-			JSONWriter json=new JSONStringer()
-				.object()
-					.key(this.keySuccess).value(this.success)
-					.key(this.keyMessage).value(this.message)
-					.key(this.keyData).value(this.data)
-				.endObject();
-			return json.toString();
-		}catch(JSONException e){
-			//TODO: Possibly endless loop?
-			return new JSONResponse(false,
-				"JSON convert error: "+e.getMessage()).toJSONString();
-		}
-		
+		JSONObject json=new JSONObject(this);
+		return json.toString();
 	}
 }

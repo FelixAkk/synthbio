@@ -5,12 +5,7 @@
 
 package synthbio.models;
 
-import org.json.JSONString;
-
-abstract class Promotor implements JSONString {
-	public static final String keyK1 = "k1";
-	public static final String keyKm = "km";
-	public static final String keyN = "n";
+abstract class Promotor extends BioBrick{
 
 	public final double k1;
 	public final double km;
@@ -20,5 +15,15 @@ abstract class Promotor implements JSONString {
 		this.k1 = k1;
 		this.km = km;
 		this.n = n;
+	}
+
+	public double getK1(){
+		return this.k1;
+	}
+	public double getKm(){
+		return this.km;
+	}
+	public double getN(){
+		return this.n;
 	}
 }

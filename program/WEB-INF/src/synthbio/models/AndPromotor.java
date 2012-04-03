@@ -5,19 +5,20 @@
 
 package synthbio.models;
 
-import org.json.JSONException;
-import org.json.JSONString;
-import org.json.JSONStringer;
-import org.json.JSONWriter;
-
 /**
  * AndPromotor value object.
  */
 public class AndPromotor extends Promotor {
 
-	public static final String keyTf1 = "tf1";
-	public static final String keyTf2 = "tf2";
-
+	/**
+	 * Names is used to determine which properties to include
+	 * when serializing the object to JSON.
+	 */
+	protected final String[] getNames(){
+		String ret[]={"tf1", "tf2", "k1", "km", "n"};
+		return ret;
+	}
+	
 	/**
 	 * Names of the Transcription factors
 	 */
@@ -25,9 +26,16 @@ public class AndPromotor extends Promotor {
 	public final String tf2;
 	
 	public AndPromotor(String tf1, String tf2, double k1, double km, int n){
-		super(k1, km, n);		
+		super(k1, km, n);
 		this.tf1=tf1;
 		this.tf2=tf2;
+	}
+
+	public String getTf1(){
+		return this.tf1;
+	}
+	public String getTf2(){
+		return this.tf2;
 	}
 	
 	/**
@@ -47,25 +55,4 @@ public class AndPromotor extends Promotor {
 			Integer.parseInt(tokens[4])
 		);
 	}
-	/**
-	 * Returns a String containing a JSON representation for the current
-	 * object state.
-	 */
-	public String toJSONString(){
-		try{
-			JSONWriter json=new JSONStringer()
-				.object()
-					.key(this.keyTf1).value(this.tf1)
-					.key(this.keyTf2).value(this.tf2)
-					//todo: Reuse possible parent toJSONString for following?
-					.key(this.keyK1).value(this.k1)
-					.key(this.keyKm).value(this.km)
-					.key(this.keyN).value(this.n)
-				.endObject();
-			return json.toString();
-		}catch(JSONException e){
-			return "{}";
-		}
-	}
-	
 }
