@@ -26,8 +26,8 @@
 <body>
 
 
-    <!-- Le NaffBarr
-    ================================================== -->
+	<!-- Le NaffBarr
+	================================================== -->
 	<nav class="navbar">
 		<aside class="nav" id="title"><div id="icon"></div>BioBrick Modeller/Simulator</aside>
 		<ul class="nav">
@@ -44,10 +44,10 @@
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Simulate<b class="caret"></b></a>
 				<ul class="dropdown-menu">
-					<li><a href="#">Show proteins</a></li>
+					<li><a href="#list-proteins" data-toggle="modal">Show proteins</a></li>
 					<li><a href="#">Validate circuit</a></li>
 					<li class="divider"></li>
-					<li><a href="#">Show input graph</a></li>
+					<li><a href="#">Define inputs</a></li>
 					<li><a href="#">Show output graph</a></li>
 					<li class="divider"></li>
 					<li><a href="#">Run solver</a></li>
@@ -72,7 +72,7 @@
 	</aside>
 	
 	<!-- Le Modals -->
-	<div class="modal" id="about" data-keyboard="true" style="display: none;">
+	<div class="modal hide fade in" id="about" data-keyboard="true">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">×</a>
 			<h3>About</h3>
@@ -83,6 +83,31 @@
 		<div class="modal-footer">
 			<a href="#" class="btn">Close</a>
 			<a href="#" class="btn btn-primary">Save changes</a>
+		</div>
+	</div>
+	
+	<div class="modal hide fade in" id="list-proteins" data-keyboard="true">
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">&times;</a>
+			<h3>List of available proteins</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th></th>
+						<th>k<sub>2</sub></th>
+						<th>d<sub>1</sub></th>
+						<th>d<sub>2</sub></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr><td colspan="4">loading...</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn btn-primary">Close</a>
 		</div>
 	</div>
 </body>
