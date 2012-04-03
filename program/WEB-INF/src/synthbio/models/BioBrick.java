@@ -21,9 +21,7 @@ abstract class BioBrick{
 	 * @return	String
 	 */
 	public String toJSONString(){
-
-		JSONObject json=new JSONObject(this);
-		return json.toString();
+		return new JSONObject(this).toString();
 	}
 
 }

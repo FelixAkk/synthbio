@@ -56,15 +56,9 @@ public class JSONResponse implements JSONString{
 	 * toJSONString returns a String with the JSON representatation of
 	 * the current object state.
 	 *
-	 * The implementation of JSONString takes care of converting types
-	 * to compatible types and will throw an exception if it fails to do
-	 * so. In case of an exception, a reply with success=false and the
-	 * Exceptions error message will be returned.
-	 *
 	 * @return String
 	 */
 	public String toJSONString(){
-		JSONObject json=new JSONObject(this);
-		return json.toString();
+		return new JSONObject(this).toString();
 	}
 }
