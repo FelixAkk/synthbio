@@ -55,11 +55,11 @@ public class TestAndPromotor{
 		 * time being, this works.
 		 */
 		String expect=
-			"{\"tf1\":\""+tf1+"\","+
+			"{\"k1\":"+k1+","+
+			"\"km\":"+km+","+
 			"\"n\":"+n+","+
-			"\"tf2\":\""+tf2+"\","+
-			"\"k1\":"+k1+","+
-			"\"km\":"+km+""+
+			"\"tf1\":\""+tf1+"\","+
+			"\"tf2\":\""+tf2+"\""+
 			"}";
 
 		assertEquals(expect, AND_ab.toJSONString());

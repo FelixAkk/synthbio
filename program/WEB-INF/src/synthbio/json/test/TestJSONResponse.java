@@ -22,7 +22,7 @@ public class TestJSONResponse{
 	public void testDataEmpty(){
 		JSONResponse response=new JSONResponse(true, "");
 
-		String expected="{\"message\":\"\",\"data\":null,\"success\":true}";
+		String expected="{\"data\":null,\"message\":\"\",\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}
@@ -35,7 +35,7 @@ public class TestJSONResponse{
 		JSONResponse response=new JSONResponse(true, "");
 		response.data="Test123";
 
-		String expected="{\"message\":\"\",\"data\":\""+response.data+"\",\"success\":true}";
+		String expected="{\"data\":\""+response.data+"\",\"message\":\"\",\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}
@@ -52,7 +52,7 @@ public class TestJSONResponse{
 		String[] foobar={"foo", "bar"};
 		response.data=foobar;
 
-		String expected="{\"message\":\"\",\"data\":[\"foo\",\"bar\"],\"success\":true}";
+		String expected="{\"data\":[\"foo\",\"bar\"],\"message\":\"\",\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}
@@ -68,10 +68,9 @@ public class TestJSONResponse{
 		response.data=new CDS("A", 1, 2, 3);
 
 		String expected=
-			"{"+
-			"\"success\":true,"+
+			"{\"data\":{\"d1\":2,\"d2\":3,\"k2\":1,\"name\":\"A\"},"+
 			"\"message\":\"\","+
-			"\"data\":{\"d1\":2,\"d2\":3,\"name\":\"A\",\"k2\":1}}";
+			"\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
 	}
@@ -83,8 +82,8 @@ public class TestJSONResponse{
 		response.data=new AndPromotor("A", "B", 1, 2, 3);
 
 		String expected=
-			"{\"message\":\"\","+
-			"\"data\":{\"tf1\":\"A\",\"n\":3,\"tf2\":\"B\",\"k1\":1,\"km\":2},"+
+			"{\"data\":{\"k1\":1,\"km\":2,\"n\":3,\"tf1\":\"A\",\"tf2\":\"B\"},"+
+			"\"message\":\"\","+
 			"\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());
@@ -103,11 +102,10 @@ public class TestJSONResponse{
 		response.data=data;
 
 		String expected=
-			"{\"message\":\"\","+
-			"\"data\":["+
-				"{\"d1\":2,\"d2\":3,\"name\":\"A\",\"k2\":1},"+
-				"{\"d1\":5,\"d2\":6,\"name\":\"B\",\"k2\":4}"+
-			"],"+
+			"{\"data\":["+
+				"{\"d1\":2,\"d2\":3,\"k2\":1,\"name\":\"A\"},"+
+				"{\"d1\":5,\"d2\":6,\"k2\":4,\"name\":\"B\"}],"+
+			"\"message\":\"\","+
 			"\"success\":true}";
 
 		assertEquals(expected, response.toJSONString());

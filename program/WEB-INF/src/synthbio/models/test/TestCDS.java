@@ -49,8 +49,8 @@ public class TestCDS{
 			"{"+
 			"\"d1\":"+d1+","+
 			"\"d2\":"+d2+","+
-			"\"name\":\""+name+"\","+
-			"\"k2\":"+k2+""+
+			"\"k2\":"+k2+","+
+			"\"name\":\""+name+"\""+
 			"}";
 
 		assertEquals(expect, a.toJSONString());

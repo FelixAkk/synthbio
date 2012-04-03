@@ -48,10 +48,10 @@ public class TestNotPromotor{
 
 		String expect=
 			"{"+
-			"\"n\":"+n+","+
-			"\"tf\":\""+tf+"\","+
 			"\"k1\":"+k1+","+
-			"\"km\":"+km+""+
+			"\"km\":"+km+","+
+			"\"n\":"+n+","+
+			"\"tf\":\""+tf+"\""+
 			"}";
 		
 		assertEquals(expect, NOT_a.toJSONString());
