@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<project name="synthbio" default="compile" basedir=".">
+	<property name="src" value="src"/>
+	<property name="build" value="classes"/>
+
+	<path id="project-classpath">
+		<fileset dir="lib" includes="*.jar" />
+		<fileset dir="lib/htmlunit" includes="*.jar" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="${build}"/> 
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false"/>
+	</target>
+
+	<!-- Just an alias -->
+	<target name="build" depends="compile" />
+
+	<!--
+	Test all non-servlet tests.
+	-->
+	<target name="test" depends="compile">
+		<junit fork="yes" printsummary="yes" showoutput="yes">
+			<classpath>
+				<path refid="project-classpath" />
+				<pathelement path="${build}"/>
+			</classpath>
+			
+			<batchtest haltonfailure="yes">
+				<formatter type="brief" usefile="false" />
+				<fileset dir="${src}">
+					<exclude name="**/json/tests/*"/>
+					<exclude name="**/servlets/test/*"/>
+					<include name="**/Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit> 
+	</target>
+
+	<!--
+	Adding another test-target to test the servlets.
+	Seperate, because they take a lot of time.
+	-->
+	<target name="test-servlets" depends="compile">
+		<junit fork="yes" printsummary="yes" showoutput="yes">
+			<classpath>
+				<path refid="project-classpath" />
+				<pathelement path="${build}"/>
+			</classpath>
+			
+			<batchtest haltonfailure="yes">
+				<formatter type="brief" usefile="false" />
+				<fileset dir="${src}">
+					<exclude name="**/json/tests/*"/>
+					<include name="**/servlets/test/*"/>
+				</fileset>
+			</batchtest>
+		</junit> 
+	</target>
+
+	<target name="test-all" depends="test,test-servlets" />
+	
+	<target name="clean">
+		<delete dir="${build}" />
+		<mkdir dir="${build}"/> 
+	</target>
+
+</project>
