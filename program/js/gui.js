@@ -5,8 +5,6 @@ $(document).ready(function() {
 	/* Activate zhe Dropdowns Herr Doktor! */
 	$('.dropdown-toggle').dropdown();
 	
-	//~ $('.modal').modal('hide');
-
 	/**
 	 * Load proteins from server.
 	 */
@@ -21,21 +19,17 @@ $(document).ready(function() {
 					return;
 				}
 				
-				//clear the table...
-				$('#list-proteins tbody').html('');
-				
-				//...and insert rows.
+				//display data in the table
+				var rows='';
 				for(i in response.data){
-					row=response.data[i];
-					rowhtml='<tr>'+
+					var row=response.data[i];
+					rows+='<tr>'+
 						'<td>'+row.name+'</td>'+
 						'<td>'+row.k2+'</td>'+
 						'<td>'+row.d1+'</td>'+
 						'<td>'+row.d2+'</td></tr>';
-					
-					$('#list-proteins tbody').append(rowhtml);
 				}
-				
+				$('#list-proteins tbody').html(rows);
 			}
 		});
 			
