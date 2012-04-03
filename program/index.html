@@ -12,6 +12,15 @@
 	
 	<!-- Le fav icon -->
 	<link rel="icon" href="img/favicon.png">
+	
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	<script type="application/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/bootstrap.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/less-1.3.0.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/model.js"></script>
+	<script type="application/javascript" language="javascript" src="js/gui.js"></script>
 </head>
 
 <body>
@@ -48,23 +57,22 @@
 		</ul>
 	</nav>
 	
-	<aside id="gates" class="stretch">
-		<div></div>
-		<div></div>
-		<footer id="gatesStatus" class="status">
+	<aside id="gates-tab" class="stretch">
+		<h3>Basic gates</h3>
+		<p class="subscript">Predefined AND and NOT gates (fixed)</p>
+		<div id="gates-basic" class="gates">
+			
+		</div>
+		<h3>Compound gates</h3>
+		<p class="subscript">User defined compound gates (loaded from .syn)</p>
+		<div id="gates-userdef" class="gates">
+		
+		</div>
+		<footer id="gates-compound" class="status">gate count or sumthin</footer>
 	</aside>
 	
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-	<script type="application/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
-	<script type="application/javascript" language="javascript" src="js/bootstrap.min.js"></script>
-	<script type="application/javascript" language="javascript" src="js/less-1.3.0.min.js"></script>
-	<script type="application/javascript" language="javascript" src="js/model.js"></script>
-	<script type="application/javascript" language="javascript" src="js/gui.js"></script>
-	
 	<!-- Le Modals -->
-	<div class="modal" id="about" data-keyboard="true">
+	<div class="modal" id="about" data-keyboard="true" style="display: none;">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">×</a>
 			<h3>About</h3>
