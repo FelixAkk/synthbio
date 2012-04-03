@@ -69,21 +69,21 @@ body {
 .navbar {
 	.structureBorder(@baseColor, @contrast);
 	border-width: 0 0 1px 0; /* Bottom border only */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-    height: @iconSize * @menuHeight;
-    min-width: 896px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+	height: @iconSize * @menuHeight;
+	min-width: 896px;
 	width: 100%;
 	position: relative;
-    z-index: 100;
+	z-index: 100;
 }
 
 .navbar, .status, .summary {
-    background: -moz-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-    background: linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-    background: -o-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-    background: -moz-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-    background: -webkit-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-    background: -ms-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
+	background: -moz-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
+	background: linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
+	background: -o-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
+	background: -moz-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
+	background: -webkit-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
+	background: -ms-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
 }
 
 .nav {
@@ -96,9 +96,9 @@ body {
 	.structureBorder(@baseColor, @contrast);
 	border-width: 0 1px 0 0; /* Right border only */
 	background-color: rgba(0,0,0, 0.1); /* Fade */
-    float: left;
-    padding: (@iconSize * 0.5) 0 (@iconSize * 0.5) (@iconSize * 0.5)*2 + @iconSize;
-    width: @asideWidth;
+	float: left;
+	padding: (@iconSize * 0.5) 0 (@iconSize * 0.5) (@iconSize * 0.5)*2 + @iconSize;
+	width: @asideWidth;
 }
 
 #icon {
@@ -112,30 +112,35 @@ body {
 }
 
 #gates {
-    background-color: @grStart;
+	background-color: @grStart;
 	.structureBorder(@baseColor, @contrast);
 	border-width: 0 1px 0 0; /* Right border only */
-    width: @asideWidth + (@iconSize * 0.5)*2 + @iconSize;
-    z-index: 60;
+	width: @asideWidth + (@iconSize * 0.5)*2 + @iconSize;
+	z-index: 60;
+	margin-top: @iconSize * @menuHeight;
+	padding-top: 10px;
+}
+#gates .gate{
+	margin: 10px 30px;
 }
 
 .stretch {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
 }
 
 .status {
-    background-color: @grStart;
+	background-color: @grStart;
 	.structureBorder(@baseColor, @contrast);
 	border-width: 1px 0 0 0; /* Top border only */
-    bottom: 0;
-    height: 24px;
-    left: 0;
-    line-height: 24px;
-    position: absolute;
-    width: 100%;
-    z-index: 17;
+	bottom: 0;
+	height: 24px;
+	left: 0;
+	line-height: 24px;
+	position: absolute;
+	width: 100%;
+	z-index: 17;
 }
