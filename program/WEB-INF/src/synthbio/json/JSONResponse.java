@@ -12,13 +12,21 @@ import org.json.JSONString;
 import org.json.JSONObject;
 
 /**
- * JSONResponse is the default wrapper for all the date in response to
+ * JSONResponse is the default wrapper for all the data in response to
  * client requests.
  */
 public class JSONResponse implements JSONString{
 
 	//TODO: final?
+
+	/**
+	 * Should the response be considered as a success?
+	 */
 	public boolean success;
+
+	/**
+	 * If the response is not a success, the message will explain why.
+	 */
 	public String message="";
 
 	/**
