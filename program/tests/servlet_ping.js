@@ -6,5 +6,5 @@
  */
 
 $.ajax("../Ping")
-	.done(function(data) { $('body').html(data); })
+	.done(function(data) { $('body').html(data); console.debug(data); })
 	.fail(function(data) { $('body').html('Failed: ' + data); });
