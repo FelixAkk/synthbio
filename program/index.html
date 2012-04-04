@@ -12,15 +12,6 @@
 	
 	<!-- Le fav icon -->
 	<link rel="icon" href="img/favicon.png">
-	
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-	<script type="application/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
-	<script type="application/javascript" language="javascript" src="js/bootstrap.min.js"></script>
-	<script type="application/javascript" language="javascript" src="js/less-1.3.0.min.js"></script>
-	<script type="application/javascript" language="javascript" src="js/model.js"></script>
-	<script type="application/javascript" language="javascript" src="js/gui.js"></script>
 </head>
 
 <body>
@@ -61,15 +52,33 @@
 		<h3>Basic gates</h3>
 		<p class="subscript">Predefined AND and NOT gates (fixed)</p>
 		<div id="gates-basic" class="gates">
-			
+			<div class="gate">
+				<img src="../img/gates/not.png" alt="NOT-gate" />
+				<h4>NOT-gate</h4>
+				<p class="subscript">
+					in:1<br>out:1
+				</p>
+			</div>
+			<div class="gate">
+				<img src="../img/gates/and.png" alt="AND-gate" />
+				<h4>AND-gate</h4>
+				<p class="subscript">
+					in:2<br>out:1
+				</p>
+			</div>
 		</div>
 		<h3>Compound gates</h3>
 		<p class="subscript">User defined compound gates (loaded from .syn)</p>
-		<div id="gates-userdef" class="gates">
+		<div id="gates-compound" class="gates">
 		
 		</div>
-		<footer id="gates-compound" class="status">gate count or sumthin</footer>
 	</aside>
+	
+	<div id="grid"></div>
+	
+	<footer class="status subscript"><img id="info-icon" src="../img/info.png" alt="Info:" />
+		Mouse over fnfo string
+	</footer>
 	
 	<!-- Le Modals -->
 	<div class="modal hide fade in" id="about" data-keyboard="true">
@@ -110,5 +119,14 @@
 			<a href="#" class="btn btn-primary">Close</a>
 		</div>
 	</div>
+	
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	<script type="application/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/bootstrap.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/less-1.3.0.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/model.js"></script>
+	<script type="application/javascript" language="javascript" src="js/gui.js"></script>
 </body>
 </html>

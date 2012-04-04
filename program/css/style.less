@@ -1,16 +1,17 @@
-/*
-##############################
-BioBrick Modeller/Simulator
+/**
+ * BioBrick Modeller/Simulator
+ * ==================================
+ *
+ *
+ *							Groep 5/E
+ * ==================================
+ */
 
-					Groep 5/E
-##############################
-*/
-
-/*
-------------------------------
-	Variable declaration
-------------------------------
-*/
+/** Section:
+ * -----------------------------------
+ * Variable declaration
+ * -----------------------------------
+ */
 
 /* SlateGrey */
 
@@ -54,11 +55,11 @@ BioBrick Modeller/Simulator
 
 @borderHeight: 25%;
 
-/*
-------------------------------
-	Mixin declaration
-------------------------------
-*/
+/** Section:
+ * -----------------------------------
+ * Mixin declaration
+ * -----------------------------------
+ */
 .borderDown(@baseColor, @contrast, @borderHeight) {
 	border: 1px solid darken(saturate(@baseColor, 5%), @contrast * @borderHeight);
 }
@@ -67,11 +68,17 @@ BioBrick Modeller/Simulator
 	border: 1px solid lighten(saturate(@baseColor, 5%), @contrast * @borderHeight);
 }
 
-/*
-------------------------------
-	Bootstrap.css overriding
-------------------------------
-*/
+.cornerRadius(@cornerRadius) {
+	  -webkit-border-radius: @cornerRadius; /* Saf 3-4, iOS 1-3.2, Android ≤1.6 */
+		 -moz-border-radius: @cornerRadius; /* FF 1-3.6 */
+			  border-radius: @cornerRadius;
+}
+
+/** Section:
+ * -----------------------------------
+ * Bootstrap.css overriding
+ * -----------------------------------
+ */
 body {
 	background-color: @baseColor;
 }
@@ -88,12 +95,13 @@ body {
 }
 
 .navbar, .status, .summary {
-	background: -moz-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-	background: linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-	background: -o-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-	background: -moz-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-	background: -webkit-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
-	background: -ms-linear-gradient(center top , @grStart, @grStop) repeat scroll 0 0 @grStop;
+	background-color: @grStop;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(@grStart), to(@grStop)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient(top, @grStart, @grStop); /* Chrome 10+, Saf5.1+, iOS 5+ */
+	background-image:    -moz-linear-gradient(top, @grStart, @grStop); /* FF3.6 */
+	background-image:     -ms-linear-gradient(top, @grStart, @grStop); /* IE10 */
+	background-image:      -o-linear-gradient(top, @grStart, @grStop); /* Opera 11.10+ */
+	background-image:         linear-gradient(to bottom, @grStart, @grStop);
 }
 
 .nav {
@@ -113,13 +121,14 @@ body {
     margin-top: 10px;
 }
 .navbar .nav .dropdown-toggle .caret, .navbar .nav .open.dropdown .caret {
-    border-bottom-color: lighten(@baseColor, 20%);
-    border-top-color: lighten(@baseColor, 20%);
-	opacity: 1;
-}
-.dropdown:hover .caret, .open.dropdown .caret {
     border-bottom-color: @textColorFaded;
     border-top-color: @textColorFaded;
+}
+.caret {
+	opacity: 0.6;
+}
+.dropdown-menu a {
+	font-size: 13px;
 }
 
 /*
@@ -151,9 +160,11 @@ body {
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	border-width: 0 1px 0 0; /* Right border only */
     width: @asideWidth + (@iconSize * 0.5)*2 + @iconSize;
-	padding-top: @iconSize * 1.75;
+	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
+	margin-top: @iconSize * 1.75;
 	color: @textColorFaded;
     z-index: 60;
+	overflow: auto;
 }
 
 #gates-tab h3 {
@@ -161,24 +172,46 @@ body {
 	margin-top: @gatesTabPadding;
 }
 
-#gates-tab p.subscript {
+#gates-tab p {
 	margin-left: @gatesTabPadding;
-	font-size: 9px;
+	line-height: 10px;
 }
 
 .gates {
 	.borderDown(@baseColor, @contrast, @borderHeight);
-	  -webkit-border-radius: @cornerRadius; /* Saf 3-4, iOS 1-3.2, Android ≤1.6 */
-		 -moz-border-radius: @cornerRadius; /* FF 1-3.6 */
-			  border-radius: @cornerRadius;
+	.cornerRadius(@cornerRadius);
 	box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25);
 	background-color: @baseColor;
 	margin: @gatesTabPadding;
 	padding: @gatesTabPadding;
 }
 
+.gate {
+	.cornerRadius(@cornerRadius);
+	text-align: right;
+	padding: 5px;
+}
+
+.subscript {
+	font-size: 9px;
+}
+
+.gate:hover {
+	background-color: rgba(255,255,255, 0.15);
+}
+
+.gate img {
+	float: left;
+}
+
 #gates-basic {
 	
+}
+
+#grid {
+	width: 50px;
+	height: 50px;
+	background-color: #FF0000;
 }
 
 .stretch {
@@ -192,12 +225,20 @@ body {
 .status {
     background-color: @grStart;
 	.borderDown(@baseColor, @contrast, @borderHeight);
+	color: @textColorFaded;
 	border-width: 1px 0 0 0; /* Top border only */
 	bottom: 0;
-	height: 24px;
+	height: @statusHeight;
 	left: 0;
 	line-height: 24px;
 	position: absolute;
 	width: 100%;
 	z-index: 17;
+}
+
+.status #info-icon {
+	height: @statusHeight - 8;
+	width: @statusHeight - 8;
+	opacity: 1 - @textFade;
+	padding: 0 6px;
 }

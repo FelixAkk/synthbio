@@ -2,7 +2,9 @@
 
 $(document).ready(function() {
 	
-	/* Activate zhe Dropdowns Herr Doktor! */
+	/**
+	 * Activate zhe Dropdowns Herr Doktor!
+	 */
 	$('.dropdown-toggle').dropdown();
 	
 	/**
