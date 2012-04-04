@@ -34,4 +34,13 @@ $(document).ready(function() {
 		});
 			
 	});
+
+	function pingServer() {
+		$.ajax("/Ping")
+			.done(function(data) { $('#gatesStatus').html('Connected to server &#10003;'); })
+			.fail(function(data) { $('#gatesStatus').html('Warning: not connected to server!'); })
+			.always(function() { setTimeout(pingServer, 3000); });
+	}
+
+	setTimeout(pingServer, 500);
 });
