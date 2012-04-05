@@ -1,0 +1,34 @@
+//Dit stuk was een beetje inspiratieloos..... Het eerste ding is een persoonlijk ding, maar denk niet dat we het gaan gebruiken. 
+//Het tweede stuk is de meer algemene versi met code problemen enzo...
+//Check maar welk stuk we gebruiken.
+
+
+//PERSONAL
+
+This iteration has been so-so. My major mistake was too little communication with team members. 
+This together with late commits from my side led to late feedback from others. It also turned out I had a different idea on 
+how things would be done client-side, so parts of my implementation was useless as well. I also felt as if other people did more, 
+which was probably true, so I want to invest more time into this project. I’ve listed a few things I wish to improve.
+
+So a few things I will to improve for next iteration:
+
+1.	More frequent commits on Git.
+2.	More communication towards team members.
+3.	More time spent coding.
+4.	More looking into other people’s code to support them.
+
+There are also a few things I’m really proud of:
+
+1.	Concise commenting
+2.	Clean code
+3.	Real TDD
+
+
+//GENERAL
+
+The client-side scaffolding didn't go as smooth. One of the issues we encountered was predefined JSON methods.
+We considered this because it would make the code more concise, but to we couldnt override JSOn methods without a nasty workaround.
+Eventually we skipped the workaround because the code was not clean and the JSON predefined methods work fine as well.
+Another issues was the QUnit testing. Implementing tests works rather well but the feedback once something goes wrong is rather useless often.
+So the debugging took more time than expected. The javascript scaffolding was not completed within the scheduled time because of a lack of 
+communication on Thomas his side. This has been pointed out and will be improved.
