@@ -23,7 +23,7 @@ function AndPromoter(transFactor1, transFactor2, kOne, kM, hillCoef){
 	this.k1 = kOne;
 	this.km = kM;
 	this.n = hillCoef;
-};
+}
 AndPromoter.prototype.toString = function(){
 	return [this.tf1, this.tf2, this.k1, this.km, this.n];
 }
@@ -36,7 +36,7 @@ function AndPromoter(transFactor, kOne, kM, hillCoef){
 	this.k1 = kOne;
 	this.km = kM;
 	this.n = hillCoef;
-};
+}
 NotPromoter.prototype.toString = function(){
 	return [this.tf1, this.k1, this.km, this.n];
 }
@@ -49,7 +49,7 @@ function CDS(n, k, dOne, dTwo) {
 	this.k2 = k;
 	this.d1 = dOne;
 	this.d2 = dTwo;
-};
+}
 CDS.prototype.toString = function(){
 	return [this.name, this.k2, this.d1, this.d2];
 }
