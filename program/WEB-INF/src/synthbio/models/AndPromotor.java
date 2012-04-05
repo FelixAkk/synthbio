@@ -7,6 +7,8 @@ package synthbio.models;
 
 /**
  * AndPromotor value object.
+ *
+ * @author jieter
  */
 public class AndPromotor extends Promotor {
 

@@ -14,10 +14,10 @@ import org.json.JSONObject;
 /**
  * JSONResponse is the default wrapper for all the data in response to
  * client requests.
+ *
+ * @author jieter
  */
-public class JSONResponse implements JSONString{
-
-	//TODO: final?
+public final class JSONResponse implements JSONString{
 
 	/**
 	 * Should the response be considered as a success?

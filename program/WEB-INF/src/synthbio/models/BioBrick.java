@@ -9,6 +9,11 @@ import org.json.JSONException;
 import org.json.JSONString;
 import org.json.JSONObject;
 
+/**
+ * BioBrick base class
+ * 
+ * @author jieter
+ */
 abstract class BioBrick{
 	
 	/**

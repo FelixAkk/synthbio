@@ -11,7 +11,11 @@ import org.junit.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
+/**
+ * Testing the CDS
+ *
+ * @author jieter
+ */
 public class TestCDS{
 	double delta=0.0001;
 	

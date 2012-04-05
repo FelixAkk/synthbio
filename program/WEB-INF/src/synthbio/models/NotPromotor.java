@@ -8,6 +8,8 @@ package synthbio.models;
 
 /**
  * NotPromotor value object.
+ *
+ * @author jieter
  */
 public class NotPromotor extends Promotor {
 

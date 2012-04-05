@@ -5,6 +5,11 @@
 
 package synthbio.models;
 
+/**
+ * Promotor defines common functionality for *Promotors.
+ *
+ * @author jieter
+ */
 abstract class Promotor extends BioBrick{
 
 	public final double k1;

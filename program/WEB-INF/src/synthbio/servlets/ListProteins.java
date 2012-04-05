@@ -23,7 +23,7 @@ import synthbio.models.CDS;
  * Servlet ListServlets returns a default JSON-reply with a list of
  * proteins available.
  *
- * 
+ * @author jieter 
  */
 public class ListProteins extends HttpServlet {
 
@@ -33,12 +33,9 @@ public class ListProteins extends HttpServlet {
 		response.setContentType("text/plain");
 		PrintWriter out = response.getWriter();
 
+		String path=this.getServletContext().getRealPath("/")+"WEB-INF/biobricks/";
 
 		JSONResponse json=new JSONResponse();
-
-
-		String path=this.getServletContext().getRealPath("/")+"WEB-INF/biobricks/";
-		
 		try{
 			json.data=new BioBrickReader(path).getCDSs();
 			json.success=true;

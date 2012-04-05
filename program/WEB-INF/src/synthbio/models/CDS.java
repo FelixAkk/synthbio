@@ -13,7 +13,9 @@ import org.json.JSONString;
 /**
  * CDS value object.
  * 
- * CDS == Gene coding sequence 
+ * CDS == Gene coding sequence
+ *
+ * @author jieter
  */
 public class CDS extends BioBrick{
 

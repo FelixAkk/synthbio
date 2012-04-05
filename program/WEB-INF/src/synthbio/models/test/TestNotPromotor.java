@@ -11,7 +11,11 @@ import org.junit.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
+/**
+ * Testing the NotPromotor.
+ * 
+ * @author jieter
+ */
 public class TestNotPromotor{
 	double delta=0.0001;
 	
