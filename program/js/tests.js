@@ -70,8 +70,16 @@
 	/**Does the circuit export work?*/
 	module("Export");
 	
-		test("An object can be converted to JSON", function(){
-			ok(true, "needs testing");
+		test("A AndPromoter can be converted to JSON", function(){
+			deepEqual(JSON.stringify(and), "{\"tf1\":\"tf1\",\"tf2\":\"tf2\",\"k1\":\"k1\",\"km\":\"km\",\"n\":\"n\"}","converting AND to JSON");
+		});
+		
+		test("A NotPromoter can be converted to JSON", function(){
+			deepEqual(JSON.stringify(not), "{\"tf\":\"tf\",\"k1\":\"k1\",\"km\":\"km\",\"n\":\"n\"}","converting AND to JSON");
+		});
+		
+		test("CDS can be converted to JSON", function(){
+			deepEqual(JSON.stringify(cds1), "{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}","converting AND to JSON");
 		});
 		
 		test("An object can be sent to the server as JSON", function(){
@@ -86,22 +94,32 @@
 			ok(true, "needs testing");
 		});
 		
-		test("Needs to be able to parse JSON", function(){
+		/**Using jsonToAnd method to convert JSON to Javascript Object*/
+		test("Needs to be able to parse JSON and convert to AndPromoter, testing jsonToAnd", function(){
+			deepEqual(and2, and, "parsing JSON object of AND");
+		});
+		
+		test("testing getAndPromoter function", function(){
 			ok(true, "needs testing");
 		});
 		
-		test("Needs to be able to convert JSON to gates", function(){
+		/**Using jsonToNot method to convert JSON to Javascript Object*/
+		test("Needs to be able to parse JSON and convert to NotPromoter", function(){
+			deepEqual(not2, not, "parsing JSON object of NOT");
+		});
+		
+		test("testing getNotPromoter function", function(){
 			ok(true, "needs testing");
 		});
 		
-		test("Needs to be able to convert JSON to signals", function(){
-			ok(true, "needs testing");
+		/**Using jsonToCDS method to convert JSON to Javascript Object*/
+		test("Needs to be able to parse JSON and convert to CDS", function(){
+			deepEqual(cds3, cds1, "parsing JSON object of CDS");
 		});
 		
-		test("Needs to be able to convert JSON to proteins", function(){
+		test("testing getCDS function", function(){
 			ok(true, "needs testing");
 		});
-		
 		
 	/**Calculating output*/
 	module("Calculate output");

@@ -13,6 +13,10 @@ var and = new AndPromoter("tf1", "tf2", "k1", "km", "n");
 var not = new NotPromoter("tf", "k1", "km", "n");
 var cds1 = new CDS("cds1", "k2", "d1", "d2");
 var cds2 = new CDS("cds2", "k2", "d1", "d2");
+var and2 = jsonToAnd("{\"tf1\":\"tf1\",\"tf2\":\"tf2\",\"k1\":\"k1\",\"km\":\"km\",\"n\":\"n\"}");
+var not2 = jsonToNot("{\"tf\":\"tf\",\"k1\":\"k1\",\"km\":\"km\",\"n\":\"n\"}");
+var cds3 = jsonToCDS("{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}");
+
 
 /**AndPromoter
  * ToString() returns a list of all properties of AndPromoter
@@ -67,8 +71,14 @@ function getAndPromoter(whichPromoter){
 	/**What do we want to do with the data*/
 	function(json) {
 		//Make an AndPromoter object out of it
-		return $.parseJSON(json);
+		return jsonToAnd(json);
 	});
+}
+
+/** Method which takes JSON string and converts it into an AndPromoter*/
+function jsonToAnd(json){
+	var temp = $.parseJSON(json);
+	return new AndPromoter(temp.tf1, temp.tf2, temp.k1, temp.km, temp.n);
 }
 
 /**
@@ -84,8 +94,14 @@ function getNotPromoter(whichPromoter){
 	/**What do we want to do with the data*/
 	function(json) {
 		//Make an NotPromoter object out of it
-		return $.parseJSON(json);
+		return jsonToNot(json);
 	});
+}
+
+/** Method which takes JSON string and converts it into an NotPromoter*/
+function jsonToNot(json){
+	var temp = $.parseJSON(json);
+	return new NotPromoter(temp.tf, temp.k1, temp.km, temp.n);
 }
 
 /**
@@ -101,8 +117,14 @@ function getCDS(whichCDS){
 	/**What do we want to do with the data*/
 	function(json) {
 		//Make an CDS object out of it
-		return $.parseJSON(json);
+		return jsonToCDS(json);
 	});
+}
+
+/** Method which takes JSON string and converts it into CDS*/
+function jsonToCDS(json){
+	var temp = $.parseJSON(json);
+	return new CDS(temp.name, temp.k2, temp.d1, temp.d2);
 }
 
 /**
