@@ -1,23 +1,6 @@
 \documentclass[a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{fullpage}
-\usepackage{amsmath,amssymb}
-\usepackage{tabularx,multirow}
-\usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
-%~ \usepackage[toc]{multitoc} % Nice two-column TOC
 
-
-% new line after paragraph title.
-\makeatletter
-\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
-  {-3.25ex\@plus -1ex \@minus -.2ex}%
-  {1.5ex \@plus .2ex}%
-  {\normalfont\normalsize\bfseries}}
-\makeatother
-{}
-\newcommand{\githubissue}[1]{\href{https://github.com/FelixAkk/synthbio/issues/#1}{\##1}}
-\newcommand{\githubmilestone}[1]{\url{https://github.com/FelixAkk/synthbio/issues?milestone=#1}}
-\newcommand{\thickhline}{\noalign{\hrule height 0.8pt}}
+\input{../scrumplan-common}
 
 \title{Programming Life - SCRUM plan \#1}
 
@@ -54,62 +37,67 @@ A list of tasks, assignments and effort estimations is included in a table.
 \paragraph{Presentation}
 Results for this iteration will be presented thursday april 5, 14:30 at DW-PC room 0.010.
 
-\setlength{\extrarowheight}{3pt}
-{\centering\begin{tabularx}{\textwidth}{r p{8cm} | l | cc}
-\multicolumn{3}{c}{}& \multicolumn{2}{c}{Effort} \\	
-& \textbf{Task} & Developer & estimated & actual \\
-\hline
-\githubissue{2} &
-Server: Tomcat server that handles HTTP requests {\sc Hello World} and class scaffolding &
-Niels/Albert & 10 & \\
 
-\githubissue{3} &
-Server/Client: Design and document JSON format for circuit (\verb|.syn|) and protein list &
-Jan Pieter & 4 & 3\\
+{\centering
+\begin{tabularx}{\textwidth}{r p{8cm} | l | cc}
 
-\githubissue{4} &
-Client: JavaScript scaffolding &
-Thomas & 8 & \\
+\tasktableheading
+
+\task{2}
+	{Server: Tomcat server that handles HTTP requests {\sc Hello World} and class scaffolding}
+	{Niels/Alber}{10}{}
+
+\task{3}
+	{Server/Client: Design and document JSON format for circuit (\verb|.syn|) and protein list.}
+	{Jan Pieter}{4}{3}
+
+\task{4}
+	{Client: JavaScript scaffolding}
+	{Thomas}
+	{8}{}
  
-\githubissue{5} &
-Client: Create basic GUI &
-Felix & 8 & \\
+\task{5}
+	{Client: Create basic GUI}
+	{Felix}
+	{8}{}
  
-\githubissue{6} &
-Server/client: create and display connection state by ping/pong heartbeat &
-Niels/Albert & 2 & \\
+\task{6}
+	{Server/client: create and display connection state by ping/pong heartbeat}
+	{Niels/Albert}
+	{2}{3}
  
-\githubissue{7} &
-Client: Show available basic gates &
-Jan Pieter & 3 & 1 + ??Felix \\ \hline
+\task{7}
+	{Client: Show available basic gates}
+	{Jan Pieter}
+	{3}{1 + ??Felix}
 
-\multicolumn{3}{r}{\textbf{Total}  }
- & 35 & \\[6mm]
+\subtotal{35}{}
  
- & \multicolumn{2}{l}{\textbf{Optional tasks}\footnote{Things from next iterations that could be done if sufficient time is available}} \\ \hline
+\subheading{
+	Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
+}
 
-\githubissue{8} &
-Server: Parse and serve list of Proteins\footnote{Only after list is supplied by Alexey} &
-Jan Pieter\footnote{Original plan was \textit{Niels/Albert}, but Jan Pieter finished his tasks...}  & 4 & 16\\
+\task{8}
+	{Server: Parse and serve list of Proteins\footnote{Only after list is supplied by Alexey}}
+	{Jan Pieter\footnote{Original plan was \textit{Niels/Albert}, but Jan Pieter finished his tasks...}}
+	{4}{16}
 
-\githubissue{11} &
-Client: Display list of Proteins &
-Jan Pieter\footnote{Initially unassigned} & 2 & 2 \\
-\hline
-\multicolumn{3}{r}{\textbf{Total}  }
- & 6 & 18\\[6mm]
+\task{11}
+	{Cient: Display list of Proteins}
+	{Jan Pieter\footnote{Initially unassigned}}
+	{2}{2}
 
-& \multicolumn{2}{l}{\textbf{Added during iteration}\footnote{Significant tasks not planned before.}} \\ \hline{}
-& Ant build evironment &
- Jan Pieter & - & 2 \\ 
+\subtotal{6}{18}
 
-\hline
-\multicolumn{3}{r}{\textbf{Total}  }
- & - &
-\\[6mm] \thickhline
+\subheading{
+	Added during iteration\footnote{Significant tasks not planned before.}
+}
 
-\multicolumn{3}{r}{\textbf{Grand Total}  }
- & \\
+\task{}{Ant build evironment}{Jan Pieter}{-}{2} 
+
+\subtotal{-}{-}
+
+\grandtotal{}{}
 \end{tabularx}
 }
 
