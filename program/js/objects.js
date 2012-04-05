@@ -2,14 +2,16 @@
  * Info from http://api.jquery.com/
  * Synthetic Biology project (Biobrick Modeller/Simulator)
  * https://github.com/FelixAkk/synthbio
- *
+ * @author	Thomas van Helden
  * Definition of objects
  */
 
 /**
  * Circuits
+ * Circuits hold a name, a description, gates, how gates are grouped and which signals connect them
+ * Note: To convert Circuits into JSON use JSON.stringify(Circuit)
  */
-function Circuit(circuitName,description, gate, signals, groupings){
+function Circuit(circuitName,description, gate, signal, groupings){
 	this.name = circuitName;
 	this.desc = description;
 	this.gates = gate;
@@ -17,15 +19,11 @@ function Circuit(circuitName,description, gate, signals, groupings){
 	this.groups = groupings;
 }
 Circuit.prototype.toString = function(){
-	var gateString = "";
-	for(var i in this.gates){
-		gateString+=i.toString() + " - ";
-	}
-	var signalString = "";
-	for(var i in this.signals){
-		signalString+=i + " - ";
-	}
-	return this.name + ": " + this.desc + " constists of gates; " + gateString() + " and signals; " + signalString + " and groupings; " + this.groups;
+	return this.name + ": " + this.desc + " consists of gates:{ " + this.gates.toString() + " } and signals:{ " + this.signals.toString() + " } and groupings:{ " + this.groups + "}";
+}
+Circuit.fromJSON= function(json){
+	var temp = $.parseJSON(json);
+	return new Circuit(temp.name, temp.desc, temp.gates, temp.signals, temp.groups);
 }
 Circuit.prototype.eval = function(){
 	return false;
@@ -44,7 +42,7 @@ function Gate(t, xCoord, yCoord){
 Gate.prototype.toString = function(){
 	return this.type + ": X = " + this.x + ", Y = "+ this.y;
 }
-Gate.prototype.fromJSON = function(json){
+Gate.fromJSON = function(json){
 	var temp = $.parseJSON(json);
 	return new Gate(temp.type, temp.x, temp.y);
 }
@@ -62,7 +60,7 @@ function Signal(prot, origin, destination){
 Signal.prototype.toString = function(){
 	return this.protein + " links " + this.from + " with " + this.to;
 }
-Signal.prototype.fromJSON = function(json){
+Signal.fromJSON = function(json){
 	var temp = $.parseJSON(json);
 	return new Signal(temp.protein, temp.from, temp.to);
 }
@@ -81,7 +79,7 @@ function CDS(proteinName, k, dOne, dTwo) {
 CDS.prototype.toString = function(){
 	return "CDS - name = " + this.name + ", k2 = "+ this.k2+ ", d1 = " + this.d1+ ", d2 = " + this.d2;
 }
-CDS.prototype.fromJSON = function(json){
+CDS.fromJSON = function(json){
 	var temp = $.parseJSON(json);
 	return new CDS(temp.name, temp.k2, temp.d1, temp.d2);
 }

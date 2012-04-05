@@ -2,7 +2,7 @@
  * Info from http://docs.jquery.com/QUnit
  * Synthetic Biology project (Biobrick Modeller/Simulator)
  * https://github.com/FelixAkk/synthbio
- 
+ * @author	Thomas van Helden
  * This document contains tests for the JavaScript clientside
  * The JSON coming from the Java server will be translated to circuits and UnitTested here
  */
@@ -14,7 +14,7 @@ var gate = new Gate("and", 10,20);
 var signal = new Signal("A",1,2);
 var cds1 = new CDS("cds1", "k2", "d1", "d2");
 var cds2 = new CDS("cds2", "k2", "d1", "d2");
-var circuit = new Circuit("circuit", "description", [gate], [signal], "groupings");
+var circuit = new Circuit("circuit", "description", [gate, gate], [signal, signal], []);
 /**
  * The actual tests
  */
@@ -24,23 +24,45 @@ $(document).ready(function(){
 	 * Circuits
 	 */
 	module("Circuits");
-	 
-	test("Circuits should have properties", function(){
-		equal(circuit.name, "circuit", "Circuit has a name");
-		equal(circuit.desc, "description", "Circuit has a description");
-		equal(circuit.gates, [gate], "Circuit has a list of gates");
-		equal(circuit.signals, [signal], "Circuit has a list of signals");
-		equal(circuit.groups, "groupings", "Circuit has groupings of gates");
-	});
- 	
-	test("Circuits should have a toString method", function(){
-		equal(circuit.toString(), circuit.name + ": " + circuit.desc + " constists of gates; " + circuit.gates[0].toString() + " and signals; " + circuit.signals[0].toString() + " and groupings; " + circuit.groups, "ToString works");
-	});
-	
-	test("Circuits should be evaluated propperly", function(){
-		ok(circuit.eval(), "circuit evaluation not tested yet");
-	});
-	
+		/**
+		 * Properties of Circuits
+		 */
+		test("Circuits should have properties", function(){
+			equal(circuit.name, "circuit", "Circuit has a name");
+			equal(circuit.desc, "description", "Circuit has a description");
+			deepEqual(circuit.gates, [gate, gate], "Circuit has a list of gates");
+			deepEqual(circuit.signals, [signal, signal], "Circuit has a list of signals");
+			deepEqual(circuit.groups, [], "Circuit has groupings of gates");
+		});
+		
+		/**
+		 * Circuit toString
+		 */
+		test("Circuit toString method is displayed", function(){
+			ok(true, circuit.toString());
+		});
+		
+		/**
+		 * Circuit to JSON
+		 */
+		test("Circuits should be able to be converted to JSON", function(){
+			equal(JSON.stringify(circuit), "{\"name\":\"circuit\",\"desc\":\"description\",\"gates\":[{\"type\":\"and\",\"x\":10,\"y\":20},{\"type\":\"and\",\"x\":10,\"y\":20}],\"signals\":[{\"protein\":\"A\",\"from\":1,\"to\":2},{\"protein\":\"A\",\"from\":1,\"to\":2}],\"groups\":[]}" ,"Circuits can be converted to JSON");
+		});
+		
+		/**
+		 * JSON to Circuit
+		 */
+		test("Circuits should be able to be generated from JSON", function(){
+			deepEqual(Circuit.fromJSON("{\"name\":\"circuit\",\"desc\":\"description\",\"gates\":[{\"type\":\"and\",\"x\":10,\"y\":20},{\"type\":\"and\",\"x\":10,\"y\":20}],\"signals\":[{\"protein\":\"A\",\"from\":1,\"to\":2},{\"protein\":\"A\",\"from\":1,\"to\":2}],\"groups\":[]}"), circuit, "JSON can be converted to Circuits");
+		});
+		
+		/**
+		 * Circuit evaluation
+		 */
+		test("Circuits should be evaluated propperly", function(){
+			ok(circuit.eval(), "circuit evaluation not tested yet");
+		});
+		
 	/**
 	 * Gates
 	 */
@@ -161,7 +183,7 @@ $(document).ready(function(){
 		 * From CDS to JSON
 		 */
 		test("CDS can be converted to JSON", function(){
-			deepEqual(JSON.stringify(cds1), "{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}", "converting CDS to JSON");
+			equal(JSON.stringify(cds1), "{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}", "converting CDS to JSON");
 		});
 		
 		/**
