@@ -11,15 +11,36 @@
  * Testable objects
  */
 var gate = new Gate("and", 10,20);
-var signal = new Signal(A,1,2);
+var signal = new Signal("A",1,2);
 var cds1 = new CDS("cds1", "k2", "d1", "d2");
 var cds2 = new CDS("cds2", "k2", "d1", "d2");
-
+var circuit = new Circuit("circuit", "description", [gate], [signal], "groupings");
 /**
  * The actual tests
  */
- $(document).ready(function(){
+$(document).ready(function(){
 
+	/**
+	 * Circuits
+	 */
+	module("Circuits");
+	 
+	test("Circuits should have properties", function(){
+		equal(circuit.name, "circuit", "Circuit has a name");
+		equal(circuit.desc, "description", "Circuit has a description");
+		equal(circuit.gates, [gate], "Circuit has a list of gates");
+		equal(circuit.signals, [signal], "Circuit has a list of signals");
+		equal(circuit.groups, "groupings", "Circuit has groupings of gates");
+	});
+ 	
+	test("Circuits should have a toString method", function(){
+		equal(circuit.toString(), circuit.name + ": " + circuit.desc + " constists of gates; " + circuit.gates[0].toString() + " and signals; " + circuit.signals[0].toString() + " and groupings; " + circuit.groups, "ToString works");
+	});
+	
+	test("Circuits should be evaluated propperly", function(){
+		ok(circuit.eval(), "circuit evaluation not tested yet");
+	});
+	
 	/**
 	 * Gates
 	 */
@@ -29,9 +50,9 @@ var cds2 = new CDS("cds2", "k2", "d1", "d2");
 		 * Gate properties
 		 */
 		test("Gates should have the right properties", function(){
-			equal(gate.type, "type", "Gates store types");
-			equal(gate.x, "x", "Gates store X coordinates");
-			equal(gate.y, "y", "Gates store Y coordinates");
+			equal(gate.type, "and", "Gates store types");
+			equal(gate.x, "10", "Gates store X coordinates");
+			equal(gate.y, "20", "Gates store Y coordinates");
 		});
 		
 		/**
@@ -45,14 +66,14 @@ var cds2 = new CDS("cds2", "k2", "d1", "d2");
 		 * From Gate to JSON
 		 */
 		test("Gates should be able to be constructed from JSON", function(){
-			equal(gate.toJSON(), "{\"type\":\"and\",\"x\":\"10\",\"y\":\"20\"}", "Gates can be converted to JSON");
+			equal(JSON.stringify(gate), "{\"type\":\"and\",\"x\":10,\"y\":20}", "Gates can be converted to JSON");
 		});
 		
 		/**
 		 * From JSON to Gate
 		 */
 		test("Gates should be able to be constructed from JSON", function(){
-			deepEqual(Gate.fromJSON("{\"type\":\"and\",\"x\":\"10\",\"y\":\"20\"}"), gate, "JSON can be converted to Gates");
+			deepEqual(Gate.fromJSON("{\"type\":\"and\",\"x\":10,\"y\":20}"), gate, "JSON can be converted to Gates");
 		});
 		
 		/**
@@ -88,14 +109,14 @@ var cds2 = new CDS("cds2", "k2", "d1", "d2");
 		 * From Signal to JSON
 		 */
 		test("Signal should be able to be constructed from JSON", function(){
-			equal(signal.toJSON(), "{\"protein\":\"A\",\"from\":\"1\",\"to\":\"2\"}", "Signals can be translated to JSON");
+			equal(JSON.stringify(signal), "{\"protein\":\"A\",\"from\":1,\"to\":2}", "Signals can be translated to JSON");
 		});
 		
 		/**
 		 * From JSON to Signal
 		 */
 		test("Signal should be able to be constructed from JSON", function(){
-			deepEqual(Signal.fromJSON("{\"protein\":\"A\",\"from\":\"1\",\"to\":\"2\"}"), signal, "JSON can be converted to Signals");
+			deepEqual(Signal.fromJSON("{\"protein\":\"A\",\"from\":1,\"to\":2}"), signal, "JSON can be converted to Signals");
 		});
 		
 		/**
@@ -140,7 +161,7 @@ var cds2 = new CDS("cds2", "k2", "d1", "d2");
 		 * From CDS to JSON
 		 */
 		test("CDS can be converted to JSON", function(){
-			deepEqual(cds1.toJSON, "{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}","converting CDS to JSON");
+			deepEqual(JSON.stringify(cds1), "{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}", "converting CDS to JSON");
 		});
 		
 		/**
@@ -157,5 +178,4 @@ var cds2 = new CDS("cds2", "k2", "d1", "d2");
 			ok(false, "needs testing");
 		});
 		
- 
-}
+});
