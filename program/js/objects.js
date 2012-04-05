@@ -6,8 +6,6 @@
  * Definition of objects
  */
 
- /**We have to check which objects we need and which data we wish to keep. It was not totally clear to me which data should be stored client side. At least this contains enough scaffolding for each class*/
- 
 /**Testable objects*/
 var and = new AndPromoter("tf1", "tf2", "k1", "km", "n");
 var not = new NotPromoter("tf", "k1", "km", "n");
@@ -29,7 +27,7 @@ function AndPromoter(transFactor1, transFactor2, kOne, kM, hillCoef){
 	this.n = hillCoef;
 }
 AndPromoter.prototype.toString = function(){
-	return [this.tf1, this.tf2, this.k1, this.km, this.n];
+	return "AND - tf1 = " + this.tf1 + ", tf2 = "+ this.tf2+ ", k1 = " + this.k1+ ", km = " + this.km+ ", n = " + this.n;
 }
 
 /**NotPromoter
@@ -42,7 +40,7 @@ function NotPromoter(transFactor, kOne, kM, hillCoef){
 	this.n = hillCoef;
 }
 NotPromoter.prototype.toString = function(){
-	return [this.tf1, this.k1, this.km, this.n];
+	return "NOT - tf1 = " + this.tf1 + ", k1 = " + this.k1+ ", km = " + this.km+ ", n = " + this.n;
 }
 
 /**CDS Object
@@ -55,7 +53,7 @@ function CDS(n, k, dOne, dTwo) {
 	this.d2 = dTwo;
 }
 CDS.prototype.toString = function(){
-	return [this.name, this.k2, this.d1, this.d2];
+	return "CDS - name = " + this.name + ", k2 = "+ this.k2+ ", d1 = " + this.d1+ ", d2 = " + this.d2;
 }
 
 /**

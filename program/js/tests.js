@@ -20,7 +20,7 @@
 		});
 		
 		test("toString method test of AndPromoter", function(){
-			deepEqual(and.toString(), [and.tf1, and.tf2, and.k1, and.km, and.n], "The list of properties is returned");
+			deepEqual(and.toString(), "AND - tf1 = " + and.tf1 + ", tf2 = "+ and.tf2+ ", k1 = " + and.k1+ ", km = " + and.km+ ", n = " + and.n, "The list of properties is returned");
 		});
  
 	/**NOT Promoters*/ 
@@ -34,7 +34,7 @@
 		});
 		
 		test("toString method test of NotPromoter", function(){
-			deepEqual(not.toString(), [not.tf1, not.k1, not.km, not.n], "The list of properties is returned");
+			deepEqual(not.toString(),"NOT - tf1 = " + not.tf1 + ", k1 = " + not.k1+ ", km = " + not.km+ ", n = " + not.n, "The list of properties is returned");
 		});
 		
 	/**What data should be stored in CDS?*/
@@ -53,7 +53,7 @@
 		});
 		
 		test("toString method test of CDS", function(){
-			deepEqual(cds1.toString(), [cds1.name, cds1.k2, cds1.d1, cds1.d2], "The list of properties is returned");
+			deepEqual(cds1.toString(), "CDS - name = " + cds1.name + ", k2 = "+ cds1.k2+ ", d1 = " + cds1.d1+ ", d2 = " + cds1.d2, "The list of properties is returned");
 		});
 		
 	/**What is the connection info?*/
