@@ -16,7 +16,7 @@
 		  equal( and.tf2 , "tf2", "TranscriptionFactor2" );
 		  equal( and.k1 , "k1", "K1" );
 		  equal( and.km , "km", "Km" );
-		  equal( and.k1 , "n", "the Hill Coeffectient" );
+		  equal( and.n , "n", "the Hill Coeffectient" );
 		});
 		
 		test("toString method test of AndPromoter", function(){
@@ -30,7 +30,7 @@
 		  equal( not.tf , "tf", "TranscriptionFactor" );
 		  equal( not.k1 , "k1", "K1" );
 		  equal( not.km , "km", "Km" );
-		  equal( not.k1 , "n", "the Hill Coeffectient" );
+		  equal( not.n , "n", "the Hill Coeffectient" );
 		});
 		
 		test("toString method test of NotPromoter", function(){
