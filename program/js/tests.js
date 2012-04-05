@@ -20,7 +20,7 @@
 		});
 		
 		test("toString method test of AndPromoter", function(){
-			equal(and.toString(), [and.tf1, and.tf2, and.k1, and.km, and.n], "The list of properties is returned");
+			deepEqual(and.toString(), [and.tf1, and.tf2, and.k1, and.km, and.n], "The list of properties is returned");
 		});
  
 	/**NOT Promoters*/ 
@@ -34,11 +34,11 @@
 		});
 		
 		test("toString method test of NotPromoter", function(){
-			equal(not.toString(), [not.tf1, not.k1, not.km, not.n], "The list of properties is returned");
+			deepEqual(not.toString(), [not.tf1, not.k1, not.km, not.n], "The list of properties is returned");
 		});
 		
 	/**What data should be stored in CDS?*/
-	module("Reading JSON - CDS");
+	module("CDS");
 
 		test("All CDSs should be listed", function() {
 		  equal( cds1.name , "cds1", "cds1" );
@@ -46,14 +46,14 @@
 		});
 
 		test("First part of CDS has values", function() {
-		  equal( cds1.name , "cds1", "protein 1" );
+		  equal( cds1.name , "cds1", "cds1" );
 		  equal( cds1.k2 , "k2", "K2" );
 		  equal( cds1.d1 , "d1", "D1" );
 		  equal( cds1.d2 , "d2", "D2" );
 		});
 		
-		test("toString method test of NotPromoter", function(){
-			equal(CDS.toString(), [cds1.name, cds1.k2, cds1.d1, cds1.d2], "The list of properties is returned");
+		test("toString method test of CDS", function(){
+			deepEqual(cds1.toString(), [cds1.name, cds1.k2, cds1.d1, cds1.d2], "The list of properties is returned");
 		});
 		
 	/**What is the connection info?*/

@@ -31,7 +31,7 @@ AndPromoter.prototype.toString = function(){
 /**NotPromoter
  * ToString() returns a list of all properties of NotPromoter
  */
-function AndPromoter(transFactor, kOne, kM, hillCoef){
+function NotPromoter(transFactor, kOne, kM, hillCoef){
 	this.tf = transFactor;
 	this.k1 = kOne;
 	this.km = kM;
