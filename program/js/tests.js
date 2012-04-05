@@ -1,4 +1,5 @@
 /**
+ * Info from http://docs.jquery.com/QUnit
  * Synthetic Biology project (Biobrick Modeller/Simulator)
  * https://github.com/FelixAkk/synthbio
  
@@ -7,51 +8,52 @@
  */
  $(document).ready(function(){
 
-	/**What data should be stored in gates?*/ 
-	module("Reading JSON - Gates");
+	/**AND Promoters*/ 
+	module("ANDPromoters");
 
-		test("Gates should contain", function() {
-		  equal( gate1.name , "", "a name" );
-		  equal( gate1.Xcoord , "x", "an X-coord" );
-		  equal( gate1.Ycoord , "y", "an Y-coord" );
-		});
-
-		test("Gates shouldn't contain", function() {
-		  equal( gate1.nothing , undefined, "undefined attribute" );
-		  equal( gate1.somethingElse , undefined, "undefined attribute" );
-		  equal( gate1.undefined , undefined, "undefined attribute" );
+		test("AndPromoters should contain", function() {
+		  equal( and.tf1 , "tf1", "TranscriptionFactor1" );
+		  equal( and.tf2 , "tf2", "TranscriptionFactor2" );
+		  equal( and.k1 , "k1", "K1" );
+		  equal( and.km , "km", "Km" );
+		  equal( and.k1 , "n", "the Hill Coeffectient" );
 		});
 		
-	/**What data should be stored in signals?*/
-	module("Reading JSON - Signals");
-
-		test("Signals should contain", function() {
-		  equal( signal1.input1 , "input1" , "A");
-		  equal( signal1.input2 , "input2" , "B" );
-		  equal( signal1.output1 , "output1" , "C" );
-		  equal( signal1.output2 , "output2" , "D" );
+		test("toString method test of AndPromoter", function(){
+			equal(and.toString(), [and.tf1, and.tf2, and.k1, and.km, and.n], "The list of properties is returned");
 		});
+ 
+	/**NOT Promoters*/ 
+	module("NotPromoters");
 
-		test("Signals shouldn't contain", function() {
-		  notEqual( signal1.input1 , "" , "empty input");
-		  notEqual( signal1.input2 , "" , "empty input2" );
-		  notEqual( signal1.output1 , "random" , "random output" );
-		  notEqual( signal1.output2 , "" , "empty output" );
+		test("NotPromoters should contain", function() {
+		  equal( not.tf , "tf", "TranscriptionFactor" );
+		  equal( not.k1 , "k1", "K1" );
+		  equal( not.km , "km", "Km" );
+		  equal( not.k1 , "n", "the Hill Coeffectient" );
 		});
 		
-	/**What data should be stored in proteins?*/
-	module("Reading JSON - Proteins");
+		test("toString method test of NotPromoter", function(){
+			equal(not.toString(), [not.tf1, not.k1, not.km, not.n], "The list of properties is returned");
+		});
+		
+	/**What data should be stored in CDS?*/
+	module("Reading JSON - CDS");
 
-		test("All proteins should be listed", function() {
-		  equal( protein1.name , "protein 1", "protein 1" );
-		  equal( protein2.name , "protein 2", "protein 2" );
+		test("All CDSs should be listed", function() {
+		  equal( cds1.name , "cds1", "cds1" );
+		  equal( cds2.name , "cds2", "cds2" );
 		});
 
-		test("First protein has values", function() {
-		  equal( protein1.name , "protein 1", "protein 1" );
-		  equal( protein1.k2 , "k2", "K2" );
-		  equal( protein1.d1 , "d1", "D1" );
-		  equal( protein1.d2 , "d2", "D2" );
+		test("First part of CDS has values", function() {
+		  equal( cds1.name , "cds1", "protein 1" );
+		  equal( cds1.k2 , "k2", "K2" );
+		  equal( cds1.d1 , "d1", "D1" );
+		  equal( cds1.d2 , "d2", "D2" );
+		});
+		
+		test("toString method test of NotPromoter", function(){
+			equal(CDS.toString(), [cds1.name, cds1.k2, cds1.d1, cds1.d2], "The list of properties is returned");
 		});
 		
 	/**What is the connection info?*/
