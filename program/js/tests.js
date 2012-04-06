@@ -37,7 +37,6 @@ var circuitJSON=
  * The actual tests
  */
 $(document).ready(function(){
-
 	module("Points");
 		test('Construct a Point', function(){
 			equal(10, point.getX(), 'check X coordinate');
@@ -84,14 +83,6 @@ $(document).ready(function(){
 			deepEqual(synthbio.Gate.fromJSON(gateJSON), gate, "JSON can be converted to Gates");
 		});
 		
-		/**
-		 * Get Gate from server
-		 */
-		//~ test("Request Gate from server and converting it to Gate object", function(){
-			//~ ok(false, "needs testing");
-		//~ });
-	//~
-
 	module("Signals");
 		
 		/**
@@ -124,12 +115,7 @@ $(document).ready(function(){
 			deepEqual(signal, synthbio.Signal.fromJSON(signalJSON), "JSON can be converted to Signals");
 		});
 		
-		/**
-		 * Get Signal from server
-		 */
-		//~ test("Request Signal from server and converting it to Signal object", function(){
-			//~ ok(false, "needs testing");
-		//~ });
+
 		
 	module("Circuits");
 		/**
@@ -154,7 +140,6 @@ $(document).ready(function(){
 		 * Circuit to JSON
 		 */
 		test("Circuits should be able to be converted to JSON", function(){
-
 			equal(
 				JSON.stringify(circuit),
 				circuitJSON,
@@ -179,11 +164,7 @@ $(document).ready(function(){
 		//~ test("Circuits should be evaluated propperly", function(){
 			//~ ok(circuit.eval(), "circuit evaluation not tested yet");
 		//~ });
-		
-	
 
-	
-		
 		
 	/**
 	 * CDS
@@ -228,12 +209,27 @@ $(document).ready(function(){
 		test("Needs to be able to parse JSON and convert to CDS", function(){
 			deepEqual(synthbio.CDS.fromJSON("{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}"), cds1, "parsing JSON object of CDS");
 		});
-		
+	
+	module('HTTP Requests');
 		/**
 		 * Get CDS from server
 		 */
 		//~ test("testing getCDS function", function(){
 			//~ ok(false, "needs testing");
 		//~ });
-		//~ 
+		//~
+				/**
+		 * Get Signal from server
+		 */
+		//~ test("Request Signal from server and converting it to Signal object", function(){
+			//~ ok(false, "needs testing");
+		//~ });
+				/**
+		 * Get Gate from server
+		 */
+		//~ test("Request Gate from server and converting it to Gate object", function(){
+			//~ ok(false, "needs testing");
+		//~ });
+		//~
+
 });

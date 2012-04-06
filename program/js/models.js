@@ -127,6 +127,7 @@ synthbio.Circuit = function(circuitName, desc, gate, signal, groupings){
 synthbio.Circuit.prototype.toString = function(){
 	return this.name + ": " + this.desc + " consists of gates:{ " + this.gates.toString() + " } and signals:{ " + this.signals.toString() + " } and groupings:{ " + this.groups + "}";
 };
+
 synthbio.Circuit.fromMap = function(map){
 	var gates=[], signals=[], groups=[];
 	$.each(map.gates, function(i, elem){
@@ -143,11 +144,6 @@ synthbio.Circuit.fromMap = function(map){
 	//~ });
 	return new synthbio.Circuit(map.name, map.description, gates, signals, groups);
 };
-/**
- * Construct from a JSON string.
- *
- * static function
- */
 synthbio.Circuit.fromJSON= function(json){
 	return synthbio.Circuit.fromMap($.parseJSON(json));
 };
@@ -158,7 +154,6 @@ synthbio.Circuit.fromJSON= function(json){
 	//~ return false;
 //~ };
  //~ 
-
 
 /**
  * CDSs
