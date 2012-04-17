@@ -1,23 +1,8 @@
 \documentclass[a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{fullpage}
-\usepackage{amsmath,amssymb}
-\usepackage{tabularx,multirow}
-\usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
-%~ \usepackage[toc]{multitoc} % Nice two-column TOC
 
+\input{../scrumplan-common}
 
-% new line after paragraph title.
-\makeatletter
-\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
-  {-3.25ex\@plus -1ex \@minus -.2ex}%
-  {1.5ex \@plus .2ex}%
-  {\normalfont\normalsize\bfseries}}
-\makeatother
-{}
-\newcommand{\githubissue}[1]{\href{https://github.com/FelixAkk/synthbio/issues/#1}{\##1}}
-
-\title{Programming Life - Scrum plan iteration 1}
+\title{Programming Life - SCRUM plan \#1}
 
 \author{Group 5/E:\\
 Felix Akkermans \\
@@ -38,55 +23,96 @@ Jan Pieter Waagmeester}
 \section{Introduction}
 In this SCRUM plan we define the tasks we want to complete in this sprint. Every task is assigned to one or two developers and an estimate is provided for the effort required.
 
+For each SCRUM run a milestone is created at GitHub, with issues for the tasks selected. The issues for this milestone can be found on: \githubmilestone{8}.
+
 \section{Selection and assignment of tasks}
 Because this is the first iteration, it is hard to predict how things work out. Lots of things are to be sorted out and we have to become familiar with the tools to be used.
 
-The time available is two afternoons in two weeks by five people. That's about sixteen hours per person, however, some time should be reserved for the scheduled meeting on wednesday. So the total effort available is about 40 man hours.
+\paragraph{Available time}
+The time available is two afternoons in two weeks by five people. That's about sixteen hours per person, however, some time should be reserved for the scheduled meeting on wednesday. So the total effort available is about 75 man hours. When writing this document, we made an error in this calculation resulting in a total effort available of 40 man hours, so during the estimation of the tasks we tried to fit all the work in those 40 hours. This might be the reason why there was some underestimation for the tasks in this iteration.
 
+A list of tasks, assignments and effort estimations is included in a table.
+
+
+\paragraph{Presentation}
 Results for this iteration will be presented thursday april 5, 14:30 at DW-PC room 0.010.
-\vfill
-\setlength{\extrarowheight}{3pt}
-\centering\begin{tabularx}{\textwidth}{p{10cm} | l | cc}
-\multicolumn{2}{c}{}& \multicolumn{2}{c}{Effort} \\	
-\textbf{Task} & Developer & estimated & actual \\
-\hline
-\githubissue{2}
-Server: Tomcat server that handles HTTP requests {\sc Hello World} and class scaffolding &
-Niels/Albert & 10 & \\
 
-\githubissue{3} Server/Client: Design and document JSON format for circuit (\verb|.syn|) and protein list &
-Jan Pieter & 4 & \\
 
-\githubissue{4} Client: JavaScript scaffolding &
-Thomas & 8 & \\
+{\centering
+\begin{tabularx}{\textwidth}{r p{8cm} | l | cc}
+
+\tasktableheading
+
+\task{2}
+	{Server: Tomcat server that handles HTTP requests {\sc Hello World} and class scaffolding}
+	{Niels/Alber}{10}{}
+
+\task{3}
+	{Server/Client: Design and document JSON format for circuit (\verb|.syn|) and protein list.}
+	{Jan Pieter}{4}{3}
+
+\task{4}
+	{Client: JavaScript scaffolding}
+	{Thomas}
+	{8}{}
  
-\githubissue{5} Client: Create basic GUI &
-Felix & 8 & \\
+\task{5}
+	{Client: Create basic GUI}
+	{Felix}
+	{8}{}
  
-\githubissue{6} Server/client: create and display connection state by ping/pong heartbeat &
-Niels/Albert & 2 & \\
+\task{6}
+	{Server/client: create and display connection state by ping/pong heartbeat}
+	{Niels/Albert}
+	{2}{3}
  
-\githubissue{7} Client: Show available basic gates &
-Jan Pieter & 3 & \\ \hline
+\task{7}
+	{Client: Show available basic gates}
+	{Jan Pieter}
+	{3}{1 + ??Felix}
 
-\multicolumn{2}{r}{\textbf{Total}  }
- & 35 & \\[8mm]
+\subtotal{35}{}
  
-\multicolumn{2}{l}{Optional\footnote{Things from next iterations that could be done if sufficient time is available}} \\ \hline
+\subheading{
+	Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
+}
 
-\githubissue{8} Server: Parse and serve list of Proteins\footnote{Only after list is supplied by Alexey} &
-Niels/Albert & 4 & \\
+\task{8}
+	{Server: Parse and serve list of Proteins\footnote{Only after list is supplied by Alexey}}
+	{Jan Pieter\footnote{Original plan was \textit{Niels/Albert}, but Jan Pieter finished his tasks...}}
+	{4}{16}
 
-\githubissue{9} Client: Display list of Proteins &
- & 2 & \\
-\hline 
+\task{11}
+	{Cient: Display list of Proteins}
+	{Jan Pieter\footnote{Initially unassigned}}
+	{2}{2}
+
+\subtotal{6}{18}
+
+\subheading{
+	Added during iteration\footnote{Significant tasks not planned before.}
+}
+
+\task{}{Ant build evironment}{Jan Pieter}{-}{2} 
+
+\subtotal{-}{-}
+
+\grandtotal{}{}
 \end{tabularx}
+}
 
 \section{Reflection on this iteration}
+As mentioned before this iteration required a lot of things to be sorted out. One example is the build environment, which was not mentioned as a task before. We think it would have been a good idea to do that. Some other area's are: selecting tools for testing HTML responses and JSON-serialisation.
 
-Todo:
-Nog niet eerder genoemd, wel gebruikt:
-- HTMLUnit \\
-- JSON-Java \\
+\paragraph{Build envirionment}
+We decided to use Apache ant to build the sources and provide easy access to the JUnit test suites. Currently, four targets are present.
+
+\paragraph{JSON serialisation}
+Selected the library from \url{http://json.org/java} since it is lightweight.
+
+\paragraph{HTML/JSON Unit testing}
+TODO: Included HTMLUnit, but no advanced JSON assertions...
+
+
 
 \end{document}

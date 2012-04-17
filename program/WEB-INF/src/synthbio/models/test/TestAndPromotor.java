@@ -12,6 +12,11 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 
+/**
+ * Testing the AndPromotor
+ *
+ * @author jieter
+ */
 public class TestAndPromotor{
 	double delta=0.0001;
 	

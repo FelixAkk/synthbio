@@ -13,6 +13,11 @@ import synthbio.json.JSONResponse;
 import synthbio.models.CDS;
 import synthbio.models.AndPromotor;
 
+/**
+ * Testing the JSONResponse
+ *
+ * @author jieter
+ */
 public class TestJSONResponse{
 		
 	/**

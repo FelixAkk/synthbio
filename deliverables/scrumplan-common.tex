@@ -1,0 +1,58 @@
+% scrumplan-common.tex
+
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{amsmath,amssymb}
+\usepackage{tabularx,multirow}
+\usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
+%~ \usepackage[toc]{multitoc} % Nice two-column TOC
+
+
+% new line after paragraph title.
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
+
+
+\setlength{\extrarowheight}{3pt}
+\newcommand{\githubissue}[1]{\href{https://github.com/FelixAkk/synthbio/issues/#1}{\##1}}
+\newcommand{\githubmilestone}[1]{\url{https://github.com/FelixAkk/synthbio/issues?milestone=#1}}
+\newcommand{\thickhline}{\noalign{\hrule height 0.8pt}}
+
+\newcommand{\tasktableheading}{
+	\multicolumn{3}{c}{} & \multicolumn{2}{c}{Effort} \\
+	 & \textbf{Task} & Developer & estimated & actual \\
+	\hline
+}
+\newcommand{\subheading}[1]{
+ & \multicolumn{2}{l}{\bf #1} \\ \hline
+}
+
+\newcommand{\subtotal}[2]{
+	\hline
+	\multicolumn{3}{r}{\textbf{Total}}
+	& #1
+	& #2 \\[6mm]
+}
+
+\newcommand{\grandtotal}[2]{
+	\thickhline
+	\multicolumn{3}{r}{\textbf{Grand Total}}
+		&
+	#1 &
+	#2 \\
+}
+
+%task command to 
+\newcommand{\task}[5]{
+	\githubissue{#1} &
+	#2 & % description
+	#3 & % developer
+	#4 & % estimated effort
+	#5   % actual effort
+	\\
+}
+	
