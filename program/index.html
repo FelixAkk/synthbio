@@ -15,6 +15,7 @@
 </head>
 
 <body>
+	<h1></h1>
 
 
 	<!-- Le NaffBarr
@@ -48,6 +49,8 @@
 		</ul>
 	</nav>
 	
+	<!-- Le Gates Tab (on the left)
+	================================================== -->
 	<aside id="gates-tab" class="stretch">
 		<h3>Basic gates</h3>
 		<p class="subscript">Predefined AND and NOT gates (fixed)</p>
@@ -74,10 +77,14 @@
 		</div>
 	</aside>
 	
-	<div id="grid"></div>
 	
-	<footer class="status subscript"><img id="info-icon" src="../img/info.png" alt="Info:" />
-		Mouse over fnfo string
+	<div id="grid" class="stretch"></div>
+	
+	<!-- Le Status Bar (at the bottom)
+	================================================== -->
+	<footer class="status subscript">
+		<img id="info-icon" src="../img/info.png" alt="Info:" /><span id="info">Mouse over fnfo string</span>
+		<span id="ping">Server status: <b>Connecting to server <em class="icon-connecting"></em></b></span>
 	</footer>
 	
 	<!-- Le Modals -->
@@ -90,8 +97,7 @@
 			<p>One fine body…</p>
 		</div>
 		<div class="modal-footer">
-			<a href="#" class="btn">Close</a>
-			<a href="#" class="btn btn-primary">Save changes</a>
+			<a href="#" class="btn" data-dismiss="modal">Close</a>
 		</div>
 	</div>
 	
@@ -120,9 +126,25 @@
 		</div>
 	</div>
 	
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+	<div class="modal hide fade in" id="connection-modal" data-keyboard="true">
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">&times;</a>
+			<h3>Connection problems</h3>
+		</div>
+		<div class="modal-body">
+			<p>Oops! It looks like no server could be found.</p>
+			<p>The server should be responding at AJAX requests on <pre class="prettyprint">/Ping</pre> on 
+			the same address as the page is loaded from. A guide to setup the server can be found on the 
+			project GitHub in <a href="">this Wiki article</a>.</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+		</div>
+	</div>
+	
+	<!-- Le javascript
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
 	<script type="application/javascript" language="javascript" src="js/jquery-1.7.2.min.js"></script>
 	<script type="application/javascript" language="javascript" src="js/bootstrap.min.js"></script>
 	<script type="application/javascript" language="javascript" src="js/less-1.3.0.min.js"></script>

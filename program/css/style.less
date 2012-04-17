@@ -45,7 +45,9 @@
 
 @grStop: darken(@baseColor, @contrast * 20%);
 
-@asideWidth: 250px;
+@titleWidth: 250px;
+
+@tabWidth: @titleWidth + (@iconSize * 0.5)*2 + @iconSize;
 
 @statusHeight: 24px; /* Height of the status bar */
 
@@ -98,10 +100,10 @@ body {
 	background-color: @grStop;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(@grStart), to(@grStop)); /* Saf4+, Chrome */
 	background-image: -webkit-linear-gradient(top, @grStart, @grStop); /* Chrome 10+, Saf5.1+, iOS 5+ */
-	background-image:    -moz-linear-gradient(top, @grStart, @grStop); /* FF3.6 */
-	background-image:     -ms-linear-gradient(top, @grStart, @grStop); /* IE10 */
-	background-image:      -o-linear-gradient(top, @grStart, @grStop); /* Opera 11.10+ */
-	background-image:         linear-gradient(to bottom, @grStart, @grStop);
+	background-image:	-moz-linear-gradient(top, @grStart, @grStop); /* FF3.6 */
+	background-image:	 -ms-linear-gradient(top, @grStart, @grStop); /* IE10 */
+	background-image:	  -o-linear-gradient(top, @grStart, @grStop); /* Opera 11.10+ */
+	background-image:		 linear-gradient(to bottom, @grStart, @grStop);
 }
 
 .nav {
@@ -117,12 +119,12 @@ body {
 	color: @textColorFaded;
 }
 .dropdown .caret {
-    margin-left: 5px;
-    margin-top: 10px;
+	margin-left: 5px;
+	margin-top: 10px;
 }
 .navbar .nav .dropdown-toggle .caret, .navbar .nav .open.dropdown .caret {
-    border-bottom-color: @textColorFaded;
-    border-top-color: @textColorFaded;
+	border-bottom-color: @textColorFaded;
+	border-top-color: @textColorFaded;
 }
 .caret {
 	opacity: 0.6;
@@ -142,7 +144,7 @@ body {
 	background-color: rgba(0,0,0, 0.1); /* Fade */
 	float: left;
 	padding: (@iconSize * 0.5) 0 (@iconSize * 0.5) (@iconSize * 0.5)*2 + @iconSize;
-	width: @asideWidth;
+	width: @titleWidth;
 }
 
 #icon {
@@ -156,14 +158,14 @@ body {
 }
 
 #gates-tab {
-    background-color: @grStart;
+	background-color: @grStart;
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	border-width: 0 1px 0 0; /* Right border only */
-    width: @asideWidth + (@iconSize * 0.5)*2 + @iconSize;
+	width: @tabWidth;
 	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
 	margin-top: @iconSize * 1.75;
 	color: @textColorFaded;
-    z-index: 60;
+	z-index: 60;
 	overflow: auto;
 }
 
@@ -209,9 +211,15 @@ body {
 }
 
 #grid {
-	width: 50px;
-	height: 50px;
-	background-color: #FF0000;
+	left: @tabWidth;
+	top: @iconSize * 1.75;
+	bottom: @statusHeight;
+	background-color: lighten(@baseColor, 20%);
+	background-image: url('../img/grid.png');
+	
+	box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25);
+	.borderDown(@baseColor, @contrast, 10%);
+	margin: 5px;
 }
 
 .stretch {
@@ -223,7 +231,7 @@ body {
 }
 
 .status {
-    background-color: @grStart;
+	background-color: @grStart;
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	color: @textColorFaded;
 	border-width: 1px 0 0 0; /* Top border only */
@@ -234,11 +242,35 @@ body {
 	position: absolute;
 	width: 100%;
 	z-index: 17;
-}
-
-.status #info-icon {
-	height: @statusHeight - 8;
-	width: @statusHeight - 8;
-	opacity: 1 - @textFade;
-	padding: 0 6px;
+	
+	#info-icon {
+		height: @statusHeight - 8;
+		width: @statusHeight - 8;
+		opacity: 1 - @textFade;
+		padding: 0 6px;
+	}
+	
+	#ping {
+		float: right;
+		margin-right: 5px;
+		
+		[class^="icon-"], [class*=" icon-"] {
+			background: no-repeat scroll url('../img/connection-status.png');
+			height: @statusHeight - 8;
+			width: @statusHeight - 8;
+			opacity: 1 - @textFade;
+			vertical-align: middle;
+			margin: 0 6px;
+		}
+		
+		.icon-connecting {
+			background-position: 0 0;
+		}
+		.icon-connected {
+			background-position: -16px 0;
+		}
+		.icon-failed {
+			background-position: -32px 0;
+		}
+	}
 }
