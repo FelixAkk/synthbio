@@ -24,9 +24,7 @@ var synthbio = synthbio || {};
  * Constructor can be called with:
  *  - two numbers: x, y
  *  - an array with two numbers: [x, y]
- *  - a map with two numbers: {"x": x, "y": y}
  */
-
 synthbio.Point = function(x, y){
 	//construct from array x if y is undefined.
 	if(y === undefined){
