@@ -29,13 +29,13 @@ For each SCRUM run a milestone is created at GitHub, with issues for the tasks s
 Because this is the first iteration, it is hard to predict how things work out. Lots of things are to be sorted out and we have to become familiar with the tools to be used.
 
 \paragraph{Available time}
-The time available is two afternoons in two weeks by five people. That's about sixteen hours per person, however, some time should be reserved for the scheduled meeting on wednesday. So the total effort available is about 75 man hours. When writing this document, we made an error in this calculation resulting in a total effort available of 40 man hours, so during the estimation of the tasks we tried to fit all the work in those 40 hours. This might be the reason why there was some underestimation for the tasks in this iteration.
+The time available is four afternoons in two weeks by five people. That's about sixteen hours per person, however, some time should be reserved for the scheduled meeting on wednesday. So the total effort available is about 75 man hours. When writing this document, we made an error in this calculation resulting in a total effort available of 40 man hours, so during the estimation of the tasks we tried to fit all the work in those 40 hours. This might be the reason why there was some underestimation for the tasks in this iteration.
 
 A list of tasks, assignments and effort estimations is included in a table.
 
 
 \paragraph{Presentation}
-Results for this iteration will be presented thursday april 5, 14:30 at DW-PC room 0.010.
+Results for this iteration will be presented thursday april 5, 16:30 in the library (project room Australia).
 
 
 \begin{center}
@@ -44,7 +44,7 @@ Results for this iteration will be presented thursday april 5, 14:30 at DW-PC ro
 
 \task{2}
 	{Server: Tomcat server that handles HTTP requests {\sc Hello World} and class scaffolding}
-	{Niels/Alber}{10}{}
+	{Niels/Albert}{2*10}{17}
 
 \task{3}
 	{Server/Client: Design and document JSON format for circuit (\verb|.syn|) and protein list.}
@@ -70,7 +70,7 @@ Results for this iteration will be presented thursday april 5, 14:30 at DW-PC ro
 	{Jan Pieter}
 	{3}{1 + ??Felix}
 
-\subtotal{35}{}
+\subtotal{45}{??}
  
 \subheading{
 	Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
@@ -94,24 +94,33 @@ Results for this iteration will be presented thursday april 5, 14:30 at DW-PC ro
 
 \task{}{Ant build evironment}{Jan Pieter}{-}{2} 
 
-\subtotal{-}{-}
+\subtotal{-}{2}
 
-\grandtotal{}{}
+\grandtotal{41}{??}
 \end{tabularx}
 \end{center}
 
 \section{Reflection on this iteration}
-As mentioned before this iteration required a lot of things to be sorted out. One example is the build environment, which was not mentioned as a task before. We think it would have been a good idea to do that. Some other area's are: selecting tools for testing HTML responses and JSON-serialisation.
+In this section we will give a quick review on this iteration. First we will comment on our initial planning and second we will review the implementation phase and the workflow.
+\subsection{Planning}
+The estimated efforts were not that far off the actual time needed for implementation and we are confident that our estimations will improve as the project continues. We did, however, forget to plan a few obvious tasks. For example, code reviewing, tool selection (testing HTML responses and JSON-serialisation) and creating a building environment are tasks that could have been foreseen. Also the time needed for everyone to setup their working environment was underestimated.
+A lot of these tasks were one-time efforts, but they can consume precious time. We think the number of these small tasks will reduce, as this was the very first iteration. We now have a starting point that can be built on. For next iterations, we really have to think things through, to make sure there will be as little unforeseen subtasks as possible.
 
-\paragraph{Build envirionment}
+\pagebreak
+\subsection{Implementation}
+The implementation phase for this iteration didn't go as smoothly as we hoped it would go, but it did gave us a few points to work on. One of these points is communication; there was little communication between members. This, combined with a low number of commits, made it hard for members to see what everyone was working on and what the overall progress was. Only when the deadline was approaching, the commits started to flow and the project advanced quickly.
+Late commits make code reviewing and integration testing harder. That is why we want to commit early and commit often in the next iteration.\\
+
+We are happy with the delivered code and product. Test-driven development was applied correctly and we think we have built a solid base. For this base we needed a few (previously undocumented) tools:
+
+\paragraph{Build environment}
 We decided to use Apache ant to build the sources and provide easy access to the JUnit test suites. Currently, four targets are present.
 
 \paragraph{JSON serialisation}
 Selected the library from \url{http://json.org/java} since it is lightweight.
 
 \paragraph{HTML/JSON Unit testing}
-TODO: Included HTMLUnit, but no advanced JSON assertions...
-
-
+We have selected HtmlUnit (\url{http://htmlunit.sourceforge.net/}) to help test the server applets. This unit acts as a browser (without the GUI) and fetches pages from the server. This helps testing the JSON responses. 
+Unfortunately, we have found no easy way to compare JSON objects in Java. That is why we are comparing the objects as strings. JSON objects are unordered by definition, but we make sure the objects have a predictable layout (alphabetical order).
 
 \end{document}
