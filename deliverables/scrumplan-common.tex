@@ -7,6 +7,7 @@
 \usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
 %~ \usepackage[toc]{multitoc} % Nice two-column TOC
 
+\usepackage{ifthen}
 
 % new line after paragraph title.
 \makeatletter
@@ -48,7 +49,7 @@
 
 %task command to 
 \newcommand{\task}[5]{
-	\githubissue{#1} &
+	\ifthenelse{\equal{#1}{} \or \equal{#1}{0}}{-}{\githubissue{#1}} &
 	#2 & % description
 	#3 & % developer
 	#4 & % estimated effort
