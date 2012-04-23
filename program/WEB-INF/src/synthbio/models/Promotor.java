@@ -31,4 +31,11 @@ abstract class Promotor extends BioBrick{
 	public double getN(){
 		return this.n;
 	}
+
+	public static AndPromotor fromSignals(Signal inA, Signal inB){
+		return null;
+	}
+	public static NotPromotor fromSignal(Signal in){
+		return null;
+	}
 }
