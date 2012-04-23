@@ -2,7 +2,7 @@
  * Info from http://docs.jquery.com/QUnit
  * Synthetic Biology project (Biobrick Modeller/Simulator)
  * https://github.com/FelixAkk/synthbio
- * @author	Thomas van Helden
+ * @author	Thomas van Helden & JanPieter Waagmeester
  * This document contains tests for the JavaScript clientside
  * The JSON coming from the Java server will be translated to circuits and UnitTested here
  */

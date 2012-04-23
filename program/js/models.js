@@ -1,7 +1,7 @@
 /**
  * Synthetic Biology project (Biobrick Modeller/Simulator)
  * https://github.com/FelixAkk/synthbio
- * @author	Thomas van Helden
+ * @author	Thomas van Helden & JanPieter Waagmeester
  *
  * Definition of models.
  * More info on jquery http://api.jquery.com/
@@ -151,7 +151,7 @@ synthbio.Circuit.fromJSON= function(json){
 //~ synthbio.Circuit.prototype.eval = function(){
 	//~ return false;
 //~ };
- //~ 
+//~ 
 
 /**
  * CDSs
