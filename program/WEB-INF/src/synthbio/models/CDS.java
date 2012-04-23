@@ -61,4 +61,9 @@ public class CDS extends BioBrick{
 			Double.parseDouble(tokens[3])
 		);
 	}
+
+	public static CDS fromSignal(Signal s){
+		return null;
+	}
+		
 }

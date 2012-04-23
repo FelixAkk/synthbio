@@ -13,6 +13,11 @@ import java.util.Scanner;
 
 import synthbio.models.*;
 
+/**
+ * Read BioBricks from the provided csv files
+ *
+ * @author jieter
+ */
 public class BioBrickReader{
 
 	private CDS[] CDSs;
