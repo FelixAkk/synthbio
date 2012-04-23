@@ -1,8 +1,9 @@
+%
 \documentclass[a4paper]{article}
 
 \input{../scrumplan-common}
 
-\title{Programming Life - SCRUM plan \#1}
+\title{Project title Zelula - SCRUM plan \#1}
 
 \author{Group 5/E:\\
 Felix Akkermans \\
@@ -12,6 +13,7 @@ Albert ten Napel \\
 Jan Pieter Waagmeester}
 
 \begin{document}
+
 \maketitle
 
 %~ • The selection of a set of features (important features first).
@@ -58,7 +60,7 @@ Results for this iteration will be presented thursday april 5, 16:30 in the libr
 \task{5}
 	{Client: Create basic GUI}
 	{Felix}
-	{8}{}
+	{8}{12}
  
 \task{6}
 	{Server/client: create and display connection state by ping/pong heartbeat}
@@ -68,9 +70,9 @@ Results for this iteration will be presented thursday april 5, 16:30 in the libr
 \task{7}
 	{Client: Show available basic gates}
 	{Jan Pieter}
-	{3}{1 + ??Felix}
+	{3}{1 + 2}
 
-\subtotal{45}{??}
+\subtotal{45}{48}
  
 \subheading{
 	Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
@@ -96,7 +98,7 @@ Results for this iteration will be presented thursday april 5, 16:30 in the libr
 
 \subtotal{-}{2}
 
-\grandtotal{65}{??}
+\grandtotal{65}{68}
 \end{tabularx}
 \end{center}
 
@@ -126,4 +128,6 @@ Selected the library from \url{http://json.org/java} since it is lightweight.
 We have selected HtmlUnit (\url{http://htmlunit.sourceforge.net/}) to help test the server applets. This unit acts as a browser (without the GUI) and fetches pages from the server. This helps testing the JSON responses. 
 Unfortunately, we have found no easy way to compare JSON objects in Java. That is why we are comparing the objects as strings. JSON objects are unordered by definition, but we make sure the objects have a predictable layout (alphabetical order).
 
+\paragraph{Project title}
+After the name confusion about BioBricks we wanted to clear this issue once and for all. In this scrum the term still floated around, for example in the GUI. So we decided on a name for the project to be used from here on everywhere in our work; \textbf{project Zelula} (meaning cell in a foreign language \footnote{\url{http://eu.wikipedia.org/wiki/Zelula}}). In Scrum 2 this should be apparent in the GUI, documentation, code comment headers.
 \end{document}
