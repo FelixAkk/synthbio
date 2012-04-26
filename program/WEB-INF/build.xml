@@ -29,7 +29,7 @@
 				<pathelement path="${build}"/>
 			</classpath>
 			
-			<batchtest haltonfailure="yes">
+			<batchtest haltonfailure="no">
 				<formatter type="brief" usefile="false" />
 				<fileset dir="${src}">
 					<exclude name="**/json/tests/*"/>
@@ -52,7 +52,7 @@
 				<pathelement path="${build}"/>
 			</classpath>
 			
-			<batchtest haltonfailure="yes">
+			<batchtest haltonfailure="no">
 				<formatter type="brief" usefile="false" />
 				<fileset dir="${src}">
 					<exclude name="**/json/tests/*"/>
