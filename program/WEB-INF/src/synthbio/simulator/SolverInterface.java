@@ -13,7 +13,7 @@
 	* The SBML solver used is SBMLsimulator: http://sourceforge.net/projects/sbml-simulator/
   */
 public class SolverInterface {
-	private final String SBMLSIMULATOR_PATH = "/SBMLsimulator.jar";
+	private final String SBMLSIMULATOR_PATH = "lib/SBMLsimulator.jar";
 	private String result;
 	
 	public SolverInterface solve(String file) {
