@@ -25,11 +25,16 @@ public class TestCommandLineCatchOutput {
 			Process pr = rt.exec("java -jar \"src/synthbio/simulator/test/Hello.jar\"");
 			
 			BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-			String line = input.readLine();
+			
+			String res = "";
+			String line = null;
+			while((line = input.readLine()) != null) {
+				res += line + "\n";
+			}
 			
 			int exitVal = pr.waitFor();
 			
-			assertEquals("Hello", line);
+			assertEquals("Hello\n", res);
 		} catch(Exception e) {
 			System.out.println(e.toString());
 			e.printStackTrace();
