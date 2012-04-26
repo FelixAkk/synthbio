@@ -19,7 +19,7 @@ public class SolverInterface {
 	public SolverInterface solve(String file) {
 		try {
 			Runtime rt = Runtime.getRuntime();
-			Process pr = rt.exec("java -jar \""+SBLMSIMULATOR_PATH+"\" --sbml-input-file \""+file+"\"");
+			Process pr = rt.exec("java -jar \""+SBMLSIMULATOR_PATH+"\" --sbml-input-file \""+file+"\"");
 			
 			BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 			
@@ -36,6 +36,7 @@ public class SolverInterface {
 			System.out.println(e.toString());
 			e.printStackTrace();
 		}
+		return this;
 	}
 	
 	public String getStringResult() {
