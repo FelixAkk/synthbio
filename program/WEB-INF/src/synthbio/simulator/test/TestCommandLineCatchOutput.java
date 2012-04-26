@@ -18,15 +18,23 @@ public class TestCommandLineCatchOutput {
 	 * Runs a command line program and catches the output.
 	 * 
 	 */
-	@Test @Ignore
+	@Test
 	public void testCommandline() {
 		try {
 			Runtime rt = Runtime.getRuntime();
-			Process pr = rt.exec("helloworld.exe");
+			Process pr = rt.exec("java -jar \"src/synthbio/simulator/test/Hello.jar\"");
 			
 			BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 			
-			assertEquals("Hello world!", input.readLine());
+			String res = "";
+			String line = null;
+			while((line = input.readLine()) != null) {
+				res += line + "\n";
+			}
+			
+			int exitVal = pr.waitFor();
+			
+			assertEquals("Hello\n", res);
 		} catch(Exception e) {
 			System.out.println(e.toString());
 			e.printStackTrace();

@@ -53,6 +53,10 @@ public class TestCircuit{
 
 		assertEquals(2, c.getGates().size());
 		//assertEquals(4, c.collectSignals().size());
+
+		assertEquals("[and(A,B)->C @(2.0,2.0)]", c.gateAt(0).toString());
+		assertEquals("[not(C)->D @(2.0,4.0)]", c.gateAt(1).toString());
+
 	}
 	
 }

@@ -16,14 +16,14 @@ import synthbio.simulator.SolverInterface;
  * Testing the execution of the solver and catching the results.
  */
 public class TestSolverInterface {
-
+	private final String TEST_PATH = "src/synthbio/simulator/test/";
 	/**
 	 * Runs the solver and catches the output.
 	 */
-	@Test
+	@Test @Ignore
 	public void testSolver() {
 		SolverInterface si = new SolverInterface();
-		String result = si.solve("test.sbml").getStringResult;
-		assertEquals("", result);
+		String res = si.solve(TEST_PATH+"test2.sbml", TEST_PATH+"test2-time.csv", TEST_PATH+"test2-opt.sbml", TEST_PATH+"test2-output.csv");
+		System.out.println(res);
 	}
 }

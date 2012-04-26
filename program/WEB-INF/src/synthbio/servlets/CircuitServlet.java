@@ -25,7 +25,7 @@ import synthbio.models.CDS;
  *
  * @author jieter 
  */
-public class ListProteins extends HttpServlet {
+public class CircuitServlet extends SynthbioServlet {
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -33,18 +33,36 @@ public class ListProteins extends HttpServlet {
 		response.setContentType("text/plain");
 		PrintWriter out = response.getWriter();
 
-		String path=this.getServletContext().getRealPath("/")+"WEB-INF/biobricks/";
-
 		JSONResponse json=new JSONResponse();
+
+		/* Try to load the BioBrick Repository
+		 */ 
+		BioBrickReader bbr;
 		try{
-			json.data=new BioBrickReader(path).getCDSs();
-			json.success=true;
+			bbr=this.getBioBrickReaderRepository();
 		}catch(Exception e){
-			
 			json.success=false;
 			json.message="Could not load BioBricks: "+e.getMessage();
+			out.println(json.toJSONString());
+			return;
 		}
 
+		/* Dispatch actions.
+		 */
+		String action=request.getParameter("action");
+		if(action.equals("load")){
+
+		}else if(action.equals("save")){
+			
+		}else if(action.equals("validate")){
+
+		}else{
+			json.success=false;
+			json.message="Invalid Action";
+		}
+
+		/* Send response to browser.
+		 */
 		out.println(json.toJSONString());
 	}
 }

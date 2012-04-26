@@ -32,7 +32,9 @@ synthbio.requests.baseURL = "";
  */
 synthbio.requests.baseXHR = function(provided){
 	var options={
-		dataType: "json"
+		dataType: "json",
+		error: function(){},
+		always: function(){}
 	}
 	//merge provided options with the default options.
 	$.extend(options, provided);
@@ -64,8 +66,7 @@ synthbio.requests.getCDSs = function(callback){
 			});
 			return callback(list);
 		},
-		error:
-		always:
+		
 	});
 };
 
@@ -85,10 +86,10 @@ synthbio.requests.listFiles = function(callback){
 				return callback(response.message);
 			}
 			return callback(list);
-		}
+		},
 		error: function(){
 			return callback("Error has occured. Cannot get list of files from server")
-		}
+		},
 		always: callback()
 		
 	});
