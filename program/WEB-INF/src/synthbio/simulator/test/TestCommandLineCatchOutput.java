@@ -16,8 +16,9 @@ public class TestCommandLineCatchOutput {
 
 	/**
 	 * Runs a command line program and catches the output.
+	 * 
 	 */
-	@Test
+	@Test @Ignore
 	public void testCommandline() {
 		try {
 			Runtime rt = Runtime.getRuntime();
