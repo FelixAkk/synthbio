@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import synthbio.json.JSONResponse;
-import synthbio.files.BioBrickReader;
+import synthbio.files.BioBrickRepository;
 import synthbio.models.CDS;
 
 
@@ -32,8 +32,8 @@ public abstract class SynthbioServlet extends HttpServlet {
 	 *
 	 * @return A BioBrickReader object.
 	 */
-	public BioBrickReader getBioBrickReaderRepository() throws Exception{
+	public BioBrickRepository getBioBrickRepository() throws Exception{
 		String path=this.getServletContext().getRealPath("/")+"WEB-INF/biobricks/";
-		return new BioBrickReader(path);
+		return new BioBrickRepository(path);
 	}
 }

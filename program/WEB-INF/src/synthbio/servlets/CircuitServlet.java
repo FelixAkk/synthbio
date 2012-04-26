@@ -37,9 +37,9 @@ public class CircuitServlet extends SynthbioServlet {
 
 		/* Try to load the BioBrick Repository
 		 */ 
-		BioBrickReader bbr;
+		BioBrickRepository bbr;
 		try{
-			bbr=this.getBioBrickReaderRepository();
+			bbr=this.getBioBrickRepository();
 		}catch(Exception e){
 			json.success=false;
 			json.message="Could not load BioBricks: "+e.getMessage();

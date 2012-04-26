@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import synthbio.json.JSONResponse;
-import synthbio.files.BioBrickReader;
 import synthbio.models.CDS;
 
 
@@ -35,7 +34,7 @@ public class ListProteinsServlet extends SynthbioServlet {
 
 		JSONResponse json=new JSONResponse();
 		try{
-			json.data=this.getBioBrickReaderRepository().getCDSs();
+			json.data=this.getBioBrickRepository().getCDSs();
 			json.success=true;
 		}catch(Exception e){
 			

@@ -9,18 +9,18 @@ import org.junit.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import synthbio.files.BioBrickReader;
+import synthbio.files.BioBrickRepository;
 import synthbio.models.*;
 
-public class TestBioBrickReader{
+public class TestBioBrickRepository{
 
 	public String biobrickPath="biobricks/";
 
-	public BioBrickReader bbr;
+	public BioBrickRepository bbr;
 
 	 @Before
 	public void setUp() throws Exception {
-		this.bbr=new BioBrickReader(this.biobrickPath);
+		this.bbr=new BioBrickRepository(this.biobrickPath);
 	}
 
 	/**
