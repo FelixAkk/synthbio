@@ -1,9 +1,19 @@
 // GUI JavaScript Document
 /**
+ * 		Project Zelula:
+ * Synthetic biology modeller/simulator
+ * https://github.com/FelixAkk/synthbio
+ * by Group E, TU Delft
+ *
+ * @author Felix Akkermans & Jan-Pieter Waagmeester
+ */
+ 
+ 
+ 
+/**
  * One date object that can be used wherever we need time
  */
 var date = new Date();
-
 
 $(document).ready(function() {
 	
@@ -37,12 +47,11 @@ $(document).ready(function() {
 		var fCount = 0; // Failure count: The amount of times that connection attempts have failed. Resets to 0 on success.
 		var limit = 3; // Amount of times after which a dialog should prompt the user about the failures.
 		var frequency = 500; // The delay between ping calls in milliseconds.
-		var d = new Date();
 		return function () {
-			var t = d.getTime();
+			var t = date.getTime();
 			$.ajax("/Ping")
 				.done(function(data) {
-					$('#ping').html('Server status: <b>Connected to server <em class="icon-connected"></em> [latency: ' + (d.getTime() - t) + 'ms]</b>');
+					$('#ping').html('Server status: <b>Connected to server <em class="icon-connected"></em> [latency: ' + (date.getTime() - t) + 'ms]</b>');
 					fCount = 0;
 				})
 				.fail(function(data) {

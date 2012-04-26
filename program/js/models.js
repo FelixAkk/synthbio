@@ -1,6 +1,8 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * 		Project Zelula:
+ * Synthetic biology modeller/simulator
  * https://github.com/FelixAkk/synthbio
+ * by Group E, TU Delft
  * @author	Thomas van Helden & JanPieter Waagmeester
  *
  * Definition of models.
