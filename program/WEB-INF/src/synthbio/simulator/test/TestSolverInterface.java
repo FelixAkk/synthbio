@@ -23,7 +23,7 @@ public class TestSolverInterface {
 	@Test @Ignore
 	public void testSolver() {
 		SolverInterface si = new SolverInterface();
-		String result = si.solve("test.sbml").getStringResult();
+		String result = si.solve("src/synthbio/simulator/test/test.sbml").getStringResult();
 		assertEquals("FAIL", result);
 	}
 }
