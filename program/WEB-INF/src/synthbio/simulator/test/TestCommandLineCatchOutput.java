@@ -6,11 +6,12 @@
 
 package synthbio.simulator.test;
 
-import org.junit.*;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import org.junit.Test;
 
 public class TestCommandLineCatchOutput {
 

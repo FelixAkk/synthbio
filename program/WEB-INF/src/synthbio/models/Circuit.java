@@ -1,5 +1,13 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
@@ -11,11 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONString;
 
-import synthbio.files.BioBrickReader;
+import synthbio.files.BioBrickRepository;
 
 /**
  * Circuit representation
@@ -197,7 +204,7 @@ public class Circuit implements JSONString{
 		
 		/*Create BioBrick repository.
 		 */
-		BioBrickReader bbr=new BioBrickReader();
+		BioBrickRepository bbr=new BioBrickRepository();
 		
 		JSONObject signal;
 		int from;
@@ -270,23 +277,3 @@ public class Circuit implements JSONString{
 
 	
 }
-/*
-gate=ret.gateAt(signal.getInt("from"));
-					if(gate.getKind()=="not"){
-						promotor=notPromotors.getNotPromotor(signal.getString("protein"));
-						if(promotor==null){
-							//todo: throw exepction;
-						}
-						gate.setPromotor(promotor);
-					}else if(gate.getKind()=="and"){
-						if(tempTf==""){
-							tempTf=signal.getString("protein");
-						}else{
-							promotor=notPromotors.getAndPromotor(tempTf, signal.getString("protein"));
-							if(promotor==null){
-								//todo: throw exepction;
-							}
-							gate.setPromotor(promotor);
-							tempTf="";
-						}
-					}*/

@@ -1,22 +1,26 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
 package synthbio.models.test;
 
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+
 import java.util.ArrayList;
 
-import synthbio.models.CDS;
-import synthbio.models.Gate;
-import synthbio.models.Position;
-import synthbio.models.Circuit;
-import synthbio.models.Signal;
 import synthbio.Util;
-
-import org.junit.*;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import synthbio.models.Circuit;
+import synthbio.models.Gate;
 
 /**
  * Testing the Circuit
