@@ -189,6 +189,7 @@ body {
 }
 
 .gate {
+	position: absolute;
 	.cornerRadius(@cornerRadius);
 	text-align: right;
 	padding: 5px;
@@ -218,8 +219,8 @@ body {
 	background-image: url('../img/grid.png');
 	
 	box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25);
-	.borderDown(@baseColor, @contrast, 10%);
-	margin: 5px;
+	/*.borderDown(@baseColor, @contrast, 10%); */
+	/*margin: 5px; */
 }
 
 #grid {
@@ -276,4 +277,15 @@ body {
 			background-position: -32px 0;
 		}
 	}
+}
+
+/*
+------------------------------
+	Grid styles
+------------------------------
+*/
+#gateand {
+	width: 50px;
+	height: 50px;
+	background: #FFF;
 }
