@@ -37,7 +37,7 @@ public class ListProteins extends HttpServlet {
 
 		JSONResponse json=new JSONResponse();
 		try{
-			json.data=new BioBrickReader(path).getCDSs();
+			json.data=(new BioBrickReader(path)).getCDSs();
 			json.success=true;
 		}catch(Exception e){
 			
