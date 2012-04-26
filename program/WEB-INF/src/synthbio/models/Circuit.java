@@ -7,6 +7,8 @@ package synthbio.models;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -201,10 +203,8 @@ public class Circuit implements JSONString{
 		int from;
 		int to;
 
-		//todo: this is a simplified and incorrect way to do it, since
-		//it coveres only the in-order cases.
-		//a Map<int, String> should be used as tmp variable.
-		String tmpTF="";
+		//remember the first transcription factor for a And-gate.
+		Map<Integer, String> tmpTF=new HashMap<Integer, String>();
 		
 		for(int i=0; i<JSONSignals.length(); i++){
 			signal=JSONSignals.getJSONObject(i);
@@ -225,10 +225,10 @@ public class Circuit implements JSONString{
 					//this is not the first connection from gate 'from'
 					//check if this signal protein is the same as
 					//already present, if not, throw an exception.
-
-					//todo: implement the check.
+					if(!ret.gateAt(from).getCDS().getName().equals(signal.getString("protein"))){
+						throw new Exception("CDS for gate "+from+" is ambigious");
+					}
 				}
-				
 			}else{
 				//input signal, nothing to do at the input side.
 			}
@@ -247,22 +247,24 @@ public class Circuit implements JSONString{
 					);
 				}else{
 					//and gate, requires two inputs, so wait till whe have two.
-					if(tmpTF==""){
-						tmpTF=signal.getString("protein");
+					if(!tmpTF.containsKey(to)){
+						tmpTF.put(to, signal.getString("protein"));
 					}else{
 						ret.gateAt(to).setPromotor(
-							bbr.getAndPromotor(signal.getString("protein"), tmpTF)
+							bbr.getAndPromotor(signal.getString("protein"), tmpTF.get(to))
 						);
-						tmpTF="";
+						tmpTF.remove(to);
 					}
 				}
 			}else{
 				//output signal, nothing to do at the output.
 			}
 		}
+/*
 		if(tmpTF!=""){
 			throw new Exception("And gate with one input");
 		}
+*/
 		return ret;
 	}
 

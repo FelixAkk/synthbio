@@ -22,11 +22,15 @@ public class TestCommandLineCatchOutput {
 	public void testCommandline() {
 		try {
 			Runtime rt = Runtime.getRuntime();
-			Process pr = rt.exec("helloworld.exe");
-			
+			Process pr = rt.exec("java -jar Hello.jar");
+			System.out.println("test");
 			BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+			String line = input.readLine();
+			System.out.println(line);
+			System.out.println(input.readLine());
+			int exitVal = pr.waitFor();
 			
-			assertEquals("Hello world!", input.readLine());
+			assertEquals("Hello", line);
 		} catch(Exception e) {
 			System.out.println(e.toString());
 			e.printStackTrace();
