@@ -29,8 +29,8 @@ public class TestPosition{
 		
 		Position p=new Position(x, y);
 
-		assertEquals(x, p.x, delta);
-		assertEquals(y, p.y, delta);
+		assertEquals(x, p.getX(), delta);
+		assertEquals(y, p.getY(), delta);
 	}
 	@Test
 	public void testDistanceToHorizontal(){
@@ -56,6 +56,16 @@ public class TestPosition{
 		assertEquals(Math.sqrt(2), p.distanceTo(q), delta);
 		//reverse
 		assertEquals(Math.sqrt(2), q.distanceTo(p), delta);
+	}
+
+	@Test
+	public void testFromJSON() throws Exception {
+		String json="{\"x\":2.0, \"y\": 3.14}";
+
+		Position p=Position.fromJSON(json);
+
+		assertEquals(2.0, p.getX(), delta);
+		assertEquals(3.14, p.getY(), delta);
 	}
 
 }

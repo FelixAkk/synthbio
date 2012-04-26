@@ -10,6 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import synthbio.files.BioBrickReader;
+import synthbio.models.*;
 
 public class TestBioBrickReader{
 
@@ -28,8 +29,18 @@ public class TestBioBrickReader{
 	 */
 	@Test
 	public void testBioBrickCounts(){
-		assertEquals(45, bbr.getAndPromotors().length);
-		assertEquals(10, bbr.getCDSs().length);
-		assertEquals(10, bbr.getNotPromotors().length);
+		assertEquals(45, bbr.getAndPromotors().size());
+		assertEquals(10, bbr.getCDSs().size());
+		assertEquals(10, bbr.getNotPromotors().size());
+	}
+
+	/**
+	 * Check getCDS response.
+	 */
+	@Test
+	public void testGetCDS(){
+		CDS c=bbr.getCDS("A");
+
+		assertEquals("A", c.getName());
 	}
 }

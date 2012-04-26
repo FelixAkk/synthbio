@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This example was taken from the slides of Bastiaan van den Berg -->
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+	<model id="example">
+	
+		<listOfUnitDefinitions>
+			<unitDefinition id="substance" name="substance">
+				<listOfUnits>
+					<unit kind="mole"/>
+				</listOfUnits>
+			</unitDefinition>
+			<unitDefinition id="time" name="time">
+				<listOfUnits>
+					<unit kind="second"/>
+				</listOfUnits>
+			</unitDefinition>
+		</listOfUnitDefinitions>
+		
+		<listOfCompartments>
+			<compartment metaid="cell" id="cell" size="1" units="volume"/>
+		</listOfCompartments>
+		
+		<listOfSpecies>
+			<species id="g" name="gene" compartment="cell" initialAmount="3" hasOnlySubstanceUnits="true" boundaryCondition="true" charge="0" constant="true"/>
+			<species id="p" name="protein" compartment="cell" initialAmount="0"/>
+			<species id="m" name="mRNA" compartment="cell" initialAmount="0"/>
+			<species id="r" name="repressor" compartment="cell" initialAmount="0"/>
+			<species id="e" name="empty" compartment="cell" initialAmount="0"/>
+		</listOfSpecies>
+		
+		<listOfReactions>
+			<reaction id="transcription" reversible="false" fast="false">
+				<listOfReactants>
+					<speciesReference species="g"/>
+				</listOfReactants>
+				
+				<listOfProducts>
+					<speciesReference species="m"/>
+				</listOfProducts>
+				
+				<listOfModifiers>
+					<speciesReference species="r"/>
+				</listOfModifiers>
+				
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+						<apply>
+							<divide/>
+								<apply>
+									<times/>
+										<ci>k1</ci>
+										<apply>
+											<power/>
+												<ci>Km</ci>
+												<ci>n</ci>
+										</apply>
+								</apply>
+								<apply>
+									<plus/>
+										<apply>
+											<power/>
+												<ci>Km</ci>
+												<ci>n</ci>
+										</apply>
+										<apply>
+											<power/>
+												<ci>r</ci>
+												<ci>n</ci>
+										</apply>
+								</apply>
+						</apply>
+					</math>
+					
+					<listOfParameters>
+						<parameter id="k1" name="k1" value="5" units="substance"/>
+						<parameter id="Km" name="Kmconst" value="10" units="substance"/>
+						<parameter id="n" name="hill" value="2" units="substance"/>
+					</listOfParameters>
+				</kineticLaw>
+			</reaction>
+		</listOfReactions>
+	</model>
+</sbml>

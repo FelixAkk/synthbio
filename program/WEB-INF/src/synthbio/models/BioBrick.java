@@ -14,7 +14,7 @@ import org.json.JSONObject;
  * 
  * @author jieter
  */
-abstract class BioBrick{
+abstract class BioBrick implements JSONString{
 	
 	/**
 	 * Returns a String containing a JSON representation for the current

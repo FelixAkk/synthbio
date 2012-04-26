@@ -13,15 +13,6 @@ package synthbio.models;
 public class AndPromotor extends Promotor {
 
 	/**
-	 * Names is used to determine which properties to include
-	 * when serializing the object to JSON.
-	 */
-	protected final String[] getNames(){
-		String ret[]={"tf1", "tf2", "k1", "km", "n"};
-		return ret;
-	}
-	
-	/**
 	 * Names of the Transcription factors
 	 */
 	public final String tf1;
@@ -39,9 +30,29 @@ public class AndPromotor extends Promotor {
 	public String getTf2(){
 		return this.tf2;
 	}
-	
+
+	public String kind(){
+		return "and";
+	}
+
 	/**
-	 * Parse from CSV row.
+	 * Is this AndPromotor composed of these two TF's?
+	 * 
+	 */
+	public boolean hasTfs(String tf1, String tf2){
+		return
+			this.tf1.equals(tf1) && this.tf2.equals(tf2) ||
+			this.tf2.equals(tf1) && this.tf1.equals(tf2);
+	}
+
+	/**
+	 * Return a simple string representation.
+	 */
+	public String toString(){
+		return this.getTf1()+","+this.getTf2();
+	}
+	/**
+	 * Parse an AndPromotor from CSV row.
 	 */
 	public static AndPromotor fromCSV(String row){
 		String[] tokens=row.split(",");

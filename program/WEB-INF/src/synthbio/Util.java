@@ -1,3 +1,7 @@
+/**
+ * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * https://github.com/FelixAkk/synthbio
+ */
 package synthbio;
 
 import java.io.BufferedReader;
