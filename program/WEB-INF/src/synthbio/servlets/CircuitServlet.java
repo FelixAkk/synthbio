@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 
 import synthbio.json.JSONResponse;
-import synthbio.files.BioBrickReader;
+import synthbio.files.BioBrickRepository;
 import synthbio.models.CDS;
 
 
