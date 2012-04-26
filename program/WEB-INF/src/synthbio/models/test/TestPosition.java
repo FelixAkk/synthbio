@@ -54,6 +54,8 @@ public class TestPosition{
 		Position q=new Position(2, 2);
 
 		assertEquals(Math.sqrt(2), p.distanceTo(q), delta);
+		//reverse
+		assertEquals(Math.sqrt(2), q.distanceTo(p), delta);
 	}
 
 }

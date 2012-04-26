@@ -63,8 +63,33 @@ synthbio.requests.getCDSs = function(callback){
 				list[i]=synthbio.CDS.fromMap(response.data[i]);
 			});
 			return callback(list);
-		}
+		},
+		error:
+		always:
 	});
 };
 
-
+/**
+ * Define the listFiles method.
+ */
+synthbio.requests.listFiles = function(callback){
+	if(!(callback instanceof Function)){
+		throw "Callback function should be supplied";
+	}
+	
+	synthbio.requests.baseXHR({
+		url: "/ListFiles",
+		//parse list of cdses and call the callback with that list.
+		success: function(response){
+			if(!response.success){
+				return callback(response.message);
+			}
+			return callback(list);
+		}
+		error: function(){
+			return callback("Error has occured. Cannot get list of files from server")
+		}
+		always: callback()
+		
+	});
+};

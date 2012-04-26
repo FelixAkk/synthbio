@@ -34,6 +34,7 @@
 				<fileset dir="${src}">
 					<exclude name="**/json/tests/*"/>
 					<exclude name="**/servlets/test/*"/>
+					<include name="**/simulator/test/*"/>
 					<include name="**/Test*.java" />
 				</fileset>
 			</batchtest>
