@@ -16,15 +16,13 @@
 var date = new Date();
 
 $(document).ready(function() {
-	
-	/**
-	 * Activate zhe Dropdowns Herr Doktor!
-	 */
+	// Activate zhe Dropdowns Herr Doktor!
 	$('.dropdown-toggle').dropdown();
 	
-	/**
-	 * Load proteins from server.
-	 */
+	// Start pinging
+	pingServer();
+	
+	// Load proteins from server.
 	$('#list-proteins').on('show', function(){
 		synthbio.requests.getCDSs(function(response){
 			if(response instanceof String){
@@ -37,33 +35,31 @@ $(document).ready(function() {
 			});
 			$('#list-proteins tbody').html(html);
 		});
-			
 	});
 	
-	/**
-	 * Ping server to check for connection 'vitals'. Shown a warning if things go really bad.
-	 */
-	var pingServer = function(){
-		var fCount = 0; // Failure count: The amount of times that connection attempts have failed. Resets to 0 on success.
-		var limit = 3; // Amount of times after which a dialog should prompt the user about the failures.
-		var frequency = 500; // The delay between ping calls in milliseconds.
-		return function () {
-			var t = date.getTime();
-			$.ajax("/Ping")
-				.done(function(data) {
-					$('#ping').html('Server status: <b>Connected to server <em class="icon-connected"></em> [latency: ' + (date.getTime() - t) + 'ms]</b>');
-					fCount = 0;
-				})
-				.fail(function(data) {
-					$('#ping').html('Server status: <b>Warning: not connected to server! <em class="icon-failed"></em></b>');
-					$('#ping').attr('class', 'failed');
-					if(fCount  <= limit+1) fCount++; // Keep counting untill the dialog was shown
-					if(fCount == limit) $('#connection-modal').modal(); // Show the dialog once
-				})
-				.always(function() { setTimeout(pingServer, 500); });
-		};
-	}();
-	pingServer();
-
-	// end
 });
+
+
+/**
+ * Ping server to check for connection 'vitals'. Shown a warning if things go really bad.
+ */
+var pingServer = function(){
+	var fCount = 0; // Failure count: The amount of times that connection attempts have failed. Resets to 0 on success.
+	var limit = 3; // Amount of times after which a dialog should prompt the user about the failures.
+	var frequency = 500; // The delay between ping calls in milliseconds.
+	return function () {
+		var t = date.getTime();
+		$.ajax("/Ping")
+			.done(function(data) {
+				$('#ping').html('Server status: <b>Connected to server <em class="icon-connected"></em> [latency: ' + (date.getTime() - t) + 'ms]</b>');
+				fCount = 0;
+			})
+			.fail(function(data) {
+				$('#ping').html('Server status: <b>Warning: not connected to server! <em class="icon-failed"></em></b>');
+				$('#ping').attr('class', 'failed');
+				if(fCount  <= limit+1) fCount++; // Keep counting untill the dialog was shown
+				if(fCount == limit) $('#connection-modal').modal(); // Show the dialog once
+			})
+			.always(function() { setTimeout(pingServer, 500); });
+	};
+}();
