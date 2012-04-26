@@ -32,10 +32,13 @@ abstract class Promotor extends BioBrick{
 		return this.n;
 	}
 
-	public static AndPromotor fromSignals(Signal inA, Signal inB){
-		return null;
-	}
-	public static NotPromotor fromSignal(Signal in){
-		return null;
-	}
+	/**
+	 * Return the kind of Promotor we are representing.
+	 *
+	 * Since the JSON serialisation methods use the get*-methods to
+	 * fetch the data from the objects, we do not use such a name scheme
+	 * for this method.
+	 */
+	public abstract String kind();
+		
 }

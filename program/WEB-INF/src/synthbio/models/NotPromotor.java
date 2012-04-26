@@ -5,7 +5,6 @@
 
 package synthbio.models;
 
-
 /**
  * NotPromotor value object.
  *
@@ -17,7 +16,7 @@ public class NotPromotor extends Promotor {
 	 * Name of the transcription factor
 	 */
 	public final String tf;
-		
+
 	public NotPromotor(String tf, double k1, double km, int n){
 		super(k1, km, n);
 		this.tf=tf;
@@ -27,6 +26,17 @@ public class NotPromotor extends Promotor {
 		return this.tf;
 	}
 
+	public String kind(){
+		return "not";
+	}
+
+	/**
+	 * Return a simple string representation.
+	 */
+	public String toString(){
+		return this.getTf();
+	}
+	
 	/**
 	 * Parse from CSV row.
 	 */

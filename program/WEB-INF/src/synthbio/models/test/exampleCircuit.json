@@ -2,8 +2,8 @@
   "name": "example.syn",
   "description": "Logic for this circuit: D = ~(A^B)",
   "gates": [
-    { "type": "and", "position": {"x": 2,"y": 2}},
-    { "type": "not", "position": {"x": 2,"y": 4}}
+    { "kind": "and", "position": {"x": 2,"y": 2}},
+    { "kind": "not", "position": {"x": 2,"y": 4}}
   ],
   "signals": [
     { "from": "input", "to": 0, "protein": "A"},

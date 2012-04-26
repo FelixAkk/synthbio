@@ -46,6 +46,12 @@ public class CDS extends BioBrick{
 	}
 
 	/**
+	 * Return a simple string representation.
+	 */
+	public String toString(){
+		return this.getName();
+	}
+	/**
 	 * Parse from CSV row.
 	 */
 	public static CDS fromCSV(String row){
@@ -61,9 +67,4 @@ public class CDS extends BioBrick{
 			Double.parseDouble(tokens[3])
 		);
 	}
-
-	public static CDS fromSignal(Signal s){
-		return null;
-	}
-		
 }

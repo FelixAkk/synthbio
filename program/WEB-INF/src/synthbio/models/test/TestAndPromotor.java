@@ -71,6 +71,25 @@ public class TestAndPromotor{
 		
 	}
 
+	@Test
+	public void testHasTfs(){
+		String tf1="A";
+		String tf2="B";
+		double k1=4.5272;
+		double km=238.9569;
+		int n=3;
+		
+		AndPromotor AND_ab=new AndPromotor(tf1, tf2, k1, km, n);
+
+		assertTrue(AND_ab.hasTfs("A", "B"));
+		assertTrue(AND_ab.hasTfs("B", "A"));
+		
+		assertFalse(AND_ab.hasTfs("B", "C"));
+		assertFalse(AND_ab.hasTfs("B", "B"));
+		assertFalse(AND_ab.hasTfs("A", "A"));
+		
+		
+	}
 	/**
 	 * Test fromCSV
 	 */

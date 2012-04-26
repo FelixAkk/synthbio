@@ -1,0 +1,21 @@
+{
+  "name": "example2.syn",
+  "description": "Another example G=(A^B^C^D)",
+  "gates": [
+    { "kind": "and", "position": {"x": 2,"y": 2}},
+    { "kind": "and", "position": {"x": 2,"y": 4}},
+    { "kind": "and", "position": {"x": 4,"y": 3}}
+  ],
+  "signals": [
+    { "from": "input", "to": 0, "protein": "A"},
+    { "from": "input", "to": 0, "protein": "B"},
+    { "from": "input", "to": 1, "protein": "C"},
+    { "from": "input", "to": 2, "protein": "D"},
+    { "from": 0, "to": 2, "protein": "E"},
+    { "from": 1, "to": 2, "protein": "F"},
+    { "from": 2, "to": 'output', "protein": "G"}
+  ],
+  "grouping": [
+
+  ]
+}
