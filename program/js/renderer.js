@@ -12,13 +12,9 @@ $(document).ready(function() {
 
 	jsPlumb.ready(function() {
 
-
-		jsPlumb.Defaults.Container = $("#grid-container");
 		jsPlumb.setRenderMode(jsPlumb.SVG);
-
-		//document.onselectstart = function(){return false;};	
 		
-
+		jsPlumb.Defaults.Container = $("#grid-container");
 		jsPlumb.draggable($("#grid-container .gate"));
 
 		var fillColor = "gray"; 
