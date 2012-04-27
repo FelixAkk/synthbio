@@ -10,7 +10,7 @@
     { "from": "input", "to": 0, "protein": "A"},
     { "from": "input", "to": 0, "protein": "B"},
     { "from": "input", "to": 1, "protein": "C"},
-    { "from": "input", "to": 2, "protein": "D"},
+    { "from": "input", "to": 1, "protein": "D"},
     { "from": 0, "to": 2, "protein": "E"},
     { "from": 1, "to": 2, "protein": "F"},
     { "from": 2, "to": 'output', "protein": "G"}

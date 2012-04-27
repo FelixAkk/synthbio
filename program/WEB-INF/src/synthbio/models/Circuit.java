@@ -275,5 +275,11 @@ public class Circuit implements JSONString{
 		return ret;
 	}
 
-	
+	public String toString(){
+		String ret="Circuit: "+this.getName()+" | "+this.getDescription()+"\n";
+		for(Gate g: this.getGates()){
+			ret+=g.toString()+"\n";
+		}
+		return ret;
+	}
 }
