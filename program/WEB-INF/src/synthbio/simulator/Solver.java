@@ -32,7 +32,9 @@ public class Solver {
 	/**
 	 * Solves a SBML file.
 	 */
-	public MultiTable solveWithFile(String fileName, double stepSize, double timeEnd) {
+	public MultiTable solveWithFile(String fileName, double stepSize, double timeEnd)
+		throws XMLStreamException, IOException,
+						ModelOverdeterminedException, SBMLException, DerivativeException {
 		Model model = (new SBMLReader()).readSBML(fileName).getModel();
 		return solve(model, stepSize, timeEnd);
 	}
@@ -40,7 +42,9 @@ public class Solver {
 	/**
 	 * Solves a Model-object.
 	 */
-	public MultiTable solve(Model model, double stepSize, double timeEnd) {
+	public MultiTable solve(Model model, double stepSize, double timeEnd)
+		throws XMLStreamException, IOException,
+						ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Setup solver
 		AbstractDESSolver solver = new EulerMethod();
 		solver.setStepSize(stepSize);
