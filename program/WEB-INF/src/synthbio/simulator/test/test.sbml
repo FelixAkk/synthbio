@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This example was taken from the slides of Bastiaan van den Berg -->
-<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+<!-- This example was taken from the slides of Bastiaan van den Berg, but fixed to proper SBML -->
+<sbml xmlns="http://www.sbml.org/sbml/level2" level="2" version="4">
 	<model id="example">
 	
 		<listOfUnitDefinitions>
@@ -17,11 +17,11 @@
 		</listOfUnitDefinitions>
 		
 		<listOfCompartments>
-			<compartment metaid="cell" id="cell" size="1" units="volume"/>
+			<compartment id="cell" size="1" units="volume"/>
 		</listOfCompartments>
 		
 		<listOfSpecies>
-			<species id="g" name="gene" compartment="cell" initialAmount="3" hasOnlySubstanceUnits="true" boundaryCondition="true" charge="0" constant="true"/>
+			<species id="g" name="gene" compartment="cell" initialAmount="3" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="true"/>
 			<species id="p" name="protein" compartment="cell" initialAmount="0"/>
 			<species id="m" name="mRNA" compartment="cell" initialAmount="0"/>
 			<species id="r" name="repressor" compartment="cell" initialAmount="0"/>
@@ -30,13 +30,13 @@
 		
 		<listOfReactions>
 			<reaction id="transcription" reversible="false" fast="false">
-				<listOfReactants>
-					<speciesReference species="g"/>
-				</listOfReactants>
+				<listOfReactants> 
+					<speciesReference species="g"/> 
+				</listOfReactants> 
 				
-				<listOfProducts>
-					<speciesReference species="m"/>
-				</listOfProducts>
+				<listOfProducts> 
+					<speciesReference species="m"/> 
+				</listOfProducts> 
 				
 				<listOfModifiers>
 					<speciesReference species="r"/>
