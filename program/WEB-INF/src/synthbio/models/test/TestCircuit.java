@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 import synthbio.Util;
 import synthbio.models.Circuit;
+import synthbio.models.CircuitException;
 import synthbio.models.Gate;
 
 /**
@@ -94,5 +95,15 @@ public class TestCircuit{
 		assertEquals("[and(F,G)->H @(4.0,3.0)]", c.gateAt(2).toString());
 		assertEquals("[not(E)->G @(5.0,5.0)]", c.gateAt(3).toString());
 	}
-	
+
+	/**
+	 * An exception should be thrown if an AND gate has not exactly
+	 * two input signals.
+	 */
+	@Test(expected=CircuitException.class)
+	public void testFromJSON_incompleteAnd() throws Exception{
+		String json=Util.fileToString("src/synthbio/models/test/incompleteAndCircuit.json");
+		Circuit c=Circuit.fromJSON(json);
+
+	}
 }

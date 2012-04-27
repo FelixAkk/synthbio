@@ -19,9 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONString;
 
+import synthbio.models.CircuitException;
 import synthbio.files.BioBrickRepository;
 
 /**
@@ -32,13 +34,13 @@ public class Circuit implements JSONString{
 	private String name;
 	private String description;
 
-	private ArrayList<Gate> gates;
+	private ArrayList<Gate> gates=new ArrayList<Gate>();
 	
 
 	/**
 	 * Construct the Circuit.
 	 *
-	 * Initilizes gates and signals to empty ArrayList. Constructor
+	 * Initilizes gates and signals to empty HashMap. Constructor
 	 * allows invalid circuits to be created.
 	 *
 	 * @param name 			Name of the circuit
@@ -49,7 +51,6 @@ public class Circuit implements JSONString{
 		this.name=name;
 		this.description=description;
 
-		this.gates=new ArrayList<Gate>();
 		if(gates!=null){
 			this.gates.addAll(gates);
 		}
@@ -83,12 +84,22 @@ public class Circuit implements JSONString{
 	}
 
 	
-	public void addGate(Gate n){
-		this.gates.add(n);
+	public void addGate(Gate g){
+		this.gates.add(g);
 	}
 
+	/**
+	 * Do we have a gate with index?
+	 */
 	public boolean hasGateAt(int index){
-		return index > 0 || index < this.gates.size();
+		//dirty
+		//anyone an idea how to fix this?
+		try{
+			this.gates.get(index);
+		}catch(IndexOutOfBoundsException e){
+			return false;
+		}
+		return true;
 	}
 	
 	public Gate gateAt(int i){
@@ -150,7 +161,7 @@ public class Circuit implements JSONString{
 	 * @param The String containin JSON
 	 * @return The Circuit.
 	 */
-	public static Circuit fromJSON(String json) throws Exception {
+	public static Circuit fromJSON(String json) throws CircuitException,JSONException {
 		return Circuit.fromJSON(new JSONObject(json));
 	}
 
@@ -164,7 +175,7 @@ public class Circuit implements JSONString{
 	 * @param The JSONObject containing the circuit information.
 	 * @return The Circuit.
 	 */
-	public static Circuit fromJSON(JSONObject json) throws Exception {
+	public static Circuit fromJSON(JSONObject json) throws CircuitException,JSONException {
 		Circuit ret=new Circuit(
 			json.getString("name"),
 			json.getString("description")
@@ -195,16 +206,20 @@ public class Circuit implements JSONString{
 		 */
 		JSONArray JSONSignals=json.getJSONArray("signals");
 		if(JSONSignals.length()<=0){
-			//todo: Do we want to remove the gates as well, because the
-			//circuit is pretty useless without proper signals.
-			//however, when work is in progress, lonely gates could be
-			//handy...
-			return ret;
+			/* Circuit is only defined with gates and signals, so fail if
+			 * no signals are present.
+			 */
+			throw new CircuitException("Circuit has no signals");
 		}
 		
-		/*Create BioBrick repository.
+		/* Create BioBrick repository.
 		 */
-		BioBrickRepository bbr=new BioBrickRepository();
+		BioBrickRepository bbr;
+		try{
+			bbr=new BioBrickRepository();
+		}catch(Exception e){
+			throw new CircuitException("Could not load BioBrick Repository");
+		}
 		
 		JSONObject signal;
 		int from;
@@ -220,7 +235,7 @@ public class Circuit implements JSONString{
 			if(signal.get("from") instanceof Integer){
 				from=signal.getInt("from");
 				if(!ret.hasGateAt(from)){
-					throw new Exception("Signal.from points to non-existant Gate.");
+					throw new CircuitException("Signal.from points to non-existant Gate.");
 				}
 				
 				//update from gate with the right CDS.
@@ -233,7 +248,7 @@ public class Circuit implements JSONString{
 					//check if this signal protein is the same as
 					//already present, if not, throw an exception.
 					if(!ret.gateAt(from).getCDS().getName().equals(signal.getString("protein"))){
-						throw new Exception("CDS for gate "+from+" is ambigious");
+						throw new CircuitException("CDS for gate "+from+" is ambigious");
 					}
 				}
 			}else{
@@ -244,7 +259,7 @@ public class Circuit implements JSONString{
 			if(signal.get("to") instanceof Integer){
 				to=signal.getInt("to");
 				if(!ret.hasGateAt(to)){
-					throw new Exception("Signal.to points to non-existant Gate.");
+					throw new CircuitException("Signal.to points to non-existant Gate.");
 				}
 
 				//Not Gate can be connected right away.
@@ -267,11 +282,11 @@ public class Circuit implements JSONString{
 				//output signal, nothing to do at the output.
 			}
 		}
-/*
-		if(tmpTF!=""){
-			throw new Exception("And gate with one input");
+
+		if(tmpTF.size()!=0){
+			throw new CircuitException("At least one AND gate has only one input.");
 		}
-*/
+
 		return ret;
 	}
 
