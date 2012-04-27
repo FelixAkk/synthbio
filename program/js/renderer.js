@@ -63,15 +63,24 @@ $(document).ready(function() {
 			isTarget:true
 		};			
 
-		var allSourceEndpoints = [], allTargetEndpoints = [];
-		_addEndpoints = function(toId, sourceAnchors, targetAnchors) {
-			for (var i = 0; i < sourceAnchors.length; i++) {
-				var sourceUUID = toId + sourceAnchors[i];
-				allSourceEndpoints.push(jsPlumb.addEndpoint(toId, sourceEndpoint, { anchor:sourceAnchors[i], uuid:sourceUUID }));
+		
+
+		var allSourceEndpoints = [], allTargetEndpoints = [],
+		_addEndpoints = function(toId, inputAnchors, outputAnchors) {
+			inputAnchors--;
+			outputAnchors--;
+			
+			var placement = function(num, total) {
+				return (total < 1) ? 0.5 : (num / total);
 			}
-			for (var j = 0; j < targetAnchors.length; j++) {
-				var targetUUID = toId + targetAnchors[j];
-				allTargetEndpoints.push(jsPlumb.addEndpoint(toId, targetEndpoint, { anchor:targetAnchors[j], uuid:targetUUID }));
+
+			for (var j = 0; j <= inputAnchors; j++) {
+				var targetUUID = toId + "_input" + j;
+				allTargetEndpoints.push(jsPlumb.addEndpoint(toId, targetEndpoint, { anchor:[0, placement(j, inputAnchors), -1, 0], uuid:targetUUID }));
+			}
+			for (var i = 0; i <= outputAnchors; i++) {
+				var sourceUUID = toId + "_output" + i;
+				allSourceEndpoints.push(jsPlumb.addEndpoint(toId, sourceEndpoint, { anchor:[1, placement(i, outputAnchors), 1, 0], uuid:sourceUUID }));
 			}
 		};
 
@@ -80,11 +89,11 @@ $(document).ready(function() {
 			connInfo.connection.getOverlay("label").setLabel("I am a banana");
 		});
 
-		_addEndpoints("hoi1", ["RightMiddle"], ["TopLeft", "BottomLeft"]);
-		_addEndpoints("hoi2", ["TopRight", "BottomRight"], ["LeftMiddle"]);
+		_addEndpoints("hoi1", 1, 2);
+		_addEndpoints("hoi2", 2, 1);
 
 		// connect a few up
-		jsPlumb.connect({uuids:["hoi2TopRight", "hoi1TopLeft"]});
-		jsPlumb.connect({uuids:["hoi2BottomRight", "hoi1BottomLeft"]});
+		jsPlumb.connect({uuids:["hoi2_output0", "hoi1_input0"]});
+		//jsPlumb.connect({uuids:["hoi2BottomRight", "hoi1BottomLeft"]});
 	});
 });
