@@ -37,7 +37,10 @@ public class TestSolver {
 	private final String sbmlfile1 = "src/synthbio/simulator/test/test.sbml";
 	private final String sbmlfile2 = "src/synthbio/simulator/test/test2.sbml";
 	
-	@Test @Ignore
+	/**
+	 * test.sbml is not valid sbml.
+	 */
+	@Test
 	public void testSBMLSolve() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveWithFile(sbmlfile1, 1, 5);
 		System.out.println(solution.toString());
