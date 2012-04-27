@@ -1,0 +1,15 @@
+{
+  "name": "incomplete_and.syn",
+  "description": "A circuit with one AND gate with only one input.",
+  "gates": [
+    { "kind": "and", "position": {"x": 2,"y": 2}}
+  ],
+  "signals": [
+    { "from": "input", "to": 0, "protein": "A"},
+    { "from": "input", "to": 1, "protein": "B"},
+    { "from": 0, "to": "output", "protein": "C"}
+  ],
+  "grouping": [
+
+  ]
+}
