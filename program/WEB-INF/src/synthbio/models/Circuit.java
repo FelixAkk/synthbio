@@ -132,9 +132,11 @@ public class Circuit implements JSONString{
 	 *
 	 * @todo implement
 	 */
+/*
 	public Collection<Signal> collectSignals(){
 		return null;
 	}
+*/
 	
 	/**
 	 * Convert the current object state to JSON
@@ -148,7 +150,7 @@ public class Circuit implements JSONString{
 			ret.put("name", this.getName());
 			ret.put("description", this.getDescription());
 			ret.put("gates", this.getGates());
-			ret.put("signals", this.collectSignals());
+		//	ret.put("signals", this.collectSignals());
 		}catch(Exception e){
 			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
 		}
