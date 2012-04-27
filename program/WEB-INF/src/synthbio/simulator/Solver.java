@@ -4,7 +4,9 @@
  * Contextproject TI2800 
  * TU Delft - University of Technology
  *
- * @author Albert ten Napel
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
  */
@@ -20,22 +22,25 @@ import org.simulator.math.odes.AbstractDESSolver;
 import org.simulator.math.odes.EulerMethod;
 import org.simulator.math.odes.MultiTable;
 import org.simulator.sbml.SBMLinterpreter;
- 
+
+/**
+ * A class for solving SBML-files and Model-objects.
+ * @author Albert ten Napel
+ */
 public class Solver {
 
 	/**
 	 * Solves a SBML file.
 	 */
-	public String solveWithFile(String fileName, double stepSize, double timeEnd) {
-		
+	public MultiTable solveWithFile(String fileName, double stepSize, double timeEnd) {
+		Model model = (new SBMLReader()).readSBML(fileName).getModel();
+		return solve(model, stepSize, timeEnd);
 	}
 
 	/**
 	 * Solves a Model-object.
 	 */
-	public String solve(String fileName, double stepSize, double timeEnd) {
-		// Load SBML model
-		Model model = (new SBMLReader()).readSBML(fileName).getModel();
+	public MultiTable solve(Model model, double stepSize, double timeEnd) {
 		// Setup solver
 		AbstractDESSolver solver = new EulerMethod();
 		solver.setStepSize(stepSize);
@@ -46,6 +51,8 @@ public class Solver {
 		}
 		// Compute the solution
 		MultiTable solution = solver.solve(interpreter, interpreter.getInitialValues(), 0d, timeEnd);
+		
+		return solution;
 	}
 	
 } 
