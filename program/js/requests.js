@@ -48,23 +48,23 @@ synthbio.requests.baseXHR = function(provided){
 /**
  * Define the getCDSs request.
  */
-synthbio.requests.getCDSs = function(callback){
-	if(!(callback instanceof Function)){
-		throw "Callback function should be supplied";
-	}
+synthbio.requests.getCDSs = function(){
+	//if(!(callback instanceof Function)){
+	//	throw "Callback function should be supplied";
+	//}
 	
 	synthbio.requests.baseXHR({
-		url: "http://localhost/WEB-INF/src/synthbio/servlets/ListProteinsServlet",
+		url: "/ListProteinsServlet",
 		//parse list of cdses and call the callback with that list.
 		success: function(response){
 			if(!response.success){
-				return callback(response.message);
+				return response.message;
 			}
 			var list=[];
 			$.each(response.data, function(i, elem){
 				list[i]=synthbio.CDS.fromMap(response.data[i]);
 			});
-			return callback(list);
+			return list;
 		},
 		
 	});
