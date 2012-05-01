@@ -4,6 +4,11 @@
 	<property name="build" value="classes"/>
 
 	<path id="project-classpath">
+		<!--
+			Make sure Hamcrest is included first, to avoid SecurityExceptions from different Hamcrest versions being included.
+			(http://www.shaunabram.com/hamcrest/)
+		-->
+		<fileset dir="lib" includes="hamcrest*.jar" />
 		<fileset dir="lib" includes="*.jar" />
 		<fileset dir="lib/htmlunit" includes="*.jar" />
 	</path>
@@ -12,6 +17,9 @@
 		<mkdir dir="${build}"/> 
 	</target>
 
+	<!--
+		Compile all sources.
+	-->
 	<target name="compile" depends="init">
 		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false"/>
 	</target>
@@ -20,7 +28,7 @@
 	<target name="build" depends="compile" />
 
 	<!--
-	Test all non-servlet tests.
+		Test all non-servlet tests.
 	-->
 	<target name="test" depends="compile">
 		<junit fork="yes" printsummary="yes" showoutput="yes">
@@ -29,7 +37,7 @@
 				<pathelement path="${build}"/>
 			</classpath>
 			
-			<batchtest haltonfailure="yes">
+			<batchtest haltonfailure="no">
 				<formatter type="brief" usefile="false" />
 				<fileset dir="${src}">
 					<exclude name="**/json/tests/*"/>
@@ -42,8 +50,8 @@
 	</target>
 
 	<!--
-	Adding another test-target to test the servlets.
-	Seperate, because they take a lot of time.
+		Adding another test-target to test the servlets.
+		Seperate, because they take a lot of time.
 	-->
 	<target name="test-servlets" depends="compile">
 		<junit fork="yes" printsummary="yes" showoutput="yes">
@@ -52,7 +60,7 @@
 				<pathelement path="${build}"/>
 			</classpath>
 			
-			<batchtest haltonfailure="yes">
+			<batchtest haltonfailure="no">
 				<formatter type="brief" usefile="false" />
 				<fileset dir="${src}">
 					<exclude name="**/json/tests/*"/>
@@ -63,7 +71,35 @@
 	</target>
 
 	<target name="test-all" depends="test,test-servlets" />
-	
+
+	<!--
+		Run a single test with
+			ant runtest -Dtest=<TestClass>
+			
+		Or multiple tests with a wildcard:
+			ant runtest -Dtest=*Test
+	-->
+	<target name="ensure-test-name" unless="test">
+		<fail message="You must run this target with -Dtest=TestName"/>
+	</target>
+	<target name="runtest" description="Runs the test you specify on the command line with -Dtest=" depends="compile, ensure-test-name">
+		<junit printsummary="withOutAndErr" fork="yes">
+			<classpath>
+				<path refid="project-classpath" />
+				<pathelement path="${build}"/>
+			</classpath>
+			<formatter type="plain" usefile="false"/>
+			<batchtest>
+				<fileset dir="${src}">
+					<include name="**/${test}.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<!--
+		Clean the compiled stuff
+	-->
 	<target name="clean">
 		<delete dir="${build}" />
 		<mkdir dir="${build}"/> 

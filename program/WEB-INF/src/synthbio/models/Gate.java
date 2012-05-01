@@ -1,18 +1,26 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
 package synthbio.models;
 
-
 import org.json.JSONObject;
+import org.json.JSONString;
 
 /**
  * Gate representation
  * @author jieter
  */
-public class Gate{
+public class Gate implements JSONString{
 
 	/**
 	 * Kind of Gate (and, not).
@@ -84,8 +92,24 @@ public class Gate{
 		this.position=p;
 	}
 
+
 	/**
-	 * String representation in the form of
+	 * Convert Gate to JSON string.
+	 */
+	public String toJSONString(){
+		JSONObject ret=new JSONObject();
+		try{
+			ret.put("kind", this.getKind());
+			ret.put("position", this.getPosition());
+			
+		}catch(Exception e){
+			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
+		}
+		return ret.toString();
+	}
+	
+	/**
+	 * Handy human readable String representation in the form of.
 	 *
 	 * [and(A,B)->C @(x,y)]
 	 * [not(D)->E @(x,y)]

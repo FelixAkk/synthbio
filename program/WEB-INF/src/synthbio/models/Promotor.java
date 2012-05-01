@@ -1,5 +1,13 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
@@ -30,6 +38,18 @@ abstract class Promotor extends BioBrick{
 	}
 	public double getN(){
 		return this.n;
+	}
+
+	public boolean equals(Object other){
+		if(!(other instanceof Promotor)){
+			return false;
+		}
+		Promotor that=(Promotor) other;
+
+		return
+			this.getK1()==that.getK1() &&
+			this.getKm()==that.getKm() &&
+			this.getN()==that.getN();
 	}
 
 	/**

@@ -1,15 +1,25 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
 package synthbio.models.test;
 
-import synthbio.models.AndPromotor;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.*;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import synthbio.models.AndPromotor;
 
 
 /**

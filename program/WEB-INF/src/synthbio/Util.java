@@ -1,17 +1,31 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
+
 package synthbio;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.FileReader;
 
+/**
+ * Utility class.
+ *
+ * Collection of utility function
+ */
 public class Util{
 
 	/**
-	 * quick and dirty file2string method:
+	 * Quick and dirty file2string method:
 	 * 
 	 * from: http://stackoverflow.com/questions/5471406
 	 */

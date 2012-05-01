@@ -1,5 +1,13 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
@@ -30,6 +38,17 @@ public class NotPromotor extends Promotor {
 		return "not";
 	}
 
+	public boolean equals(Object other){
+		if(!super.equals(other)){
+			return false;
+		}
+		if(!(other instanceof NotPromotor)){
+			return false;
+		}
+		NotPromotor that=(NotPromotor) other;
+
+		return this.getTf().equals(that.getTf());
+	}
 	/**
 	 * Return a simple string representation.
 	 */

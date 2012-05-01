@@ -42,11 +42,20 @@
 
 	<servlet>
 		<servlet-name>ListProteins</servlet-name>
-		<servlet-class>synthbio.servlets.ListProteins</servlet-class>
+		<servlet-class>synthbio.servlets.ListProteinsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ListProteins</servlet-name>
 		<url-pattern>/ListProteins</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Circuit</servlet-name>
+		<servlet-class>synthbio.servlets.CircuitServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Circuit</servlet-name>
+		<url-pattern>/Circuit</url-pattern>
 	</servlet-mapping>
 
 </web-app>

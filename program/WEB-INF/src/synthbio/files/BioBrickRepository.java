@@ -1,5 +1,13 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
@@ -24,13 +32,13 @@ import synthbio.models.NotPromotor;
  *
  * @author jieter
  */
-public class BioBrickReader{
+public class BioBrickRepository{
 
 	private Collection<CDS> CDSs=new ArrayList<CDS>();
 	private Collection<NotPromotor> notPromotors=new ArrayList<NotPromotor>();
 	private Collection<AndPromotor> andPromotors=new ArrayList<AndPromotor>();
 
-	public BioBrickReader() throws Exception{
+	public BioBrickRepository() throws Exception{
 		this("biobricks/");
 	}
 	
@@ -42,7 +50,7 @@ public class BioBrickReader{
 	 * @param  path
 	 * @throws FileNotFoundException 
 	 */
-	public BioBrickReader(String path) throws Exception{
+	public BioBrickRepository(String path) throws Exception{
 
 		for(String row: this.getDataRows(path+"and.csv")){
 			if(row!=""){

@@ -1,5 +1,13 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
@@ -65,7 +73,7 @@ public class TestJSONResponse{
 	/**
 	 * put a CDS in the data field, and check json output.
 	 */
-	@Ignore
+	
 	@Test
 	public void testDataCDS(){
 		JSONResponse response=new JSONResponse(true, "");
@@ -93,6 +101,7 @@ public class TestJSONResponse{
 
 		assertEquals(expected, response.toJSONString());
 	}
+	
 	/**
 	 * Array of CDSs.
 	 */

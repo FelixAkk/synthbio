@@ -1,15 +1,25 @@
 /**
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
  * https://github.com/FelixAkk/synthbio
  */
 
 package synthbio.models.test;
 
-import synthbio.models.Position;
-
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
+
+import synthbio.models.Position;
 
 /**
  * Testing the Position
@@ -58,6 +68,37 @@ public class TestPosition{
 		assertEquals(Math.sqrt(2), q.distanceTo(p), delta);
 	}
 
+	@Test
+	public void testEquals(){
+		Position p=new Position(1, 1);
+		Position q=new Position(2, 2);
+		Position r=new Position(1, 1);
+		Position s=new Position(2.0, 2.0);
+		
+		assertEquals(p, p);
+		assertEquals(q, q);
+
+		assertEquals(p, r);
+		
+		assertThat(p, is(not(q)));
+		assertThat(q, is(not(r)));
+
+		assertThat(p, is(not(new Object())));
+
+		assertEquals(q, s);
+	}
+
+	@Test
+	public void testToString(){
+		Position q=new Position(2, 2);
+
+		assertEquals("(2.0,2.0)", q.toString());
+
+		Position p=new Position(3.14, 3.14);
+
+		assertEquals("(3.14,3.14)", p.toString());
+	}
+	
 	@Test
 	public void testFromJSON() throws Exception {
 		String json="{\"x\":2.0, \"y\": 3.14}";
