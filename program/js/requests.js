@@ -43,7 +43,8 @@ synthbio.requests.baseXHR = function(provided){
 }
 
 /**
- * Define the listFiles method.
+ * listFiles
+ * Returns a list of all files
  */
 synthbio.requests.listFiles = function(){
 	
@@ -67,7 +68,8 @@ synthbio.requests.listFiles = function(){
 };
 
 /**
- * Define the getFile method.
+ * getFile method.
+ * Return a file called "fileName"
  */
 synthbio.requests.getFile = function(fileName){
 
@@ -85,7 +87,8 @@ synthbio.requests.getFile = function(fileName){
 };
 
 /**
- * Define the putFile method.
+ * putFile
+ * Store a circuit, "circ", on the server called "fileName"
  */
 synthbio.requests.putFile = function(fileName, circ){
 	
@@ -108,12 +111,11 @@ synthbio.requests.putFile = function(fileName, circ){
 };
 
 /**
- * Define the getCDSs request.
+ * getCDSs
+ * Return a list of all available proteins
  */
 synthbio.requests.getCDSs = function(){
-	//if(!(callback instanceof Function)){
-	//	throw "Callback function should be supplied";
-	//}
+	
 	function callback {};
 	
 	synthbio.requests.baseXHR({
@@ -136,7 +138,8 @@ synthbio.requests.getCDSs = function(){
 };
 
 /**
- * Define the listCircuits method.
+ * ListCircuit
+ * Return a list of all circuits
  */
 synthbio.requests.listCircuits = function(){
 	
@@ -163,7 +166,8 @@ synthbio.requests.listCircuits = function(){
 
 
 /**
- * Define the simulate method.
+ * Simulate
+ * Request to simulate a circuit "fileName" with "input" proteins
  */
 synthbio.requests.simulate = function(fileName, input){
 	
@@ -182,20 +186,21 @@ synthbio.requests.simulate = function(fileName, input){
 };
 
 /**
- * Define the validate method.
+ * Validate
+ * Checks if a circuit 
  */
-synthbio.requests.validate = function(fileName, input){
+synthbio.requests.validate = function(circuit){
 	
 	function callback {};
 	
 	synthbio.requests.baseXHR({
 		url: "/validate",
-		data: [fileName, JSON.stringify(input)]
+		data: [JSON.stringify(circuit)]
 		success: function(response){
 			return callback(response);
 		},
 		error: callback("Error has occured. Cannot validate this circuit. Please check input"),
-		always: callback("simulate called")
+		always: callback("validate called")
 		
 	});
 };
