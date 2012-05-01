@@ -54,7 +54,7 @@ synthbio.requests.getCDSs = function(callback){
 	}
 	
 	synthbio.requests.baseXHR({
-		url: "/ListProteins",
+		url: "http://localhost/WEB-INF/src/synthbio/servlets/ListProteinsServlet",
 		//parse list of cdses and call the callback with that list.
 		success: function(response){
 			if(!response.success){
