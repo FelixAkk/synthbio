@@ -38,6 +38,17 @@ public class NotPromotor extends Promotor {
 		return "not";
 	}
 
+	public boolean equals(Object other){
+		if(!super.equals(other)){
+			return false;
+		}
+		if(!(other instanceof NotPromotor)){
+			return false;
+		}
+		NotPromotor that=(NotPromotor) other;
+
+		return this.getTf().equals(that.getTf());
+	}
 	/**
 	 * Return a simple string representation.
 	 */

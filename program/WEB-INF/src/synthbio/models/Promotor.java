@@ -40,6 +40,18 @@ abstract class Promotor extends BioBrick{
 		return this.n;
 	}
 
+	public boolean equals(Object other){
+		if(!(other instanceof Promotor)){
+			return false;
+		}
+		Promotor that=(Promotor) other;
+
+		return
+			this.getK1()==that.getK1() &&
+			this.getKm()==that.getKm() &&
+			this.getN()==that.getN();
+	}
+
 	/**
 	 * Return the kind of Promotor we are representing.
 	 *

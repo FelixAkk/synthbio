@@ -92,14 +92,7 @@ public class Circuit implements JSONString{
 	 * Do we have a gate with index?
 	 */
 	public boolean hasGateAt(int index){
-		//dirty
-		//anyone an idea how to fix this?
-		try{
-			this.gates.get(index);
-		}catch(IndexOutOfBoundsException e){
-			return false;
-		}
-		return true;
+		return index >= 0 && index < this.gates.size();
 	}
 	
 	public Gate gateAt(int i){

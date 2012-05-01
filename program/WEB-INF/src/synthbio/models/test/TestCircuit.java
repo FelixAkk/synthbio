@@ -48,7 +48,8 @@ public class TestCircuit{
 	}
 
 	/**
-	 * Test some example circuits
+	 * Test some valid example circuits.
+	 *
 	 */
 	@Test
 	public void testFromJSON1() throws Exception{
@@ -60,7 +61,6 @@ public class TestCircuit{
 		assertEquals("Logic for this circuit: D = ~(A^B)", c.getDescription());
 
 		assertEquals(2, c.getGates().size());
-		//assertEquals(4, c.collectSignals().size());
 
 		assertEquals("[and(A,B)->C @(2.0,2.0)]", c.gateAt(0).toString());
 		assertEquals("[not(C)->D @(2.0,4.0)]", c.gateAt(1).toString());
@@ -104,6 +104,6 @@ public class TestCircuit{
 	public void testFromJSON_incompleteAnd() throws Exception{
 		String json=Util.fileToString("src/synthbio/models/test/incompleteAndCircuit.json");
 		Circuit c=Circuit.fromJSON(json);
-
 	}
+	
 }

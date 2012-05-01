@@ -73,7 +73,7 @@ public class TestJSONResponse{
 	/**
 	 * put a CDS in the data field, and check json output.
 	 */
-	@Ignore
+	
 	@Test
 	public void testDataCDS(){
 		JSONResponse response=new JSONResponse(true, "");
@@ -101,6 +101,7 @@ public class TestJSONResponse{
 
 		assertEquals(expected, response.toJSONString());
 	}
+	
 	/**
 	 * Array of CDSs.
 	 */

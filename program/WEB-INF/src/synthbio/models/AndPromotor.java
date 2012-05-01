@@ -53,6 +53,18 @@ public class AndPromotor extends Promotor {
 			this.tf2.equals(tf1) && this.tf1.equals(tf2);
 	}
 
+	public boolean equals(Object other){
+		if(!super.equals(other)){
+			return false;
+		}
+		if(!(other instanceof AndPromotor)){
+			return false;
+		}
+		AndPromotor that=(AndPromotor) other;
+
+		return this.hasTfs(that.getTf1(), that.getTf2());
+	}
+		
 	/**
 	 * Return a simple string representation.
 	 */

@@ -59,6 +59,14 @@ public class Position{
 		);
 	}
 
+	public boolean equals(Object other){
+		if(!(other instanceof Position)){
+			return false;
+		}
+		Position that=(Position)other;
+
+		return this.getX()==that.getX() && this.getY()==that.getY();
+	}
 	/**
 	 * Return a simple String representation
 	 */

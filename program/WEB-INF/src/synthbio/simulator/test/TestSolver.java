@@ -40,12 +40,14 @@ public class TestSolver {
 	/**
 	 * test.sbml is not valid sbml.
 	 */
+	@Ignore
 	@Test
 	public void testSBMLSolve() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveWithFile(sbmlfile1, 1, 5);
 		System.out.println(solution.toString());
 	}
 	
+	@Ignore
 	@Test
 	public void testSBMLSolve2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveWithFile(sbmlfile2, 1, 5);
