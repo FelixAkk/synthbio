@@ -1,12 +1,14 @@
 /**
- * 		Project Zelula:
- * Synthetic biology modeller/simulator
- * https://github.com/FelixAkk/synthbio
- * by Group E, TU Delft
- * @author	Thomas van Helden, jieter
+ * Project Zelula
  *
- * Definition of requests. All requests made from the client to the server
- * should be defined in this file.
+ * Contextproject TI2800 
+ * TU Delft - University of Technology
+ *  
+ * Authors: 
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ * 
+ * https://github.com/FelixAkk/synthbio
  */
  
 /**
@@ -45,6 +47,8 @@ synthbio.requests.baseXHR = function(provided){
 /**
  * listFiles
  * Returns a list of all files
+ * Callback will be done on the result
+ * Other messages will be shown in console.log
  */
 synthbio.requests.listFiles = function(callback){
 	if(!callback instanceof Function){
@@ -59,7 +63,7 @@ synthbio.requests.listFiles = function(callback){
 			callback(response.data);
 		},
 		error: function(){
-			alert("Error has occured. Cannot get list of files from server");
+			console.log("Error has occured. Cannot get list of files from server");
 		},
 		always: function(){
 			console.log("listFiles called");
@@ -72,6 +76,8 @@ synthbio.requests.listFiles = function(callback){
 /**
  * getFile method.
  * Return a file called "fileName"
+ * Callback function will be applied to the file that is returned
+ * Other info is shown in the console.log
  */
 synthbio.requests.getFile = function(callback, name){
 
@@ -82,7 +88,7 @@ synthbio.requests.getFile = function(callback, name){
 			callback(response);
 		},
 		error: function() { 
-			alert("Error has occured. Cannot get file from server"); 
+			console.log("Error has occured. Cannot get file from server"); 
 		},
 		always: function(){
 			console.log("getFile called");
@@ -93,24 +99,25 @@ synthbio.requests.getFile = function(callback, name){
 /**
  * putFile
  * Store a circuit, "circ", on the server called "fileName"
+ * Callback function will be the return info/errors
  */
-synthbio.requests.putFile = function(name, circ){
+synthbio.requests.putFile = function(callback, name, circ){
 	
 	synthbio.requests.baseXHR({
-		url: "/SaveFiles",
+		url: "/PutFile",
 		type: "POST",
 		data: {fileName: name, circuit: JSON.stringify(circ)},
 		success: function(response){
 			if(!response.success){
-				console.log(response.message);
+				callback(response.message);
 			}
-			console.log("Storage of "+fileName+" successful");
+			callback("Storage of "+fileName+" successful");
 		},
 		error: function(){
-			console.log("Error has occured. Cannot save file on server");
+			callback("Error has occured. Cannot save file on server");
 		},
 		always: function(){
-			console.log("putFile called");
+			callback("putFile called");
 		}
 		
 	});
@@ -119,6 +126,8 @@ synthbio.requests.putFile = function(name, circ){
 /**
  * getCDSs
  * Return a list of all available proteins
+ * Callback will be applied to the returned list
+ * Other messages are shown in console.log
  */
 synthbio.requests.getCDSs = function(callback){
 	
@@ -136,7 +145,7 @@ synthbio.requests.getCDSs = function(callback){
 			callback(list);
 		},
 		error: function(){
-			alert("Error has occured. Cannot get proteins from server");
+			console.log("Error has occured. Cannot get proteins from server");
 		},
 		always: function(){
 			console.log("getCDS called");
@@ -148,6 +157,8 @@ synthbio.requests.getCDSs = function(callback){
 /**
  * ListCircuit
  * Return a list of all circuits
+ * Callback will be applied to the returned list
+ * Other error messages will be shown in console.log
  */
 synthbio.requests.listCircuits = function(callback){
 	
@@ -165,7 +176,7 @@ synthbio.requests.listCircuits = function(callback){
 			callback(list);
 		},
 		error: function(){
-			alert("Error has occured. Cannot get circuits from server");
+			console.log("Error has occured. Cannot get circuits from server");
 		},
 		always: function(){
 			console.log("listCircuit called");
@@ -174,10 +185,38 @@ synthbio.requests.listCircuits = function(callback){
 	});
 };
 
+/**
+ * Circuit to SBML
+ * Save a circuit, "circ", as SBML with a "name"
+ * Callback will be applied on the return messages
+ */
+synthbio.requests.circuitToSBML = function(callback, name, circ){
+	
+	synthbio.requests.baseXHR({
+		url: "/CircuitToSBML",
+		type: "POST",
+		data: {fileName: name, circuit: JSON.stringify(circ)},
+		success: function(response){
+			if(!response.success){
+				callback(response.message);
+			}
+			callback(response);
+		},
+		error: function(){
+			callback("Error has occured. Cannot save circuit");
+		},
+		always: function(){
+			callback("circuitToSBML called");
+		}
+		
+	});
+};
 
 /**
  * Simulate
  * Request to simulate a circuit "fileName" with "input" proteins
+ * Callback will be applied on the returned data
+ * Other messages are shown in console.log
  */
 synthbio.requests.simulate = function(callback, name, input){
 	
@@ -190,7 +229,7 @@ synthbio.requests.simulate = function(callback, name, input){
 			callback(response);
 		},
 		error: function(){
-			alert("Error has occured. Cannot simulate this circuit");
+			console.log("Error has occured. Cannot simulate this circuit");
 		},
 		always: function(){
 			console.log("simulate called");
@@ -201,7 +240,8 @@ synthbio.requests.simulate = function(callback, name, input){
 
 /**
  * Validate
- * Checks if a circuit 
+ * Checks if a circuit is ready to be simulated
+ * Callback will be applied on the return messages
  */
 synthbio.requests.validate = function(callback,circuit){
 	
@@ -213,8 +253,12 @@ synthbio.requests.validate = function(callback,circuit){
 		success: function(response){
 			callback(response);
 		},
-		error: alert("Error has occured. Cannot validate this circuit. Please check input"),
-		always: console.log("validate called")
+		error: function(){
+			alert("Error has occured. Cannot validate this circuit. Please check input");
+		},
+		always: function(){
+			console.log("validate called");
+		}
 		
 	});
 };

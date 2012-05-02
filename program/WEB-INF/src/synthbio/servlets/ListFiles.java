@@ -25,7 +25,6 @@ import synthbio.json.JSONResponse;
 
 /**
  * Servlet ListFiles returns a default list saved files.
- * @author Thomas van Helden
  */
 @SuppressWarnings("serial")
 public class ListFiles extends SynthbioServlet {
