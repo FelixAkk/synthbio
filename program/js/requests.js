@@ -254,10 +254,10 @@ synthbio.requests.validate = function(callback,circuit){
 			callback(response);
 		},
 		error: function(){
-			alert("Error has occured. Cannot validate this circuit. Please check input");
+			callback("Error has occured. Cannot validate this circuit. Please check input");
 		},
 		always: function(){
-			console.log("validate called");
+			callback("validate called");
 		}
 		
 	});
