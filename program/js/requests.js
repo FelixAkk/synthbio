@@ -56,7 +56,7 @@ synthbio.requests.listFiles = function(callback){
 			if(!response.success){
 				return console.log(response.message);
 			}
-			return callback(response.data);
+			callback(response.data);
 		},
 		error: function(){
 			alert("Error has occured. Cannot get list of files from server");
