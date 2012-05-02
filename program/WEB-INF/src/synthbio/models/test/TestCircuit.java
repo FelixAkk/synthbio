@@ -14,11 +14,9 @@
 package synthbio.models.test;
 
 import static org.junit.Assert.assertEquals;
-
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test;
-
 
 import java.util.ArrayList;
 
@@ -51,15 +49,19 @@ public class TestCircuit{
 		assertEquals(new ArrayList<Gate>(), c.getGates());
 	}
 
+	private Circuit loadTestFile(String filename) throws Exception{
+		String json=Util.fileToString("data/test/models/"+filename);
+		
+		return Circuit.fromJSON(json);
+	}
+	
 	/**
 	 * Test some valid example circuits.
 	 *
 	 */
 	@Test
 	public void testFromJSON_examplesyn() throws Exception{
-		String json=Util.fileToString("src/synthbio/models/test/exampleCircuit.json");
-		
-		Circuit c=Circuit.fromJSON(json);
+		Circuit c=this.loadTestFile("exampleCircuit.json");
 
 		assertEquals("example.syn", c.getName());
 		assertEquals("Logic for this circuit: D = ~(A^B)", c.getDescription());
@@ -72,8 +74,7 @@ public class TestCircuit{
 
 	@Test
 	public void testFromJSON_example2syn() throws Exception{
-		String json=Util.fileToString("src/synthbio/models/test/exampleCircuit2.json");
-		Circuit c=Circuit.fromJSON(json);
+		Circuit c=this.loadTestFile("exampleCircuit2.json");
 
 		assertEquals("example2.syn", c.getName());
 		assertEquals("Another example G=(A^B^C^D)", c.getDescription());
@@ -86,9 +87,8 @@ public class TestCircuit{
 	}
 	@Test
 	public void testFromJSON_example3syn() throws Exception{
-		String json=Util.fileToString("src/synthbio/models/test/exampleCircuit3.json");
-		Circuit c=Circuit.fromJSON(json);
-
+		Circuit c=this.loadTestFile("exampleCircuit3.json");
+		
 		assertEquals("example3.syn", c.getName());
 		assertEquals("Another example H=(~(A^B))^(C^D)", c.getDescription());
 
@@ -113,9 +113,7 @@ public class TestCircuit{
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("At least one AND gate has only one input.");
 	
-			
-		String json=Util.fileToString("src/synthbio/models/test/incompleteAndCircuit.json");
-		Circuit c=Circuit.fromJSON(json);
+		this.loadTestFile("incompleteAndCircuit.json");
 	}
 	
 	/**
@@ -126,8 +124,7 @@ public class TestCircuit{
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("Circuit has no signals.");
 
-		String json=Util.fileToString("src/synthbio/models/test/gatesButNoSignals.json");
-		Circuit c=Circuit.fromJSON(json);
+		this.loadTestFile("gatesButNoSignals.json");
 	}
 
 	/**
@@ -138,8 +135,7 @@ public class TestCircuit{
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("Signal[to] points to non-existant Gate.");
 
-		String json=Util.fileToString("src/synthbio/models/test/signalToNullPointer.json");
-		Circuit c=Circuit.fromJSON(json);
+		this.loadTestFile("signalToNullPointer.json");
 	}
 	
 	/**
@@ -150,8 +146,7 @@ public class TestCircuit{
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("Signal[from] points to non-existant Gate.");
 
-		String json=Util.fileToString("src/synthbio/models/test/signalFromNullPointer.json");
-		Circuit c=Circuit.fromJSON(json);
+		this.loadTestFile("signalFromNullPointer.json");
 	}
 
 	/**
@@ -162,7 +157,6 @@ public class TestCircuit{
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("CDS for gate 1 is ambigious");
 
-		String json=Util.fileToString("src/synthbio/models/test/ambigiousCDS.json");
-		Circuit c=Circuit.fromJSON(json);
+		this.loadTestFile("ambigiousCDS.json");
 	}
 }

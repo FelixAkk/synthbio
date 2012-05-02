@@ -16,6 +16,7 @@ package synthbio.servlets;
 import javax.servlet.http.HttpServlet;
 
 import synthbio.files.BioBrickRepository;
+import synthbio.files.SynRepository;
 
 
 /**
@@ -26,14 +27,22 @@ import synthbio.files.BioBrickRepository;
 @SuppressWarnings("serial")
 public abstract class SynthbioServlet extends HttpServlet {
 
-
+	/**
+	 * Get the path of the webroot from servletcontext.
+	 */
+	public String getWebroot(){
+		return this.getServletContext().getRealPath("/")+"WEB-INF/";
+	}
+	
 	/**
 	 * Return the BioBrick repository.
 	 *
 	 * @return A BioBrickReader object.
 	 */
 	public BioBrickRepository getBioBrickRepository() throws Exception{
-		String path=this.getServletContext().getRealPath("/")+"WEB-INF/biobricks/";
-		return new BioBrickRepository(path);
+		return new BioBrickRepository(this.getWebroot()+"data/biobricks/");
+	}
+	public SynRepository getSynRepository() throws Exception{
+		return new SynRepository(this.getWebroot()+"data/synstore/");
 	}
 }
