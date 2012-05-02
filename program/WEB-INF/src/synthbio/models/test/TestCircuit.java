@@ -14,7 +14,11 @@
 package synthbio.models.test;
 
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.Test;
+
 
 import java.util.ArrayList;
 
@@ -52,7 +56,7 @@ public class TestCircuit{
 	 *
 	 */
 	@Test
-	public void testFromJSON1() throws Exception{
+	public void testFromJSON_examplesyn() throws Exception{
 		String json=Util.fileToString("src/synthbio/models/test/exampleCircuit.json");
 		
 		Circuit c=Circuit.fromJSON(json);
@@ -67,7 +71,7 @@ public class TestCircuit{
 	}
 
 	@Test
-	public void testFromJSON2() throws Exception{
+	public void testFromJSON_example2syn() throws Exception{
 		String json=Util.fileToString("src/synthbio/models/test/exampleCircuit2.json");
 		Circuit c=Circuit.fromJSON(json);
 
@@ -81,7 +85,7 @@ public class TestCircuit{
 		assertEquals("[and(E,F)->G @(4.0,3.0)]", c.gateAt(2).toString());
 	}
 	@Test
-	public void testFromJSON3() throws Exception{
+	public void testFromJSON_example3syn() throws Exception{
 		String json=Util.fileToString("src/synthbio/models/test/exampleCircuit3.json");
 		Circuit c=Circuit.fromJSON(json);
 
@@ -96,14 +100,69 @@ public class TestCircuit{
 		assertEquals("[not(E)->G @(5.0,5.0)]", c.gateAt(3).toString());
 	}
 
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
 	/**
 	 * An exception should be thrown if an AND gate has not exactly
 	 * two input signals.
 	 */
-	@Test(expected=CircuitException.class)
+	@Test
 	public void testFromJSON_incompleteAnd() throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("At least one AND gate has only one input.");
+	
+			
 		String json=Util.fileToString("src/synthbio/models/test/incompleteAndCircuit.json");
 		Circuit c=Circuit.fromJSON(json);
 	}
 	
+	/**
+	 * A circuit with gates but without signals is not valid
+	 */
+	@Test
+	public void testFromJSON_gatesButNoSignals() throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("Circuit has no signals.");
+
+		String json=Util.fileToString("src/synthbio/models/test/gatesButNoSignals.json");
+		Circuit c=Circuit.fromJSON(json);
+	}
+
+	/**
+	 * Signal[to] pointing to non-existant gate
+	 */
+	@Test
+	public void testFromJSON_signalToNullPointer() throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("Signal[to] points to non-existant Gate.");
+
+		String json=Util.fileToString("src/synthbio/models/test/signalToNullPointer.json");
+		Circuit c=Circuit.fromJSON(json);
+	}
+	
+	/**
+	 * Signal[from] pointing to non-existant gate
+	 */
+	@Test
+	public void testFromJSON_signalFromNullPointer() throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("Signal[from] points to non-existant Gate.");
+
+		String json=Util.fileToString("src/synthbio/models/test/signalFromNullPointer.json");
+		Circuit c=Circuit.fromJSON(json);
+	}
+
+	/**
+	 * Ambigious CDS for a gate.
+	 */
+	@Test
+	public void testFromJSON_ambigiousCDS() throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("CDS for gate 1 is ambigious");
+
+		String json=Util.fileToString("src/synthbio/models/test/ambigiousCDS.json");
+		Circuit c=Circuit.fromJSON(json);
+	}
 }

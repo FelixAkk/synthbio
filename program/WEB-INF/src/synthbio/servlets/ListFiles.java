@@ -38,7 +38,7 @@ public class ListFiles extends SynthbioServlet {
 		JSONResponse json=new JSONResponse();
 		try{
 		//No data stored yet so this is a mockup
-			String[] emptyData = new int[2];
+			String[] emptyData ={"foo.syn", "bar.syn"};
 			json.data= emptyData;
 			json.success=true;
 		}catch(Exception e){

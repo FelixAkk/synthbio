@@ -1,0 +1,19 @@
+{
+  "name": "ambigious_cds.syn",
+  "description": "A circuit with an ambigious output at one gate.",
+  "gates": [
+    { "kind": "not", "position": {"x": 4,"y": 4}},
+    { "kind": "and", "position": {"x": 2,"y": 2}}
+  ],
+  "signals": [
+    { "from": "input", "to": 0, "protein": "F"},
+    { "from": "input", "to": 1, "protein": "A"},
+    { "from": "input", "to": 1, "protein": "B"},
+    { "from": 1, "to": "output", "protein": "C"},
+    { "from": 1, "to": "output", "protein": "D"},
+    { "from": 0, "to": "output", "protein": "G"}
+  ],
+  "grouping": [
+
+  ]
+}
