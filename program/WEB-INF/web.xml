@@ -33,7 +33,7 @@
 
 	<servlet>
 		<servlet-name>Ping</servlet-name>
-		<servlet-class>synthbio.servlets.Ping</servlet-class>
+		<servlet-class>synthbio.servlets.PingServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Ping</servlet-name>

@@ -27,10 +27,9 @@ import javax.servlet.http.HttpServletResponse;
  * This servlet can be used to check the connection status.
  * The client requests "Ping" and knows the server is running when "Pong" is succesfully returned.
  */
-public class Ping extends HttpServlet {
-
-	private static final long serialVersionUID = 6101851080527587488L;
-
+@SuppressWarnings("serial")
+public class PingServlet extends SynthbioServlet {
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		response.setContentType("text/plain");
