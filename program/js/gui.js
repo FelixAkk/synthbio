@@ -24,6 +24,8 @@ var synthbio = synthbio || {};
  */
 synthbio.gui = synthbio.gui || {};
 
+synthbio.gui.gateCounter = 0;
+
 /**
  * Width of the <aside> element with all the gates in pixels.
  */
@@ -70,9 +72,9 @@ $(document).ready(function() {
 				var newGate = $(synthbio.gui.createGateElement("not"/*this.className.substring(5)*/));
 				$('#grid-container').append(newGate);
 
-				newGate.css("top", parseInt($(this).offset().top));
+				newGate.css("top", parseInt(event.pageY  - $(this).height()));
 				newGate.css("left", parseInt(event.pageX - synthbio.gui.gatesTabWidth));
-				jsPlumb.draggable(newGate);
+				synthbio.gui.addGateAnchors(newGate.attr("id"), 1, 1);
 			}
 
 			$("#gates-transport .gate").remove();
@@ -80,6 +82,26 @@ $(document).ready(function() {
 		}
 	});
 });
+
+synthbio.gui.SourceEndpoints = [];
+synthbio.gui.TargetEndpoints = [];
+synthbio.gui.addGateAnchors = function(toId, inputAnchors, outputAnchors) {
+	inputAnchors--;
+	outputAnchors--;
+	
+	var placement = function(num, total) {
+		return (total < 1) ? 0.5 : (num / total);
+	}
+
+	for (var j = 0; j <= inputAnchors; j++) {
+		var targetUUID = toId + "_input" + j;
+		synthbio.gui.TargetEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.inputEndpoint, { anchor:[0, placement(j, inputAnchors), -1, 0], uuid:targetUUID }));
+	} 
+	for (var i = 0; i <= outputAnchors; i++) {
+		var sourceUUID = toId + "_output" + i;
+		synthbio.gui.SourceEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { anchor:[1, placement(i, outputAnchors), 1, 0], uuid:sourceUUID }));
+	}
+}
 
 /**
  * Create a new gate DOM element to be used within the modelling grid.
@@ -93,10 +115,15 @@ synthbio.gui.createGateElement = function(gateClass) {
         return;
     }
 
-    var element = $("<div class=\"gate " + gateClass + " draggable\">"
+	synthbio.gui.gateCounter++;
+	var id = "gate" + synthbio.gui.gateCounter;
+
+    var element = $("<div íd=\""+id+"\" class=\"gate " + gateClass + "\">"
         + "<embed src=\"../img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
         + "<div class=\"mask\"></div>"
         + "</div>");
+
+	jsPlumb.draggable(element);
     return element;
 }
 
