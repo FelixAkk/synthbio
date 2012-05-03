@@ -33,6 +33,13 @@ public abstract class SynthbioServlet extends HttpServlet {
 	public String getWebroot(){
 		return this.getServletContext().getRealPath("/")+"WEB-INF/";
 	}
+
+	/**
+	 * Log a message to the servlets log.
+	 */
+	public void log(String message){
+		this.getServletContext().log(message);
+	}
 	
 	/**
 	 * Return the BioBrick repository.
@@ -42,6 +49,10 @@ public abstract class SynthbioServlet extends HttpServlet {
 	public BioBrickRepository getBioBrickRepository() throws Exception{
 		return new BioBrickRepository(this.getWebroot()+"data/biobricks/");
 	}
+
+	/**
+	 * Return the Syn repository
+	 */
 	public SynRepository getSynRepository() throws Exception{
 		return new SynRepository(this.getWebroot()+"data/synstore/");
 	}

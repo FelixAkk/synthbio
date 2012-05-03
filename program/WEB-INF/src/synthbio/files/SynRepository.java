@@ -30,7 +30,7 @@ public class SynRepository{
 	private Collection<String> files=new ArrayList<String>();
 	
 	public SynRepository() throws Exception{
-		this("biobricks/");
+		this("data/synstore/");
 	}
 	
 	/**
@@ -40,7 +40,8 @@ public class SynRepository{
 	 * @throws FileNotFoundException 
 	 */
 	public SynRepository(String path) throws Exception{
-
+		this.files.add("example.syn");
+		this.files.add("example2.syn");
 	}
 
 	/**

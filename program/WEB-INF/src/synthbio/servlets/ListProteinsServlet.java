@@ -43,7 +43,6 @@ public class ListProteinsServlet extends SynthbioServlet {
 			json.data=this.getBioBrickRepository().getCDSs();
 			json.success=true;
 		}catch(Exception e){
-			
 			json.success=false;
 			json.message="Could not load BioBricks: "+e.getMessage();
 		}
