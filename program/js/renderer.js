@@ -87,7 +87,7 @@ $(document).ready(function() {
 
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) { 
-			connInfo.connection.getOverlay("label").setLabel("I am a banana");
+			connInfo.connection.getOverlay("label").setLabel("I am a signal");
 		});
 
 		_addEndpoints("hoi1", 1, 2);
