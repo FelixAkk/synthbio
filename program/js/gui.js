@@ -78,7 +78,7 @@ $(document).ready(function() {
 
 				newGate.css("top", parseInt(event.pageY  - $(this).height()));
 				newGate.css("left", parseInt(event.pageX - synthbio.gui.gatesTabWidth));
-				synthbio.gui.addGateAnchors(newGate.attr("id"), 1, 1);
+				synthbio.gui.addGateAnchors(newGate);
 			}
 
 			$("#gates-transport .gate").remove();
@@ -104,7 +104,7 @@ synthbio.gui.TargetEndpoints = [];
  * @param inputAnchors Number of input anchors
  * @param outputAnchors Number of output anchors
  */
-synthbio.gui.addGateAnchors = function(toId, inputAnchors, outputAnchors) {
+synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
 	inputAnchors--;
 	outputAnchors--;
 	
@@ -120,6 +120,24 @@ synthbio.gui.addGateAnchors = function(toId, inputAnchors, outputAnchors) {
 		var sourceUUID = toId + "_output" + i;
 		synthbio.gui.SourceEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { anchor:[1, placement(i, outputAnchors), 1, 0], uuid:sourceUUID }));
 	}
+}
+
+/**
+ * Add the correct number of anchors to a gate
+ *
+ * @param elem Target element. Uses the class attribute to determine the proper number of anchors.
+ */
+synthbio.gui.addGateAnchors = function(elem) {
+	elem = $(elem);
+	var gateClass = elem.attr('class').split(' ')[1];
+	var gateID = elem.attr("id");
+
+	//TODO: Better way to determine number of inputs/outputs (also for compound gates).
+    if(gateClass == "not")
+		synthbio.gui.addPlumbAnchors(gateID, 1, 1)
+	else if (gateClass == "and")
+		synthbio.gui.addPlumbAnchors(gateID, 2, 1)
+	//else TODO: implement exception throwing using synthbio.util
 }
 
 /**
