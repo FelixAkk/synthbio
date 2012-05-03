@@ -1,8 +1,15 @@
 /**
- * 		Project Zelula:
- * Synthetic biology modeller/simulator
+ * Project Zelula
+ *
+ * Contextproject TI2800
+ * TU Delft - University of Technology
+ *
+ * Authors:
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ *
  * https://github.com/FelixAkk/synthbio
- * by Group E, TU Delft
+ *
  * @author	Thomas van Helden & JanPieter Waagmeester
  *
  * Definition of models.
