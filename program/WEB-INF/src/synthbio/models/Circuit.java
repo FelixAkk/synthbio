@@ -298,7 +298,15 @@ public class Circuit implements JSONString{
 
 		return ret;
 	}
-
+	
+	/**
+	 * Return an SBML document for the current circuit.
+	 *
+	 * @todo implement
+	 */
+	public String toSBML(){
+		
+	}
 	public String toString(){
 		String ret="Circuit: "+this.getName()+" | "+this.getDescription()+"\n";
 		for(Gate g: this.getGates()){

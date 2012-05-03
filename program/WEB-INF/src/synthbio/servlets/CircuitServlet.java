@@ -35,6 +35,9 @@ import synthbio.json.JSONResponse;
  * Servlet ListServlets has different actions on the circuit and replies
  * with the default JSON response.
  *
+ * API functions documented at:
+ * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
+ * 
  * @author jieter 
  */
 @SuppressWarnings("serial")
@@ -119,7 +122,33 @@ public class CircuitServlet extends SynthbioServlet {
 				return;
 			}
 			this.doValidate(circuit);
-
+			
+		//toSBML(circuit)
+		}else if(action.equals("exportSBML")){
+			String circuit=request.getParameter("circuit");
+			if(circuit==null){
+				json.fail("Parameter 'circuit' not set");
+				out.println(json.toJSONString());
+				return;
+			}
+			this.doExport(circuit);
+		
+		//simulate(circuit, inputs)
+		}else if(action.equals("simulate")){
+			String circuit=request.getParameter("circuit");
+			if(circuit==null){
+				json.fail("Parameter 'circuit' not set");
+				out.println(json.toJSONString());
+				return;
+			}
+			String inputs=request.getParameter("inputs");
+			if(inputs==null){
+				json.fail("Parameter 'inputs' not set");
+				out.println(json.toJSONString());
+				return;
+			}
+			this.doSimulate(circuit, inputs);
+			
 		//all other cases: invalid action
 		}else{
 			json.fail("CircuitServlet: Invalid Action: "+action);
@@ -130,11 +159,9 @@ public class CircuitServlet extends SynthbioServlet {
 		out.println(json.toJSONString());
 	}
 
-	/* Action methods.
-	 */
-
+	
 	/**
-	 * List the files contained in the syn store.
+	 * Action: List the files contained in the syn store.
 	 */
 	public void doList(){
 		this.json.data=this.synRepository.getFileList();
@@ -142,7 +169,7 @@ public class CircuitServlet extends SynthbioServlet {
 	}
 
 	/**
-	 * Load a file from the syn store.
+	 * Action: Load a file from the syn store.
 	 */
 	public void doLoad(String filename){
 		try{
@@ -154,10 +181,9 @@ public class CircuitServlet extends SynthbioServlet {
 	}
 
 	/**
-	 * Save a file to the syn store.
+	 * Action: Save a file to the syn store.
 	 */
 	public void doSave(String filename, String circuit){
-		this.log("save: "+filename+" ("+circuit);
 		try{
 			this.synRepository.putFile(filename, circuit);
 			json.message="Saved succesfully";
@@ -168,15 +194,48 @@ public class CircuitServlet extends SynthbioServlet {
 	}
 
 	/**
-	 * Validate a circuit.
+	 * Action: Validate a circuit.
 	 */
 	public void doValidate(String circuit){
 		try{
 			Circuit c=Circuit.fromJSON(circuit);
+			json.success=true;
+			json.message="Circuit validates!";
 		}catch(CircuitException e){
-
+			json.fail("Error in Circuit: "+e.getMessage());
 		}catch(JSONException e){
-
+			json.fail("Malformed JSON: "+e.getMessage());
 		}
+	}
+
+	
+	/**
+	 * Action: Export to SBML
+	 */
+	public void doExport(String circuit){
+		Circuit c;
+		try{
+			c=Circuit.fromJSON(circuit);
+		}catch(Exception e){
+			json.fail("Circuit does not validate, please use validate to correct errors.");
+			return;
+		}
+		json.data=c.toSBML();
+		json.success=true;
+	}
+
+	/**
+	 * Action: Simulate circuit
+	 */
+	public void doSimulate(String circuit, String inputs){
+		Circuit c;
+		try{
+			c=Circuit.fromJSON(circuit);
+		}catch(Exception e){
+			json.fail("Circuit does not validate, please use validate to correct errors.");
+			return;
+		}
+		json.data=c.toSBML();
+		json.success=true;
 	}
 }
