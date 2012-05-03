@@ -32,8 +32,8 @@ import synthbio.json.JSONResponse;
 
 
 /**
- * Servlet ListServlets returns a default JSON-reply with a list of
- * proteins available.
+ * Servlet ListServlets has different actions on the circuit and replies
+ * with the default JSON response.
  *
  * @author jieter 
  */
@@ -44,6 +44,10 @@ public class CircuitServlet extends SynthbioServlet {
 	 * The JSON response object.
 	 */
 	private JSONResponse json;
+
+	/**
+	 * The repository of .syn files.
+	 */
 	private SynRepository synRepository;
 	
 	@Override
@@ -115,24 +119,43 @@ public class CircuitServlet extends SynthbioServlet {
 
 	/* Action methods.
 	 */
+
+	/**
+	 * List the files contained in the syn store.
+	 */
 	public void doList(){
 		this.json.data=this.synRepository.getFileList();
 		this.json.success=true;
 	}
-	
+
+	/**
+	 * Load a file from the syn store.
+	 */
 	public void doLoad(String filename){
 		try{
 			json.data=new JSONObject(this.synRepository.getFile(filename));
 			json.success=true;
 		}catch(Exception e){
-			json.success=false;
-			json.message="Could not load .syn-file.";
+			json.fail("Could not load .syn-file.");
 		}
 	}
 
+	/**
+	 * Save a file to the syn store.
+	 */
 	public void doSave(String filename, String circuit){
-		
+		try{
+			this.synRepository.putFile(filename, circuit);
+			json.message="Saved succesfully";
+			json.success=true;
+		}catch(Exception e){
+			json.fail("Could not save .syn-file.");
+		}
 	}
+
+	/**
+	 * Validate a circuit.
+	 */
 	public void doValidate(String circuit){
 		try{
 			Circuit c=Circuit.fromJSON(circuit);

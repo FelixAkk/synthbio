@@ -91,4 +91,14 @@ public class SynRepository{
 		return Util.fileToString(this.path+filename);
 	}
 
+	/**
+	 * Save the content to file
+	 *
+	 * @param filename The file to save to.
+	 * @param content The content of the file.
+	 */
+	public void putFile(String filename, String content) throws Exception{
+		assert filename.endsWith(".syn");
+		Util.stringToFile(this.path+filename, content);
+	}
 }

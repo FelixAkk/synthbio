@@ -15,8 +15,9 @@ package synthbio;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
+import java.io.FileWriter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +47,20 @@ public class Util{
 		return builder.toString();
 	}
 
+	/**
+	 * String to file.
+	 */
+	public static void stringToFile(String filename, String content) throws IOException{
+		File file=new File(filename);
+		if(!file.exists()){
+			file.createNewFile();
+		}
+		FileWriter writer=new FileWriter(file);
+
+		writer.write(content);
+
+	}
+		
 	/**
 	 * Return a JSONObject for a file.
 	 */
