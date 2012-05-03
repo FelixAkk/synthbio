@@ -132,7 +132,7 @@ synthbio.requests.putFile = function(callback, name, circ){
 synthbio.requests.getCDSs = function(callback){
 	
 	synthbio.requests.baseXHR({
-		url: "/ListProteinsServlet",
+		url: "/ListProteins",
 		//parse list of cdses and call the callback with that list.
 		success: function(response){
 			if(!response.success){

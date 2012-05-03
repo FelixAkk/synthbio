@@ -34,7 +34,7 @@ $(document).ready(function() {
 	$('.dropdown-toggle').dropdown();
 	
 	// Start pinging
-	//pingServer();
+	synthbio.gui.pingServer();
 	
 	// Load proteins from server.
 	$('#list-proteins').on('show', function(){
