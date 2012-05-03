@@ -2,7 +2,8 @@
   "name": "incomplete_and.syn",
   "description": "A circuit with one AND gate with only one input.",
   "gates": [
-    { "kind": "and", "position": {"x": 2,"y": 2}}
+    { "kind": "and", "position": {"x": 2,"y": 2}},
+    { "kind": "not", "position": {"x": 3,"y": 3}}
   ],
   "signals": [
     { "from": "input", "to": 0, "protein": "A"},

@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,7 +85,6 @@ public class Circuit implements JSONString{
 		return this.gates;
 	}
 
-	
 	public void addGate(Gate g){
 		this.gates.add(g);
 	}
@@ -94,24 +95,29 @@ public class Circuit implements JSONString{
 	public boolean hasGateAt(int index){
 		return index >= 0 && index < this.gates.size();
 	}
+
 	
-	public Gate gateAt(int i){
-		return this.gates.get(i);
+	public Gate gateAt(int index){
+		assert this.hasGateAt(index) : "No such Gate";
+		return this.gates.get(index);
 	}
 	
 	
 	/**
-	 * Validate the circuit.
+	 * Validate the use of Proteins in the circuit.
 	 *
-	 * Validates if the circuit is valid:
-	 *  - Existence of unconnected outputs/inputs?
-	 *  - Multiple use of Proteins.
-	 * 
-	 * @todo: implement
+	 * @return true if the use of proteins is valid.
 	 */
-	public boolean validate(){
-		return false;
+/*
+	@todo implement
+	public boolean validateProteins(){
+		Set<String> proteins=new HashSet<String>();
+
+		for(Gate g: this.getGates()){
+
+		}
 	}
+*/
 
 	/**
 	 * Return an collection of signals.
@@ -143,6 +149,7 @@ public class Circuit implements JSONString{
 			ret.put("name", this.getName());
 			ret.put("description", this.getDescription());
 			ret.put("gates", this.getGates());
+		//	todo fix this.
 		//	ret.put("signals", this.collectSignals());
 		}catch(Exception e){
 			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
@@ -204,7 +211,8 @@ public class Circuit implements JSONString{
 			/* Circuit is only defined with gates and signals, so fail if
 			 * no signals are present.
 			 */
-			throw new CircuitException("Circuit has no signals");
+			
+			throw new CircuitException("Circuit has no signals.");
 		}
 		
 		/* Create BioBrick repository.
@@ -213,7 +221,7 @@ public class Circuit implements JSONString{
 		try{
 			bbr=new BioBrickRepository();
 		}catch(Exception e){
-			throw new CircuitException("Could not load BioBrick Repository");
+			throw new CircuitException("Could not load BioBrick Repository.");
 		}
 		
 		JSONObject signal;
@@ -230,7 +238,7 @@ public class Circuit implements JSONString{
 			if(signal.get("from") instanceof Integer){
 				from=signal.getInt("from");
 				if(!ret.hasGateAt(from)){
-					throw new CircuitException("Signal.from points to non-existant Gate.");
+					throw new CircuitException("Signal[from] points to non-existant Gate.");
 				}
 				
 				//update from gate with the right CDS.
@@ -254,7 +262,7 @@ public class Circuit implements JSONString{
 			if(signal.get("to") instanceof Integer){
 				to=signal.getInt("to");
 				if(!ret.hasGateAt(to)){
-					throw new CircuitException("Signal.to points to non-existant Gate.");
+					throw new CircuitException("Signal[to] points to non-existant Gate.");
 				}
 
 				//Not Gate can be connected right away.
@@ -281,6 +289,12 @@ public class Circuit implements JSONString{
 		if(tmpTF.size()!=0){
 			throw new CircuitException("At least one AND gate has only one input.");
 		}
+
+/*		@todo fix this.
+		if(!ret.validateProteins()){
+			throw new CircuitException("Incorrect Protein assignment");
+		}
+*/
 
 		return ret;
 	}

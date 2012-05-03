@@ -1,0 +1,15 @@
+{
+  "name": "signal_null_pointer.syn",
+  "description": "A circuit with signal pointing to a non-existant gate.",
+  "gates": [
+    { "kind": "and", "position": {"x": 2,"y": 2}}
+  ],
+  "signals": [
+    { "from": "input", "to": 0, "protein": "A"},
+    { "from": "input", "to": 0, "protein": "B"},
+	{ "from": "input", "to": 1, "protein": "C"}
+  ],
+  "grouping": [
+
+  ]
+}

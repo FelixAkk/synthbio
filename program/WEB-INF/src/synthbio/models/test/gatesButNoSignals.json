@@ -1,0 +1,13 @@
+{
+  "name": "gates_but_no_signals.syn",
+  "description": "A circuit without signals.",
+  "gates": [
+    { "kind": "and", "position": {"x": 2,"y": 2}}
+  ],
+  "signals": [
+  
+  ],
+  "grouping": [
+
+  ]
+}
