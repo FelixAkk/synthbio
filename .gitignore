@@ -8,4 +8,8 @@
 #java class files we are not interested in.
 *.class
 
+#exlude ant stuff.
 /program/WEB-INF/ant
+
+#and also PhpStorm stuff.
+/program/.idea/*
