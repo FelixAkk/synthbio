@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,17 +49,13 @@ public class Util{
 	}
 
 	/**
-	 * String to file.
+	 * Dump a string to a file..
 	 */
 	public static void stringToFile(String filename, String content) throws IOException{
-		File file=new File(filename);
-		if(!file.exists()){
-			file.createNewFile();
-		}
-		FileWriter writer=new FileWriter(file);
+		BufferedWriter out=new BufferedWriter(new FileWriter(filename));
 
-		writer.write(content);
-
+		out.write(content);
+		out.close();
 	}
 		
 	/**

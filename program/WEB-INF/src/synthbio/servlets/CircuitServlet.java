@@ -49,9 +49,12 @@ public class CircuitServlet extends SynthbioServlet {
 	 * The repository of .syn files.
 	 */
 	private SynRepository synRepository;
-	
+
+	/**
+	 * Get requests
+	 */
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		
 		//create new JSONResponse for this request.
 		this.json=new JSONResponse();
@@ -99,12 +102,22 @@ public class CircuitServlet extends SynthbioServlet {
 				return;
 			}
 			
-			String circuit="{}";
+			String circuit=request.getParameter("circuit");
+			if(circuit==null){
+				json.fail("Parameter 'circuit' not set");
+				out.println(json.toJSONString());
+				return;
+			}
 			this.doSave(filename, circuit);
 		
 		//validate(circuit)
 		}else if(action.equals("validate")){
-			String circuit="{}";
+			String circuit=request.getParameter("circuit");
+			if(circuit==null){
+				json.fail("Parameter 'circuit' not set");
+				out.println(json.toJSONString());
+				return;
+			}
 			this.doValidate(circuit);
 
 		//all other cases: invalid action
@@ -144,12 +157,13 @@ public class CircuitServlet extends SynthbioServlet {
 	 * Save a file to the syn store.
 	 */
 	public void doSave(String filename, String circuit){
+		this.log("save: "+filename+" ("+circuit);
 		try{
 			this.synRepository.putFile(filename, circuit);
 			json.message="Saved succesfully";
 			json.success=true;
 		}catch(Exception e){
-			json.fail("Could not save .syn-file.");
+			json.fail("Could not save .syn-file: "+e.getMessage());
 		}
 	}
 

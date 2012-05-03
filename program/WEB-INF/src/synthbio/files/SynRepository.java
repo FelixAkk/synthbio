@@ -100,5 +100,7 @@ public class SynRepository{
 	public void putFile(String filename, String content) throws Exception{
 		assert filename.endsWith(".syn");
 		Util.stringToFile(this.path+filename, content);
+
+		this.files.add(filename);
 	}
 }
