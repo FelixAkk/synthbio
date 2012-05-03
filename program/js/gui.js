@@ -10,7 +10,7 @@
  *
  * https://github.com/FelixAkk/synthbio
  *
- * @author Felix Akkermans & Jan-Pieter Waagmeester
+ * @author Felix Akkermans & Jan-Pieter Waagmeester & Niels Doekemeijer
  * GUI JavaScript Document, concerns all GUI matters except those about the modeling grid.
  */
 
@@ -73,7 +73,7 @@ $(document).ready(function() {
         },
 		stop: function(event, ui){
 			if(event.pageX > synthbio.gui.gatesTabWidth) {
-				var newGate = $(synthbio.gui.createGateElement("not"/*this.className.substring(5)*/));
+				var newGate = $(synthbio.gui.createGateElement($(this).attr('class').split(' ')[1]));
 				$('#grid-container').append(newGate);
 
 				newGate.css("top", parseInt(event.pageY  - $(this).height()));

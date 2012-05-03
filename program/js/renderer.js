@@ -5,7 +5,7 @@
  * https://github.com/FelixAkk/synthbio
  * by Group E, TU Delft
  *
- * @author Felix Akkermans & Jan-Pieter Waagmeester
+ * @author Felix Akkermans & Niels Doekemeijer
  */
 
 $(document).ready(function() {
