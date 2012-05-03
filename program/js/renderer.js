@@ -16,8 +16,13 @@ $(document).ready(function() {
 
 		jsPlumb.importDefaults({
 			DragOptions : { cursor: 'pointer', zIndex:2000 },
+
+			//Overlays for wires
 			ConnectionOverlays : [
+				//Arrow overlay
 				[ "Arrow", { location:0.9 } ],
+
+				//Text overlay
 				[ "Label", { 
 					location:0.5,
 					id:"label",

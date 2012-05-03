@@ -24,6 +24,9 @@ var synthbio = synthbio || {};
  */
 synthbio.gui = synthbio.gui || {};
 
+/**
+ * Gate counter, used for tracking gates
+ */
 synthbio.gui.gateCounter = 0;
 
 /**
@@ -56,6 +59,7 @@ $(document).ready(function() {
 	//$('#gates-tab').appendChild(synthbio.gui.createGateElement('and'));
     //$('#gates-tab').appendChild(synthbio.gui.createGateElement('not'));
 
+	//Initialize gate-dragging
 	$('#gates-tab .gate').draggable({ 
 		appendTo: "#gates-transport",
 		containment: 'window',
@@ -83,8 +87,23 @@ $(document).ready(function() {
 	});
 });
 
+/**
+ * All the JSPlumb source anchors
+ */
 synthbio.gui.SourceEndpoints = [];
+
+/**
+ * All the JSPlumb target anchors
+ */
 synthbio.gui.TargetEndpoints = [];
+
+/**
+ * Add specified number of JSPlumb anchors to a gate
+ *
+ * @param toId ID of the gate element. UUID of the anchors will be *id*_input*number* (and id_outputNUMBER)
+ * @param inputAnchors Number of input anchors
+ * @param outputAnchors Number of output anchors
+ */
 synthbio.gui.addGateAnchors = function(toId, inputAnchors, outputAnchors) {
 	inputAnchors--;
 	outputAnchors--;
@@ -106,7 +125,7 @@ synthbio.gui.addGateAnchors = function(toId, inputAnchors, outputAnchors) {
 /**
  * Create a new gate DOM element to be used within the modelling grid.
  *
- * @param class The class/type of gate to be created. Can be either the string 'not', 'and' or 'compound'.
+ * @param gateClass The class/type of gate to be created. Can be either the string 'not', 'and' or 'compound'.
  */
 synthbio.gui.createGateElement = function(gateClass) {
     // TODO: use synthbio.util
