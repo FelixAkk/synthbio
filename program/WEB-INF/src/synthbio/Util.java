@@ -16,6 +16,10 @@ package synthbio;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.FileReader;
+import java.io.IOException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Utility class.
@@ -40,5 +44,12 @@ public class Util{
 		}
 
 		return builder.toString();
+	}
+
+	/**
+	 * Return a JSONObject for a file.
+	 */
+	public static JSONObject fileToJSONObject(String filename) throws JSONException, IOException{
+		return new JSONObject(fileToString(filename));
 	}
 }
