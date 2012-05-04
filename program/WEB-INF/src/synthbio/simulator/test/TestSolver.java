@@ -46,11 +46,11 @@ import org.simulator.sbml.SBMLinterpreter;
  * @author Albert ten Napel
  */
 public class TestSolver {
-	private final String not = "src/synthbio/simulator/test/not.sbml";
-	private final String nand = "src/synthbio/simulator/test/nand.sbml";
+	private final String not = "data/test/simulator/not.sbml";
+	private final String nand = "data/test/simulator/nand.sbml";
 	
-	private final String tc1 = "src/synthbio/simulator/test/00001-sbml-l2v4.xml";
-	private final String tc2 = "src/synthbio/simulator/test/00002-sbml-l2v4.xml";
+	private final String tc1 = "data/test/simulator/00001-sbml-l2v4.xml";
+	private final String tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
 	
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
