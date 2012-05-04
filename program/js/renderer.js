@@ -47,6 +47,7 @@ $(document).ready(function() {
 			strokeStyle:"#2e2aF8"
 		};
 
+		var inputCounter = 0;
 		// the definition of input endpoints
 		synthbio.gui.inputEndpoint = {
 			endpoint:"Rectangle",					
@@ -56,6 +57,16 @@ $(document).ready(function() {
 			dropOptions: {
 				activeClass:'dragActive',
 				hoverClass:'dragHover'
+			},
+			beforeDrop: function(opt) {
+				if ((!opt.jpc) || (opt.jpc.sourceId != "gate-input") || opt.jpc.endpoints[0].getUuid())
+					return true;
+
+				var UUID = "input" + ++inputCounter;
+				var src = jsPlumb.addEndpoint("gate-input", synthbio.gui.outputEndpoint, { anchor: "Continuous", uuid:UUID });
+				jsPlumb.connect({source: src, target: opt.target});
+
+				return false;
 			}
 		};
 
@@ -63,12 +74,13 @@ $(document).ready(function() {
 		synthbio.gui.outputEndpoint = {
 			endpoint:"Dot",
 			paintStyle:{ fillStyle:"#225588",radius:7 },
-			connector:[ "Flowchart", { stub:40 } ],
+			//connector:[ "Flowchart", { stub:40 } ],
+			connector: ["Bezier", { curviness:50 } ],
 			connectorStyle:connectorPaintStyle,
 			hoverPaintStyle:pointHoverStyle,
 			connectorHoverStyle:connectorHoverStyle,
 			isSource:true,
-			maxConnections: -1
+			maxConnections:-1
 		};
 
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
@@ -76,10 +88,27 @@ $(document).ready(function() {
 			connInfo.connection.getOverlay("label").setLabel("I am a signal");
 		});
 
+		// listen for disposal of connections; delete endpoints if necessary
+		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) { 
+			if (connInfo.sourceId == "gate-input" && !connInfo.sourceEndpoint.connections.length)
+				jsPlumb.deleteEndpoint(connInfo.sourceEndpoint);
+			if (connInfo.targetId == "gate-output" && !connInfo.targetEndpoint.connections.length)
+				jsPlumb.deleteEndpoint(connInfo.targetEndpoint);
+		});
+
 		//jsPlumb.draggable("gate-input");
 		jsPlumb.draggable("gate-output");
 
-		jsPlumb.makeSource("gate-input", synthbio.gui.outputEndpoint);
-		jsPlumb.makeTarget("gate-output", synthbio.gui.inputEndpoint);
+		var oep = jQuery.extend(true, {	
+			anchor:"Continuous",
+			deleteEndpointsOnDetach: false
+		}, synthbio.gui.outputEndpoint);
+		var iep = jQuery.extend(true, {
+			anchor:"Continuous",
+			deleteEndpointsOnDetach: false
+		}, synthbio.gui.inputEndpoint);
+
+		jsPlumb.makeSource("gate-input", oep);
+		jsPlumb.makeTarget("gate-output", iep);
 	});
 });
