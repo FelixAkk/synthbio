@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+	<model id="not">
+	
+		<listOfUnitDefinitions>
+			<unitDefinition id="substance">
+				<listOfUnits>
+					<unit kind="mole"/>
+				</listOfUnits>
+			</unitDefinition>
+			<unitDefinition id="time">
+				<listOfUnits>
+					<unit kind="second"/>
+				</listOfUnits>
+			</unitDefinition>
+		</listOfUnitDefinitions>
+		
+		<listOfCompartments>
+			<compartment id="cell" size="1" units="volume"/>
+		</listOfCompartments>
+		
+		<listOfSpecies>
+			<species id="g" compartment="cell" initialAmount="3" hasOnlySubstanceUnits="true" boundaryCondition="true" constant="true"/>
+			<species id="e" compartment="cell" initialAmount="0"/>
+		
+			<species id="a" compartment="cell" initialAmount="500" substanceUnits="substance"/>
+			<species id="b" compartment="cell" initialAmount="0" substanceUnits="substance"/>
+			
+			<species id="mb" compartment="cell" initialAmount="0" substanceUnits="substance"/>
+		</listOfSpecies>
+		
+		<listOfParameters>
+			<parameter id="km" value="224.0227" units="substance"/>
+			<parameter id="k1" value="4.7313" units="substance"/>
+			<parameter id="k2" value="4.6337" units="substance"/>
+			<parameter id="n" value="1" units="substance"/>
+			<parameter id="d1" value="0.0240" units="substance"/>
+			<parameter id="d2" value="0.8466" units="substance"/>
+		</listOfParameters>
+		
+		<listOfReactions>
+			<reaction id="transcription" reversible="false" fast="false">
+				<listOfReactants>
+					<speciesReference species="g"/>
+				</listOfReactants>
+	
+	 			<listOfProducts> 
+					<speciesReference species="mb"/>
+				</listOfProducts> 
+				
+				<listOfModifiers>
+					<speciesReference species="a"/>
+				</listOfModifiers>
+				
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- (k1*km^n/km^n+a^n)-(d1*mb) -->
+						<apply>
+							<minus/>
+							<apply>
+								<divide/>
+								<apply>
+									<times/>
+									<ci>k1</ci>
+									<apply>
+										<power/>
+										<ci>km</ci>
+										<ci>n</ci>
+									</apply>
+								</apply>
+								<apply>
+									<plus/>
+									<apply>
+										<power/>
+										<ci>km</ci>
+										<ci>n</ci>
+									</apply>
+									<apply>
+										<power/>
+										<ci>a</ci>
+										<ci>n</ci>
+									</apply>
+								</apply>
+							</apply>
+							<apply>
+								<times/>
+								<ci>d1</ci>
+								<ci>mb</ci>
+							</apply>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+			
+			<reaction id="translation" reversible="false" fast="false">
+				<listOfReactants>
+					<speciesReference species="mb"/>
+				</listOfReactants> 
+	
+				<listOfProducts> 
+					<speciesReference species="b"/>
+				</listOfProducts>
+				
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- k2*mb - d2*b -->
+						<apply>
+							<minus/>
+							<apply>
+								<times/>
+								<ci>k2</ci>
+								<ci>mb</ci>
+							</apply>
+							<apply>
+								<times/>
+								<ci>d2</ci>
+								<ci>b</ci>
+							</apply>
+						</apply>
+					</math>
+				</kineticLaw>
+				
+			</reaction>
+		</listOfReactions>
+	</model>
+</sbml>
