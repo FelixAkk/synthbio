@@ -27,11 +27,6 @@
 	<description>Welcome to</description>
 
 	<servlet>
-		<servlet-name>HelloWorldExample</servlet-name>
-		<servlet-class>HelloWorldExample</servlet-class>
-	</servlet>
-
-	<servlet>
 		<servlet-name>Ping</servlet-name>
 		<servlet-class>synthbio.servlets.PingServlet</servlet-class>
 	</servlet>

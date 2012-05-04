@@ -54,8 +54,8 @@ $(document).ready(function() {
 			hoverPaintStyle:pointHoverStyle,
 			isTarget:true,
 			dropOptions: {
-				activeClass: 'dragActive',
-				hoverClass: 'dragHover'
+				activeClass:'dragActive',
+				hoverClass:'dragHover'
 			}
 		};
 
@@ -75,5 +75,11 @@ $(document).ready(function() {
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) { 
 			connInfo.connection.getOverlay("label").setLabel("I am a signal");
 		});
+
+		//jsPlumb.draggable("gate-input");
+		jsPlumb.draggable("gate-output");
+
+		jsPlumb.makeSource("gate-input", synthbio.gui.outputEndpoint);
+		jsPlumb.makeTarget("gate-output", synthbio.gui.inputEndpoint);
 	});
 });
