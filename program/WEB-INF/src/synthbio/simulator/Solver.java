@@ -34,20 +34,27 @@ public class Solver {
 
 	/**
 	 * Solves a SBML file.
+	 * @param		fileName	The location of the SBML-file
+	 * @param		stepSize	the size of the timesteps
+	 * @param		timeEnd		the amount of time to simulate 
+	 * @return						A MultiTable-object containing the solution
 	 */
 	public MultiTable solveWithFile(String fileName, double stepSize, double timeEnd)
-		throws XMLStreamException, IOException,
-						ModelOverdeterminedException, SBMLException, DerivativeException {
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		// Convert the SBML-file to a Model-object.
 		Model model = (new SBMLReader()).readSBML(fileName).getModel();
 		return solve(model, stepSize, timeEnd);
 	}
 
 	/**
 	 * Solves a Model-object.
+	 * @param		model 		the Model-object to simulate.
+	 * @param		stepSize 	the size of the timesteps
+	 * @param		timeEnd 	the amount of time to simulate 
+	 * @return 						A MultiTable-object containing the solution
 	 */
 	public MultiTable solve(Model model, double stepSize, double timeEnd)
-		throws XMLStreamException, IOException,
-						ModelOverdeterminedException, SBMLException, DerivativeException {
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Setup solver
 		AbstractDESSolver solver = new EulerMethod();
 		solver.setStepSize(stepSize);
@@ -61,5 +68,4 @@ public class Solver {
 		
 		return solution;
 	}
-	
 } 
