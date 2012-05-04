@@ -30,7 +30,7 @@ synthbio.gui = synthbio.gui || {};
 synthbio.gui.gatesTabWidth = parseFloat($('#gates-tab').css("width"));
 
 $(document).ready(function() {
-	// Activate zhe Dropdowns Herr Doktor!
+    // Activate zhe Dropdowns Herr Doktor!
 	$('.dropdown-toggle').dropdown();
 	
 	// Start pinging
@@ -52,7 +52,7 @@ $(document).ready(function() {
 	});
 
 	//$('#gates-tab').appendChild(synthbio.gui.createGateElement('and'));
-    //$('#gates-tab').appendChild(synthbio.gui.createGateElement('not'));
+	//$('#gates-tab').appendChild(synthbio.gui.createGateElement('not'));
 
 	$('#gates-tab .gate').on('mousedown', synthbio.gui.instantiateGate);
 });
@@ -63,17 +63,17 @@ $(document).ready(function() {
  * @param class The class/type of gate to be created. Can be either the string 'not', 'and' or 'compound'.
  */
 synthbio.gui.createGateElement = function(gateClass) {
-    // TODO: use synthbio.util
-    if(gateClass !== "not" && gateClass !== "and" && gateClass !== "compound") {
-        // TODO: implement exception throwing using synthbio.util
-        return;
-    }
+	// TODO: use synthbio.util
+	if(gateClass !== "not" && gateClass !== "and" && gateClass !== "compound") {
+		// TODO: implement exception throwing using synthbio.util
+		return;
+	}
 
-    var element = $("<div class=\"gate " + gateClass + " draggable\">"
-        + "<embed src=\"../img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
-        + "<div class=\"mask\"></div>"
-        + "</div>");
-    return element;
+	var element = $("<div class=\"gate " + gateClass + " draggable\">"
+		+ "<embed src=\"../img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
+		+ "<div class=\"mask\"></div>"
+		+ "</div>");
+	return element;
 }
 
 /**
@@ -82,65 +82,65 @@ synthbio.gui.createGateElement = function(gateClass) {
  * @param event JavaScript event provided by default. Required for getting mouse/pointer position.
  */
 synthbio.gui.instantiateGate = function(event) {
-    // We need the event object. Without we have no idea where the mouse is and exit the function call.
-    if(arguments.length < 1) {
-        // TODO: implement exception throwing using
-        return;
-    }
+	// We need the event object. Without we have no idea where the mouse is and exit the function call.
+	if(arguments.length < 1) {
+		// TODO: implement exception throwing using
+		return;
+	}
 
-    /**
-     * Gated used in the transport layer (not the one for in the grid, for that we construct a clone).
-     */
+	/**
+	 * Gated used in the transport layer (not the one for in the grid, for that we construct a clone).
+	 */
 	var	dragGate = synthbio.gui.createGateElement(this.className.substring(5));
 	var gatesTransport = $('#gates-transport');
 
-    /**
-     * Designates whether the gate has crossed the border between the gates tab and the grid. Used in optimizations.
-     */
-    var cross = false;
+	/**
+	 * Designates whether the gate has crossed the border between the gates tab and the grid. Used in optimizations.
+	 */
+	var cross = false;
 
-    gatesTransport.append(dragGate);
-    dragGate.css('position', 'absolute');
-    dragGate.css('left', (event.pageX - 50)+'px');
-    dragGate.css('top',  (event.pageY - 25 - parseInt(gatesTransport.css('top')))+'px');
+	gatesTransport.append(dragGate);
+	dragGate.css('position', 'absolute');
+	dragGate.css('left', (event.pageX - 50)+'px');
+	dragGate.css('top',  (event.pageY - 25 - parseInt(gatesTransport.css('top')))+'px');
 	gatesTransport.css('display', 'block');
-    dragGate.draggable({
-        stop: function(event)
-        {
-            // The gate must have been moved into the modelling grid (beyond the gates tab) to be added
-            if(event.pageX > synthbio.gui.gatesTabWidth) {
-                var newGate = $(this).clone();
-                // Compensate for the offset of the grid so it ends up where the cursor is
-                newGate.css("left", parseInt(newGate.css("left")) - synthbio.gui.gatesTabWidth);
-                // Remove the glow
-                newGate.removeClass("gate-border");
-                // Add it to the modelling grid
-                $('#grid-container').append(newGate);
-                // Make the new draggable in the jsPlumb system
-                jsPlumb.draggable(newGate);
-            }
+	dragGate.draggable({
+		stop: function(event)
+		{
+			// The gate must have been moved into the modelling grid (beyond the gates tab) to be added
+			if(event.pageX > synthbio.gui.gatesTabWidth) {
+				var newGate = $(this).clone();
+				// Compensate for the offset of the grid so it ends up where the cursor is
+				newGate.css("left", parseInt(newGate.css("left")) - synthbio.gui.gatesTabWidth);
+				// Remove the glow
+				newGate.removeClass("gate-border");
+				// Add it to the modelling grid
+				$('#grid-container').append(newGate);
+				// Make the new draggable in the jsPlumb system
+				jsPlumb.draggable(newGate);
+			}
 
-            /**
-             * Cleanup: remove the gate that was in the transport layer, and then hide it again.
-             * Recommended to remove ALL gates in the transport layer. Just removing the currently dragging gate
-             * proves troublesome because it leaves them unremoved in some situations.
-             */
-            $("#gates-transport .gate").remove();
-            gatesTransport.css('display', 'none');
-        },
-        drag: function(event) {
-            if(!cross && event.pageX > synthbio.gui.gatesTabWidth) {
-                // When we first crossed, do once
-                $(this).addClass("gate-border");
-                cross = true;
-            } else if(cross && event.pageX < synthbio.gui.gatesTabWidth) {
-                // Else if we crossed back again, do one
-                $(this).removeClass("gate-border");
-                cross = false;
-            }
-        }
-    });
-    dragGate.trigger("mousedown.draggable", [event]);
+			/**
+			 * Cleanup: remove the gate that was in the transport layer, and then hide it again.
+			 * Recommended to remove ALL gates in the transport layer. Just removing the currently dragging gate
+			 * proves troublesome because it leaves them unremoved in some situations.
+			 */
+			$("#gates-transport .gate").remove();
+			gatesTransport.css('display', 'none');
+		},
+		drag: function(event) {
+			if(!cross && event.pageX > synthbio.gui.gatesTabWidth) {
+				// When we first crossed, do once
+				$(this).addClass("gate-border");
+				cross = true;
+			} else if(cross && event.pageX < synthbio.gui.gatesTabWidth) {
+				// Else if we crossed back again, do one
+				$(this).removeClass("gate-border");
+				cross = false;
+			}
+		}
+	});
+	dragGate.trigger("mousedown.draggable", [event]);
 }
 
 /**
@@ -157,7 +157,7 @@ synthbio.gui.pingServer = function() {
 		$.ajax("/Ping")
 			.done(function(data) {
 				$('#ping').html('Server status: <b>Connected to server <em class="icon-connected"></em> [latency: '
-                    + (date.getTime() - t) + 'ms]</b>');
+					+ (date.getTime() - t) + 'ms]</b>');
 				fCount = 0;
 			})
 			.fail(function(data) {
