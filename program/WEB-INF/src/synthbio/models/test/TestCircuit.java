@@ -23,9 +23,7 @@ import static org.hamcrest.CoreMatchers.*;
 import java.util.ArrayList;
 
 import synthbio.Util;
-import synthbio.models.Circuit;
-import synthbio.models.CircuitException;
-import synthbio.models.Gate;
+import synthbio.models.*;
 
 /**
  * Testing the Circuit
@@ -35,6 +33,29 @@ import synthbio.models.Gate;
 public class TestCircuit{
 	double delta=0.0001;
 
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
+	/**
+	 * Load a test JSON file from the file system and convert it to JSON
+	 */
+	private Circuit loadTestFile(String filename) throws Exception{
+		String json=Util.fileToString("data/test/models/"+filename);
+		
+		return Circuit.fromJSON(json);
+	}
+
+	/**
+	 * Return a gate (and(A,B)->C).
+	 */
+	private Gate getAndGate(){
+		return new Gate(
+			new AndPromotor("A", "B", 1, 2, 3),
+			new CDS("C", 1, 2, 3),
+			new Position()
+		);
+	}
+	
 	@Test
 	public void testConstructor(){
 		Circuit c=new Circuit("Test");
@@ -52,14 +73,77 @@ public class TestCircuit{
 	}
 
 	/**
-	 * Load a test JSON file from the file system and convert it to JSON
+	 * Check if no exceptions are thrown if a circuit with no gates is
+	 * validated.
 	 */
-	private Circuit loadTestFile(String filename) throws Exception{
-		String json=Util.fileToString("data/test/models/"+filename);
-		
-		return Circuit.fromJSON(json);
+	@Test
+	public void testValidity_empty() throws Exception{
+		Circuit c=new Circuit("foo", "bar");
+
+		c.validate();
 	}
 	
+	@Test
+	public void testValidity_invalidGate1()throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("Gate [and(?)->C @(0.0,0.0)] has no Promotor set.");
+		
+		Circuit c=new Circuit("foo", "bar");
+		Gate g=this.getAndGate();
+		g.setPromotor(null);
+		c.addGate(g);
+		
+		c.addInput("A");
+		c.addInput("B");
+		c.addOutput("C");
+
+		c.validate();
+	}
+	
+	@Test
+	public void testValidity_invalidGate2()throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("Gate [and(A,B)->? @(0.0,0.0)] has no CDS set.");
+		
+		Circuit c=new Circuit("foo", "bar");
+		Gate g=this.getAndGate();
+		g.setCDS(null);
+		c.addGate(g);
+		
+		c.addInput("A");
+		c.addInput("B");
+		c.addOutput("C");
+
+		c.validate();
+	}
+
+	
+	@Test
+	public void testValidity_oneGateNoInputs()throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("Circuit with one Gate should have at least one input.");
+		
+		Circuit c=new Circuit("foo", "bar");
+		c.addGate(this.getAndGate());
+		c.addOutput("C");
+
+		c.validate();
+	}
+	
+	@Test
+	public void testValidity_oneGateNoOutputs()throws Exception{
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("Circuit with one Gate should have at least one output.");
+		
+		Circuit c=new Circuit("foo", "bar");
+		c.addGate(this.getAndGate());
+		c.addInput("A");
+		c.addInput("B");
+
+		c.validate();
+	}
+	
+
 	/**
 	 * Test some valid example circuits.
 	 */
@@ -116,10 +200,7 @@ public class TestCircuit{
 		assertThat(c.getOutputs(), hasItems("H"));
 	}
 
-	
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
+
 	/**
 	 * An exception should be thrown if an AND gate has not exactly
 	 * two input signals.

@@ -159,6 +159,18 @@ public class Circuit implements JSONString{
 	 * @throws 
 	 */
 	public void validate() throws CircuitException{
+		/* if there is one gate there should be at least one input and
+		 * at least one output.
+		 */
+		if(this.getGates().size()>0){
+			if(this.getInputs().size()<1){
+				throw new CircuitException("Circuit with one Gate should have at least one input.");
+			}
+			if(this.getOutputs().size()<1){
+				throw new CircuitException("Circuit with one Gate should have at least one output.");
+			}
+		}
+		
 		for(Gate g: this.getGates()){
 			if(g.getPromotor()==null){
 				throw new CircuitException("Gate "+g.toString()+" has no Promotor set.");
@@ -174,7 +186,6 @@ public class Circuit implements JSONString{
 		}catch(CircuitException e){
 			throw new CircuitException("Incorrect Protein assignment: "+e.getMessage());
 		}
-			
 	}
 	
 	/**
@@ -294,7 +305,6 @@ public class Circuit implements JSONString{
 			json.getString("name"),
 			json.getString("description")
 		);
-		
 		
 		/* Fetch the gates, add them in their order to a local list of
 		 * gates.
