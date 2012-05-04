@@ -17,6 +17,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
 
@@ -70,6 +72,10 @@ public class TestCircuit{
 
 		assertEquals("[and(A,B)->C @(2.0,2.0)]", c.gateAt(0).toString());
 		assertEquals("[not(C)->D @(2.0,4.0)]", c.gateAt(1).toString());
+
+		//test inputs and outputs
+		assertThat(c.getInputs(), hasItems("A", "B"));
+		assertThat(c.getOutputs(), hasItems("D"));
 	}
 
 	@Test
@@ -84,6 +90,10 @@ public class TestCircuit{
 		assertEquals("[and(A,B)->E @(2.0,2.0)]", c.gateAt(0).toString());
 		assertEquals("[and(C,D)->F @(2.0,4.0)]", c.gateAt(1).toString());
 		assertEquals("[and(E,F)->G @(4.0,3.0)]", c.gateAt(2).toString());
+
+		//test inputs and outputs
+		assertThat(c.getInputs(), hasItems("A", "B", "C", "D"));
+		assertThat(c.getOutputs(), hasItems("G"));
 	}
 	@Test
 	public void testFromJSON_example3syn() throws Exception{
@@ -98,6 +108,10 @@ public class TestCircuit{
 		assertEquals("[and(C,D)->F @(2.0,4.0)]", c.gateAt(1).toString());
 		assertEquals("[and(F,G)->H @(4.0,3.0)]", c.gateAt(2).toString());
 		assertEquals("[not(E)->G @(5.0,5.0)]", c.gateAt(3).toString());
+
+		//test inputs and outputs
+		assertThat(c.getInputs(), hasItems("A", "B", "C", "D"));
+		assertThat(c.getOutputs(), hasItems("H"));
 	}
 
 	

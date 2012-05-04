@@ -16,6 +16,8 @@ package synthbio.models.test;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,22 @@ import synthbio.models.*;
 public class TestGate{
 	double delta=0.0001;
 
+	public Gate getAndGate(){
+		AndPromotor promotor=new AndPromotor("A", "B", 1, 2, 3);
+		CDS cds=new CDS("C", 1, 2, 3);
+		Position position=new Position(1, 2);
+
+		return new Gate(promotor, cds, position);
+	}
+	
+	public Gate getNotGate(){
+		NotPromotor promotor=new NotPromotor("A", 1, 2, 3);
+		CDS cds=new CDS("C", 1, 2, 3);
+		Position position=new Position(1, 2);
+
+		return new Gate(promotor, cds, position);
+	}
+		
 	/**
 	 * Test empty gate constructor
 	 */
@@ -55,17 +73,38 @@ public class TestGate{
 		assertEquals(position, g.getPosition());
 	}
 
+	/**
+	 * Check if the toString method returns something we expect.
+	 */
 	@Test
-	public void testToString(){
-		AndPromotor promotor=new AndPromotor("A", "B", 1, 2, 3);
-		CDS cds=new CDS("C", 1, 2, 3);
-		Position position=new Position(1, 2);
-
-		Gate g=new Gate(promotor, cds, position);
+	public void testAndGateToString(){
+		Gate g=this.getAndGate();
 
 		assertEquals("[and(A,B)->C @(1.0,2.0)]", g.toString());
 	}
-	
-	
-	
+	@Test
+	public void testNotGateToString(){
+		Gate g=this.getNotGate();
+
+		assertEquals("[not(A)->C @(1.0,2.0)]", g.toString());
+	}
+
+	/**
+	 * Check if the gates getInput/getOutput methods yield expected
+	 * results.
+	 */
+	@Test
+	public void testGetInputsOutputs(){
+		Gate g;
+
+		//for an AND gate
+		g=this.getAndGate();
+		assertThat(g.getInputs(), hasItems("A", "B"));
+		assertThat(g.getOutput(), is("C"));
+
+		//for a NOT gate
+		g=this.getNotGate();
+		assertThat(g.getInputs(), hasItems("A"));
+		assertThat(g.getOutput(), is("C"));
+	}
 }

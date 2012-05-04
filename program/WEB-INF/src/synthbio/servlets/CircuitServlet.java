@@ -29,8 +29,6 @@ import synthbio.models.Circuit;
 import synthbio.models.CircuitException;
 import synthbio.json.JSONResponse;
 
-
-
 /**
  * Servlet ListServlets has different actions on the circuit and replies
  * with the default JSON response.
