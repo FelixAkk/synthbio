@@ -55,7 +55,6 @@ abstract class Promotor extends BioBrick{
 	 */
 	public abstract boolean hasTf(String tf);
 	
-
 	/**
 	 * Does this Promotor equals the other.
 	 */

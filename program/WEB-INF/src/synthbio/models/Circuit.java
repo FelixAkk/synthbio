@@ -34,7 +34,7 @@ import synthbio.files.BioBrickRepository;
  * A Circuit is defined by a name, description and three lists: Gates,
  * input proteins and output proteins.
  *
- * Circuits fromJSON is guaranteed to return a valid circuit, when
+ * Circuits' fromJSON is guaranteed to return a valid circuit. When
  * constructing the Circuit manually, a validate() method is supplied to
  * check validity.
  * 
@@ -141,21 +141,55 @@ public class Circuit implements JSONString{
 		return index >= 0 && index < this.gates.size();
 	}
 
-	
+	/**
+	 * Return the gate at position index, provided that such a gate exists. 
+	 */
 	public Gate gateAt(int index){
 		assert this.hasGateAt(index) : "No such Gate";
 		return this.gates.get(index);
 	}
 	
+	/**
+	 * Validate the Circuit.
+	 *
+	 * Check:
+	 *  - All gates have non-null
+	 *  - Valid use of proteins.
+	 *
+	 * @throws 
+	 */
+	public void validate() throws CircuitException{
+		for(Gate g: this.getGates()){
+			if(g.getPromotor()==null){
+				throw new CircuitException("Gate "+g.toString()+" has no Promotor set.");
+			}
+			if(g.getCDS()==null){
+				throw new CircuitException("Gate "+g.toString()+" has no CDS set.");
+			}
+		}
+		
+		//validate the protein assignments.
+		try{
+			this.validateProteins();
+		}catch(CircuitException e){
+			throw new CircuitException("Incorrect Protein assignment: "+e.getMessage());
+		}
+			
+	}
 	
 	/**
-	 * Validate the use of Proteins in the circuit.
+	 * Validate the use of proteins in the circuit.
+	 * If the circuit is valid, no exception is thrown.
 	 *
-	 * @todo find a way to export the error messages.
-	 * @return true if the use of proteins is valid.
+	 * Could be done in a more efficient manner, but for the time being
+	 * this is straightforward and explicit.
+	 * 
+	 * @throws CircuitException if some error is found in the protein
+	 * assignment.
 	 */
-	public boolean validateProteins(){
-		//check if all input Proteins are used.
+	public void validateProteins() throws CircuitException{
+		/* check if all input Proteins are used by some gate.
+		 */
 		boolean used=false;
 		for(String input: this.getInputs()){
 			used=false;
@@ -165,28 +199,55 @@ public class Circuit implements JSONString{
 				}
 			}
 			if(!used){
-				// error: "Unused input protein ("+input+")."
-				return false;
+				throw new CircuitException("Unused input protein ("+input+").");
 			}
 		}
 
 		/* Check if all gate have
 		 *  - inputs from other gates or from the circuits inputs
-		 * or
 		 *  - outputs to other gates or to the circuits outputs
+		 *  - no outputs which are inputs. 
 		 */
+		boolean available;
 		for(Gate g: this.getGates()){
 			//check inputs
 			for(String input: g.getInputs()){
-				//check the circuits inputs
-				if(this.getInputs().contains(input)){
-
-				}else{
-					// error: "Input "+input+" of Gate "+g.toString()+" is not connected";
-					return false;
+				//check the circuits' inputs
+				if(!this.getInputs().contains(input)){
+					//and if its not in Circuits' inputs, check all Gate
+					//outputs.
+					available=false;
+					for(Gate output: this.getGates()){
+						if(output.hasOutput(input)){
+							available=true;
+						}
+					}
+					if(!available){
+						throw new CircuitException("Input "+input+" of Gate "+g.toString()+" is not connected");
+					}
 				}
 			}
+			
 			//check outputs
+			String output=g.getOutput();
+			//check the circuits' outputs
+			if(!this.getOutputs().contains(output)){
+				//and if its not in Circuits' outputs, check all Gate
+				//inputs.
+				available=false;
+				for(Gate input: this.getGates()){
+					if(input.hasInput(output)){
+						available=true;
+					}
+				}
+				if(!available){
+					throw new CircuitException("Output "+output+" of Gate "+g.toString()+" is not connected");
+				}
+			}
+			//check if gate has a signal from an output to an input.
+			if(g.hasInput(g.getOutput())){
+				throw new CircuitException("Gate "+g.toString()+" has an output which is connected to one of its inputs");
+			}
 		}
 
 		//check if all outputs come from a gate.
@@ -198,50 +259,14 @@ public class Circuit implements JSONString{
 				}
 			}
 			if(!used){
-				// error: "Unused output protein ("+output+")."
-				return false;
+				throw new CircuitException("Unused output protein ("+output+").");
 			}
 		}
-		return true;
-	}
+		//check if one protein is produced by more than one gate or by
+		//a gate and by the inputs.
+		//@todo implement
 
-
-	/**
-	 * Return an collection of signals.
-	 *
-	 * Since signals are not stored in the Circuit object as such,
-	 * they are derived from the set of Gates and references between
-	 * them.
-	 *
-	 * @return A collection of all the signals in the circuit, including
-	 * the input and output nodes.
-	 *
-	 * @todo implement
-	 */
-/*
-	public Collection<Signal> collectSignals(){
-		return null;
-	}
-*/
-	
-	/**
-	 * Convert the current object state to JSON
-	 * 
-	 * @return Serialized JSON string representation of the Circuit.
-	 */
-	public String toJSONString(){
-		JSONObject ret=new JSONObject();
-
-		try{
-			ret.put("name", this.getName());
-			ret.put("description", this.getDescription());
-			ret.put("gates", this.getGates());
-		//	todo fix this.
-		//	ret.put("signals", this.collectSignals());
-		}catch(Exception e){
-			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
-		}
-		return ret.toString();
+		//if we arrive here, the protein assignments are valid.
 	}
 
 	/**
@@ -362,6 +387,7 @@ public class Circuit implements JSONString{
 					if(!tmpTF.containsKey(to)){
 						tmpTF.put(to, signal.getString("protein"));
 					}else{
+						//now we have two inputs, add the AndPromtor to the Gate.
 						circuit.gateAt(to).setPromotor(
 							bbr.getAndPromotor(signal.getString("protein"), tmpTF.get(to))
 						);
@@ -374,16 +400,40 @@ public class Circuit implements JSONString{
 			}
 		}
 
+		//check voor leftovers 
 		if(tmpTF.size()!=0){
 			throw new CircuitException("At least one AND gate has only one input.");
 		}
 
-		//if(!circuit.validateProteins()){
-		//	throw new CircuitException("Incorrect Protein assignment");
-		//}
-
-
+		/* validate the circuit. validate will throw exceptions when it
+		 * encounters invalid things...
+		 * Calling this will double some checks and is quite expensive,
+		 * but since all circuits will be quite small, it should be no
+		 * problem.
+		 */
+		circuit.validate();
+		
 		return circuit;
+	}
+	
+	/**
+	 * Convert the current object state to JSON
+	 * 
+	 * @return Serialized JSON string representation of the Circuit.
+	 */
+	public String toJSONString(){
+		JSONObject ret=new JSONObject();
+
+		try{
+			ret.put("name", this.getName());
+			ret.put("description", this.getDescription());
+			ret.put("gates", this.getGates());
+			//@todo include signals...
+			//ret.put("signals", <signals>);
+		}catch(Exception e){
+			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
+		}
+		return ret.toString();
 	}
 	
 	/**
@@ -395,6 +445,10 @@ public class Circuit implements JSONString{
 		//TODO: Implement toSBML
 		return null;
 	}
+
+	/**
+	 * Return a string representation for the Circuit.
+	 */
 	public String toString(){
 		String ret="Circuit: "+this.getName()+" | "+this.getDescription()+"\n";
 		for(Gate g: this.getGates()){

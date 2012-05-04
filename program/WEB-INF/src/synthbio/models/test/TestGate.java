@@ -14,6 +14,8 @@
 package synthbio.models.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -101,10 +103,40 @@ public class TestGate{
 		g=this.getAndGate();
 		assertThat(g.getInputs(), hasItems("A", "B"));
 		assertThat(g.getOutput(), is("C"));
-
+		
 		//for a NOT gate
 		g=this.getNotGate();
 		assertThat(g.getInputs(), hasItems("A"));
 		assertThat(g.getOutput(), is("C"));
+	}
+
+	/**
+	 * Check the hasInput/hasOutput methods
+	 */
+	@Test
+	public void testHasInputOutput(){
+		Gate g;
+
+		//for an AND gate
+		g=this.getAndGate();
+		assertTrue(g.hasInput("A"));
+		assertTrue(g.hasInput("B"));
+		assertTrue(g.hasOutput("C"));
+
+		assertFalse(g.hasInput("C"));
+		assertFalse(g.hasInput("X"));
+		assertFalse(g.hasOutput("A"));
+		assertFalse(g.hasOutput("B"));
+		
+		
+		//for a NOT gate
+		g=this.getNotGate();
+		assertTrue(g.hasInput("A"));
+		assertTrue(g.hasOutput("C"));
+
+		assertFalse(g.hasInput("C"));
+		assertFalse(g.hasInput("X"));
+		assertFalse(g.hasOutput("A"));
+		assertFalse(g.hasOutput("B"));
 	}
 }

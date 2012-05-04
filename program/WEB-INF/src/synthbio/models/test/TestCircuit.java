@@ -34,7 +34,7 @@ import synthbio.models.Gate;
  */
 public class TestCircuit{
 	double delta=0.0001;
-	
+
 	@Test
 	public void testConstructor(){
 		Circuit c=new Circuit("Test");
@@ -51,6 +51,9 @@ public class TestCircuit{
 		assertEquals(new ArrayList<Gate>(), c.getGates());
 	}
 
+	/**
+	 * Load a test JSON file from the file system and convert it to JSON
+	 */
 	private Circuit loadTestFile(String filename) throws Exception{
 		String json=Util.fileToString("data/test/models/"+filename);
 		
@@ -59,7 +62,6 @@ public class TestCircuit{
 	
 	/**
 	 * Test some valid example circuits.
-	 *
 	 */
 	@Test
 	public void testFromJSON_examplesyn() throws Exception{
