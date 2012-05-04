@@ -13,6 +13,7 @@
 
 package synthbio.models;
 
+import java.util.List;
 import org.json.JSONObject;
 import org.json.JSONString;
 
@@ -92,7 +93,44 @@ public class Gate implements JSONString{
 		this.position=p;
 	}
 
-
+	/**
+	 * Return a list of inputs for this Gate
+	 */
+	public List<String> getInputs(){
+		if(this.getPromotor()==null){
+			return null;
+		}
+		return this.getPromotor().listTfs();
+	}
+		
+	/**
+	 * Does the Gate have a certain input protein?
+	 */
+	public boolean hasInput(String protein){
+		if(this.getPromotor()==null){
+			return false;
+		}
+		return this.getPromotor().hasTf(protein);
+	}
+	
+	/**
+	 * Return the output for this gate or Null if it is not defined.
+	 */
+	public String getOutput(){
+		if(this.getCDS()==null){
+			return null;
+		}
+		return this.getCDS().getName();
+	}
+	
+	/**
+	 * Does the Gate have a certain output protein?
+	 */
+	public boolean hasOutput(String protein){
+		return this.getOutput().equals(protein);
+	}
+	
+	
 	/**
 	 * Convert Gate to JSON string.
 	 */
