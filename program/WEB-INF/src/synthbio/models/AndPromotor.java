@@ -13,8 +13,14 @@
 
 package synthbio.models;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * AndPromotor value object.
+ *
+ * Except for the two transcription factors, AndPromotor inherits all
+ * parameters from Promotor.
  *
  * @author jieter
  */
@@ -38,11 +44,24 @@ public class AndPromotor extends Promotor {
 	public String getTf2(){
 		return this.tf2;
 	}
-
 	public String kind(){
 		return "and";
 	}
 
+	/**
+	 * Return the transcription factors for the AndPromotor
+	 */
+	public List<String> listTfs(){
+		return Arrays.asList(this.getTf1(), this.getTf2());
+	}
+	
+	/**
+	 * Does this AndPromotor react on transcription factor tf?
+	 */
+	public boolean hasTf(String tf){
+		return this.getTf1().equals(tf) || this.getTf2().equals(tf);
+	}
+		
 	/**
 	 * Is this AndPromotor composed of these two TF's?
 	 * 
@@ -53,6 +72,9 @@ public class AndPromotor extends Promotor {
 			this.tf2.equals(tf1) && this.tf1.equals(tf2);
 	}
 
+	/**
+	 * Does this equals other?
+	 */
 	public boolean equals(Object other){
 		if(!super.equals(other)){
 			return false;

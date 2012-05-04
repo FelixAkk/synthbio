@@ -14,6 +14,7 @@
 package synthbio.servlets.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -65,10 +66,11 @@ public class TestCircuitServlet{
 	public void testList() throws Exception{
 		TextPage page=this.getTestPage(this.url+"?action=list");
 
-		//check success
-		assertThat(page.getContent(), containsString("\"success\":true"));
-		
 		JSONObject response=new JSONObject(page.getContent());
+
+		//check success and empty message string.
+		assertTrue(response.getBoolean("success"));
+		assertEquals("", response.getString("message"));
 		
 		//check returned type.
 		assertThat(response.getJSONArray("data"), is(JSONArray.class));
@@ -82,5 +84,29 @@ public class TestCircuitServlet{
 		for(int i=0; i<data.length(); i++){
 			assertThat(data.getString(i), endsWith(".syn"));
 		}
+
+		//check that the file list contains 'example.syn'
+		assertThat(page.getContent(), containsString("example.syn"));
+	}
+
+	/**
+	 * Test the loadFile action
+	 */
+	@Test
+	public void testLoad() throws Exception{
+		TextPage page=this.getTestPage(this.url+"?action=load&filename=example.syn");
+
+		JSONObject response=new JSONObject(page.getContent());
+
+		//check success and empty message string.
+		assertTrue(response.getBoolean("success"));
+		assertEquals("", response.getString("message"));
+
+		JSONObject data=response.getJSONObject("data");
+		JSONObject expect=Util.fileToJSONObject("data/synstore/example.syn");
+		assertEquals(expect.getString("name"), data.getString("name"));
+		assertEquals(expect.getString("description"), data.getString("description"));
+		
+
 	}
 }

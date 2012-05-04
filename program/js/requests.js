@@ -10,7 +10,15 @@
  * 
  * https://github.com/FelixAkk/synthbio
  */
- 
+
+
+/**
+ * Connection to the server API, as defined in
+ * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
+ *
+ * 
+ */
+
 /**
  * syntbio package.
  */
@@ -55,7 +63,7 @@ synthbio.requests.listFiles = function(callback){
 		return ("callback function for listFiles is not a function");
 	}
 	synthbio.requests.baseXHR({
-		url: "/ListFiles",
+		url: "/Circuit?action=list",
 		success: function(response){
 			if(!response.success){
 				return console.log(response.message);
@@ -82,8 +90,10 @@ synthbio.requests.listFiles = function(callback){
 synthbio.requests.getFile = function(callback, name){
 
 	synthbio.requests.baseXHR({
-		url: "/getFile",
-		data: {fileName: name},
+		url: "/Circuit?action=load",
+		data: {
+			"filename": name
+		},
 		success: function(response){
 			callback(response);
 		},
@@ -104,9 +114,12 @@ synthbio.requests.getFile = function(callback, name){
 synthbio.requests.putFile = function(callback, name, circ){
 	
 	synthbio.requests.baseXHR({
-		url: "/PutFile",
+		url: "/Circuit?action=save",
 		type: "POST",
-		data: {fileName: name, circuit: JSON.stringify(circ)},
+		data: {
+			"filename": name,
+			"circuit": JSON.stringify(circ)
+		},
 		success: function(response){
 			if(!response.success){
 				callback(response.message);
@@ -160,6 +173,8 @@ synthbio.requests.getCDSs = function(callback){
  * Callback will be applied to the returned list
  * Other error messages will be shown in console.log
  */
+ 
+/* (2012-05-03, Jieter): seems to be the same as listFiles??
 synthbio.requests.listCircuits = function(callback){
 	
 	synthbio.requests.baseXHR({
@@ -184,7 +199,7 @@ synthbio.requests.listCircuits = function(callback){
 		
 	});
 };
-
+*/
 /**
  * Circuit to SBML
  * Save a circuit, "circ", as SBML with a "name"
@@ -193,9 +208,12 @@ synthbio.requests.listCircuits = function(callback){
 synthbio.requests.circuitToSBML = function(callback, name, circ){
 	
 	synthbio.requests.baseXHR({
-		url: "/CircuitToSBML",
+		url: "/Circuit?action=exportSBML",
 		type: "POST",
-		data: {fileName: name, circuit: JSON.stringify(circ)},
+		data: {
+			"filename": name,
+			"circuit": JSON.stringify(circ)
+		},
 		success: function(response){
 			if(!response.success){
 				callback(response.message);
@@ -223,8 +241,11 @@ synthbio.requests.simulate = function(callback, name, input){
 	new synthbio.requests.callback();
 	
 	synthbio.requests.baseXHR({
-		url: "/simulate",
-		data: {fileName: name, cds: JSON.stringify(input)},
+		url: "/Circuit?action=simulate",
+		data: {
+			"filename": name,
+			"inputs": JSON.stringify(input)
+		},
 		success: function(response){
 			callback(response);
 		},
@@ -248,7 +269,7 @@ synthbio.requests.validate = function(callback,circuit){
 	new synthbio.requests.callback();
 	
 	synthbio.requests.baseXHR({
-		url: "/validate",
+		url: "/Circuit?action=validate",
 		data: JSON.stringify(circuit),
 		success: function(response){
 			callback(response);

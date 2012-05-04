@@ -10,7 +10,7 @@
  *
  * https://github.com/FelixAkk/synthbio
  *
- * @author Felix Akkermans & Jan-Pieter Waagmeester
+ * @author Felix Akkermans & Jan-Pieter Waagmeester & Niels Doekemeijer
  * GUI JavaScript Document, concerns all GUI matters except those about the modeling grid.
  */
 
@@ -23,6 +23,11 @@ var synthbio = synthbio || {};
  * GUI package
  */
 synthbio.gui = synthbio.gui || {};
+
+/**
+ * Gate counter, used for tracking gates
+ */
+synthbio.gui.gateCounter = 0;
 
 /**
  * Width of the <aside> element with all the gates in pixels.
@@ -54,13 +59,91 @@ $(document).ready(function() {
 	//$('#gates-tab').appendChild(synthbio.gui.createGateElement('and'));
     //$('#gates-tab').appendChild(synthbio.gui.createGateElement('not'));
 
-	$('#gates-tab .gate').on('mousedown', synthbio.gui.instantiateGate);
+	//Initialize gate-dragging
+	$('#gates-tab .gate').draggable({ 
+		appendTo: "#gates-transport",
+		containment: 'window',
+		scroll: false,
+		helper: 'clone',
+		start: function(event){
+			$("#gates-transport").css('display', 'block');
+		},
+        drag: function(event, ui) {
+            $(ui.helper).toggleClass("gate-border", event.pageX > synthbio.gui.gatesTabWidth);
+        },
+		stop: function(event, ui){
+			if(event.pageX > synthbio.gui.gatesTabWidth) {
+				var newGate = $(synthbio.gui.createGateElement($(this).attr('class').split(' ')[1]));
+				$('#grid-container').append(newGate);
+
+				newGate.css("top", parseInt(event.pageY  - $(this).height()));
+				newGate.css("left", parseInt(event.pageX - synthbio.gui.gatesTabWidth));
+				synthbio.gui.addGateAnchors(newGate);
+			}
+
+			$("#gates-transport .gate").remove();
+			$("#gates-transport").css('display', 'none');
+		}
+	});
 });
+
+/**
+ * All the JSPlumb source anchors
+ */
+synthbio.gui.SourceEndpoints = [];
+
+/**
+ * All the JSPlumb target anchors
+ */
+synthbio.gui.TargetEndpoints = [];
+
+/**
+ * Add specified number of JSPlumb anchors to a gate
+ *
+ * @param toId ID of the gate element. UUID of the anchors will be *id*_input*number* (and id_outputNUMBER)
+ * @param inputAnchors Number of input anchors
+ * @param outputAnchors Number of output anchors
+ */
+synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
+	inputAnchors--;
+	outputAnchors--;
+	
+	var placement = function(num, total) {
+		return (total < 1) ? 0.5 : (num / total);
+	}
+
+	for (var j = 0; j <= inputAnchors; j++) {
+		var targetUUID = toId + "_input" + j;
+		synthbio.gui.TargetEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.inputEndpoint, { anchor:[0, placement(j, inputAnchors), -1, 0], uuid:targetUUID }));
+	} 
+	for (var i = 0; i <= outputAnchors; i++) {
+		var sourceUUID = toId + "_output" + i;
+		synthbio.gui.SourceEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { anchor:[1, placement(i, outputAnchors), 1, 0], uuid:sourceUUID }));
+	}
+}
+
+/**
+ * Add the correct number of anchors to a gate
+ *
+ * @param elem Target element. Uses the class attribute to determine the proper number of anchors.
+ */
+synthbio.gui.addGateAnchors = function(elem) {
+	elem = $(elem);
+	var gateClass = elem.attr('class').split(' ')[1];
+	var gateID = elem.attr("id");
+
+	//TODO: Better way to determine number of inputs/outputs (also for compound gates).
+    if(gateClass == "not")
+		synthbio.gui.addPlumbAnchors(gateID, 1, 1)
+	else if (gateClass == "and")
+		synthbio.gui.addPlumbAnchors(gateID, 2, 1)
+	//else TODO: implement exception throwing using synthbio.util
+}
 
 /**
  * Create a new gate DOM element to be used within the modelling grid.
  *
- * @param class The class/type of gate to be created. Can be either the string 'not', 'and' or 'compound'.
+ * @param gateClass The class/type of gate to be created. Can be either the string 'not', 'and' or 'compound'.
  */
 synthbio.gui.createGateElement = function(gateClass) {
     // TODO: use synthbio.util
@@ -69,78 +152,16 @@ synthbio.gui.createGateElement = function(gateClass) {
         return;
     }
 
-    var element = $("<div class=\"gate " + gateClass + " draggable\">"
+	synthbio.gui.gateCounter++;
+	var id = "gate" + synthbio.gui.gateCounter;
+
+    var element = $("<div íd=\""+id+"\" class=\"gate " + gateClass + "\">"
         + "<embed src=\"../img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
         + "<div class=\"mask\"></div>"
         + "</div>");
+
+	jsPlumb.draggable(element);
     return element;
-}
-
-/**
- * Instantiate/copy/duplicate a provided gate HTML element and place it as a draggable in the transport
- *
- * @param event JavaScript event provided by default. Required for getting mouse/pointer position.
- */
-synthbio.gui.instantiateGate = function(event) {
-    // We need the event object. Without we have no idea where the mouse is and exit the function call.
-    if(arguments.length < 1) {
-        // TODO: implement exception throwing using
-        return;
-    }
-
-    /**
-     * Gated used in the transport layer (not the one for in the grid, for that we construct a clone).
-     */
-	var	dragGate = synthbio.gui.createGateElement(this.className.substring(5));
-	var gatesTransport = $('#gates-transport');
-
-    /**
-     * Designates whether the gate has crossed the border between the gates tab and the grid. Used in optimizations.
-     */
-    var cross = false;
-
-    gatesTransport.append(dragGate);
-    dragGate.css('position', 'absolute');
-    dragGate.css('left', (event.pageX - 50)+'px');
-    dragGate.css('top',  (event.pageY - 25 - parseInt(gatesTransport.css('top')))+'px');
-	gatesTransport.css('display', 'block');
-    dragGate.draggable({
-        stop: function(event)
-        {
-            // The gate must have been moved into the modelling grid (beyond the gates tab) to be added
-            if(event.pageX > synthbio.gui.gatesTabWidth) {
-                var newGate = $(this).clone();
-                // Compensate for the offset of the grid so it ends up where the cursor is
-                newGate.css("left", parseInt(newGate.css("left")) - synthbio.gui.gatesTabWidth);
-                // Remove the glow
-                newGate.removeClass("gate-border");
-                // Add it to the modelling grid
-                $('#grid-container').append(newGate);
-                // Make the new draggable in the jsPlumb system
-                jsPlumb.draggable(newGate);
-            }
-
-            /**
-             * Cleanup: remove the gate that was in the transport layer, and then hide it again.
-             * Recommended to remove ALL gates in the transport layer. Just removing the currently dragging gate
-             * proves troublesome because it leaves them unremoved in some situations.
-             */
-            $("#gates-transport .gate").remove();
-            gatesTransport.css('display', 'none');
-        },
-        drag: function(event) {
-            if(!cross && event.pageX > synthbio.gui.gatesTabWidth) {
-                // When we first crossed, do once
-                $(this).addClass("gate-border");
-                cross = true;
-            } else if(cross && event.pageX < synthbio.gui.gatesTabWidth) {
-                // Else if we crossed back again, do one
-                $(this).removeClass("gate-border");
-                cross = false;
-            }
-        }
-    });
-    dragGate.trigger("mousedown.draggable", [event]);
 }
 
 /**

@@ -17,35 +17,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import synthbio.json.JSONResponse;
-
-
 /**
- * Servlet PutFile returns a default list saved files.
+ * Servlet Ping returns Pong.
+ *
+ * This servlet can be used to check the connection status.
+ * The client requests "Ping" and knows the server is running when "Pong" is succesfully returned.
  */
 @SuppressWarnings("serial")
-public class PutFile extends SynthbioServlet {
-
+public class PingServlet extends SynthbioServlet {
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
 		response.setContentType("text/plain");
 		PrintWriter out = response.getWriter();
 
-		JSONResponse json=new JSONResponse();
-		try{
-		//No data stored yet so this is a mockup
-			json.data= null;
-			json.success=true;
-		}catch(Exception e){
-			
-			json.success=false;
-			json.message="Could not load BioBricks: "+e.getMessage();
-		}
-
-		out.println(json.toJSONString());
+		out.print("Pong");
 	}
 }
