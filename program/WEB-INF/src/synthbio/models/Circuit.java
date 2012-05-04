@@ -305,7 +305,8 @@ public class Circuit implements JSONString{
 	 * @todo implement
 	 */
 	public String toSBML(){
-		
+		//TODO: Implement toSBML
+		return null;
 	}
 	public String toString(){
 		String ret="Circuit: "+this.getName()+" | "+this.getDescription()+"\n";

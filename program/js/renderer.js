@@ -50,7 +50,7 @@ $(document).ready(function() {
 		// the definition of input endpoints
 		synthbio.gui.inputEndpoint = {
 			endpoint:"Rectangle",					
-			paintStyle:{ fillStyle:"#558822",width:10,height:10 },
+			paintStyle:{ fillStyle:"#558822",width:11,height:11 },
 			hoverPaintStyle:pointHoverStyle,
 			isTarget:true,
 			dropOptions: {
@@ -67,7 +67,8 @@ $(document).ready(function() {
 			connectorStyle:connectorPaintStyle,
 			hoverPaintStyle:pointHoverStyle,
 			connectorHoverStyle:connectorHoverStyle,
-			isSource:true
+			isSource:true,
+			maxConnections: -1
 		};
 
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
