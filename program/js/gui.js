@@ -170,8 +170,11 @@ synthbio.gui.createGateElement = function(gateClass, gatePos) {
 
 	jsPlumb.draggable(res.element);
 	res.element.dblclick(function() {
-		alert("removing " + id);
-		jsPlumb.removeAllEndpoints(id);
+		if (!confirm("Delete " + id + "?"))
+			return;
+
+		jsPlumb.removeAllEndpoints(res.element);
+		res.element.remove();
 	});
 
 	$('#grid-container').append(res.element);
@@ -204,6 +207,6 @@ synthbio.gui.pingServer = function() {
 				if(fCount  <= limit+1) fCount++; // Keep counting untill the dialog was shown
 				if(fCount == limit) $('#connection-modal').modal(); // Show the dialog once
 			})
-			//.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
+			.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
 	};
 }();
