@@ -163,7 +163,7 @@ synthbio.gui.createGateElement = function(gateClass, gatePos) {
     var res = {
 		idx: synthbio.gui.gateCounter,
 		element: $("<div íd=\""+id+"\" class=\"gate " + gateClass + "\">"
-			+ "<embed src=\"../img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
+			+ "<embed src=\"img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
 			+ "<div class=\"mask\"></div>"
 			+ "</div>")
 	}
@@ -204,6 +204,6 @@ synthbio.gui.pingServer = function() {
 				if(fCount  <= limit+1) fCount++; // Keep counting untill the dialog was shown
 				if(fCount == limit) $('#connection-modal').modal(); // Show the dialog once
 			})
-			.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
+			//.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
 	};
 }();
