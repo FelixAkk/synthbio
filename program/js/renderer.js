@@ -59,8 +59,12 @@ $(document).ready(function() {
 				hoverClass:'dragHover'
 			},
 			beforeDrop: function(opt) {
-				if ((!opt.jpc) || (opt.jpc.sourceId != "gate-input") || opt.jpc.endpoints[0].getUuid())
+				if (!opt.connection || 
+					opt.connection.sourceId != "gate-input" || 
+					opt.connection.endpoints[0].getUuid())
+				{
 					return true;
+				}
 
 				var UUID = "input" + ++inputCounter;
 				var src = jsPlumb.addEndpoint("gate-input", synthbio.gui.outputEndpoint, { anchor: "Continuous", uuid:UUID });
