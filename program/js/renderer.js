@@ -87,10 +87,27 @@ $(document).ready(function() {
 			maxConnections:-1
 		};
 
+		var connCount = 0;
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
-		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) { 
-			connInfo.connection.getOverlay("label").setLabel("I am a signal");
+		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
+			connCount++;
+			connInfo.connection.getOverlay("label").setLabel("<a id=\"conn" + connCount + "\" href=#>Choose protein</a>");
+
+			var el = $("#conn" + connCount, 0);
+			el.click(function(){
+				var lp = $('#list-proteins');
+				lp.modal("show");
+				$('#list-proteins tbody').on("click", "tr", function() {
+					lp.modal("hide");
+					el.html($("td", this, 0).html());
+				});
+			});
 		});
+
+		$('#list-proteins').on('hide', function(){
+			$('#list-proteins tbody').off("click", "tr");
+		});
+
 
 		// listen for disposal of connections; delete endpoints if necessary
 		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) { 
