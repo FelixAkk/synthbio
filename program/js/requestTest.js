@@ -47,26 +47,15 @@
 		});
  
 	/**
-	 * getCDS(callback)
+	 * getCDSs(callback)
 	 * This should return a list of proteins which are available, including meta-data
 	 * Requested by GUI and delivered by server
 	 */
 	module("getCDSs");
 		test('List all proteins', function(){
-			deepEqual(synthbio.requests.getCDSs(console.log), proteins(true), "Should return a list of available proteins");
+			ok(synthbio.requests.getCDSs(alert), "Should return a list of available proteins");
 		});
 	 
-	/**
-	 * listCircuits
-	 * This should return a list of circuits of files which are saved
-	 * These circuits will be shown in the compound gate section in the GUI
-	 * Requested by GUI and delivered by server
-	 */
-	module("listCircuits");
-		test('List all circuits of saved files', function(){
-			deepEqual(synthbio.requests.listCircuits(console.log), {}, "should return a list containing saved circuits");
-		});
- 
 	 /**
 	 * circuitToSBML(callback, fileName, circuit)
 	 * This should save a circuit as SBML file
