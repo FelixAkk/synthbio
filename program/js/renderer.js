@@ -131,5 +131,8 @@ $(document).ready(function() {
 
 		jsPlumb.makeSource("gate-input", oep);
 		jsPlumb.makeTarget("gate-output", iep);
+
+		//Workaround for bug in jQuery/jsPlumb (Firefox only)
+		jsPlumb.addEndpoint("grid-container").setVisible(false);
 	});
 });
