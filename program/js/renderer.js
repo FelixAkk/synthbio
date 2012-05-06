@@ -47,6 +47,7 @@ $(document).ready(function() {
 			strokeStyle:"#2e2aF8"
 		};
 
+		var inputCounter = 0;
 		// the definition of input endpoints
 		synthbio.gui.inputEndpoint = {
 			endpoint:"Rectangle",					
@@ -56,6 +57,20 @@ $(document).ready(function() {
 			dropOptions: {
 				activeClass:'dragActive',
 				hoverClass:'dragHover'
+			},
+			beforeDrop: function(opt) {
+				if (!opt.connection || 
+					opt.connection.sourceId != "gate-input" || 
+					opt.connection.endpoints[0].getUuid())
+				{
+					return true;
+				}
+
+				var UUID = "input" + ++inputCounter;
+				var src = jsPlumb.addEndpoint("gate-input", synthbio.gui.outputEndpoint, { anchor: "Continuous", uuid:UUID });
+				jsPlumb.connect({source: src, target: opt.target});
+
+				return false;
 			}
 		};
 
@@ -63,23 +78,61 @@ $(document).ready(function() {
 		synthbio.gui.outputEndpoint = {
 			endpoint:"Dot",
 			paintStyle:{ fillStyle:"#225588",radius:7 },
-			connector:[ "Flowchart", { stub:40 } ],
+			//connector:[ "Flowchart", { stub:40 } ],
+			connector: ["Bezier", { curviness:50 } ],
 			connectorStyle:connectorPaintStyle,
 			hoverPaintStyle:pointHoverStyle,
 			connectorHoverStyle:connectorHoverStyle,
 			isSource:true,
-			maxConnections: -1
+			maxConnections:-1
 		};
 
+		var connCount = 0;
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
-		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) { 
-			connInfo.connection.getOverlay("label").setLabel("I am a signal");
+		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
+			connCount++;
+			connInfo.connection.getOverlay("label").setLabel("<a id=\"conn" + connCount + "\" href=#>Choose protein</a>");
+
+			var el = $("#conn" + connCount, 0);
+			el.click(function(){
+				var lp = $('#list-proteins');
+				lp.modal("show");
+				$('#list-proteins tbody').on("click", "tr", function() {
+					lp.modal("hide");
+					el.html($("td", this, 0).html());
+				});
+			});
+		});
+
+		$('#list-proteins').on('hide', function(){
+			$('#list-proteins tbody').off("click", "tr");
+		});
+
+
+		// listen for disposal of connections; delete endpoints if necessary
+		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) { 
+			if (connInfo.sourceId == "gate-input" && !connInfo.sourceEndpoint.connections.length)
+				jsPlumb.deleteEndpoint(connInfo.sourceEndpoint);
+			if (connInfo.targetId == "gate-output" && !connInfo.targetEndpoint.connections.length)
+				jsPlumb.deleteEndpoint(connInfo.targetEndpoint);
 		});
 
 		//jsPlumb.draggable("gate-input");
 		jsPlumb.draggable("gate-output");
 
-		jsPlumb.makeSource("gate-input", synthbio.gui.outputEndpoint);
-		jsPlumb.makeTarget("gate-output", synthbio.gui.inputEndpoint);
+		var oep = jQuery.extend(true, {	
+			anchor:"Continuous",
+			deleteEndpointsOnDetach: false
+		}, synthbio.gui.outputEndpoint);
+		var iep = jQuery.extend(true, {
+			anchor:"Continuous",
+			deleteEndpointsOnDetach: false
+		}, synthbio.gui.inputEndpoint);
+
+		jsPlumb.makeSource("gate-input", oep);
+		jsPlumb.makeTarget("gate-output", iep);
+
+		//Workaround for bug in jQuery/jsPlumb (Firefox only)
+		jsPlumb.addEndpoint("grid-container").setVisible(false);
 	});
 });

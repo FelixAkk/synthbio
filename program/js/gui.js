@@ -56,9 +56,6 @@ $(document).ready(function() {
 		});
 	});
 
-	//$('#gates-tab').appendChild(synthbio.gui.createGateElement('and'));
-    //$('#gates-tab').appendChild(synthbio.gui.createGateElement('not'));
-
 	//Initialize gate-dragging
 	$('#gates-tab .gate').draggable({ 
 		appendTo: "#gates-transport",
@@ -72,14 +69,10 @@ $(document).ready(function() {
             $(ui.helper).toggleClass("gate-border", event.pageX > synthbio.gui.gatesTabWidth);
         },
 		stop: function(event, ui){
-			if(event.pageX > synthbio.gui.gatesTabWidth) {
-				var newGate = $(synthbio.gui.createGateElement($(this).attr('class').split(' ')[1]));
-				$('#grid-container').append(newGate);
-
-				newGate.css("top", parseInt(event.pageY  - $(this).height()));
-				newGate.css("left", parseInt(event.pageX - synthbio.gui.gatesTabWidth));
-				synthbio.gui.addGateAnchors(newGate);
-			}
+			synthbio.gui.createGateElement(
+				$(this).attr('class').split(' ')[1],
+				[event.pageX - synthbio.gui.gatesTabWidth, event.pageY  - $(this).height()]
+			);
 
 			$("#gates-transport .gate").remove();
 			$("#gates-transport").css('display', 'none');
@@ -88,23 +81,18 @@ $(document).ready(function() {
 });
 
 /**
- * All the JSPlumb source anchors
- */
-synthbio.gui.SourceEndpoints = [];
-
-/**
- * All the JSPlumb target anchors
- */
-synthbio.gui.TargetEndpoints = [];
-
-/**
  * Add specified number of JSPlumb anchors to a gate
  *
  * @param toId ID of the gate element. UUID of the anchors will be *id*_input*number* (and id_outputNUMBER)
  * @param inputAnchors Number of input anchors
  * @param outputAnchors Number of output anchors
+ * @return Object with inputEndpoints and outputEndpoints (both arrays)
  */
 synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
+	var res = {
+		inputEndpoints: [],
+		outputEndpoints: []
+	}
 	inputAnchors--;
 	outputAnchors--;
 	
@@ -113,55 +101,87 @@ synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
 	}
 
 	for (var j = 0; j <= inputAnchors; j++) {
-		var targetUUID = toId + "_input" + j;
-		synthbio.gui.TargetEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.inputEndpoint, { anchor:[0, placement(j, inputAnchors), -1, 0], uuid:targetUUID }));
+		var inputUUID = toId + "_input" + j;
+		res.inputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.inputEndpoint, { 
+			anchor:[0, placement(j, inputAnchors), -1, 0], 
+			uuid:inputUUID 
+		}));
 	} 
 	for (var i = 0; i <= outputAnchors; i++) {
-		var sourceUUID = toId + "_output" + i;
-		synthbio.gui.SourceEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { anchor:[1, placement(i, outputAnchors), 1, 0], uuid:sourceUUID }));
+		var outputUUID = toId + "_output" + i;
+		res.outputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { 
+			anchor:[1, placement(i, outputAnchors), 1, 0], 
+			uuid:outputUUID 
+		}));
 	}
+	
+	return res;
 }
 
 /**
  * Add the correct number of anchors to a gate
  *
- * @param elem Target element. Uses the class attribute to determine the proper number of anchors.
+ * @param elem Target element (object or selector)	
+ * @param amount Amount of anchors [input, output]. If null, the class attribute will be used to determine these numbers.
+ * @return Returns the result of synthbio.gui.addPlumbAnchors
  */
-synthbio.gui.addGateAnchors = function(elem) {
-	elem = $(elem);
-	var gateClass = elem.attr('class').split(' ')[1];
+synthbio.gui.addGateAnchors = function(elem, amount) {
+	elem = $(elem, 0);
 	var gateID = elem.attr("id");
 
 	//TODO: Better way to determine number of inputs/outputs (also for compound gates).
-    if(gateClass == "not")
-		synthbio.gui.addPlumbAnchors(gateID, 1, 1)
-	else if (gateClass == "and")
-		synthbio.gui.addPlumbAnchors(gateID, 2, 1)
-	//else TODO: implement exception throwing using synthbio.util
+	if (!amount || !amount[0] || !amount[1]) {
+		var gateClass = elem.attr('class').split(' ')[1];
+		if(gateClass == "not")
+			amount = [1, 1]
+		else if (gateClass == "and")
+			amount = [2, 1]
+		//else TODO: implement exception throwing using synthbio.util
+	}
+
+	return synthbio.gui.addPlumbAnchors(gateID, amount[0], amount[1])
 }
 
 /**
  * Create a new gate DOM element to be used within the modelling grid.
  *
  * @param gateClass The class/type of gate to be created. Can be either the string 'not', 'and' or 'compound'.
+ * @param gatePos Position of the new gate [left, top]. If left < 0 or top < 0, the gate will not be shown
  */
-synthbio.gui.createGateElement = function(gateClass) {
-    // TODO: use synthbio.util
+synthbio.gui.createGateElement = function(gateClass, gatePos) {
+    // TODO: use models.js -> synthbio.Gate
     if(gateClass !== "not" && gateClass !== "and" && gateClass !== "compound") {
         // TODO: implement exception throwing using synthbio.util
         return;
     }
+	if(!gatePos || gatePos[0] < 0 || gatePos[1] < 0)
+		return;
 
 	synthbio.gui.gateCounter++;
 	var id = "gate" + synthbio.gui.gateCounter;
 
-    var element = $("<div íd=\""+id+"\" class=\"gate " + gateClass + "\">"
-        + "<embed src=\"../img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
-        + "<div class=\"mask\"></div>"
-        + "</div>");
+    var res = {
+		idx: synthbio.gui.gateCounter,
+		element: $("<div íd=\""+id+"\" class=\"gate " + gateClass + "\">"
+			+ "<embed src=\"img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
+			+ "<div class=\"mask\"></div>"
+			+ "</div>")
+	}
 
-	jsPlumb.draggable(element);
-    return element;
+	jsPlumb.draggable(res.element);
+	res.element.dblclick(function() {
+		if (!confirm("Delete " + id + "?"))
+			return;
+
+		jsPlumb.removeAllEndpoints(res.element);
+		res.element.remove();
+	});
+
+	$('#grid-container').append(res.element);
+	res.element.css("left", parseInt(gatePos[0]));
+	res.element.css("top", parseInt(gatePos[1]));
+
+    return jQuery.extend(true, synthbio.gui.addGateAnchors(res.element), res);
 }
 
 /**
@@ -172,7 +192,7 @@ synthbio.gui.pingServer = function() {
 	var date = new Date();
 	var fCount = 0; // Failure count: The amount of times that connection attempts have failed. Resets to 0 on success.
 	var limit = 3; // Amount of times after which a dialog should prompt the user about the failures.
-	var frequency = 500; // The delay between ping calls in milliseconds.
+	var frequency = 750; // The delay between ping calls in milliseconds.
 	return function () {
 		var t = date.getTime();
 		$.ajax("/Ping")

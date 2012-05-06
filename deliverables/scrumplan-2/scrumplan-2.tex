@@ -45,79 +45,79 @@ Results for this iteration will be presented Friday May 4, 12:15 in DW-PC 0.010.
 \task{18}
 	{Server: Save circuit}
 	{Jan Pieter}
-	{}{}
+	{\multirow{3}{*}{$\Bigg\}$ 12}}{\multirow{3}{*}{$\Bigg\}$ 16}}
 
 \task{19}
 	{Server: Load circuit}
 	{Jan Pieter}
-	{12}{Actual}
+	{}{}
 
 \task{20}
 	{Server: Validate circuit}
 	{Jan Pieter}
-	{}{}
+	{}{}[2mm]
 
 \task{26}
 	{Server: Serve saved circuits}
 	{Jan Pieter}
-	{3}{Actual}
+	{3}{2}
 
 \task{21}
 	{Server: Connection to simulator}
 	{Albert}
-	{12}{Actual}
+	{12}{15}
 
 \task{27}
 	{Server: Convert circuit to simulator input}
 	{Albert}
-	{3}{Actual}
+	{3}{-}
 
 \task{4}
 	{Client: Javascript scaffolding}
 	{Thomas}
-	{10}{Actual}
+	{10}{12}[2mm]
 
 \task{22}
 	{Client: Gate scaffolding and rendering}
 	{Felix}
-	{}{}
+	{\multirow{3}{*}{$\Bigg\}$ 14}}{\(\downarrow\)}
 
 \task{24}
 	{Client: Drag-and-drop gates to working area}
-	{Felix}
-	{14}{Actual}
+	{Felix/Niels}
+	{}{\(\downarrow\)/3}
 
 \task{25}
 	{Client: Move gates in the working area}
 	{Felix}
-	{}{}
+	{}{Actual}[2mm]
 
 \task{30}
 	{Client: Draw wires between gates}
 	{Niels}
-	{}{}
+	{\multirow{2}{*}{$\Big\}$ 14}}{12}
 
 \task{31}
 	{Client: Draw input/output wires}
 	{Niels}
-	{14}{Actual}
+	{}{8}[2mm]
 
 \task{28}
 	{Reflection scrum plan 2}
 	{Thomas}
-	{3}{Actual}
+	{3}{2}
 
 \task{29}
 	{Scaffolding scrum plan 3}
 	{Thomas}
-	{1}{Actual}
+	{1}{Actual}[2mm]
 
 \task{32}
 	{Code review}
 	{Everyone}
 	{5 * 4}{Actual}
 
-\subtotal{92}{-}
+\subtotal{92}{}
  
 \subheading{
 	Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
@@ -126,32 +126,54 @@ Results for this iteration will be presented Friday May 4, 12:15 in DW-PC 0.010.
 \task{0}
 	{Server: Simulate circuit}
 	{-}
-	{Planned}{Actual}
+	{0}{0}
 
 \task{0}
 	{Client: Validate circuit}
 	{-}
-	{Planned}{Actual}
+	{0}{0}
 
 \task{0}
 	{Client: Load circuit}
 	{-}
-	{Planned}{Actual}
+	{0}{0}
 
 \task{0}
 	{Client: Save circuit}
 	{-}
-	{Planned}{Actual}
+	{0}{0}
 
 \task{0}
 	{Client: Specify proteins for wires}
 	{-}
-	{Planned}{Actual}
+	{0}{0}
 
 \subtotal{-}{-}
 
 \grandtotal{92}{-}
 \end{tabularx}
 \end{center}
+
+\section{Reflection on this iteration}
+In this section we will give a quick review on this iteration. \\
+
+\subsection{Planning}
+From the beginning of the iteration we spend a decent amount of time on planning. During the first meeting we mainly established our plan, dividing tasks and estimating how much time it would take us. From the previous iteration we learned that things will always take more time, especially if you take into account the extra hours you spend documenting and reading in on your work. So we added a small amount of hours on top of our expectations which brought us closer to our real time spent. We added the hours for code reviewing. So overall we improved on the planning part with respect to the first iteration. 
+
+\subsection{Implementation}
+As for the implementation, things went well. We did run into some issues, but eventually they were fixed. Main problems were drag and drop for our gates and old documentation. 
+Dragging and dropping gates had some issues, but due to the help of JQuery we managed.
+Old documentation was one of the reasons our work was getting out of sync. We established an HTTP API so we could work based on that. 
+
+During the previous iteration we already thought ahead of one specific problem. We thought that drawing wires would prove to be one of the major issues during this iteration. However, during this iteration we discovered jsPlumb which made things a lot easier and good looking.
+
+Furthermore, we really noticed the benefits of code review during this iteration. Many small bugs were easily fixed by just having another person review your code.
+
+The test driven development for the JavaScript scaffolding didn't go according to plan, because we instantly apply functions to our Ajax results, which makes it hard to test the intermediate results. However, through manual testing we still managed to do some proper testing.
+
+
+\paragraph{jsPlumb}
+We chose to use one extra tool which was not mentioned before. This is because we only recently discovered it. We used jsPlumb (\url{http://jsplumb.org/}) as framework for the (visual) connections in the GUI. This framework makes it easy to define anchors and draw wires between these anchors. \\
+Unfortunately, the framework did not match up to all our wishes. Small changes to the library were necessary to allow jsPlumb to automatically create anchors from which multiple wires can be drawn (these kind of anchors are used in the connector from which input signals originate).
 
 \end{document}

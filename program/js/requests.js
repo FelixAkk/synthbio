@@ -168,39 +168,6 @@ synthbio.requests.getCDSs = function(callback){
 };
 
 /**
- * ListCircuit
- * Return a list of all circuits
- * Callback will be applied to the returned list
- * Other error messages will be shown in console.log
- */
- 
-/* (2012-05-03, Jieter): seems to be the same as listFiles??
-synthbio.requests.listCircuits = function(callback){
-	
-	synthbio.requests.baseXHR({
-		url: "/ListCircuits",
-		//parse list of cdses and call the callback with that list.
-		success: function(response){
-			if(!response.success){
-				console.log(response.message);
-			}
-			var list=[];
-			$.each(response.data, function(i, elem){
-				list[i]=synthbio.Circuit.fromMap(response.data[i]);
-			});
-			callback(list);
-		},
-		error: function(){
-			console.log("Error has occured. Cannot get circuits from server");
-		},
-		always: function(){
-			console.log("listCircuit called");
-		}
-		
-	});
-};
-*/
-/**
  * Circuit to SBML
  * Save a circuit, "circ", as SBML with a "name"
  * Callback will be applied on the return messages
@@ -238,8 +205,6 @@ synthbio.requests.circuitToSBML = function(callback, name, circ){
  */
 synthbio.requests.simulate = function(callback, name, input){
 	
-	new synthbio.requests.callback();
-	
 	synthbio.requests.baseXHR({
 		url: "/Circuit?action=simulate",
 		data: {
@@ -265,8 +230,6 @@ synthbio.requests.simulate = function(callback, name, input){
  * Callback will be applied on the return messages
  */
 synthbio.requests.validate = function(callback,circuit){
-	
-	new synthbio.requests.callback();
 	
 	synthbio.requests.baseXHR({
 		url: "/Circuit?action=validate",
