@@ -139,7 +139,7 @@ synthbio.gui.addGateAnchors = function(elem, amount) {
 		//else TODO: implement exception throwing using synthbio.util
 	}
 
-	synthbio.gui.addPlumbAnchors(gateID, amount[0], amount[1])
+	return synthbio.gui.addPlumbAnchors(gateID, amount[0], amount[1])
 }
 
 /**
@@ -192,7 +192,7 @@ synthbio.gui.pingServer = function() {
 	var date = new Date();
 	var fCount = 0; // Failure count: The amount of times that connection attempts have failed. Resets to 0 on success.
 	var limit = 3; // Amount of times after which a dialog should prompt the user about the failures.
-	var frequency = 500; // The delay between ping calls in milliseconds.
+	var frequency = 750; // The delay between ping calls in milliseconds.
 	return function () {
 		var t = date.getTime();
 		$.ajax("/Ping")

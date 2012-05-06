@@ -45,17 +45,17 @@ Results for this iteration will be presented Friday May 4, 12:15 in DW-PC 0.010.
 \task{18}
 	{Server: Save circuit}
 	{Jan Pieter}
-	{}{}
+	{\(\downarrow\)\footnote{Included in time below}}{\(\downarrow\)}
 
 \task{19}
 	{Server: Load circuit}
 	{Jan Pieter}
-	{12}{Actual}
+	{\(\downarrow\)}{\(\downarrow\)}
 
 \task{20}
 	{Server: Validate circuit}
 	{Jan Pieter}
-	{}{}
+	{12}{Actual}
 
 \task{26}
 	{Server: Serve saved circuits}
@@ -80,22 +80,22 @@ Results for this iteration will be presented Friday May 4, 12:15 in DW-PC 0.010.
 \task{22}
 	{Client: Gate scaffolding and rendering}
 	{Felix}
-	{}{}
+	{\(\downarrow\)}{\(\downarrow\)}
 
 \task{24}
 	{Client: Drag-and-drop gates to working area}
 	{Felix}
-	{14}{Actual}
+	{\(\downarrow\)}{\(\downarrow\)}
 
 \task{25}
 	{Client: Move gates in the working area}
 	{Felix}
-	{}{}
+	{14}{Actual}
 
 \task{30}
 	{Client: Draw wires between gates}
 	{Niels}
-	{}{}
+	{\(\downarrow\)}{\(\downarrow\)}
 
 \task{31}
 	{Client: Draw input/output wires}
@@ -153,5 +153,14 @@ Results for this iteration will be presented Friday May 4, 12:15 in DW-PC 0.010.
 \grandtotal{92}{-}
 \end{tabularx}
 \end{center}
+
+\section{Reflection on this iteration}
+In this section we will give a quick review on this iteration. \\
+
+Extra (previously undocumented) tools:
+
+\paragraph{jsPlumb}
+We have chosen jsPlumb (\url{http://jsplumb.org/}) as framework for the (visual) connections in the GUI. This framework makes it easy to define anchors and draw wires between these anchors. \\
+Unfortunately, the framework did not match up to all our wishes. Small changes to the library were necessary to allow jsPlumb to automatically create anchors from which multiple wires can be drawn (these kind of anchors are used in the connector from which input signals originate).
 
 \end{document}
