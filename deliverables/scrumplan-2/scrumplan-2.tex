@@ -1,3 +1,4 @@
+%
 \documentclass[a4paper]{article}
 
 \input{../scrumplan-common}
@@ -12,6 +13,7 @@ Albert ten Napel \\
 Jan Pieter Waagmeester}
 
 \begin{document}
+
 \maketitle
 
 %~ • The selection of a set of features (important features first).
@@ -43,112 +45,112 @@ Results for this iteration will be presented Friday May 4, 12:15 in DW-PC 0.010.
 \tasktableheading
 
 \task{18}
-	{Server: Save circuit}
-	{Jan Pieter}
-	{\multirow{3}{*}{$\Bigg\}$ 12}}{\multirow{3}{*}{$\Bigg\}$ 16}}
+        {Server: Save circuit}
+        {Jan Pieter}
+        {\multirow{3}{*}{$\Bigg\}$ 12}}{\multirow{3}{*}{$\Bigg\}$ 16}}
 
 \task{19}
-	{Server: Load circuit}
-	{Jan Pieter}
-	{}{}
+        {Server: Load circuit}
+        {Jan Pieter}
+        {}{}
 
 \task{20}
-	{Server: Validate circuit}
-	{Jan Pieter}
-	{}{}[2mm]
+        {Server: Validate circuit}
+        {Jan Pieter}
+        {}{}[2mm]
 
 \task{26}
-	{Server: Serve saved circuits}
-	{Jan Pieter}
-	{3}{2}
+        {Server: Serve saved circuits}
+        {Jan Pieter}
+        {3}{2}
 
 \task{21}
-	{Server: Connection to simulator}
-	{Albert}
-	{12}{15}
+        {Server: Connection to simulator}
+        {Albert}
+        {12}{15}
 
 \task{27}
-	{Server: Convert circuit to simulator input}
-	{Albert}
-	{3}{-}
+        {Server: Convert circuit to simulator input}
+        {Albert}
+        {3}{-}
 
 \task{4}
-	{Client: Javascript scaffolding}
-	{Thomas}
-	{10}{12}[2mm]
+        {Client: Javascript scaffolding}
+        {Thomas}
+        {10}{12}[2mm]
 
 \task{22}
-	{Client: Gate scaffolding and rendering}
-	{Felix}
-	{\multirow{3}{*}{$\Bigg\}$ 14}}{\(\downarrow\)}
+        {Client: Gate scaffolding and rendering}
+        {Felix}
+        {\multirow{3}{*}{$\Bigg\}$ 14}}{\(3\)}
 
 \task{24}
-	{Client: Drag-and-drop gates to working area}
-	{Felix/Niels}
-	{}{\(\downarrow\)/3}
+        {Client: Drag-and-drop gates to working area}
+        {Felix/Niels}
+        {}{\(7\)/3}
 
 \task{25}
-	{Client: Move gates in the working area}
-	{Felix}
-	{}{Actual}[2mm]
+        {Client: Move gates in the working area}
+        {Felix}
+        {}{-}[2mm]
 
 \task{30}
-	{Client: Draw wires between gates}
-	{Niels}
-	{\multirow{2}{*}{$\Big\}$ 14}}{12}
+        {Client: Draw wires between gates}
+        {Niels}
+        {\multirow{2}{*}{$\Big\}$ 14}}{12}
 
 \task{31}
-	{Client: Draw input/output wires}
-	{Niels}
-	{}{8}[2mm]
+        {Client: Draw input/output wires}
+        {Niels}
+        {}{8}[2mm]
 
 \task{28}
-	{Reflection scrum plan 2}
-	{Thomas}
-	{3}{2}
+        {Reflection scrum plan 2}
+        {Thomas}
+        {3}{2}
 
 \task{29}
-	{Scaffolding scrum plan 3}
-	{Thomas}
-	{1}{1}[2mm]
+        {Scaffolding scrum plan 3}
+        {Thomas}
+        {1}{Actual}[2mm]
 
 \task{32}
-	{Code review}
-	{Everyone}
-	{5 * 4}{Actual}
+        {Code review}
+        {Everyone}
+        {5 * 4}{Actual}
 
 \subtotal{92}{}
  
 \subheading{
-	Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
+        Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
 }
 
 \task{0}
-	{Server: Simulate circuit}
-	{-}
-	{0}{0}
+        {Server: Simulate circuit}
+        {-}
+        {0}{0}
 
 \task{0}
-	{Client: Validate circuit}
-	{-}
-	{0}{0}
+        {Client: Validate circuit}
+        {-}
+        {0}{0}
 
 \task{0}
-	{Client: Load circuit}
-	{-}
-	{0}{0}
+        {Client: Load circuit}
+        {-}
+        {0}{0}
 
 \task{0}
-	{Client: Save circuit}
-	{-}
-	{0}{0}
+        {Client: Save circuit}
+        {-}
+        {0}{0}
 
 \task{0}
-	{Client: Specify proteins for wires}
-	{-}
-	{0}{0}
+        {Client: Specify proteins for wires}
+        {-}
+        {0}{0}
 
-\subtotal{-}{-}
+\subtotal{0}{0}
 
 \grandtotal{92}{-}
 \end{tabularx}
@@ -165,7 +167,7 @@ As for the implementation, things went well. We did run into some issues, but ev
 Dragging and dropping gates had some issues, but due to the help of JQuery we managed.
 Old documentation was one of the reasons our work was getting out of sync. We established an HTTP API so we could work based on that. 
 
-During the previous iteration we already thought ahead of one specific problem. We thought that drawing wires would prove to be one of the major issues during this iteration. However, during this iteration we discovered jsPlumb which made things a lot easier and good looking.
+During the previous iteration we already thought ahead of one specific problem. We thought that drawing wires would prove to be one of the major issues during this iteration. However, during this iteration we discovered jsPlumb which made things a lot easier and good looking. Using this framework also meant some features are implemented out-of-the-box, saving time and bringing focus  more to high-level functionality.
 
 Furthermore, we really noticed the benefits of code review during this iteration. Many small bugs were easily fixed by just having another person review your code.
 
