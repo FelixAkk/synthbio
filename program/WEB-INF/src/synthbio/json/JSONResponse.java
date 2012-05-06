@@ -63,8 +63,12 @@ public final class JSONResponse implements JSONString{
 	public Object getData(){
 		return this.data;
 	}
-	
-	
+
+	public void fail(String message){
+		this.success=false;
+		this.message=message;
+	}
+
 	/**
 	 * toJSONString returns a String with the JSON representatation of
 	 * the current object state.

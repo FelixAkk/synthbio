@@ -15,7 +15,13 @@ package synthbio;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Utility class.
@@ -40,5 +46,22 @@ public class Util{
 		}
 
 		return builder.toString();
+	}
+
+	/**
+	 * Dump a string to a file..
+	 */
+	public static void stringToFile(String filename, String content) throws IOException{
+		BufferedWriter out=new BufferedWriter(new FileWriter(filename));
+
+		out.write(content);
+		out.close();
+	}
+		
+	/**
+	 * Return a JSONObject for a file.
+	 */
+	public static JSONObject fileToJSONObject(String filename) throws JSONException, IOException{
+		return new JSONObject(fileToString(filename));
 	}
 }

@@ -13,13 +13,14 @@
 
 package synthbio.models;
 
+import java.util.List;
+
 /**
  * Promotor defines common functionality for *Promotors.
  *
  * @author jieter
  */
 abstract class Promotor extends BioBrick{
-
 	public final double k1;
 	public final double km;
 	public final int n;
@@ -39,7 +40,24 @@ abstract class Promotor extends BioBrick{
 	public double getN(){
 		return this.n;
 	}
+	
+	/**
+	 * List of transcription factors for this Promotor.
+	 *
+	 * Not named getTfs because the JSONObject uses all get*-methods to
+	 * create serialized output. If we want to use get*-methods, we
+	 * should provide a list of properties to include.
+	 */
+	public abstract List<String> listTfs();
 
+	/**
+	 * Does this Promotor consists of at lesat this transcription factor?
+	 */
+	public abstract boolean hasTf(String tf);
+	
+	/**
+	 * Does this Promotor equals the other.
+	 */
 	public boolean equals(Object other){
 		if(!(other instanceof Promotor)){
 			return false;
@@ -60,5 +78,4 @@ abstract class Promotor extends BioBrick{
 	 * for this method.
 	 */
 	public abstract String kind();
-		
 }

@@ -19,9 +19,10 @@
 
 	<!--
 		Compile all sources.
+		Turn debugging on, and include lines in stack traces.
 	-->
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false"/>
+		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false" debug="on" debuglevel="lines,vars,source" />
 	</target>
 
 	<!-- Just an alias -->

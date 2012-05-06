@@ -14,8 +14,8 @@
 package synthbio.models.test;
 
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.Test;
 import static org.hamcrest.Matchers.*;
 
 

@@ -29,31 +29,83 @@ import org.apache.commons.math.ode.DerivativeException;
 import org.simulator.math.odes.MultiTable;
 import synthbio.simulator.Solver;
 
+import java.awt.Dimension;
+
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.xml.stax.SBMLReader;
+import org.simulator.math.odes.AbstractDESSolver;
+import org.simulator.math.odes.EulerMethod;
+import org.simulator.sbml.SBMLinterpreter;
+
 /**
  * Testing Solver.
  * @author Albert ten Napel
  */
 public class TestSolver {
-	private final String sbmlfile1 = "src/synthbio/simulator/test/test.sbml";
-	private final String sbmlfile2 = "src/synthbio/simulator/test/test2.sbml";
+	private final String not = "data/test/simulator/not.sbml";
+	private final String nand = "data/test/simulator/nand.sbml";
+	
+	private final String tc1 = "data/test/simulator/00001-sbml-l2v4.xml";
+	private final String tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
 	
 	/**
-	 * test.sbml is not valid sbml.
+	 * Testing one of the files included with the testsuite of SBMLsimulator.
 	 */
-	@Ignore
 	@Test
-	public void testSBMLSolve() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = (new Solver()).solveWithFile(sbmlfile1, 1, 5);
-		System.out.println(solution.toString());
+	public void tc1() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		MultiTable solution = (new Solver()).solveWithFile(tc1, 1, 100);
+		double s1 = solution.getColumn("S1").getValue(99);
+		double s2 = solution.getColumn("S2").getValue(99);
+		assertTrue(s2 > s1);
 	}
 	
-	@Ignore
+	/**
+	 * Testing one of the files included with the testsuite of SBMLsimulator.
+	 */
 	@Test
-	public void testSBMLSolve2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = (new Solver()).solveWithFile(sbmlfile2, 1, 5);
-		assertEquals(
-			"[Time] [0.0, 1.0, 2.0, 3.0, 4.0, 5.0], [uVol, input, output, X4], [1.0, 16.0, 0.0, 14.0], [1.0, 16.0, 112.5927312, 14.0], [1.0, 16.0, 225.1854624, 14.0], [1.0, 16.0, 337.7781936, 14.0], [1.0, 16.0, 450.3709248, 14.0], [1.0, 16.0, 562.963656, 14.0]]",
-			 solution.toString()
-		);
+	public void tc2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		MultiTable solution = (new Solver()).solveWithFile(tc2, 1, 100);
+		double s1 = solution.getColumn("S1").getValue(99);
+		double s2 = solution.getColumn("S2").getValue(99);
+		assertTrue(s2 > s1);
+	}
+	
+	/**
+	 * Testing a SBML-file containing a not-gate (A -> not -> B, where A is high).
+	 */
+	@Test
+	public void testSBMLnot() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		MultiTable solution = (new Solver()).solveWithFile(not, 0.1, 100);
+		
+		double a = solution.getColumn("a").getValue(99);
+		double b = solution.getColumn("b").getValue(99);
+		
+		assertTrue(a > b);
+	}
+	
+	/**
+	 * Testing a SBML-file containing a nand-gate.
+	 */
+	@Test
+	public void testSBMLnand() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		MultiTable solution = (new Solver()).solveWithFile(nand, 0.1, 100);
+		
+		double c = solution.getColumn("c").getValue(4);
+		double d = solution.getColumn("d").getValue(4);
+		
+		assertTrue(c > d);
+	}
+	
+	/**
+	 * A visual representation of the data for manual testing purposes
+	 */
+	private void showMultiTable(MultiTable solution) {
+		JScrollPane resultDisplay = new JScrollPane(new JTable(solution));
+		resultDisplay.setPreferredSize(new Dimension(800, 600));
+		JOptionPane.showMessageDialog(null, resultDisplay, "Solution", JOptionPane.INFORMATION_MESSAGE);
 	}
 }

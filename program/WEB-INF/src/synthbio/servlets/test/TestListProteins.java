@@ -34,8 +34,6 @@ public class TestListProteins{
 	 */
 	 public static final String url="http://localhost:8080/ListProteins";
 
-
-	
 	/**
 	 * compare response from ListProteins to expected response.
 	 *
@@ -47,7 +45,7 @@ public class TestListProteins{
 		final WebClient webClient = new WebClient();
 		final TextPage page = webClient.getPage(url);
 
-		String expected=Util.fileToString("src/synthbio/servlets/test/listProteins-expected.json").trim();
+		String expected=Util.fileToString("data/test/servlets/listProteins-expected.json").trim();
 
 		assertEquals(
 			expected,
@@ -56,8 +54,4 @@ public class TestListProteins{
 
 		webClient.closeAllWindows();
 	}
-
-
-   
-
 }

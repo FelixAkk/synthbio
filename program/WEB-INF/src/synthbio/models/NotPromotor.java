@@ -13,6 +13,10 @@
 
 package synthbio.models;
 
+import java.util.Arrays;
+import java.util.List;
+
+
 /**
  * NotPromotor value object.
  *
@@ -36,6 +40,14 @@ public class NotPromotor extends Promotor {
 
 	public String kind(){
 		return "not";
+	}
+
+	public List<String> listTfs(){
+		return Arrays.asList(this.getTf());
+	}
+
+	public boolean hasTf(String tf){
+		return this.getTf().equals(tf);
 	}
 
 	public boolean equals(Object other){
