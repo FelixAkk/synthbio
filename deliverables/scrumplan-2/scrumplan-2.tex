@@ -45,110 +45,110 @@ Results for this iteration will be presented Friday May 4, 12:15 in DW-PC 0.010.
 \tasktableheading
 
 \task{18}
-        {Server: Save circuit}
-        {Jan Pieter}
-        {\multirow{3}{*}{$\Bigg\}$ 12}}{\multirow{3}{*}{$\Bigg\}$ 16}}
+	{Server: Save circuit}
+	{Jan Pieter}
+	{\multirow{3}{*}{$\Bigg\}$ 12}}{\multirow{3}{*}{$\Bigg\}$ 16}}
 
 \task{19}
-        {Server: Load circuit}
-        {Jan Pieter}
-        {}{}
+	{Server: Load circuit}
+	{Jan Pieter}
+	{}{}
 
 \task{20}
-        {Server: Validate circuit}
-        {Jan Pieter}
-        {}{}[2mm]
+	{Server: Validate circuit}
+	{Jan Pieter}
+	{}{}[2mm]
 
 \task{26}
-        {Server: Serve saved circuits}
-        {Jan Pieter}
-        {3}{2}
+	{Server: Serve saved circuits}
+	{Jan Pieter}
+	{3}{2}
 
 \task{21}
-        {Server: Connection to simulator}
-        {Albert}
-        {12}{15}
+	{Server: Connection to simulator}
+	{Albert}
+	{12}{15}
 
 \task{27}
-        {Server: Convert circuit to simulator input}
-        {Albert}
-        {3}{-}
+	{Server: Convert circuit to simulator input}
+	{Albert}
+	{3}{-}
 
 \task{4}
-        {Client: Javascript scaffolding}
-        {Thomas}
-        {10}{12}[2mm]
+	{Client: Javascript scaffolding}
+	{Thomas}
+	{10}{12}[2mm]
 
 \task{22}
-        {Client: Gate scaffolding and rendering}
-        {Felix}
-        {\multirow{3}{*}{$\Bigg\}$ 14}}{\(3\)}
+	{Client: Gate scaffolding and rendering}
+	{Felix}
+	{\multirow{3}{*}{$\Bigg\}$ 14}}{n.a. \footnote{This issue was not worked on due to issue \githubissue{22} taking longer than expected.}}
 
 \task{24}
-        {Client: Drag-and-drop gates to working area}
-        {Felix/Niels}
-        {}{\(7\)/3}
+	{Client: Drag-and-drop gates to working area}
+	{Felix+Niels}
+	{}{\(7\)+3}
 
 \task{25}
-        {Client: Move gates in the working area}
-        {Felix}
-        {}{-}[2mm]
+	{Client: Move gates in the working area}
+	{Felix}
+	{}{n.a. \footnote{This issue was not implemented because it's included in the jsPlumb framework. See paragraph \ref{jsPlumb}.}}[2mm]
 
 \task{30}
-        {Client: Draw wires between gates}
-        {Niels}
-        {\multirow{2}{*}{$\Big\}$ 14}}{12}
+	{Client: Draw wires between gates}
+	{Niels}
+	{\multirow{2}{*}{$\Big\}$ 14}}{12}
 
 \task{31}
-        {Client: Draw input/output wires}
-        {Niels}
-        {}{8}[2mm]
+	{Client: Draw input/output wires}
+	{Niels}
+	{}{8}[2mm]
 
 \task{28}
-        {Reflection scrum plan 2}
-        {Thomas}
-        {3}{2}
+	{Reflection scrum plan 2}
+	{Thomas}
+	{3}{2}
 
 \task{29}
-        {Scaffolding scrum plan 3}
-        {Thomas}
-        {1}{1}[2mm]
+	{Scaffolding scrum plan 3}
+	{Thomas}
+	{1}{1}[2mm]
 
 \task{32}
-        {Code review}
-        {Everyone}
-        {5 * 4}{Actual}
+	{Code review}
+	{Everyone}
+	{5 * 4}{Actual}
 
 \subtotal{92}{}
  
 \subheading{
-        Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
+	Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
 }
 
 \task{0}
-        {Server: Simulate circuit}
-        {-}
-        {0}{0}
+	{Server: Simulate circuit}
+	{-}
+	{-}{-}
 
 \task{0}
-        {Client: Validate circuit}
-        {-}
-        {0}{0}
+	{Client: Validate circuit}
+	{-}
+	{-}{-}
 
 \task{0}
-        {Client: Load circuit}
-        {-}
-        {0}{0}
+	{Client: Load circuit}
+	{-}
+	{-}{-}
 
 \task{0}
-        {Client: Save circuit}
-        {-}
-        {0}{0}
+	{Client: Save circuit}
+	{-}
+	{-}{-}
 
 \task{0}
-        {Client: Specify proteins for wires}
-        {-}
-        {0}{0}
+	{Client: Specify proteins for wires}
+	{-}
+	{-}{-}
 
 \subtotal{0}{0}
 
@@ -174,7 +174,7 @@ Furthermore, we really noticed the benefits of code review during this iteration
 The test driven development for the JavaScript scaffolding didn't go according to plan, because we instantly apply functions to our Ajax results, which makes it hard to test the intermediate results. However, through manual testing we still managed to do some proper testing.
 
 
-\paragraph{jsPlumb}
+\label{jsPlumb}\paragraph{jsPlumb}
 We chose to use one extra tool which was not mentioned before. This is because we only recently discovered it. We used jsPlumb (\url{http://jsplumb.org/}) as framework for the (visual) connections in the GUI. This framework makes it easy to define anchors and draw wires between these anchors. \\
 Unfortunately, the framework did not match up to all our wishes. Small changes to the library were necessary to allow jsPlumb to automatically create anchors from which multiple wires can be drawn (these kind of anchors are used in the connector from which input signals originate).
 
