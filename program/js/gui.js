@@ -65,9 +65,9 @@ $(document).ready(function() {
 		start: function(event){
 			$("#gates-transport").css('display', 'block');
 		},
-        drag: function(event, ui) {
-            $(ui.helper).toggleClass("gate-border", event.pageX > synthbio.gui.gatesTabWidth);
-        },
+		drag: function(event, ui) {
+			$(ui.helper).toggleClass("gate-border", event.pageX > synthbio.gui.gatesTabWidth);
+		},
 		stop: function(event, ui){
 			synthbio.gui.createGateElement(
 				$(this).attr('class').split(' ')[1],
@@ -149,18 +149,18 @@ synthbio.gui.addGateAnchors = function(elem, amount) {
  * @param gatePos Position of the new gate [left, top]. If left < 0 or top < 0, the gate will not be shown
  */
 synthbio.gui.createGateElement = function(gateClass, gatePos) {
-    // TODO: use models.js -> synthbio.Gate
-    if(gateClass !== "not" && gateClass !== "and" && gateClass !== "compound") {
-        // TODO: implement exception throwing using synthbio.util
-        return;
-    }
+	// TODO: use models.js -> synthbio.Gate
+	if(gateClass !== "not" && gateClass !== "and" && gateClass !== "compound") {
+		// TODO: implement exception throwing using synthbio.util
+		return;
+	}
 	if(!gatePos || gatePos[0] < 0 || gatePos[1] < 0)
 		return;
 
 	synthbio.gui.gateCounter++;
 	var id = "gate" + synthbio.gui.gateCounter;
 
-    var res = {
+	var res = {
 		idx: synthbio.gui.gateCounter,
 		element: $("<div íd=\""+id+"\" class=\"gate " + gateClass + "\">"
 			+ "<embed src=\"img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
@@ -181,7 +181,7 @@ synthbio.gui.createGateElement = function(gateClass, gatePos) {
 	res.element.css("left", parseInt(gatePos[0]));
 	res.element.css("top", parseInt(gatePos[1]));
 
-    return jQuery.extend(true, synthbio.gui.addGateAnchors(res.element), res);
+	return jQuery.extend(true, synthbio.gui.addGateAnchors(res.element), res);
 }
 
 /**
@@ -198,7 +198,7 @@ synthbio.gui.pingServer = function() {
 		$.ajax("/Ping")
 			.done(function(data) {
 				$('#ping').html('Server status: <b>Connected to server <em class="icon-connected"></em> [latency: '
-                    + (date.getTime() - t) + 'ms]</b>');
+					+ (date.getTime() - t) + 'ms]</b>');
 				fCount = 0;
 			})
 			.fail(function(data) {
