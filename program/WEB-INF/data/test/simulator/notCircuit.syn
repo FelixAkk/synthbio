@@ -1,0 +1,14 @@
+{
+  "name": "notCircuit.syn",
+  "description": "Logic for this circuit: B = ~A",
+  "gates": [
+    { "kind": "not", "position": {"x": 2,"y": 2}}
+  ],
+  "signals": [
+    { "from": "input", "to": 0, "protein": "A"},
+    { "from": "0", "to": "output", "protein": "B"}
+  ],
+  "grouping": [
+
+  ]
+}

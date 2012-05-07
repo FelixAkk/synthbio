@@ -117,9 +117,9 @@ Results for this iteration will be presented Friday May 4, 12:15 in DW-PC 0.010.
 \task{32}
         {Code review}
         {Everyone}
-        {5 * 4}{9}
+        {5 * 4}{11}
 
-\subtotal{92}{87}
+\subtotal{92}{89}
  
 \subheading{
         Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
@@ -164,12 +164,15 @@ From the beginning of the iteration we spend a decent amount of time on planning
 
 \subsection{Implementation}
 As for the implementation, things went well. We did run into some issues, but eventually they were fixed. Main problems were drag and drop for our gates and old documentation. 
-Dragging and dropping gates had some issues, but due to the help of JQuery we managed.
+
+Dragging and dropping gates had some issues. This also had to do with jsPlumb implementation. We managed to drag and drop a gate, so the rendering part is finished. However, we cannot extract a JSON representation of our circuit yet.
 Old documentation was one of the reasons our work was getting out of sync. We established an HTTP API so we could work based on that. 
 
-During the previous iteration we already thought ahead of one specific problem. We thought that drawing wires would prove to be one of the major issues during this iteration. However, during this iteration we discovered jsPlumb which made things a lot easier and good looking. Using this framework also meant some features are implemented out-of-the-box, saving time and bringing focus  more to high-level functionality.
+During the previous iteration we had already thought ahead about one specific problem. We thought that drawing wires would prove to be one of the major issues during this iteration. However, during this iteration we discovered jsPlumb which made things a lot easier and good looking. Using this framework also meant some features are implemented out-of-the-box, saving time and bringing focus  more to high-level functionality.
 
 Furthermore, we really noticed the benefits of code review during this iteration. Many small bugs were easily fixed by just having another person review your code.
+
+Connecting to the simulator input took extra time as well, which lead a delayed implementation of the conversion of a circuit to simulator input. This task will be pushed on to the next sprint.
 
 The test driven development for the JavaScript scaffolding didn't go according to plan, because we instantly apply functions to our Ajax results, which makes it hard to test the intermediate results. However, through manual testing we still managed to do some proper testing.
 
