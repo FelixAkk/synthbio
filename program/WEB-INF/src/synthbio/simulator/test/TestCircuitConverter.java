@@ -33,9 +33,11 @@ import java.io.IOException;
  */
 public class TestCircuitConverter {
 	private final String notCircuit = "data/test/simulator/notCircuit.syn";
+	private final String andCircuit = "data/test/simulator/andCircuit.syn";
+	private final String nandCircuit = "data/test/simulator/nandCircuit.syn";
 	
 	/**
-	 * Test if notCircuit.syn is properly converted to SBML.
+	 * Test if a simple Not-gate is properly converted to SBML.
 	 */
 	@Ignore
 	@Test
@@ -51,4 +53,42 @@ public class TestCircuitConverter {
 		assertTrue(sbmlResult.contains("<reaction id=\"translation_not_mB_B\""));
 	}
 	
+	/**
+	 * Test if a simple And-gate is properly converted to SBML.
+	 */
+	@Ignore
+	@Test
+	public void testAndCircuit() throws CircuitException, JSONException, IOException {
+		CircuitConverter converter = new CircuitConverter();
+		Circuit circuit = Circuit.fromJSON(Util.fileToJSONObject(andCircuit));
+		String sbmlResult = converter.convert(circuit);
+		
+		assertTrue(sbmlResult.contains("<species id=\"A\""));
+		assertTrue(sbmlResult.contains("<species id=\"B\""));
+		assertTrue(sbmlResult.contains("<species id=\"mC\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"transcription_and_A_B_mC\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"translation_and_mC_C\""));
+	}
+	
+	/**
+	 * Test if a more complex Nand-gate is properly converted to SBML.
+	 */
+	@Ignore
+	@Test
+	public void testNandCircuit() throws CircuitException, JSONException, IOException {
+		CircuitConverter converter = new CircuitConverter();
+		Circuit circuit = Circuit.fromJSON(Util.fileToJSONObject(nandCircuit));
+		String sbmlResult = converter.convert(circuit);
+		
+		assertTrue(sbmlResult.contains("<species id=\"A\""));
+		assertTrue(sbmlResult.contains("<species id=\"B\""));
+		assertTrue(sbmlResult.contains("<species id=\"C\""));
+		assertTrue(sbmlResult.contains("<species id=\"D\""));
+		assertTrue(sbmlResult.contains("<species id=\"mC\""));
+		assertTrue(sbmlResult.contains("<species id=\"mD\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"transcription_and_A_B_mC\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"translation_and_mC_C\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"transcription_and_C_mD\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"translation_and_mD_D\""));
+	}
 }

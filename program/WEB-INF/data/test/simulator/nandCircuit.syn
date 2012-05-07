@@ -1,0 +1,15 @@
+{
+	"name": "nandCircuit.syn",
+	"description": "Logic for this circuit: ~(A&B -> C) -> D",
+	"gates": [
+		{ "kind": "and", "position": {"x": 2,"y": 2}}
+		{ "kind": "not", "position": {"x": 2,"y": 4}}
+	],
+	"signals": [
+		{ "from": "input", "to": 0, "protein": "A"},
+		{ "from": "input", "to": 0, "protein": "B"},
+		{ "from": 0, "to": "1", "protein": "C"},
+		{ "from": 1, "to": "output", "protein": "D"}
+	],
+	"grouping": []
+}

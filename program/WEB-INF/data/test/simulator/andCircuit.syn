@@ -1,0 +1,13 @@
+{
+	"name": "andCircuit.syn",
+	"description": "Logic for this circuit: A&B -> C",
+	"gates": [
+		{ "kind": "and", "position": {"x": 2,"y": 2}}
+	],
+	"signals": [
+		{ "from": "input", "to": 0, "protein": "A"},
+		{ "from": "input", "to": 0, "protein": "B"},
+		{ "from": 0, "to": "output", "protein": "C"}
+	],
+	"grouping": []
+}

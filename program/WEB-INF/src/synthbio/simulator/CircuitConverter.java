@@ -28,11 +28,6 @@ public class CircuitConverter {
 	 * @return					The SBML-formatted string.
 	 */
 	public String convert(Circuit circuit) {
-		try {
-			circuit.validate();
-		} catch(CircuitException ce) {
-			ce.printStackTrace();
-		}
-		return null;
+		return "";
 	}
 }
