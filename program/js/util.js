@@ -21,7 +21,7 @@
 var synthbio = synthbio || {};
 
 /**
- * requests package
+ * utilities package
  */
 synthbio.util = synthbio.util || {};
 
