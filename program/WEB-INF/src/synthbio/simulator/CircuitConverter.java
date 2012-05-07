@@ -14,6 +14,7 @@
 package synthbio.simulator;
 
 import synthbio.models.Circuit;
+import synthbio.models.CircuitException;
 
 /**
  * A class for converting Circuit-objects to SBML.
@@ -27,7 +28,11 @@ public class CircuitConverter {
 	 * @return					The SBML-formatted string.
 	 */
 	public String convert(Circuit circuit) {
-		circuit.validate();
+		try {
+			circuit.validate();
+		} catch(CircuitException ce) {
+			ce.printStackTrace();
+		}
 		return null;
 	}
-} 
+}
