@@ -106,4 +106,34 @@
 		<mkdir dir="${build}"/> 
 	</target>
 
+	<!--
+		Try to implement automated jslint checking and jsmin minifing.
+	-->
+	<taskdef name="jslint"
+		classname="com.googlecode.jslint4java.ant.JSLintTask"
+		classpath="lib/jslint4java-2.0.2.jar" />
+	<target name="jslint">
+		<jslint>
+			<formatter type="plain" />
+			<fileset dir="../js">
+				<include name="*.js" />
+				<exclude name="*.min.js" />
+			</fileset>
+		</jslint>
+	</target>
+	
+	<!-- Minify all javascript files in js/ -->
+	<taskdef name="jsmin"
+		classname="net.matthaynes.jsmin.JSMin_Task"
+		classpath="lib/jsmin.0.2.4.jar" />
+	
+	<target name="jsmin" depends="jslint">
+		<jsmin destdir="../js/" suffix="true">
+			<fileset dir="../js/">
+				<include name="*.js"/>
+				<exclude name="*min.js"/>
+			</fileset>
+		</jsmin>
+	</target>
+
 </project>
