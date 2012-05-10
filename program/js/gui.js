@@ -149,11 +149,6 @@ synthbio.gui.addGateAnchors = function(elem, amount) {
  * @param gatePos Position of the new gate [left, top]. If left < 0 or top < 0, the gate will not be shown
  */
 synthbio.gui.createGateElement = function(gateClass, gatePos) {
-	// TODO: use models.js -> synthbio.Gate
-	if(gateClass !== "not" && gateClass !== "and" && gateClass !== "compound") {
-		// TODO: implement exception throwing using synthbio.util
-		return;
-	}
 	if(!gatePos || gatePos[0] < 0 || gatePos[1] < 0)
 		return;
 

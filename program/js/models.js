@@ -73,7 +73,7 @@ synthbio.Point.fromJSON=function(json){
  * @param t Type/class of gate, should be either "not", "and" or "compound"
  */
 synthbio.Gate = function(t, position){
-	synthbio.util.assert(t == "not" || t == "and" || t == "compound");
+	synthbio.util.assert(t == "not" || t == "and", "Only 'not' );
 
 	this.type = t;
 	if(position instanceof synthbio.Point) {
@@ -105,7 +105,7 @@ synthbio.Gate.fromJSON = function(json){
 
 /**
  * Signals
- * Signals hold proteins, an origin and a destination
+ * Signals hold proteins, an origin and a destination. A.K.A. wire, connection.
  * Note: To convert Signals to JSON use JSON.stringify(Signal)
  */
 synthbio.Signal = function(prot, origin, destination){
@@ -192,7 +192,7 @@ synthbio.Circuit.prototype.getGate = function(index) {
 	} else {
 		return gate;
 	}
-}
+};
 
 // (Jieter): eval is a reserved keyword in javascript, could be used...
 // What exactly is your idea for the function of eval?
