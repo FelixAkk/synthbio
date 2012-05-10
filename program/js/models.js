@@ -78,7 +78,6 @@ synthbio.Gate = function(t, position){
 	this.type = t;
 	if(position instanceof synthbio.Point) {
 		this.position=position;
-	// if position is an array (i.d. has a length property)
 	} else if($.isArray(position) && !isNaN(parseInt(position[0], 10)) && !isNaN(parseInt(position[1], 10))) {
 		this.position = new synthbio.Point(position);
 	} else {
