@@ -5,8 +5,8 @@
  * TU Delft - University of Technology
  *
  * Authors:
- * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
- * 	Albert ten Napel, Jan Pieter Waagmeester
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
  *
@@ -35,7 +35,7 @@ synthbio.util = synthbio.util || {};
  */
 synthbio.util.AssertException = function(message) {
 	this.message = message;
-}
+};
 
 synthbio.util.AssertException.prototype.toString = function () {
 	return 'AssertException: ' + this.message;
@@ -55,4 +55,4 @@ synthbio.util.assert = function(exp, message) {
 	if (!exp) {
 		throw new synthbio.util.AssertException(message);
 	}
-}
+};
