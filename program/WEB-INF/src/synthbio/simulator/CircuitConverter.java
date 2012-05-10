@@ -16,6 +16,8 @@ package synthbio.simulator;
 import synthbio.models.Circuit;
 import synthbio.models.CircuitException;
 import synthbio.models.Gate;
+import synthbio.models.CDS;
+import synthbio.models.Promotor;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,7 +35,7 @@ public class CircuitConverter {
 	// The header and trailer that has to be included in every SBML file.
 	private final String header =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
-		"<sbml xmlns=\"http://www.sbml.org/sbml/level2/version4\" level=\"2\" version=\"4\">"+
+		"<sbml xmlns=\"http://www.sbml.org/sbml/level2/version4\" level=\"2\" version=\"4\">\n"+
 		"\t<model>\n"+
 		"\t\t<listOfUnitDefinitions>\n"+
 		"\t\t\t<unitDefinition id=\"substance\">\n"+
@@ -59,6 +61,18 @@ public class CircuitConverter {
 		"</sbml>";
 	
 	/**
+	 * Helpful method for getting a string of tabs
+	 */
+	private String tabs(int n) {
+		String r = "";
+		if(n > 0) {
+			for(int i = 0; i < n; i++)
+				r += "\t";
+		}
+		return r;
+	}
+	
+	/**
 	 * Converts a Circuit-object to SBML.
 	 * @param		circuit	The Circuit-object to convert.
 	 * @return					The SBML-formatted string.
@@ -80,11 +94,21 @@ public class CircuitConverter {
 			
 			// First reaction: transcription
 			// From input proteins to mRNA of output protein.
-			reactions.add(new Reaction(ReactionType.Transcription, kind, inputs, 'm'+output));
+			Reaction transcription = new Reaction(ReactionType.Transcription, kind, inputs, 'm'+output);
+			// transcription needs the parameters: k1, km, n, d1
+			Promotor prom = g.getPromotor();
+			transcription.setParameters(prom.getK1(), prom.getKm(), prom.getN(), g.getCDS().getD1());
+			// add the reaction
+			reactions.add(transcription);
 			
 			// Second reaction: translation
 			// From mRNA of output protein to output protein.
-			reactions.add(new Reaction(ReactionType.Translation, kind, 'm'+output, output));
+			Reaction translation = new Reaction(ReactionType.Translation, kind, 'm'+output, output);
+			// translation needs the parameters: k2, d2
+			CDS c = g.getCDS();
+			translation.setParameters(c.getK2(), c.getD2());
+			// add the reaction
+			reactions.add(translation);
 			
 			// Add new species to the set (if there are any)
 			for(String s: inputs)
@@ -97,9 +121,10 @@ public class CircuitConverter {
 		String r = header;
 		// add all the species
 		for(String s: species)
-			r += speciesString(s, 0d);
+			r += "\t\t\t" + speciesString(s, 0d);
 		r += "\t\t</listOfSpecies>\n";
 		// add the reactions
+		r += "\t\t<listOfReactions>\n";
 		for(Reaction reaction: reactions)
 			r += reaction.getSBMLString();
 		
@@ -119,6 +144,11 @@ public class CircuitConverter {
 		private List<String> fromProteins;
 		private String toProtein;
 		
+		// parameters contains the paramters for this reaction
+		// for transcription these are [k1, km, n and d1]
+		// for translation these are [k2, d2]
+		private double[] parameters;
+		
 		// multiple input constructor
 		public Reaction(ReactionType type, String gate, List<String> fromProteins, String toProtein) {
 			this.type = type;
@@ -134,6 +164,20 @@ public class CircuitConverter {
 			fromProteins.add(fromProtein);
 			this.toProtein = toProtein;
 			this.gate = gate;
+		}
+		
+		// setParameters for transcription: k1, Km, n and d1
+		public void setParameters(double k1, double km, double n, double d1) {
+			parameters = new double[] {k1, km, n, d1};
+		}
+		
+		// setParameters for translation: k2 and d2
+		public void setParameters(double k2, double d2) {
+			parameters = new double[] {k2, d2};
+		}
+		
+		public double[] getParameters() {
+			return parameters;
 		}
 		
 		/**
@@ -157,14 +201,14 @@ public class CircuitConverter {
 			// with translation this is mrna of input (translation has only one input).
 			r +=
 				"\t\t\t\t<listOfReactants>\n"+
-				"\t\t\t\t\t<speciesReference species=\"" + (type == ReactionType.Transcription? "gene": "m" + fromProteins.get(0)) + "\"/>\n"+
+				"\t\t\t\t\t<speciesReference species=\"" + (type == ReactionType.Transcription? "gene": fromProteins.get(0)) + "\"/>\n"+
 				"\t\t\t\t</listOfReactants>\n";
 			// Products
 			// with transcription this is mrna of output
 			// with translation this is output
 			r +=
 				"\t\t\t\t<listOfProducts>\n"+
-				"\t\t\t\t\t<speciesReference species=\"" + (type == ReactionType.Transcription? "m": "") + toProtein + "\"/>\n"+
+				"\t\t\t\t\t<speciesReference species=\"" + toProtein + "\"/>\n"+
 				"\t\t\t\t</listOfProducts>\n";
 			// Modifiers
 			// with transcription this is the inputs
@@ -190,11 +234,121 @@ public class CircuitConverter {
 			//		k2 of input
 			//		d2 of output
 			r += "\t\t\t\t\t<listOfParameters>\n";
-			
+			if(type == ReactionType.Transcription) {
+				r += "\t\t\t\t\t\t<parameter id=\"k1\" value=\"" + parameters[0] + "\" units=\"substance\"/>\n";
+				r += "\t\t\t\t\t\t<parameter id=\"km\" value=\"" + parameters[1] + "\" units=\"substance\"/>\n";
+				r += "\t\t\t\t\t\t<parameter id=\"n\" value=\"" + parameters[2] + "\" units=\"substance\"/>\n";
+				r += "\t\t\t\t\t\t<parameter id=\"d1\" value=\"" + parameters[3] + "\" units=\"substance\"/>\n";
+			} else {
+				r += "\t\t\t\t\t\t<parameter id=\"k2\" value=\"" + parameters[0] + "\" units=\"substance\"/>\n";
+				r += "\t\t\t\t\t\t<parameter id=\"d2\" value=\"" + parameters[1] + "\" units=\"substance\"/>\n";
+			}
 			r += "\t\t\t\t\t</listOfParameters>\n";
 			
 			// the math
 			r += "\t\t\t\t\t<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
+			
+			// adding a comment to indicate the reaction formula
+			if(type == ReactionType.Transcription) {
+				if(gate.equals("not")) {
+					r +=
+						"\t\t\t\t\t<!-- (k1*km^n/km^n+" + fromProteins.get(0) + "^n)-d1*" + toProtein + " -->\n"+
+						"\t\t\t\t\t\t<apply>\n"+
+						"\t\t\t\t\t\t\t<minus/>\n"+
+						"\t\t\t\t\t\t\t\t<apply>\n"+
+						"\t\t\t\t\t\t\t\t\t<divide/>\n"+
+						"\t\t\t\t\t\t\t\t\t\t<apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t<times/>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t<ci>k1</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t<apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t<power/>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t<ci>km</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t<ci>n</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t</apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t</apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t<apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t<plus/>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t<apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t\t<power/>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t\t<ci>km</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t\t<ci>n</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t</apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t<apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t\t<power/>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t\t<ci>" + fromProteins.get(0) + "</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t\t<ci>n</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t\t</apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t</apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t</apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t<apply>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t<times/>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t<ci>d1</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t\t<ci>" + toProtein + "</ci>\n"+
+						"\t\t\t\t\t\t\t\t\t\t</apply>\n"+
+						"\t\t\t\t\t\t\t\t\t</apply>\n";
+				} else if(gate.equals("and")) {
+					String temp = fromProteins.get(0) + "*" + fromProteins.get(1);
+					r +=
+						tabs(5)+"<!-- (k1(" + temp + ")^n/km^n+(" + temp + ")^n)-d1*" + toProtein + " -->\n"+
+							tabs(6)+"<apply>\n"+
+								tabs(7)+"<minus/>\n"+
+								tabs(7)+"<apply>\n"+
+									tabs(8)+"<divide/>\n"+
+									tabs(8)+"<apply>\n"+
+										tabs(9)+"<times/>\n"+
+										tabs(9)+"<ci>k1</ci>\n"+
+										tabs(9)+"<apply>\n"+
+											tabs(10)+"<power/>\n"+
+											tabs(10)+"<apply>\n"+
+												tabs(11)+"<times/>\n"+
+												tabs(11)+"<ci>" + fromProteins.get(0) + "</ci>\n"+
+												tabs(11)+"<ci>" + fromProteins.get(1) + "</ci>\n"+
+											tabs(10)+"</apply>\n"+
+											tabs(10)+"<ci>n</ci>\n"+
+										tabs(9)+"</apply>\n"+
+									tabs(8)+"</apply>\n"+
+									tabs(8)+"<apply>\n"+
+										tabs(9)+"<plus/>\n"+
+										tabs(9)+"<apply>\n"+
+											tabs(10)+"<power/>\n"+
+											tabs(10)+"<ci>km</ci>\n"+
+											tabs(10)+"<ci>n</ci>\n"+
+										tabs(9)+"</apply>\n"+
+										tabs(9)+"<apply>\n"+
+											tabs(10)+"<power/>\n"+
+											tabs(10)+"<apply>\n"+
+												tabs(11)+"<times/>\n"+
+												tabs(11)+"<ci>" + fromProteins.get(0) + "</ci>\n"+
+												tabs(11)+"<ci>" + fromProteins.get(1) + "</ci>\n"+
+											tabs(10)+"</apply>\n"+
+											tabs(10)+"<ci>n</ci>\n"+
+										tabs(9)+"</apply>\n"+
+									tabs(8)+"</apply>\n"+
+								tabs(7)+"</apply>\n"+
+								tabs(7)+"<apply>\n"+
+									tabs(8)+"<times/>\n"+
+									tabs(8)+"<ci>d1</ci>\n"+
+									tabs(8)+"<ci>" + toProtein + "</ci>\n"+
+								tabs(7)+"</apply>\n"+
+							tabs(6)+"</apply>\n";
+				}
+			} else {
+				r +=
+					"\t\t\t\t\t<!-- k2*" + fromProteins.get(0) + " - d2*" + toProtein + " -->\n"+
+					"\t\t\t\t\t\t<apply>\n"+
+					"\t\t\t\t\t\t\t<minus/>\n"+
+					"\t\t\t\t\t\t\t\t<apply>\n"+
+					"\t\t\t\t\t\t\t\t\t<times/>\n"+
+					"\t\t\t\t\t\t\t\t\t<ci>k2</ci>\n"+
+					"\t\t\t\t\t\t\t\t\t<ci>" + fromProteins.get(0) + "</ci>\n"+
+					"\t\t\t\t\t\t\t\t</apply>\n"+
+					"\t\t\t\t\t\t\t\t<apply>\n"+
+					"\t\t\t\t\t\t\t\t\t<times/>\n"+
+					"\t\t\t\t\t\t\t\t\t<ci>d2</ci>\n"+
+					"\t\t\t\t\t\t\t\t\t<ci>" + toProtein + "</ci>\n"+
+					"\t\t\t\t\t\t\t\t</apply>\n"+
+					"\t\t\t\t\t\t</apply>\n";
+			}
 			
 			r += "\t\t\t\t\t</math>\n";
 			
