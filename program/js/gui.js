@@ -60,17 +60,25 @@ $(document).ready(function() {
 		scroll: false,
 		helper: 'clone',
 		start: function(event){
+			// Prepare transport layer
 			$("#gates-transport").css('display', 'block');
 		},
 		drag: function(event, ui) {
-			$(ui.helper).toggleClass("gate-border", event.pageX > synthbio.gui.gatesTabWidth);
+			// Display gate border if dragging in grid (and gate can be dropped)
+			var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
+			$(ui.helper).toggleClass("gate-border", dragInGrid);
 		},
 		stop: function(event, ui){
-			synthbio.gui.displayGateModel(synthbio.model.addGate(
-				$(this).attr('class').split(' ')[1],
-				[event.pageX - synthbio.gui.gatesTabWidth, event.pageY  - $(this).height()]
-			));
+			// Add new gate to circuit
+			var newGate = synthbio.model.addGate(
+				$(this).attr('class').split(' ')[1], // type of gate (second word in class of the element)
+				[event.pageX - synthbio.gui.gatesTabWidth, event.pageY  - $(this).height()] // position
+			);
 
+			// Display gate in grid
+			synthbio.gui.displayGateModel(newGate);
+
+			// Clean up transport layer
 			$("#gates-transport .gate").remove();
 			$("#gates-transport").css('display', 'none');
 		}
@@ -96,6 +104,7 @@ synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
 	inputAnchors--;
 	outputAnchors--;
 	
+	// Function to calculate the placement (1/2 if there's only one to place, else 1/total)
 	var placement = function(num, total) {
 		return (total < 1) ? 0.5 : (num / total);
 	}
@@ -125,35 +134,38 @@ synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
  * @return Returns the model, with anchors properties added
  */
 synthbio.gui.addGateAnchors = function(gateModel) {
-	return $.extend(
-		true,
-		synthbio.gui.addPlumbAnchors(
-			gateModel.element.attr("id"),
-			gateModel.model.getInputCount(),
-			gateModel.model.getOutputCount()
-		),
-		gateModel
+	var anchors = synthbio.gui.addPlumbAnchors(
+		gateModel.element.attr("id"),
+		gateModel.model.getInputCount(),
+		gateModel.model.getOutputCount()
 	);
+
+	// Extend gateModel with anchors and return
+	return $.extend(true, anchors, gateModel);
 }
 
 /**
  * Adds a new gate DOM element to be used within the modelling grid.
  *
- * @param gateModel Object with element, model and anchors.
+ * @param gateModel synthbio.Gate
+ * @return Object with element, model and anchors.
  */
 synthbio.gui.displayGateModel = function(gateModel) {
 	if(!gateModel)
 		return;
 	
+	// Create new display element
 	var element = $("<div class=\"gate " + gateModel.getType() + "\">"
 		+ gateModel.getImage(true)
 		+ "<div class=\"mask\"></div>"
 		+ "</div>");
 
+	// Place new element in grid
 	$('#grid-container').append(element);
 	element.css("left", gateModel.getX());
 	element.css("top", gateModel.getY());
 
+	// Make the gate draggable
 	jsPlumb.draggable(element, {
 		stop: function(event, ui){
 			gateModel.setPosition([
@@ -163,6 +175,7 @@ synthbio.gui.displayGateModel = function(gateModel) {
 		}
 	});
 
+	// Delete on double click
 	element.dblclick(function() {
 		if (!confirm("Delete " + gateModel.toString() + "?"))
 			return;
@@ -171,6 +184,7 @@ synthbio.gui.displayGateModel = function(gateModel) {
 		element.remove();
 	});
 
+	// Add anchors and return
 	return synthbio.gui.addGateAnchors({element: element, model: gateModel});
 }
 
