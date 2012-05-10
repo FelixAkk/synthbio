@@ -73,7 +73,7 @@ synthbio.Point.fromJSON=function(json){
  * @param t Type/class of gate, should be either "not", "and" or "compound"
  */
 synthbio.Gate = function(t, position){
-	synthbio.util.assert(t == "not" || t == "and" || t == "compound");
+	synthbio.util.assert(t === "not" || t === "and", "Only 'not' and 'and' allowed as type");
 
 	this.type = t;
 	this.setPosition(position);
@@ -172,8 +172,16 @@ synthbio.Circuit.prototype.toString = function(){
 	return this.name + ": " + this.desc + " consists of gates:{ " + this.gates.toString() + " } and signals:{ " + this.signals.toString() + " } and groupings:{ " + this.groups + "}";
 };
 
-synthbio.Circuit.fromMap = function(map){
+/**
+ * Parses and constructs a circuit from the provided JSON. Assumes a valid circuit.
+ *
+ * @param json JSON (usually from a .syn) file representing a circuit.
+ */
+synthbio.Circuit.fromJSON = function(json) {
+	var map = $.parseJSON(json);
+	
 	var gates=[], signals=[], groups=[];
+
 	$.each(map.gates, function(i, elem){
 		gates[i]=synthbio.Gate.fromMap(elem);
 	});
@@ -186,11 +194,33 @@ synthbio.Circuit.fromMap = function(map){
 	//~ $.each(map.groups, function(i, elem){
 	//~		groups[i]=synthbio.Group.fromMap(elem);
 	//~ });
-	return new synthbio.Circuit(map.name, map.description, gates, signals, groups);
+
+	return synthbio.Circuit(map.name, map.description, gates, signals, groups);
 };
-synthbio.Circuit.fromJSON= function(json){
-	return synthbio.Circuit.fromMap($.parseJSON(json));
-};
+
+/**
+ * Cleans the current workspace and loads the provided circuit.
+ *
+ * @param circuit An instance of synthbio.Circuit
+ */
+synthbio.loadCircuit = function(circuit) {
+	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit."
+	+ " This is required.");
+
+	// Install model
+	synthbio.model = circuit;
+	// Clear grid
+	$('grid-container').html = "";
+	// Setup inputs/outputs
+	synthbio.gui.addInputOutputFields();
+	// Show the circuit; add all the elements
+	$.each(model.gates, function(index, element) {
+		synthbio.gui.displayGate(element);
+	})
+	$.each(model.signals, function(index, element){
+		signals[i]=synthbio.Signal.fromMap(elem);
+	});
+}
 
 /**
  * Sort of a setter for gates.
@@ -226,14 +256,7 @@ synthbio.Circuit.prototype.getGate = function(index) {
 	} else {
 		return gate;
 	}
-}
-
-// (Jieter): eval is a reserved keyword in javascript, could be used...
-// What exactly is your idea for the function of eval?
-//~ synthbio.Circuit.prototype.eval = function(){
-	//~ return false;
-//~ };
-//~ 
+};
 
 /**
  * CDSs
