@@ -1,8 +1,17 @@
 /**
- * Info from http://docs.jquery.com/QUnit
- * Synthetic Biology project (Biobrick Modeller/Simulator)
+ * Project Zelula
+ *
+ * Contextproject TI2800
+ * TU Delft - University of Technology
+ *
+ * Authors:
+ * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * 	Albert ten Napel, Jan Pieter Waagmeester
+ *
  * https://github.com/FelixAkk/synthbio
+ *
  * @author	Thomas van Helden & JanPieter Waagmeester
+ *
  * This document contains tests for the JavaScript clientside
  * The JSON coming from the Java server will be translated to circuits and UnitTested here
  */
@@ -54,12 +63,29 @@ $(document).ready(function(){
 
 	module("Gates");
 		/**
+		 * Gate construction
+		 */
+		test("Gates should only be able to be constructed with certain parameters provided with the constructor call.",
+			function() {
+			raises(new synthbio.Gate("and", 5), , "Invalid position parameter is given.");
+		})
+		
+		/**
 		 * Gate properties
 		 */
 		test("Gates should have the right properties", function(){
 			equal(gate.type, "and", "Gates store types");
 			equal(gate.getX(), 10, "Gates store X coordinates");
 			equal(gate.getY(), 20, "Gates store Y coordinates");
+		});
+
+		/**
+		 * Gate properties
+		 */
+		test("Gates should have the right properties", function(){
+			equal(notgate.type, "not", "Gates store types");
+			equal(notgate.getX(), 10, "Gates store X coordinates");
+			equal(notgate.getY(), 22, "Gates store Y coordinates");
 		});
 		
 		/**
@@ -128,6 +154,19 @@ $(document).ready(function(){
 			deepEqual(circuit.signals, [signal, signal], "Circuit has a list of signals");
 			deepEqual(circuit.groups, [], "Circuit has groupings of gates");
 		});
+
+
+		/**
+		 * Adding of gates
+		 */
+		circuit.add(notgate); // add gate on index [0].
+		test("Circuits should add and store gates through a method call", function() {
+			deepEqual(circuit.getGates(), [notgate])
+		})
+		circuit.add(notgate); // add gate on index [1].
+		test("Circuits should add and store gates through a method call", function() {
+			deepEqual(circuit.getGate(1), notgate)
+		})
 		
 		/**
 		 * Circuit toString

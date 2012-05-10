@@ -5,17 +5,17 @@
  * TU Delft - University of Technology
  *
  * Authors:
- * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
- * 	Albert ten Napel, Jan Pieter Waagmeester
+ * Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ * Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
  *
- * @author	Thomas van Helden & JanPieter Waagmeester
+ * @author	Thomas van Helden, JanPieter Waagmeester, Felix Akkermans, Niels Doekenmeijer
  *
  * Definition of models.
  * More info on jquery http://api.jquery.com/
  */
- 
+
 /*jslint devel: true, browser: true, sloppy: true, stupid: false, white: true, maxerr: 50, indent: 4 */
 /*global $ */
 
@@ -23,6 +23,7 @@
  * syntbio package.
  */
 var synthbio = synthbio || {};
+
 
 /**
  * Point class
@@ -36,10 +37,10 @@ var synthbio = synthbio || {};
  */
 synthbio.Point = function(x, y){
 	//construct from array x if y is undefined.
-	if(y === undefined){
+	if(y === undefined) {
 		this.x=x[0];
 		this.y=x[1];
-	}else{
+	} else {
 		this.x=x;
 		this.y=y;
 	}
@@ -71,10 +72,13 @@ synthbio.Point.fromJSON=function(json){
  */
 synthbio.Gate = function(t, position){
 	this.type = t;
-	if(position instanceof synthbio.Point){
+	if(position instanceof synthbio.Point) {
 		this.position=position;
-	}else{
+	// if position is an array (i.d. has a length property)
+	} else if(position.length && !isNaN(parseInt(position[0], 10)) && !isNaN(parseInt(position[1], 10))) {
 		this.position = new synthbio.Point(position);
+	} else {
+		throw "Position could not be parsed";
 	}
 };
 
@@ -121,12 +125,12 @@ synthbio.Signal.fromJSON = function(json){
  * Circuits hold a name, a description, gates, how gates are grouped and which signals connect them
  * Note: To convert Circuits into JSON use JSON.stringify(Circuit)
  */
-synthbio.Circuit = function(circuitName, desc, gate, signal, groupings){
+synthbio.Circuit = function(circuitName, desc, gates, signal, groupings){
 	this.name = circuitName;
 	this.description = desc;
 
 	//make gates, signals and groupings default to empty an array 
-	this.gates = gate || [];
+	this.gates = gates || [];
 	this.signals = signal || [];
 	this.groups = groupings || []; 
 };
@@ -182,3 +186,10 @@ synthbio.CDS.fromMap = function(map){
 synthbio.CDS.fromJSON = function(json){
 	return synthbio.CDS.fromMap($.parseJSON(json));	
 };
+
+/**
+ * The object that will represent the entire circuit that is in the app. Might be a slight delay between synchronization
+ * but should correspond to the circuit pretty accurately. This should only matter with trivial things like the position
+ * of gates. This object is instantiated as an empty circuit with no name or description.
+ */
+synthbio.model = new synthbio.Circuit("", "");
