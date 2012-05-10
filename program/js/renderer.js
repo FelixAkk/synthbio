@@ -102,6 +102,13 @@ $(document).ready(function() {
 					el.html($("td", this, 0).html());
 				});
 			});
+
+			// Calculate source/target indices
+			var fromIndex = synthbio.gui.getGateIndexById(connInfo.sourceId);
+			var toIndex = synthbio.gui.getGateIndexById(connInfo.targetId);
+			
+			// Add signal to circuit
+			synthbio.model.addSignal("", fromIndex, toIndex);
 		});
 
 		$('#list-proteins').on('hide', function(){

@@ -145,6 +145,39 @@ synthbio.gui.addGateAnchors = function(gateModel) {
 }
 
 /**
+ * Maps an (display) element ID to the proper gate object
+ */
+synthbio.gui.displayGateIdMap = {/*id12: object12, id34: object34*/};
+
+/**
+ * Returns gate object by GUI id
+ * @param id string
+ * @return Object with element, model and anchors (exception if not found)
+ */
+synthbio.gui.getGateById = function(id) {
+	if (id == "gate-input")
+		return "input";
+	else if (id == "gate-output")
+		return "output";
+	else if (synthbio.gui.displayGateIdMap[id])
+		return synthbio.gui.displayGateIdMap[id];
+	else
+		throw "Cannot map id to gate";
+}
+
+/**
+ * Returns gate index by GUI id
+ * @param id string
+ * @return index (exception if not found)
+ */
+synthbio.gui.getGateIndexById = function(id) {
+	var gate = synthbio.gui.getGateById(id);
+	if (gate.model)
+		gate = synthbio.model.indexOfGate(gate.model);
+	return gate;
+}
+
+/**
  * Adds a new gate DOM element to be used within the modelling grid.
  *
  * @param gateModel synthbio.Gate
@@ -184,8 +217,13 @@ synthbio.gui.displayGateModel = function(gateModel) {
 		element.remove();
 	});
 
-	// Add anchors and return
-	return synthbio.gui.addGateAnchors({element: element, model: gateModel});
+	// Add anchors
+	var res = synthbio.gui.addGateAnchors({element: element, model: gateModel});
+
+	// Add to ID map
+	synthbio.gui.displayGateIdMap[element.attr("id")] = res;
+
+	return res;
 }
 
 /**
