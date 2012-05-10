@@ -39,7 +39,7 @@ $(document).ready(function() {
 	$('.dropdown-toggle').dropdown();
 	
 	// Load proteins from server.
-	$('#list-proteins').on('show', function(){
+	$('#list-proteins').on('show', function() {
 		synthbio.requests.getCDSs(function(response){
 			if(response instanceof String){
 				$('#list-proteins tbody td').html(data.response);
@@ -66,7 +66,7 @@ $(document).ready(function() {
 			$(ui.helper).toggleClass("gate-border", event.pageX > synthbio.gui.gatesTabWidth);
 		},
 		stop: function(event, ui){
-			synthbio.gui.displayGateModel(synthbio.model.addGate(
+			synthbio.gui.displayGate(synthbio.model.addGate(
 				$(this).attr('class').split(' ')[1],
 				[event.pageX - synthbio.gui.gatesTabWidth, event.pageY  - $(this).height()]
 			));
@@ -76,41 +76,76 @@ $(document).ready(function() {
 		}
 	});
 
+	// Set up modelling grid
+	synthbio.gui.addInputOutputFields();
+
 	// Start pinging
 	synthbio.gui.pingServer();
+
+
+	var map = {
+		"name": "example.syn",
+		"description": "Logic for this circuit: D = ~(A^B)",
+		"gates": [
+			{ "kind": "and", "position": {"x": 2,"y": 2}},
+			{ "kind": "not", "position": {"x": 2,"y": 4}}
+		],
+		"signals": [
+			{ "from": "input", "to": 0, "protein": "A"},
+			{ "from": "input", "to": 0, "protein": "B"},
+			{ "from": 0, "to": 1, "protein": "C"},
+			{ "from": 1, "to": "output", "protein": "D"}
+		],
+		"grouping": [
+
+		]
+	};
+	var gates=[], signals=[], groups=[];
+
+	$.each(map.gates, function(i, elem){
+		gates[i]=synthbio.Gate.fromMap(elem);
+	});
+
+	$.each(map.signals, function(i, elem){
+		signals[i]=synthbio.Signal.fromMap(elem);
+	});
+	var cir = synthbio.Circuit(map.name, map.description, gates, signals, groups);
+	setTimeout(function() {
+		synthbio.model.loadCircuit(cir);
+	}, 500);
 });
 
 /**
- * Add specified number of JSPlumb anchors to a gate
+ * Add specified number of JSPlumb endpoints to a gate
  *
- * @param toId ID of the gate element. UUID of the anchors will be *id*_input*number* (and id_outputNUMBER)
- * @param inputAnchors Number of input anchors
- * @param outputAnchors Number of output anchors
+ * @param toId ID of the gate element. UUID of the endpoints will be *id*_input*number* (and id_outputNUMBER)
+ * @param inputEndpoints Number of input endpoints
+ * @param outputEndpoints Number of output endpoints
  * @return Object with inputEndpoints and outputEndpoints (both arrays)
  */
-synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
+synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints) {
 	var res = {
 		inputEndpoints: [],
 		outputEndpoints: []
-	}
-	inputAnchors--;
-	outputAnchors--;
+	};
+	inputEndpoints--;
+	outputEndpoints--;
 	
 	var placement = function(num, total) {
 		return (total < 1) ? 0.5 : (num / total);
-	}
+	};
 
-	for (var j = 0; j <= inputAnchors; j++) {
+	for (var j = 0; j <= inputEndpoints; j++) {
 		var inputUUID = toId + "_input" + j;
 		res.inputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.inputEndpoint, { 
-			anchor:[0, placement(j, inputAnchors), -1, 0], 
+			endpoint:[0, placement(j, inputEndpoints), -1, 0], 
 			uuid:inputUUID 
 		}));
-	} 
-	for (var i = 0; i <= outputAnchors; i++) {
+	}
+	for (var i = 0; i <= outputEndpoints; i++) {
 		var outputUUID = toId + "_output" + i;
 		res.outputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { 
-			anchor:[1, placement(i, outputAnchors), 1, 0], 
+			endpoint:[1, placement(i, outputEndpoints), 1, 0], 
 			uuid:outputUUID 
 		}));
 	}
@@ -119,29 +154,38 @@ synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
 }
 
 /**
- * Add the correct number of anchors to a gate
+ * Add the correct number of endpoints to a gate
  *
  * @param gateModel Target element (object or selector)	
- * @return Returns the model, with anchors properties added
+ * @return Returns the model, with endpoints properties added
  */
-synthbio.gui.addGateAnchors = function(gateModel) {
+synthbio.gui.addGateEndpoints = function(gateModel) {
 	return $.extend(
 		true,
-		synthbio.gui.addPlumbAnchors(
+		synthbio.gui.addPlumbEndpoints(
 			gateModel.element.attr("id"),
 			gateModel.model.getInputCount(),
 			gateModel.model.getOutputCount()
 		),
 		gateModel
 	);
-}
+};
 
+
+/**
+ * Call to display the block from which input signals originate and the output signals end into.
+ */
+synthbio.gui.addInputOutputFields = function() {
+	$('grid-container').append(
+		"<div id=\"gate-input\" class=\"gate input\">Input</div><div id=\"gate-output\" class=\"gate output\">Output</div>"
+	);
+}
 /**
  * Adds a new gate DOM element to be used within the modelling grid.
  *
- * @param gateModel Object with element, model and anchors.
+ * @param gateModel Object with element, model and endpoints.
  */
-synthbio.gui.displayGateModel = function(gateModel) {
+synthbio.gui.displayGate = function(gateModel) {
 	if(!gateModel)
 		return;
 	
@@ -171,7 +215,7 @@ synthbio.gui.displayGateModel = function(gateModel) {
 		element.remove();
 	});
 
-	return synthbio.gui.addGateAnchors({element: element, model: gateModel});
+	return synthbio.gui.addGateEndpoints({element: element, model: gateModel});
 }
 
 /**
