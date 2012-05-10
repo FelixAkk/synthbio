@@ -72,6 +72,18 @@ synthbio.Point.fromJSON=function(json){
  */
 synthbio.Gate = function(t, position){
 	this.type = t;
+	this.setPosition(position);
+};
+synthbio.Gate.prototype.getType = function(){
+	return this.type;
+}
+synthbio.Gate.prototype.getX = function(){
+	return this.position.getX();
+};
+synthbio.Gate.prototype.getY = function(){
+	return this.position.getY();
+};
+synthbio.Gate.prototype.setPosition = function(position){
 	if(position instanceof synthbio.Point) {
 		this.position=position;
 	// if position is an array (i.d. has a length property)
@@ -81,13 +93,30 @@ synthbio.Gate = function(t, position){
 		throw "Position could not be parsed";
 	}
 };
-
-synthbio.Gate.prototype.getX = function(){
-	return this.position.getX();
-};
-synthbio.Gate.prototype.getY = function(){
-	return this.position.getY();
-};
+synthbio.Gate.prototype.getImage = function(html){
+	var img = "gates/" + this.getType() + ".svg";
+	if (html)
+		return "<embed src=\"img/" + img + "\" type=\"image/svg+xml\" />";
+	else
+		return img;
+}
+synthbio.Gate.prototype.getInputCount = function(){
+	//TODO: better way to determine number of inputs/outputs
+	if(this.type == "not")
+		return 1;
+	else if (this.type == "and")
+		return 2;
+	else
+		throw "Cannot determine number of input gates";
+}
+synthbio.Gate.prototype.getOutputCount = function(){
+	if(this.type == "not")
+		return 1;
+	else if (this.type == "and")
+		return 1;
+	else
+		throw "Cannot determine number of output gates";
+}
 synthbio.Gate.prototype.toString = function(){
 	return this.type + ": X = " + this.position.getX() + ", Y = "+ this.position.getY();
 };
@@ -157,6 +186,12 @@ synthbio.Circuit.fromMap = function(map){
 };
 synthbio.Circuit.fromJSON= function(json){
 	return synthbio.Circuit.fromMap($.parseJSON(json));
+};
+
+synthbio.Circuit.prototype.addGate = function(type, pos){
+	var gate = new synthbio.Gate(type, pos);
+	this.gates.push(gate);
+	return gate;
 };
 
 // (Jieter): eval is a reserved keyword in javascript, could be used...

@@ -38,9 +38,6 @@ $(document).ready(function() {
 	// Activate zhe Dropdowns Herr Doktor!
 	$('.dropdown-toggle').dropdown();
 	
-	// Start pinging
-	synthbio.gui.pingServer();
-	
 	// Load proteins from server.
 	$('#list-proteins').on('show', function(){
 		synthbio.requests.getCDSs(function(response){
@@ -56,7 +53,7 @@ $(document).ready(function() {
 		});
 	});
 
-	//Initialize gate-dragging
+	// Initialize gate-dragging
 	$('#gates-tab .gate').draggable({ 
 		appendTo: "#gates-transport",
 		containment: 'window',
@@ -69,15 +66,18 @@ $(document).ready(function() {
 			$(ui.helper).toggleClass("gate-border", event.pageX > synthbio.gui.gatesTabWidth);
 		},
 		stop: function(event, ui){
-			synthbio.gui.createGateElement(
+			synthbio.gui.displayGateModel(synthbio.model.addGate(
 				$(this).attr('class').split(' ')[1],
 				[event.pageX - synthbio.gui.gatesTabWidth, event.pageY  - $(this).height()]
-			);
+			));
 
 			$("#gates-transport .gate").remove();
 			$("#gates-transport").css('display', 'none');
 		}
 	});
+
+	// Start pinging
+	synthbio.gui.pingServer();
 });
 
 /**
@@ -121,67 +121,57 @@ synthbio.gui.addPlumbAnchors = function(toId, inputAnchors, outputAnchors) {
 /**
  * Add the correct number of anchors to a gate
  *
- * @param elem Target element (object or selector)	
- * @param amount Amount of anchors [input, output]. If null, the class attribute will be used to determine these numbers.
- * @return Returns the result of synthbio.gui.addPlumbAnchors
+ * @param gateModel Target element (object or selector)	
+ * @return Returns the model, with anchors properties added
  */
-synthbio.gui.addGateAnchors = function(elem, amount) {
-	elem = $(elem, 0);
-	var gateID = elem.attr("id");
-
-	//TODO: Better way to determine number of inputs/outputs (also for compound gates).
-	if (!amount || !amount[0] || !amount[1]) {
-		var gateClass = elem.attr('class').split(' ')[1];
-		if(gateClass == "not")
-			amount = [1, 1]
-		else if (gateClass == "and")
-			amount = [2, 1]
-		//else TODO: implement exception throwing using synthbio.util
-	}
-
-	return synthbio.gui.addPlumbAnchors(gateID, amount[0], amount[1])
+synthbio.gui.addGateAnchors = function(gateModel) {
+	return $.extend(
+		true,
+		synthbio.gui.addPlumbAnchors(
+			gateModel.element.attr("id"),
+			gateModel.model.getInputCount(),
+			gateModel.model.getOutputCount()
+		),
+		gateModel
+	);
 }
 
 /**
- * Create a new gate DOM element to be used within the modelling grid.
+ * Adds a new gate DOM element to be used within the modelling grid.
  *
- * @param gateClass The class/type of gate to be created. Can be either the string 'not', 'and' or 'compound'.
- * @param gatePos Position of the new gate [left, top]. If left < 0 or top < 0, the gate will not be shown
+ * @param gateModel Object with element, model and anchors.
  */
-synthbio.gui.createGateElement = function(gateClass, gatePos) {
-	// TODO: use models.js -> synthbio.Gate
-	if(gateClass !== "not" && gateClass !== "and" && gateClass !== "compound") {
-		// TODO: implement exception throwing using synthbio.util
+synthbio.gui.displayGateModel = function(gateModel) {
+	if(!gateModel)
 		return;
-	}
-	if(!gatePos || gatePos[0] < 0 || gatePos[1] < 0)
-		return;
+	
+	var element = $("<div class=\"gate " + gateModel.getType() + "\">"
+		+ gateModel.getImage(true)
+		+ "<div class=\"mask\"></div>"
+		+ "</div>");
 
-	synthbio.gui.gateCounter++;
-	var id = "gate" + synthbio.gui.gateCounter;
+	$('#grid-container').append(element);
+	element.css("left", gateModel.getX());
+	element.css("top", gateModel.getY());
 
-	var res = {
-		idx: synthbio.gui.gateCounter,
-		element: $("<div íd=\""+id+"\" class=\"gate " + gateClass + "\">"
-			+ "<embed src=\"img/gates/" + gateClass + ".svg\" type=\"image/svg+xml\" />"
-			+ "<div class=\"mask\"></div>"
-			+ "</div>")
-	}
-
-	jsPlumb.draggable(res.element);
-	res.element.dblclick(function() {
-		if (!confirm("Delete " + id + "?"))
-			return;
-
-		jsPlumb.removeAllEndpoints(res.element);
-		res.element.remove();
+	jsPlumb.draggable(element, {
+		stop: function(event, ui){
+			gateModel.setPosition([
+				element.css("left"), 
+				element.css("top")
+			]);
+		}
 	});
 
-	$('#grid-container').append(res.element);
-	res.element.css("left", parseInt(gatePos[0]));
-	res.element.css("top", parseInt(gatePos[1]));
+	element.dblclick(function() {
+		if (!confirm("Delete " + gateModel.toString() + "?"))
+			return;
 
-	return jQuery.extend(true, synthbio.gui.addGateAnchors(res.element), res);
+		jsPlumb.removeAllEndpoints(element);
+		element.remove();
+	});
+
+	return synthbio.gui.addGateAnchors({element: element, model: gateModel});
 }
 
 /**
