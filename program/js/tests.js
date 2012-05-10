@@ -278,5 +278,4 @@ $(document).ready(function() {
 			//~ ok(false, "needs testing");
 		//~ });
 		//~
-
 });

@@ -105,7 +105,7 @@ synthbio.Gate.fromJSON = function(json){
 
 /**
  * Signals
- * Signals hold proteins, an origin and a destination
+ * Signals hold proteins, an origin and a destination. A.K.A. wire, connection.
  * Note: To convert Signals to JSON use JSON.stringify(Signal)
  */
 synthbio.Signal = function(prot, origin, destination){
