@@ -34,28 +34,28 @@ public class CircuitConverter {
 	private final String header =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
 		"<sbml xmlns=\"http://www.sbml.org/sbml/level2/version4\" level=\"2\" version=\"4\">"+
-			"<model>\n"+
-				"<listOfUnitDefinitions>\n"+
-					"<unitDefinition id=\"substance\">\n"+
-						"<listOfUnits>\n"+
-							"<unit kind=\"mole\"/>\n"+
-						"</listOfUnits>\n"+
-					"</unitDefinition>\n"+
-					"<unitDefinition id=\"time\">\n"+
-						"<listOfUnits>\n"+
-							"<unit kind=\"second\"/>\n"+
-						"</listOfUnits>\n"+
-					"</unitDefinition>\n"+
-				"</listOfUnitDefinitions>\n"+
-				"<listOfCompartments>\n"+
-					"<compartment id=\"cell\" size=\"1\" units=\"volume\"/>\n"+
-				"</listOfCompartments>\n"+
-				"<listOfSpecies>\n"+
-					"<species id=\"gene\" compartment=\"cell\" initialAmount=\"3\" hasOnlySubstanceUnits=\"true\" boundaryCondition=\"true\" constant=\"true\"/>\n"+
-					"<species id=\"empty\" compartment=\"cell\" initialAmount=\"0\"/>\n";
+		"\t<model>\n"+
+		"\t\t<listOfUnitDefinitions>\n"+
+		"\t\t\t<unitDefinition id=\"substance\">\n"+
+		"\t\t\t\t<listOfUnits>\n"+
+		"\t\t\t\t\t<unit kind=\"mole\"/>\n"+
+		"\t\t\t\t</listOfUnits>\n"+
+		"\t\t\t</unitDefinition>\n"+
+		"\t\t\t<unitDefinition id=\"time\">\n"+
+		"\t\t\t\t<listOfUnits>\n"+
+		"\t\t\t\t\t<unit kind=\"second\"/>\n"+
+		"\t\t\t\t</listOfUnits>\n"+
+		"\t\t\t</unitDefinition>\n"+
+		"\t\t</listOfUnitDefinitions>\n"+
+		"\t\t<listOfCompartments>\n"+
+		"\t\t\t<compartment id=\"cell\" size=\"1\" units=\"volume\"/>\n"+
+		"\t\t</listOfCompartments>\n"+
+		"\t\t<listOfSpecies>\n"+
+		"\t\t\t<species id=\"gene\" compartment=\"cell\" initialAmount=\"3\" hasOnlySubstanceUnits=\"true\" boundaryCondition=\"true\" constant=\"true\"/>\n"+
+		"\t\t\t<species id=\"empty\" compartment=\"cell\" initialAmount=\"0\"/>\n";
 	private final String trailer =
-				"</listOfReactions>\n"+
-			"</model>\n"+
+		"\t\t</listOfReactions>\n"+
+		"\t</model>\n"+
 		"</sbml>";
 	
 	/**
@@ -98,9 +98,7 @@ public class CircuitConverter {
 		// add all the species
 		for(String s: species)
 			r += speciesString(s, 0d);
-		r +=
-			"</listOfSpecies>\n"+
-			"<listOfReactions>\n";
+		r += "\t\t</listOfSpecies>\n";
 		// add the reactions
 		for(Reaction reaction: reactions)
 			r += reaction.getSBMLString();
@@ -158,36 +156,53 @@ public class CircuitConverter {
 			// with transcription this is gene.
 			// with translation this is mrna of input (translation has only one input).
 			r +=
-				"<listOfReactants>\n"+
-					"<speciesReference species=\"" + (type == ReactionType.Transcription? "gene": "m" + fromProteins.get(0)) + "\"/>\n"+
-				"</listOfReactants>\n";
+				"\t\t\t\t<listOfReactants>\n"+
+				"\t\t\t\t\t<speciesReference species=\"" + (type == ReactionType.Transcription? "gene": "m" + fromProteins.get(0)) + "\"/>\n"+
+				"\t\t\t\t</listOfReactants>\n";
 			// Products
 			// with transcription this is mrna of output
 			// with translation this is output
 			r +=
-				"<listOfProducts>\n"+
-					"<speciesReference species=\"" + (type == ReactionType.Transcription? "m": "") + toProtein + "\"/>\n"+
-				"</listOfProducts>\n";
+				"\t\t\t\t<listOfProducts>\n"+
+				"\t\t\t\t\t<speciesReference species=\"" + (type == ReactionType.Transcription? "m": "") + toProtein + "\"/>\n"+
+				"\t\t\t\t</listOfProducts>\n";
 			// Modifiers
 			// with transcription this is the inputs
 			// with translation this is empty
 			if(type == ReactionType.Transcription) {
-				r += "<listOfModifiers>\n";
+				r += "\t\t\t\t<listOfModifiers>\n";
 				for(String in: fromProteins)
-					r += "<speciesReference species=\"" + in + "\"/>\n";
-				r += "</listOfModifiers>";
+					r += "\t\t\t\t\t<speciesReference species=\"" + in + "\"/>\n";
+				r += "\t\t\t\t</listOfModifiers>";
 			}
 			
 			return r + "\n";
+		}
+		
+		private String kineticLaw() {
+			String r = "\t\t\t\t<kineticLaw>\n";
+			
+			// the parameters
+			r += "\t\t\t\t\t<listOfParameters>\n";
+			
+			r += "\t\t\t\t\t</listOfParameters>\n";
+			
+			// the math
+			r += "\t\t\t\t\t<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
+			
+			r += "\t\t\t\t\t</math>\n";
+			
+			return r + "\t\t\t\t</kineticLaw>\n";
 		}
 		
 		/**
 		 * Returns the SBML string of this Reaction.
 		 */
 		public String getSBMLString() {
-			String s = "<reaction id=\"" + getReactionId() + "\" reversible=\"false\" fast=\"false\">\n";
+			String s = "\t\t\t<reaction id=\"" + getReactionId() + "\" reversible=\"false\" fast=\"false\">\n";
 			s += listOfInvolved();
-			return s + "</reaction>\n";
+			s += kineticLaw();
+			return s + "\t\t\t</reaction>\n";
 		}
 	}
 }
