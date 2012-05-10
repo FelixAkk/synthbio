@@ -16,8 +16,8 @@
  * More info on jquery http://api.jquery.com/
  */
 
-/*jslint devel: true, browser: true, sloppy: true, stupid: false, white: true, maxerr: 50, indent: 4 */
-/*global $ */
+/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio */
 
 /**
  * syntbio package.
@@ -73,13 +73,12 @@ synthbio.Point.fromJSON=function(json){
  * @param t Type/class of gate, should be either "not", "and" or "compound"
  */
 synthbio.Gate = function(t, position){
-	synthbio.util.assert(t == "not" || t == "and", "Only 'not' and 'and' allowed");
+	synthbio.util.assert(t === "not" || t === "and", "Only 'not' and 'and' allowed as type");
 
 	this.type = t;
 	if(position instanceof synthbio.Point) {
 		this.position=position;
-	// if position is an array (i.d. has a length property)
-	} else if(position.length && !isNaN(parseInt(position[0], 10)) && !isNaN(parseInt(position[1], 10))) {
+	} else if($.isArray(position) && !isNaN(parseInt(position[0], 10)) && !isNaN(parseInt(position[1], 10))) {
 		this.position = new synthbio.Point(position);
 	} else {
 		throw "Position could not be parsed";
@@ -181,25 +180,19 @@ synthbio.Circuit.prototype.add = function(gate) {
 synthbio.Circuit.prototype.getGates = function() {
 	return this.gates;
 };
+
 /**
  * Getter for a gate on index. Only returns if there is a gate on that index.
  * @param index Index in the array.
  */
 synthbio.Circuit.prototype.getGate = function(index) {
 	var gate = this.gates[index];
-	if(gate == undefined) {
+	if(gate === undefined) {
 		throw "No gate on index " + index + ".";
 	} else {
 		return gate;
 	}
 };
-
-// (Jieter): eval is a reserved keyword in javascript, could be used...
-// What exactly is your idea for the function of eval?
-//~ synthbio.Circuit.prototype.eval = function(){
-	//~ return false;
-//~ };
-//~ 
 
 /**
  * CDSs
