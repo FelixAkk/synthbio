@@ -183,6 +183,12 @@ public class CircuitConverter {
 			String r = "\t\t\t\t<kineticLaw>\n";
 			
 			// the parameters
+			// transcription has:
+			//		k1, Km and n of the input
+			//		d1 of output
+			// translation has:
+			//		k2 of input
+			//		d2 of output
 			r += "\t\t\t\t\t<listOfParameters>\n";
 			
 			r += "\t\t\t\t\t</listOfParameters>\n";
