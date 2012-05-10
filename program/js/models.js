@@ -73,7 +73,7 @@ synthbio.Point.fromJSON=function(json){
  * @param t Type/class of gate, should be either "not", "and" or "compound"
  */
 synthbio.Gate = function(t, position){
-	synthbio.util.assert(t == "not" || t == "and", "Only 'not' );
+	synthbio.util.assert(t == "not" || t == "and", "Only 'not' and 'and' allowed");
 
 	this.type = t;
 	if(position instanceof synthbio.Point) {
