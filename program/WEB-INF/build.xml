@@ -107,7 +107,8 @@
 	</target>
 
 	<!--
-		Try to implement automated jslint checking and jsmin minifing.
+		Try to implement automated jslint checking
+		http://docs.jslint4java.googlecode.com/git/2.0.1/ant.html
 	-->
 	<taskdef name="jslint"
 		classname="com.googlecode.jslint4java.ant.JSLintTask"
@@ -122,7 +123,10 @@
 		</jslint>
 	</target>
 	
-	<!-- Minify all javascript files in js/ -->
+	<!--
+		Minify all javascript files in js/, except those already minified.
+		http://code.google.com/p/jsmin-ant-task/
+	-->
 	<taskdef name="jsmin"
 		classname="net.matthaynes.jsmin.JSMin_Task"
 		classpath="lib/jsmin.0.2.4.jar" />
