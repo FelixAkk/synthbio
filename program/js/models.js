@@ -10,7 +10,7 @@
  *
  * https://github.com/FelixAkk/synthbio
  *
- * @author	Thomas van Helden, JanPieter Waagmeester, Felix Akkermans, Niels Doekenmeijer
+ * @author	Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
  *
  * Definition of models.
  * More info on jquery http://api.jquery.com/
@@ -69,8 +69,12 @@ synthbio.Point.fromJSON=function(json){
  * Gates 
  * Gates hold a type, an X coordinate and a Y coordinate
  * Note: To convert Gates to JSON use JSON.stringify(Gate)
+ *
+ * @param t Type/class of gate, should be either "not", "and" or "compound"
  */
 synthbio.Gate = function(t, position){
+	synthbio.util.assert(t == "not" || t == "and" || t == "compound");
+
 	this.type = t;
 	this.setPosition(position);
 };
@@ -188,11 +192,41 @@ synthbio.Circuit.fromJSON= function(json){
 	return synthbio.Circuit.fromMap($.parseJSON(json));
 };
 
-synthbio.Circuit.prototype.addGate = function(type, pos){
-	var gate = new synthbio.Gate(type, pos);
-	this.gates.push(gate);
+/**
+ * Sort of a setter for gates.
+ * @param gate An instance of synthbio.Gate
+ */
+synthbio.Circuit.prototype.addGate = function(gate, position) {
+	if (!(gate instanceof synthbio.Gate) && position)
+		gate = new synthbio.Gate(gate, position);
+
+	if(gate instanceof synthbio.Gate) {
+		this.gates.push(gate);
+	} else {
+		throw "Provided gate is not of type synthbio.Gate";
+	}
+
 	return gate;
 };
+
+/**
+ * Getter for the array of gates.
+ */
+synthbio.Circuit.prototype.getGates = function() {
+	return this.gates;
+};
+/**
+ * Getter for a gate on index. Only returns if there is a gate on that index.
+ * @param index Index in the array.
+ */
+synthbio.Circuit.prototype.getGate = function(index) {
+	var gate = this.gates[index];
+	if(gate == undefined) {
+		throw "No gate on index " + index + ".";
+	} else {
+		return gate;
+	}
+}
 
 // (Jieter): eval is a reserved keyword in javascript, could be used...
 // What exactly is your idea for the function of eval?

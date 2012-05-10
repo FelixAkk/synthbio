@@ -26,8 +26,9 @@ var synthbio = synthbio || {};
 synthbio.util = synthbio.util || {};
 
 /**
+ * AssertException class.
  *
- * @param message
+ * @param message Debugging message.
  */
 synthbio.util.AssertException = function(message) {
     this.message = message;
@@ -38,9 +39,11 @@ synthbio.util.AssertException.prototype.toString = function () {
 };
 
 /**
+ * Ensure that an expression evaluates to true during execution. if the expression evaluates to false, this indicates a
+ * possible bug in code.
  *
- * @param exp
- * @param message
+ * @param exp Expression yielding a boolean (or truthy, which is not recommended) value.
+ * @param message Debugging message.
  */
 synthbio.util.assert = function(exp, message) {
     if (!exp) {

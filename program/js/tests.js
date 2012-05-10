@@ -10,7 +10,7 @@
  *
  * https://github.com/FelixAkk/synthbio
  *
- * @author	Thomas van Helden & JanPieter Waagmeester
+ * @author	Thomas van Helden & Jan Pieter Waagmeester & Felix Akkermans
  *
  * This document contains tests for the JavaScript clientside
  * The JSON coming from the Java server will be translated to circuits and UnitTested here
@@ -32,8 +32,15 @@ var signalJSON='{"protein":"A","from":1,"to":2}';
 
 var circuitName="testCircuit";
 var circuitDescription="testDescription";
+var circuit;
 
-var circuit = new synthbio.Circuit(circuitName, circuitDescription, [gate, gate], [signal, signal], []);
+/**
+ * Function called before each test for setup
+ */
+QUnit.testStart = function(testBatchName) {
+	// ensure a clean circuit slate every test
+	circuit = new synthbio.Circuit(circuitName, circuitDescription, [gate, gate], [signal, signal], []);
+}
 
 var circuitJSON=
 	'{"name":"'+circuitName+'",'+
@@ -45,13 +52,13 @@ var circuitJSON=
 /**
  * The actual tests
  */
-$(document).ready(function(){
+$(document).ready(function() {
 	module("Points");
-		test('Construct a Point', function(){
+		test('Construct a Point', function() {
 			equal(10, point.getX(), 'check X coordinate');
 			equal(20, point.getY(), 'check Y coordinate');
 		});
-		test('Distance', function(){
+		test('Distance', function() {
 			equal(0, point.distanceTo(point), 'Distance to self is 0');
 
 			var xplusone=new synthbio.Point(point.getX()+1, point.getY());
@@ -67,13 +74,13 @@ $(document).ready(function(){
 		 */
 		test("Gates should only be able to be constructed with certain parameters provided with the constructor call.",
 			function() {
-			raises(new synthbio.Gate("and", 5), , "Invalid position parameter is given.");
+			raises(function() {new synthbio.Gate("and", 5)}, "Invalid position parameter is given.");
 		})
 		
 		/**
 		 * Gate properties
 		 */
-		test("Gates should have the right properties", function(){
+		test("Gates should have the right properties", function() {
 			equal(gate.type, "and", "Gates store types");
 			equal(gate.getX(), 10, "Gates store X coordinates");
 			equal(gate.getY(), 20, "Gates store Y coordinates");
@@ -82,7 +89,7 @@ $(document).ready(function(){
 		/**
 		 * Gate properties
 		 */
-		test("Gates should have the right properties", function(){
+		test("Gates should have the right properties", function() {
 			equal(notgate.type, "not", "Gates store types");
 			equal(notgate.getX(), 10, "Gates store X coordinates");
 			equal(notgate.getY(), 22, "Gates store Y coordinates");
@@ -91,21 +98,21 @@ $(document).ready(function(){
 		/**
 		 * Gate toString
 		 */
-		test("Gates should have a working toString method", function(){
+		test("Gates should have a working toString method", function() {
 			equal(gate.toString(), gate.type + ": X = " + gate.getX() + ", Y = "+ gate.getY() ,"The toString method works");
 		});
 		
 		/**
 		 * From Gate to JSON
 		 */
-		test("Gates should be able to be constructed from JSON", function(){
+		test("Gates should be able to be constructed from JSON", function() {
 			equal(JSON.stringify(gate), gateJSON, "Gates can be converted to JSON");
 		});
 		
 		/**
 		 * From JSON to Gate
 		 */
-		test("Gates should be able to be constructed from JSON", function(){
+		test("Gates should be able to be constructed from JSON", function() {
 			deepEqual(synthbio.Gate.fromJSON(gateJSON), gate, "JSON can be converted to Gates");
 		});
 		
@@ -114,7 +121,7 @@ $(document).ready(function(){
 		/**
 		 * Signal properties
 		 */
-		test("Signals should store the right properties", function(){
+		test("Signals should store the right properties", function() {
 			equal(signal.protein, "A", "type of protein");
 			equal(signal.from, "1", "Origin of signal");
 			equal(signal.to, "2", "Destination of signal");
@@ -123,21 +130,21 @@ $(document).ready(function(){
 		/**
 		 * Signal toString
 		 */
-		test("Signals should have a toString method", function(){
+		test("Signals should have a toString method", function() {
 			equal(signal.toString(), signal.protein + " links " + signal.from + " with " + signal.to);
 		});
 		
 		/**
 		 * From Signal to JSON
 		 */
-		test("Signal should be able to be constructed from JSON", function(){
+		test("Signal should be able to be constructed from JSON", function() {
 			equal(JSON.stringify(signal), signalJSON, "Signals can be translated to JSON");
 		});
 		
 		/**
 		 * From JSON to Signal
 		 */
-		test("Signal should be able to be constructed from JSON", function(){
+		test("Signal should be able to be constructed from JSON", function() {
 			deepEqual(signal, synthbio.Signal.fromJSON(signalJSON), "JSON can be converted to Signals");
 		});
 		
@@ -147,7 +154,7 @@ $(document).ready(function(){
 		/**
 		 * Properties of Circuits
 		 */
-		test("Circuits should have properties", function(){
+		test("Circuits should have the correct properties", function() {
 			equal(circuit.name, circuitName, "Circuit has a name");
 			equal(circuit.description, circuitDescription, "Circuit has a description");
 			deepEqual(circuit.gates, [gate, gate], "Circuit has a list of gates");
@@ -155,30 +162,31 @@ $(document).ready(function(){
 			deepEqual(circuit.groups, [], "Circuit has groupings of gates");
 		});
 
-
 		/**
 		 * Adding of gates
 		 */
-		circuit.add(notgate); // add gate on index [0].
 		test("Circuits should add and store gates through a method call", function() {
-			deepEqual(circuit.getGates(), [notgate])
+			circuit.add(notgate); // add gate on index [2].
+			deepEqual(circuit.getGates(), [gate,gate,notgate])
 		})
-		circuit.add(notgate); // add gate on index [1].
+	
 		test("Circuits should add and store gates through a method call", function() {
-			deepEqual(circuit.getGate(1), notgate)
+			circuit.add(notgate); // add gate on index [2].
+			deepEqual(circuit.getGate(2), notgate)
+			raises(function() {circuit.getGate(3)}, "Empty index is given.");
 		})
-		
+
 		/**
 		 * Circuit toString
 		 */
-		test("Circuit toString method is displayed", function(){
+		test("Circuit toString method is displayed", function() {
 			ok(true, circuit.toString());
 		});
 		
 		/**
 		 * Circuit to JSON
 		 */
-		test("Circuits should be able to be converted to JSON", function(){
+		test("Circuits should be able to be converted to JSON", function() {
 			equal(
 				JSON.stringify(circuit),
 				circuitJSON,
@@ -189,7 +197,7 @@ $(document).ready(function(){
 		/**
 		 * JSON to Circuit
 		 */
-		test("Circuits should be able to be generated from JSON", function(){
+		test("Circuits should be able to be generated from JSON", function() {
 			deepEqual(
 				synthbio.Circuit.fromJSON(circuitJSON),
 				circuit,
@@ -200,7 +208,7 @@ $(document).ready(function(){
 		/**
 		 * Circuit evaluation
 		 */
-		//~ test("Circuits should be evaluated propperly", function(){
+		//~ test("Circuits should be evaluated propperly", function() {
 			//~ ok(circuit.eval(), "circuit evaluation not tested yet");
 		//~ });
 
@@ -214,38 +222,38 @@ $(document).ready(function(){
 		 * CDS list
 		 */
 		test("All CDSs should be listed", function() {
-		  equal( cds1.name , "cds1", "cds1" );
-		  equal( cds2.name , "cds2", "cds2" );
+			equal( cds1.name , "cds1", "cds1" );
+			equal( cds2.name , "cds2", "cds2" );
 		});
 
 		/**
 		 * CDS properties
 		 */
 		test("First part of CDS has values", function() {
-		  equal( cds1.name , "cds1", "cds1" );
-		  equal( cds1.k2 , "k2", "K2" );
-		  equal( cds1.d1 , "d1", "D1" );
-		  equal( cds1.d2 , "d2", "D2" );
+			equal( cds1.name , "cds1", "cds1" );
+			equal( cds1.k2 , "k2", "K2" );
+			equal( cds1.d1 , "d1", "D1" );
+			equal( cds1.d2 , "d2", "D2" );
 		});
 		
 		/**
 		 * CDS toString
 		 */
-		test("toString method test of CDS", function(){
+		test("toString method test of CDS", function() {
 			deepEqual(cds1.toString(), "CDS - name = " + cds1.name + ", k2 = "+ cds1.k2+ ", d1 = " + cds1.d1+ ", d2 = " + cds1.d2, "The list of properties is returned");
 		});
 		
 		/**
 		 * From CDS to JSON
 		 */
-		test("CDS can be converted to JSON", function(){
+		test("CDS can be converted to JSON", function() {
 			equal(JSON.stringify(cds1), "{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}", "converting CDS to JSON");
 		});
 		
 		/**
 		 * From JSON to CDS
 		 */
-		test("Needs to be able to parse JSON and convert to CDS", function(){
+		test("Needs to be able to parse JSON and convert to CDS", function() {
 			deepEqual(synthbio.CDS.fromJSON("{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}"), cds1, "parsing JSON object of CDS");
 		});
 	
@@ -253,20 +261,20 @@ $(document).ready(function(){
 		/**
 		 * Get CDS from server
 		 */
-		//~ test("testing getCDS function", function(){
+		//~ test("testing getCDS function", function() {
 			//~ ok(false, "needs testing");
 		//~ });
 		//~
 				/**
 		 * Get Signal from server
 		 */
-		//~ test("Request Signal from server and converting it to Signal object", function(){
+		//~ test("Request Signal from server and converting it to Signal object", function() {
 			//~ ok(false, "needs testing");
 		//~ });
 				/**
 		 * Get Gate from server
 		 */
-		//~ test("Request Gate from server and converting it to Gate object", function(){
+		//~ test("Request Gate from server and converting it to Gate object", function() {
 			//~ ok(false, "needs testing");
 		//~ });
 		//~
