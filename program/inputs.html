@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Synthetic biological circuit modelling and simulation web application">
+	<meta name="author" content="Group E">
+	<title>BioBrick Modeller/Simulator</title>
+	
+	<!-- Le styles -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="css/style.less" rel="stylesheet/less" type="text/css" media="all" />
+	
+	<!-- Le fav icon -->
+	<link rel="icon" href="img/favicon.png">
+</head>
+
+<body>
+
+
+	<!-- Le NaffBarr -->
+	<!-- ================================================== -->
+	<nav class="navbar">
+		<aside class="nav" id="title"><div id="icon"></div>BioBrick Modeller/Simulator</aside>
+		<ul class="nav">
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="#">Save</a></li>
+					<li><a href="#">Save As…</a></li>
+					<li><a href="#">Open</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Exit application</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Simulate<b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="#list-proteins" data-toggle="modal">Show proteins</a></li>
+					<li><a href="#">Validate circuit</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Define inputs</a></li>
+					<li><a href="#">Show output graph</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Run solver</a></li>
+				</ul>
+			</li>
+			<li><a href="#about" data-toggle="modal">About</a></li>
+		</ul>
+	</nav>
+
+	<!-- Le Gates Tab (on the left) -->
+	<!-- ================================================== -->
+	<aside id="gates-tab" class="stretch">
+		<h3>Basic gates</h3>
+		<p class="subscript">Predefined AND and NOT gates (fixed)</p>
+		<div id="gates-basic" class="gates">
+			<div id="77" class="gate not">
+				<embed src="img/gates/not.svg" type="image/svg+xml" />
+				<div class="mask"></div>
+				<h4>NOT-gate</h4>
+				<p class="subscript">
+					in:1<br>out:1
+				</p>
+			</div>
+			<div class="gate and">
+				<embed src="img/gates/and.svg" type="image/svg+xml" />
+				<div class="mask"></div>
+				<h4>AND-gate</h4>
+				<p class="subscript">
+					in:2<br>out:1
+				</p>
+			</div>
+		</div>
+		
+	</aside>
+
+	<!-- Le javascript -->
+	<!-- ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script type="application/javascript" language="javascript" src="js/lib/jquery-1.7.2.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/lib/jquery-ui-1.8.19.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/lib/bootstrap.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/lib/less-1.3.0.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/util.js"></script>
+	<script type="application/javascript" language="javascript" src="js/gui.js"></script>
+
+	
+	<!-- mocking the input selection dialogue -->
+	<style>
+		#define-inputs{
+			position: absolute; left: 320px; top: 60px; background-color: white; padding: 20px;
+		}
+		.x-axis{
+			width: 50px;
+			float: right;
+			text-align: right;
+		}
+		.signal{
+			clear: right;
+		}
+		.toggle-highlow{
+			display: inline-block;
+			width: 10px;
+			cursor: pointer;
+		}
+		.levels{
+			display: inline-block;
+		}
+		.levels div{
+			display: inline-block;
+			background-color: #eee;
+			width: 12px;
+			height: 16px;
+			cursor: pointer;
+			
+		}
+		.levels div.low{
+			border-bottom: 2px solid black;
+		}
+		.levels div.high{
+			border-top: 2px solid black;
+		}
+		div.low +  div.high{
+			border-left: 1px solid black;
+		}
+		div.high + div.low{
+			border-left: 1px solid black;
+		}
+	</style>
+	<script>
+		$(document).ready(function(){
+			//iterate over signals and create signal input editors.
+			$.each(
+				['A', 'B', 'C'],
+				function(index, name){
+					var signalEditor=$('<div class="signal" id="signal'+name+'"></div>');
+					signalEditor.html(name+': <div class="toggle-highlow low" title="Set signal always on, always off or costum">&uarr;</div>');
+					var levels='<div class="levels">';
+					for(i=0; i<20; i++){
+						levels+='<div class="tick low"></div>';
+					}
+					levels+='</div>';
+					
+					signalEditor.append(levels);
+				
+					console.log(signalEditor);
+					$('#signals').append(signalEditor);
+				}
+			);
+			$('.toggle-highlow').click(function(){
+				var self=$(this);
+				if(self.hasClass('high')){
+					self.html('&darr;').removeClass('high').addClass('low');
+					console.log(self.parent());
+					self.parent().find('.levels div').removeClass('high').addClass('low');
+				}else{
+					self.html('&uarr;').removeClass('low').addClass('high');
+					self.parent().find('.levels div').removeClass('low').addClass('high');
+				}
+
+			});
+			
+			//create the ticks for each signal
+			$('.levels').html(function(){
+				var ret='';
+				for(i=0; i<20; i++){
+					ret+='<div class="tick low"></div>';
+				}
+				return ret;
+			});
+			//add click listeners to each tick. Would be nice to define a
+			//click listener for the whole div.levels to reduce the number of
+			//listeners by the number of ticks...
+			$('.levels div').click(function(){
+				$(this).toggleClass('low').toggleClass('high');
+				$(this).parent().find('toggle-highlow').removeClass('low').removeClass('high');
+			});
+		});
+	</script>
+	<div id="define-inputs">
+		<h3>Define simulation inputs</h3>
+		<div >
+			<div class="x-axis" title="One tick equals one second"> t &rarr; </div>
+			<div id="signals">
+			</div>
+		</div>
+	</div>
+
+	
+	<!-- Le Status Bar (at the bottom) -->
+	<!-- ================================================== -->
+	<footer class="status subscript">
+		<img id="info-icon" src="img/info.png" alt="Info:" /><span id="info">Mouse over info string</span>
+		<span id="ping">Server status: <b>Connecting to server <em class="icon-connecting"></em></b></span>
+	</footer>
+	
+
+	
+	
+	
+	
+</body>
+</html>
