@@ -455,9 +455,10 @@ synthbio.gui.displayConnection = function(connection) {
 synthbio.gui.removeDisplaySignal = function(id) {
 	var obj = synthbio.gui.displaySignalIdMap[id];
 	if (obj) {
-		if (obj.connection) {
-			obj.connection.endpoints[1].detach();
-		}
+		//ToDo: Find a way to detach jsPlumb connections
+		//if (obj.connection) {
+		//	obj.connection.endpoints[1].detach();
+		//}
 		if (obj.signal) {
 			synthbio.model.removeSignal(obj.signal);
 		}
