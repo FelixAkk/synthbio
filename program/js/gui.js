@@ -117,8 +117,9 @@ $(document).ready(function() {
 	$.each(map.signals, function(i, elem){
 		signals[i]=synthbio.Signal.fromMap(elem);
 	});
-	var cir = synthbio.Circuit(map.name, map.description, gates, signals, groups);
+	var cir = new synthbio.Circuit(map.name, map.description, gates, signals, groups);
 	setTimeout(function() {
+		console.log(cir);
 		synthbio.model.loadCircuit(cir);
 	}, 500);
 });
@@ -175,7 +176,7 @@ synthbio.gui.addGateEndpoints = function(gateModel) {
 		gateModel.model.getOutputCount()
 	);
 
-	// Extend gateModel with anchors and return
+	// Extend gateModel with endpoints and return
 	return $.extend(true, endpoints, gateModel);
 }
 
@@ -227,8 +228,7 @@ synthbio.gui.addInputOutputFields = function() {
  * @return Object with element, model and endpoints.
  */
 synthbio.gui.displayGate = function(gateModel) {
-	if(!gateModel)
-		return;
+	assert(gateModel instanceof synthbio.Gate, "Provided gate ojbect must be an instance of 'synthbio.Gate'");
 	
 	// Create new display element
 	var element = $("<div class=\"gate " + gateModel.getType() + "\">"
@@ -260,7 +260,7 @@ synthbio.gui.displayGate = function(gateModel) {
 		element.remove();
 	});
 
-	// Add anchors
+	// Add endpoints
 	var res = synthbio.gui.addGateEndpoints({element: element, model: gateModel});
 
 	// Add to ID map
