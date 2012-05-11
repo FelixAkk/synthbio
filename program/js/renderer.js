@@ -90,6 +90,13 @@ $(document).ready(function() {
 		var connCount = 0;
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
+			// Calculate source/target indices
+			var fromIndex = synthbio.gui.getGateIndexById(connInfo.sourceId);
+			var toIndex = synthbio.gui.getGateIndexById(connInfo.targetId);
+			
+			// Add signal to circuit
+			var signal = synthbio.model.addSignal("", fromIndex, toIndex);
+
 			connCount++;
 			connInfo.connection.getOverlay("label").setLabel("<a id=\"conn" + connCount + "\" href=#>Choose protein</a>");
 
@@ -99,7 +106,10 @@ $(document).ready(function() {
 				lp.modal("show");
 				$('#list-proteins tbody').on("click", "tr", function() {
 					lp.modal("hide");
-					el.html($("td", this, 0).html());
+					
+					var prot = $("td", this, 0).html();
+					el.html(prot); //Update label
+					signal.protein = prot; //Update signal in model
 				});
 			});
 		});

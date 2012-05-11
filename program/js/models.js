@@ -158,13 +158,13 @@ synthbio.Signal.fromJSON = function(json){
  * Circuits hold a name, a description, gates, how gates are grouped and which signals connect them
  * Note: To convert Circuits into JSON use JSON.stringify(Circuit)
  */
-synthbio.Circuit = function(circuitName, desc, gates, signal, groupings){
+synthbio.Circuit = function(circuitName, desc, gates, signals, groupings){
 	this.name = circuitName;
 	this.description = desc;
 
 	//make gates, signals and groupings default to empty an array 
 	this.gates = gates || [];
-	this.signals = signal || [];
+	this.signals = signals || [];
 	this.groups = groupings || []; 
 };
 
@@ -220,6 +220,17 @@ synthbio.loadCircuit = function(circuit) {
 	$.each(model.signals, function(index, element){
 		signals[i]=synthbio.Signal.fromMap(elem);
 	});
+};
+
+/**
+ * Returns the index of a gate (-1 if not found)
+ * @param gate An instance of synthbio.Gate
+ */
+synthbio.Circuit.prototype.indexOfGate = function(gate) {
+	var idx = this.gates.indexOf(gate);
+	if (idx < 0)
+		throw "Gate is not present in circuit";
+	return idx;
 }
 
 /**
@@ -256,6 +267,23 @@ synthbio.Circuit.prototype.getGate = function(index) {
 	} else {
 		return gate;
 	}
+}
+
+/**
+ * Sort of a setter for signals.
+ * @param signal An instance of synthbio.Signal
+ */
+synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
+	if (!(signal instanceof synthbio.Signal) && origin !== undefined && destination !== undefined)
+		signal = new synthbio.Signal(signal, origin, destination);
+
+	if(signal instanceof synthbio.Signal) {
+		this.signals.push(signal);
+	} else {
+		throw "Provided signal is not of type synthbio.Signal";
+	}
+
+	return signal;
 };
 
 /**
