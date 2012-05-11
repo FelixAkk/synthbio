@@ -144,7 +144,6 @@ class Reaction {
 		// the math
 		r += tabs(5)+"<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
 		
-		// adding a comment to indicate the reaction formula
 		if(type == ReactionType.Transcription) {
 			if(gate.equals("not")) {
 				r +=
