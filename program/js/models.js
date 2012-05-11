@@ -353,13 +353,13 @@ synthbio.loadCircuit = function(circuit) {
 
 	// Install model
 	synthbio.model = circuit;
-	//synthbio.gui.reset();
+	synthbio.gui.reset();
 	// Show the circuit; add all the elements
 	$.each(synthbio.model.gates, function(index, element) {
 		synthbio.gui.displayGate(element);
 	});
 	$.each(synthbio.model.signals, function(index, element){
-		//synthbio.gui.displaySignal(element);
+		synthbio.gui.displaySignal(element);
 	});
 	//TODO; implement grouping.
 };

@@ -120,6 +120,25 @@ $(document).ready(function() {
 	}, 500);
 });
 
+synthbio.gui.reset = function() {
+	jsPlumb.reset();
+
+	var oep = jQuery.extend(true, {	
+		anchor:"Continuous",
+		deleteEndpointsOnDetach: false
+	}, synthbio.gui.outputEndpoint);
+	var iep = jQuery.extend(true, {
+		anchor:"Continuous",
+		deleteEndpointsOnDetach: false
+	}, synthbio.gui.inputEndpoint);
+
+	jsPlumb.makeSource("gate-input", oep);
+	jsPlumb.makeTarget("gate-output", iep);
+
+	//Workaround for bug in jQuery/jsPlumb (Firefox only)
+	jsPlumb.addEndpoint("grid-container").setVisible(false);
+}
+
 /**
  * Add specified number of JSPlumb endpoints to a gate
  *
@@ -179,7 +198,10 @@ synthbio.gui.addGateEndpoints = function(gateModel) {
 /**
  * Maps an (display) element ID to the proper gate object
  */
-synthbio.gui.displayGateIdMap = {/*id12: object12, id34: object34*/};
+synthbio.gui.displayGateIdMap = {/*Example:
+	id12: object12, 
+	id34: object34
+*/};
 
 /**
  * Returns gate object by GUI id
@@ -207,6 +229,26 @@ synthbio.gui.getGateIndexById = function(id) {
 	if (gate.model)
 		gate = synthbio.model.indexOfGate(gate.model);
 	return gate;
+}
+
+/**
+ * Returns gate GUI id by index
+ * @param idx integer
+ * @return id (exception if not found)
+ */
+synthbio.gui.getGateIdByIndex = function(idx) {
+	if (idx == "input")
+		return "gate-input";
+	else if (idx == "output")
+		return "gate-output";
+	else {
+		var gate = synthbio.model.getGate(idx);
+		for(var id in synthbio.gui.displayGateIdMap)
+			if (synthbio.gui.displayGateIdMap[id].model == gate) {
+				return id;
+			}
+		throw "Cannot map index to id";
+	}
 }
 
 /**
@@ -256,6 +298,21 @@ synthbio.gui.displayGate = function(gateModel) {
 	synthbio.gui.displayGateIdMap[element.attr("id")] = res;
 
 	return res;
+}
+
+/**
+ * Adds a new wire to the grid.
+ *
+ * @param gateModel synthbio.Signal
+ * @return Object with element, model and endpoints.
+ */
+synthbio.gui.displaySignal = function(signal) {
+	synthbio.util.assert(signal instanceof synthbio.Signal, "Provided signal ojbect must be an instance of 'synthbio.Signal'");
+
+	var src = synthbio.gui.getGateIdByIndex(signal.from);
+	var dst = synthbio.gui.getGateIdByIndex(signal.to);
+
+	jsPlumb.connect({source: src, target: dst});
 }
 
 /**
