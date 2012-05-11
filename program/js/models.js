@@ -75,11 +75,11 @@ synthbio.Point.fromJSON=function(json){
 synthbio.Gate = function(t, position){
 	synthbio.util.assert(t === "not" || t === "and", "Only 'not' and 'and' allowed as type");
 
-	this.type = t;
+	this.kind = t;
 	this.setPosition(position);
 };
 synthbio.Gate.prototype.getType = function(){
-	return this.type;
+	return this.kind;
 }
 synthbio.Gate.prototype.getX = function(){
 	return this.position.getX();
@@ -106,26 +106,26 @@ synthbio.Gate.prototype.getImage = function(html){
 }
 synthbio.Gate.prototype.getInputCount = function(){
 	//TODO: better way to determine number of inputs/outputs
-	if(this.type == "not")
+	if(this.kind == "not")
 		return 1;
-	else if (this.type == "and")
+	else if (this.kind == "and")
 		return 2;
 	else
 		throw "Cannot determine number of input gates";
 }
 synthbio.Gate.prototype.getOutputCount = function(){
-	if(this.type == "not")
+	if(this.kind == "not")
 		return 1;
-	else if (this.type == "and")
+	else if (this.kind == "and")
 		return 1;
 	else
 		throw "Cannot determine number of output gates";
 }
 synthbio.Gate.prototype.toString = function(){
-	return this.type + ": X = " + this.position.getX() + ", Y = "+ this.position.getY();
+	return this.kind + ": X = " + this.position.getX() + ", Y = "+ this.position.getY();
 };
 synthbio.Gate.fromMap = function(map){
-	return new synthbio.Gate(map.type, synthbio.Point.fromMap(map.position));
+	return new synthbio.Gate(map.kind, synthbio.Point.fromMap(map.position));
 };
 synthbio.Gate.fromJSON = function(json){
 	return synthbio.Gate.fromMap($.parseJSON(json));
@@ -195,31 +195,7 @@ synthbio.Circuit.fromJSON = function(json) {
 	//~		groups[i]=synthbio.Group.fromMap(elem);
 	//~ });
 
-	return synthbio.Circuit(map.name, map.description, gates, signals, groups);
-};
-
-/**
- * Cleans the current workspace and loads the provided circuit.
- *
- * @param circuit An instance of synthbio.Circuit
- */
-synthbio.loadCircuit = function(circuit) {
-	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit."
-	+ " This is required.");
-
-	// Install model
-	synthbio.model = circuit;
-	// Clear grid
-	$('grid-container').html = "";
-	// Setup inputs/outputs
-	synthbio.gui.addInputOutputFields();
-	// Show the circuit; add all the elements
-	$.each(model.gates, function(index, element) {
-		synthbio.gui.displayGate(element);
-	})
-	$.each(model.signals, function(index, element){
-		signals[i]=synthbio.Signal.fromMap(elem);
-	});
+	return new synthbio.Circuit(map.name, map.description, gates, signals, groups);
 };
 
 /**
@@ -365,3 +341,25 @@ synthbio.CDS.fromJSON = function(json){
  * of gates. This object is instantiated as an empty circuit with no name or description.
  */
 synthbio.model = new synthbio.Circuit("", "");
+
+/**
+ * Cleans the current workspace and loads the provided circuit.
+ *
+ * @param circuit An instance of synthbio.Circuit
+ */
+synthbio.loadCircuit = function(circuit) {
+	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit."
+		+ " This is required.");
+
+	// Install model
+	synthbio.model = circuit;
+	//synthbio.gui.reset();
+	// Show the circuit; add all the elements
+	$.each(synthbio.model.gates, function(index, element) {
+		synthbio.gui.displayGate(element);
+	});
+	$.each(synthbio.model.signals, function(index, element){
+		//synthbio.gui.displaySignal(element);
+	});
+	//TODO; implement grouping.
+};
