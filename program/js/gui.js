@@ -181,6 +181,9 @@ synthbio.gui.reset = function() {
 		synthbio.gui.removeDisplayGate(id);
 	}
 
+	synthbio.gui.displayGateIdMap = {};
+	synthbio.gui.displaySignalIdMap = {};
+
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
 }
@@ -252,32 +255,31 @@ synthbio.gui.displayGateIdMap = {/*Example:
 	}
 */};
 
-synthbio.gui.removeDisplayGate = function(id) {
-	var obj = synthbio.gui.displayGateIdMap[id];
-	if (obj) {
-		if (obj.element) {
-			jsPlumb.removeAllEndpoints(obj.element);
-			obj.element.remove();
-		}
-		if (obj.model) {
-			synthbio.model.removeGate(obj.model);
-		}
-		delete synthbio.gui.displayGateIdMap[id];
+/**
+ * Maps an (display) element ID to the proper signal object
+ */
+synthbio.gui.displaySignalIdMap = {/*Example:
+	elementID: {
+		connection: jsPlumb connection,
+		signal: synthbio.Signal,
 	}
-}
+*/};
 
 /**
  * Returns gate object by GUI id
  * @param id string
- * @return Object with element, model and endpoints (exception if not found)
+ * @param noException Truthy to not throw exception
+ * @return Object with element, model and endpoints (exception if not found, false if noException)
  */
-synthbio.gui.getGateById = function(id) {
+synthbio.gui.getGateById = function(id, noException) {
 	if (id == "gate-input")
 		return "input";
 	else if (id == "gate-output")
 		return "output";
 	else if (synthbio.gui.displayGateIdMap[id])
 		return synthbio.gui.displayGateIdMap[id];
+	else if (noException) 
+		return false;
 	else
 		throw "Cannot map id to gate";
 }
@@ -285,10 +287,11 @@ synthbio.gui.getGateById = function(id) {
 /**
  * Returns gate index by GUI id
  * @param id string
- * @return index (exception if not found)
+ * @param noException Truthy to not throw exception
+ * @return index (exception if not found, false if noException)
  */
-synthbio.gui.getGateIndexById = function(id) {
-	var gate = synthbio.gui.getGateById(id);
+synthbio.gui.getGateIndexById = function(id, noException) {
+	var gate = synthbio.gui.getGateById(id, noException);
 	if (gate.model)
 		gate = synthbio.model.indexOfGate(gate.model);
 	return gate;
@@ -297,9 +300,10 @@ synthbio.gui.getGateIndexById = function(id) {
 /**
  * Returns gate GUI id by index
  * @param idx integer
- * @return id (exception if not found)
+ * @param noException Truthy to not throw exception
+ * @return id (exception if not found, false if noException)
  */
-synthbio.gui.getGateIdByIndex = function(idx) {
+synthbio.gui.getGateIdByIndex = function(idx, noException) {
 	if (idx == "input")
 		return "gate-input";
 	else if (idx == "output")
@@ -310,8 +314,28 @@ synthbio.gui.getGateIdByIndex = function(idx) {
 			if (synthbio.gui.displayGateIdMap[id].model == gate) {
 				return id;
 			}
-		throw "Cannot map index to id";
+	
+		if (noException)
+			return false;
+		else
+			throw "Cannot map index to id";
 	}
+}
+
+/**
+ * Returns signal object by GUI id
+ * @param id string
+ * @param noException Truthy to not throw exception
+ * @return Object with connection and signal (exception if not found, false if noException)
+ */
+synthbio.gui.getSignalById = function(id, noException) {
+	var signal = synthbio.gui.displaySignalIdMap[id];
+	if (signal)
+		return signal;
+	else if (noException)
+		return false;
+	else
+		throw "Cannot map id to signal";
 }
 
 /**
@@ -324,7 +348,7 @@ synthbio.gui.displayGate = function(gateModel) {
 	synthbio.util.assert(gateModel instanceof synthbio.Gate, "Provided gate ojbect must be an instance of 'synthbio.Gate'");
 	
 	// Create new display element
-	var element = $("<div class=\"gate " + gateModel.getType() + "\">"
+	var element = $("<div class=\"gate " + gateModel.getKind() + "\">"
 		+ gateModel.getImage(true)
 		+ "<div class=\"mask\"></div>"
 		+ "</div>");
@@ -339,8 +363,8 @@ synthbio.gui.displayGate = function(gateModel) {
 	jsPlumb.draggable(element, {
 		stop: function(event, ui) {
 			gateModel.setPosition([
-				element.css("left"), 
-				element.css("top")
+				parseFloat(element.css("left")), 
+				parseFloat(element.css("top"))
 			]);
 		}
 	});
@@ -362,18 +386,84 @@ synthbio.gui.displayGate = function(gateModel) {
 }
 
 /**
+ * Removes a gate from circuit based on GUI id.
+ *
+ * @param id String
+ * @return Object Deleted object.
+ */
+synthbio.gui.removeDisplayGate = function(id) {
+	var obj = synthbio.gui.displayGateIdMap[id];
+	if (obj) {
+		if (obj.element) {
+			jsPlumb.removeAllEndpoints(obj.element);
+			obj.element.remove();
+		}
+		if (obj.model) {
+			synthbio.model.removeGate(obj.model);
+		}
+		delete synthbio.gui.displayGateIdMap[id];
+	}
+	return obj;
+}
+
+/**
  * Adds a new wire to the grid.
  *
- * @param gateModel synthbio.Signal
- * @return Object with element, model and endpoints.
+ * @param signal synthbio.Signal
+ * @param jsPlumb.Connection Optional jsPlumb connection object, will create connection if undefined.
+ * @return Object with signal and connection.
  */
-synthbio.gui.displaySignal = function(signal) {
+synthbio.gui.displaySignal = function(signal, connection) {
 	synthbio.util.assert(signal instanceof synthbio.Signal, "Provided signal ojbect must be an instance of 'synthbio.Signal'");
 
-	var src = synthbio.gui.getGateIdByIndex(signal.from);
-	var dst = synthbio.gui.getGateIdByIndex(signal.to);
+	if (!connection) {
+		var src = synthbio.gui.getGateIdByIndex(signal.from);
+		var dst = synthbio.gui.getGateIdByIndex(signal.to);
+		connection = jsPlumb.connect({source: src, target: dst, parameters: {signal: signal}});
+	}
 
-	jsPlumb.connect({source: src, target: dst});
+	var res = {connection: connection, signal: signal};
+	synthbio.model.addSignal(signal);
+	synthbio.gui.displaySignalIdMap[connection.id] = res;
+	return res;
+}
+
+/**
+ * Adds a new wire to the grid.
+ *
+ * @param connection jsPlumb.ConnectionInfo
+ * @return Object with signal and connection.
+ */
+synthbio.gui.displayConnection = function(connection) {
+	synthbio.util.assert(connection.sourceId && connection.targetId, "Provided signal ojbect must be an instance of 'jsPlumb.Connection'");
+
+	// Calculate source/target indices
+	var fromIndex = synthbio.gui.getGateIndexById(connection.sourceId);
+	var toIndex = synthbio.gui.getGateIndexById(connection.targetId);
+	
+	// Add signal to circuit and display
+	var signal = synthbio.model.addSignal("", fromIndex, toIndex);
+	return synthbio.gui.displaySignal(signal, connection);
+}
+
+/**
+ * Removes a signal from circuit based on GUI id.
+ *
+ * @param id String
+ * @return Object Deleted object.
+ */
+synthbio.gui.removeDisplaySignal = function(id) {
+	var obj = synthbio.gui.displaySignalIdMap[id];
+	if (obj) {
+		if (obj.connection) {
+			obj.connection.endpoints[1].detach();
+		}
+		if (obj.signal) {
+			synthbio.model.removeSignal(obj.signal);
+		}
+		delete synthbio.gui.displaySignalIdMap[id];
+	}
+	return obj;
 }
 
 /**

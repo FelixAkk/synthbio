@@ -78,7 +78,7 @@ synthbio.Gate = function(t, position){
 	this.kind = t;
 	this.setPosition(position);
 };
-synthbio.Gate.prototype.getType = function(){
+synthbio.Gate.prototype.getKind = function(){
 	return this.kind;
 }
 synthbio.Gate.prototype.getX = function(){
@@ -98,7 +98,7 @@ synthbio.Gate.prototype.setPosition = function(position){
 	}
 };
 synthbio.Gate.prototype.getImage = function(html){
-	var img = "gates/" + this.getType() + ".svg";
+	var img = "gates/" + this.getKind() + ".svg";
 	if (html)
 		return "<embed src=\"img/" + img + "\" type=\"image/svg+xml\" />";
 	else
@@ -217,10 +217,12 @@ synthbio.Circuit.prototype.addGate = function(gate, position) {
 	if (!(gate instanceof synthbio.Gate) && position)
 		gate = new synthbio.Gate(gate, position);
 
-	if(gate instanceof synthbio.Gate) {
-		this.gates.push(gate);
-	} else {
-		throw "Provided gate is not of type synthbio.Gate";
+	if (this.gates.indexOf(gate) < 0) {
+		if(gate instanceof synthbio.Gate) {
+			this.gates.push(gate);
+		} else {
+			throw "Provided gate is not of type synthbio.Gate";
+		}
 	}
 
 	return gate;
@@ -233,8 +235,8 @@ synthbio.Circuit.prototype.addGate = function(gate, position) {
 synthbio.Circuit.prototype.removeGate = function(gate) {
 	var idx = this.checkGateExists(gate);
 
-	this.removeSignal(idx, undefined);
-	this.removeSignal(undefined, idx);
+	this.removeSignal(undefined, idx, undefined);
+	this.removeSignal(undefined, undefined, idx);
 
 	for(var i = 0; i < this.signals.length; i++) {
 		if (this.signals[i].from > idx)
@@ -282,10 +284,14 @@ synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
 	if (!(signal instanceof synthbio.Signal) && origin !== undefined && destination !== undefined)
 		signal = new synthbio.Signal(signal, origin, destination);
 
-	if(signal instanceof synthbio.Signal) {
-		this.signals.push(signal);
-	} else {
-		throw "Provided signal is not of type synthbio.Signal";
+	if (this.signals.indexOf(signal) < 0) {
+		if(signal instanceof synthbio.Signal) {
+			//Make sure there are no duplicates, and then add the signal
+			this.removeSignal(signal);
+			this.signals.push(signal);
+		} else {
+			throw "Provided signal is not of type synthbio.Signal";
+		}
 	}
 
 	return signal;
@@ -293,19 +299,27 @@ synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
 
 /**
  * Removes signals based on origin/destination. removeSignal() removes all signals.
- * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
- * @param destination Destination integer (not used if origin is a synthbio.Signal). Undefined to accept any destination.
+ * @param protein An instance of synthbio.Signal or a string. Undefined to accept any protein.
+ * @param origin Origin integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
+ * @param destination Destination integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
+ * @return array Returns array of removed signals.
  */
-synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
-	if (origin instanceof synthbio.Signal) {
-		origin = origin.from;
-		destination = origin.to;
+synthbio.Circuit.prototype.removeSignal = function(protein, origin, destination) {
+	if (protein instanceof synthbio.Signal) {
+		var idx = this.signals.indexOf(protein);
+		if (idx >= 0)
+			return [this.signals.splice(idx, 1)];
+
+		origin = protein.from;
+		destination = protein.to;
+		protein = protein.protein;
 	}
 
 	var removed = [];
 	for(var i = 0; i < this.signals.length; i++)
-		if (((origin      === undefined) || (this.signals[i].from == origin)) &&
-		    ((destination === undefined) || (this.signals[i].to == destination))) 
+		if (((protein     === undefined) || (this.signals[i].protein === protein)) &&
+			((origin      === undefined) || (this.signals[i].from === origin)) &&
+		    ((destination === undefined) || (this.signals[i].to === destination))) 
 		{
 			removed.push(this.signals.splice(i, 1));
 			i--;

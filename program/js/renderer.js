@@ -90,15 +90,14 @@ $(document).ready(function() {
 		var connCount = 0;
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
-			// Calculate source/target indices
-			var fromIndex = synthbio.gui.getGateIndexById(connInfo.sourceId);
-			var toIndex = synthbio.gui.getGateIndexById(connInfo.targetId);
-			
-			// Add signal to circuit
-			var signal = synthbio.model.addSignal("", fromIndex, toIndex);
+			var signal = connInfo.connection.getParameters().signal;
+			signal = (signal) ? signal : synthbio.gui.displayConnection(connInfo.connection).signal;
 
 			connCount++;
-			connInfo.connection.getOverlay("label").setLabel("<a id=\"conn" + connCount + "\" href=#>Choose protein</a>");
+			var lbl = "<a id=\"conn" + connCount + "\" href=#>";
+			lbl += (signal.protein) ? signal.protein : "Choose protein";
+			lbl += "</a>";
+			connInfo.connection.getOverlay("label").setLabel(lbl);
 
 			var el = $("#conn" + connCount, 0);
 			el.click(function(){
@@ -120,15 +119,13 @@ $(document).ready(function() {
 
 
 		// listen for disposal of connections; delete endpoints if necessary
-		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) { 
+		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) {
 			if (connInfo.sourceId == "gate-input" && !connInfo.sourceEndpoint.connections.length)
 				jsPlumb.deleteEndpoint(connInfo.sourceEndpoint);
 			if (connInfo.targetId == "gate-output" && !connInfo.targetEndpoint.connections.length)
 				jsPlumb.deleteEndpoint(connInfo.targetEndpoint);
 
-			var fromIndex = synthbio.gui.getGateIndexById(connInfo.sourceId);
-			var toIndex = synthbio.gui.getGateIndexById(connInfo.targetId);
-			synthbio.model.removeSignal(fromIndex, toIndex);
+			synthbio.gui.removeDisplaySignal(connInfo.connection.id);
 		});
 
 		//jsPlumb.draggable("gate-input");
