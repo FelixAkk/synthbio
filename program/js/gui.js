@@ -55,7 +55,7 @@ synthbio.gui.gateDimensions = function() {
 	// Assign
 	return dimensions;
 }();
-console.log(synthbio.gui.gateDimensions);
+
 /**
  * Statusbar info tooltip function
  *
@@ -176,7 +176,10 @@ $(document).ready(function() {
 });
 
 synthbio.gui.reset = function() {
-	jsPlumb.reset();
+	jsPlumb.removeEveryEndpoint();
+	for (id in synthbio.gui.displayGateIdMap) {
+		synthbio.gui.removeDisplayGate(id);
+	}
 
 	var oep = jQuery.extend(true, {	
 		anchor:"Continuous",
@@ -254,9 +257,26 @@ synthbio.gui.addGateEndpoints = function(gateModel) {
  * Maps an (display) element ID to the proper gate object
  */
 synthbio.gui.displayGateIdMap = {/*Example:
-	id12: object12, 
-	id34: object34
+	elementID: {
+		element: JQueryElement,
+		model: synthbio.Gate,
+		inputAnchors/outputAnchors: array of jsPlumb anchors
+	}
 */};
+
+synthbio.gui.removeDisplayGate = function(id) {
+	var obj = synthbio.gui.displayGateIdMap[id];
+	if (obj) {
+		if (obj.element) {
+			jsPlumb.removeAllEndpoints(obj.element);
+			obj.element.remove();
+		}
+		if (obj.model) {
+			synthbio.model.removeGate(obj.model);
+		}
+		delete synthbio.gui.displayGateIdMap[id];
+	}
+}
 
 /**
  * Returns gate object by GUI id
@@ -326,6 +346,7 @@ synthbio.gui.displayGate = function(gateModel) {
 	element.css("left", gateModel.getX() + "px");
 	element.css("top", gateModel.getY() + "px");
 
+
 	// Make the gate draggable
 	jsPlumb.draggable(element, {
 		stop: function(event, ui) {
@@ -336,21 +357,18 @@ synthbio.gui.displayGate = function(gateModel) {
 		}
 	});
 
-	// Delete on double click
-	element.dblclick(function() {
-		if (!confirm("Delete " + gateModel.toString() + "?"))
-			return;
-
-		jsPlumb.removeAllEndpoints(element);
-		element.remove();
-		synthbio.model.removeGate(gateModel);
-	});
-
 	// Add endpoints
 	var res = synthbio.gui.addGateEndpoints({element: element, model: gateModel});
+	var id = element.attr("id");
 
 	// Add to ID map
-	synthbio.gui.displayGateIdMap[element.attr("id")] = res;
+	synthbio.gui.displayGateIdMap[id] = res;
+
+	// Delete on double click
+	element.dblclick(function() {
+		if (confirm("Delete " + gateModel.toString() + "?"))
+			synthbio.gui.removeDisplayGate(id);
+	});
 
 	return res;
 }
