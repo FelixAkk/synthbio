@@ -66,8 +66,15 @@ public class CircuitConverter {
 	/**
 	 * Converts a .syn file to SBML.
 	 */
-	public String convertSyn(String filename) throws CircuitException, JSONException, IOException {
+	public String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
 		return convert(Circuit.fromJSON(Util.fileToString(filename)));
+	}
+	
+	/**
+	 * Converts a .syn String.
+	 */
+	public String convert(String syn) throws CircuitException, JSONException, IOException {
+		return convert(Circuit.fromJSON(syn));
 	}
 	
 	/**

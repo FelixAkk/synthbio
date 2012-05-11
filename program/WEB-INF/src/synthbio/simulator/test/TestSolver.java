@@ -57,7 +57,7 @@ public class TestSolver {
 	 */
 	@Test
 	public void tc1() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = (new Solver()).solveWithFile(tc1, 1, 100);
+		MultiTable solution = (new Solver()).solveSBMLFile(tc1, 1, 100);
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
 		assertTrue(s2 > s1);
@@ -68,7 +68,7 @@ public class TestSolver {
 	 */
 	@Test
 	public void tc2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = (new Solver()).solveWithFile(tc2, 1, 100);
+		MultiTable solution = (new Solver()).solveSBMLFile(tc2, 1, 100);
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
 		assertTrue(s2 > s1);
@@ -79,7 +79,7 @@ public class TestSolver {
 	 */
 	@Test
 	public void testSBMLnot() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = (new Solver()).solveWithFile(not, 0.1, 100);
+		MultiTable solution = (new Solver()).solveSBMLFile(not, 0.1, 100);
 		
 		double a = solution.getColumn("a").getValue(99);
 		double b = solution.getColumn("b").getValue(99);
@@ -92,7 +92,7 @@ public class TestSolver {
 	 */
 	@Test
 	public void testSBMLnand() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = (new Solver()).solveWithFile(nand, 0.1, 100);
+		MultiTable solution = (new Solver()).solveSBMLFile(nand, 0.1, 100);
 		
 		double c = solution.getColumn("c").getValue(4);
 		double d = solution.getColumn("d").getValue(4);

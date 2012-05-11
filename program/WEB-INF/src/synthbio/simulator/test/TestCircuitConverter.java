@@ -41,7 +41,7 @@ public class TestCircuitConverter {
 	 */
 	@Test
 	public void testNotCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertSyn(notCircuit);
+		String sbmlResult = (new CircuitConverter()).convertFromFile(notCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -55,7 +55,7 @@ public class TestCircuitConverter {
 	 */
 	@Test
 	public void testAndCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertSyn(andCircuit);
+		String sbmlResult = (new CircuitConverter()).convertFromFile(andCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -69,7 +69,7 @@ public class TestCircuitConverter {
 	 */
 	@Test
 	public void testNandCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertSyn(nandCircuit);
+		String sbmlResult = (new CircuitConverter()).convertFromFile(nandCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));

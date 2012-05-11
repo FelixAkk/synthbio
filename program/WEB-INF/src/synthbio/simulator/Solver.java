@@ -39,19 +39,37 @@ public class Solver {
 	/**
 	 * Solves a .syn file.
 	 */
-	public MultiTable solveSyn(String filename, double stepSize, double timeEnd)
+	public MultiTable solveWithSynFile(String fileName, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
-		String sbml = (new CircuitConverter()).convertSyn(filename);
-		Model model = (new SBMLReader()).readSBMLFromString(sbml).getModel();
-		return solve(model, stepSize, timeEnd);
+		// Convert the SBML-file to a Model-object.
+		String sbml = (new CircuitConverter()).convertFromFile(fileName);
+		return solveSBML(sbml, stepSize, timeEnd);
+	}
+
+	/**
+	 * Solves a .syn String.
+	 */
+	public MultiTable solve(String syn, double stepSize, double timeEnd)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
+		String sbml = (new CircuitConverter()).convert(syn);
+		return solveSBML(sbml, stepSize, timeEnd);
 	}
 
 	/**
 	 * Solves a Circuit-object.
 	 */
-	public MultiTable solveCircuit(Circuit c, double stepSize, double timeEnd)
+	public MultiTable solve(Circuit c, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		String sbml = (new CircuitConverter()).convert(c);
+		return solveSBML(sbml, stepSize, timeEnd);
+	}
+	
+	/**
+	 * Solve SBML String.
+	 */
+	public MultiTable solveSBML(String sbml, double stepSize, double timeEnd)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		// Convert the SBML-string to a Model-object.
 		Model model = (new SBMLReader()).readSBMLFromString(sbml).getModel();
 		return solve(model, stepSize, timeEnd);
 	}
@@ -63,7 +81,7 @@ public class Solver {
 	 * @param		timeEnd		the amount of time to simulate 
 	 * @return						A MultiTable-object containing the solution
 	 */
-	public MultiTable solveWithFile(String fileName, double stepSize, double timeEnd)
+	public MultiTable solveSBMLFile(String fileName, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Convert the SBML-file to a Model-object.
 		Model model = (new SBMLReader()).readSBML(fileName).getModel();
