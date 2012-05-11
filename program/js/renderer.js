@@ -127,9 +127,7 @@ $(document).ready(function() {
 				jsPlumb.deleteEndpoint(connInfo.targetEndpoint);
 
 			var fromIndex = synthbio.gui.getGateIndexById(connInfo.sourceId);
-			console.log(fromIndex);
 			var toIndex = synthbio.gui.getGateIndexById(connInfo.targetId);
-			console.log(toIndex);
 			synthbio.model.removeSignal(fromIndex, toIndex);
 		});
 

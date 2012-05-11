@@ -230,6 +230,13 @@ synthbio.Circuit.prototype.removeGate = function(gate) {
 	this.removeSignal(idx, undefined);
 	this.removeSignal(undefined, idx);
 
+	for(var i = 0; i < this.signals.length; i++) {
+		if (this.signals[i].from > idx)
+			this.signals[i].from--;
+		if (this.signals[i].to > idx)
+			this.signals[i].to--;
+	}
+
 	return this.gates.splice(idx, 1);
 }
 
