@@ -199,34 +199,6 @@ synthbio.Circuit.fromJSON = function(json) {
 };
 
 /**
- * Cleans the current workspace and loads the provided circuit.
- *
- * @param circuit An instance of synthbio.Circuit
- */
-synthbio.model.loadCircuit = function(circuit) {
-	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit."
-	+ " This is required.");
-
-	// Install model
-	synthbio.model = circuit;
-	// Clear grid
-	$('grid-container').html = "";
-	// Setup inputs/outputs
-	synthbio.gui.addInputOutputFields();
-	// Show the circuit; add all the elements
-	$.each(model.gates, function(index, element) {
-		synthbio.gui.displayGate(element);
-	});
-	$.each(model.signals, function(index, element){
-		synthbio.gui.displaySignal(element);
-	});
-	//TODO; implement grouping.
-	//$.each(model.signals, function(index, element){
-	//	synthbio.gui.displaySignal(element);
-	//});
-};
-
-/**
  * Returns the index of a gate (-1 if not found)
  * @param gate An instance of synthbio.Gate
  */
@@ -317,3 +289,25 @@ synthbio.CDS.fromJSON = function(json){
  * of gates. This object is instantiated as an empty circuit with no name or description.
  */
 synthbio.model = new synthbio.Circuit("", "");
+
+/**
+ * Cleans the current workspace and loads the provided circuit.
+ *
+ * @param circuit An instance of synthbio.Circuit
+ */
+synthbio.loadCircuit = function(circuit) {
+	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit."
+		+ " This is required.");
+
+	// Install model
+	synthbio.model = circuit;
+	//synthbio.gui.reset();
+	// Show the circuit; add all the elements
+	$.each(synthbio.model.gates, function(index, element) {
+		synthbio.gui.displayGate(element);
+	});
+	$.each(synthbio.model.signals, function(index, element){
+		//synthbio.gui.displaySignal(element);
+	});
+	//TODO; implement grouping.
+};

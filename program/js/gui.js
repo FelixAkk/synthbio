@@ -84,9 +84,6 @@ $(document).ready(function() {
 		}
 	});
 
-	// Set up modelling grid
-	synthbio.gui.addInputOutputFields();
-
 	// Start pinging
 	synthbio.gui.pingServer();
 
@@ -95,8 +92,8 @@ $(document).ready(function() {
 		"name": "example.syn",
 		"description": "Logic for this circuit: D = ~(A^B)",
 		"gates": [
-			{ "kind": "and", "position": {"x": 2,"y": 2}},
-			{ "kind": "not", "position": {"x": 2,"y": 4}}
+			{ "kind": "and", "position": {"x": 250,"y": 223}},
+			{ "kind": "not", "position": {"x": 340,"y": 431}}
 		],
 		"signals": [
 			{ "from": "input", "to": 0, "protein": "A"},
@@ -119,8 +116,7 @@ $(document).ready(function() {
 	});
 	var cir = new synthbio.Circuit(map.name, map.description, gates, signals, groups);
 	setTimeout(function() {
-		console.log(cir);
-		synthbio.model.loadCircuit(cir);
+		synthbio.loadCircuit(cir);
 	}, 500);
 });
 
@@ -139,6 +135,8 @@ synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints)
 	};
 	inputEndpoints--;
 	outputEndpoints--;
+
+	console.log(arguments);
 	
 	// Function to calculate the placement (1/2 if there's only one to place, else 1/total)
 	var placement = function(num, total) {
@@ -170,6 +168,7 @@ synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints)
  * @return Returns the model, with endpoints properties added
  */
 synthbio.gui.addGateEndpoints = function(gateModel) {
+	console.log(gateModel);
 	var endpoints = synthbio.gui.addPlumbEndpoints(
 		gateModel.element.attr("id"),
 		gateModel.model.getInputCount(),
@@ -214,21 +213,13 @@ synthbio.gui.getGateIndexById = function(id) {
 }
 
 /**
- * Call to display the block from which input signals originate and the output signals end into.
- */
-synthbio.gui.addInputOutputFields = function() {
-	$('grid-container').append(
-		"<div id=\"gate-input\" class=\"gate input\">Input</div><div id=\"gate-output\" class=\"gate output\">Output</div>"
-	);
-}
-/**
  * Adds a new gate DOM element to be used within the modelling grid.
  *
  * @param gateModel synthbio.Gate
  * @return Object with element, model and endpoints.
  */
 synthbio.gui.displayGate = function(gateModel) {
-	assert(gateModel instanceof synthbio.Gate, "Provided gate ojbect must be an instance of 'synthbio.Gate'");
+	synthbio.util.assert(gateModel instanceof synthbio.Gate, "Provided gate ojbect must be an instance of 'synthbio.Gate'");
 	
 	// Create new display element
 	var element = $("<div class=\"gate " + gateModel.getType() + "\">"
@@ -238,8 +229,8 @@ synthbio.gui.displayGate = function(gateModel) {
 
 	// Place new element in grid
 	$('#grid-container').append(element);
-	element.css("left", gateModel.getX());
-	element.css("top", gateModel.getY());
+	element.css("left", gateModel.getX() + "px");
+	element.css("top", gateModel.getY() + "px");
 
 	// Make the gate draggable
 	jsPlumb.draggable(element, {
