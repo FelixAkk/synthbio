@@ -15,10 +15,14 @@ package synthbio.simulator;
 
 import synthbio.models.Circuit;
 import synthbio.models.CircuitException;
+import org.json.JSONException;
+import java.io.IOException;
 import synthbio.models.Gate;
 import synthbio.models.CDS;
 import synthbio.models.Promotor;
 import synthbio.simulator.Reaction;
+
+import synthbio.Util;
 import static synthbio.Util.tabs;
 
 import java.util.ArrayList;
@@ -58,6 +62,13 @@ public class CircuitConverter {
 			tabs(2)+"</listOfReactions>\n"+
 		tabs(1)+"</model>\n"+
 		"</sbml>";
+	
+	/**
+	 * Converts a .syn file to SBML.
+	 */
+	public String convertSyn(String filename) throws CircuitException, JSONException, IOException {
+		return convert(Circuit.fromJSON(Util.fileToString(filename)));
+	}
 	
 	/**
 	 * Converts a Circuit-object to SBML.

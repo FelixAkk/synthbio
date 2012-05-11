@@ -16,6 +16,11 @@ package synthbio.simulator;
 import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
 
+import synthbio.models.Circuit;
+import synthbio.models.CircuitException;
+import org.json.JSONException;
+import synthbio.simulator.CircuitConverter;
+
 import org.apache.commons.math.ode.DerivativeException;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLException;
@@ -31,6 +36,25 @@ import org.simulator.sbml.SBMLinterpreter;
  * @author Albert ten Napel
  */
 public class Solver {
+	/**
+	 * Solves a .syn file.
+	 */
+	public MultiTable solveSyn(String filename, double stepSize, double timeEnd)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
+		String sbml = (new CircuitConverter()).convertSyn(filename);
+		Model model = (new SBMLReader()).readSBML(sbml).getModel();
+		return solve(model, stepSize, timeEnd);
+	}
+
+	/**
+	 * Solves a Circuit-object.
+	 */
+	public MultiTable solveCircuit(Circuit c, double stepSize, double timeEnd)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
+		String sbml = (new CircuitConverter()).convert(c);
+		Model model = (new SBMLReader()).readSBML(sbml).getModel();
+		return solve(model, stepSize, timeEnd);
+	}
 
 	/**
 	 * Solves a SBML file.
