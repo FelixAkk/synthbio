@@ -181,18 +181,6 @@ synthbio.gui.reset = function() {
 		synthbio.gui.removeDisplayGate(id);
 	}
 
-	var oep = jQuery.extend(true, {	
-		anchor:"Continuous",
-		deleteEndpointsOnDetach: false
-	}, synthbio.gui.outputEndpoint);
-	var iep = jQuery.extend(true, {
-		anchor:"Continuous",
-		deleteEndpointsOnDetach: false
-	}, synthbio.gui.inputEndpoint);
-
-	jsPlumb.makeSource("gate-input", oep);
-	jsPlumb.makeTarget("gate-output", iep);
-
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
 }
