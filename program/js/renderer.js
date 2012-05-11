@@ -125,6 +125,12 @@ $(document).ready(function() {
 				jsPlumb.deleteEndpoint(connInfo.sourceEndpoint);
 			if (connInfo.targetId == "gate-output" && !connInfo.targetEndpoint.connections.length)
 				jsPlumb.deleteEndpoint(connInfo.targetEndpoint);
+
+			var fromIndex = synthbio.gui.getGateIndexById(connInfo.sourceId);
+			console.log(fromIndex);
+			var toIndex = synthbio.gui.getGateIndexById(connInfo.targetId);
+			console.log(toIndex);
+			synthbio.model.removeSignal(fromIndex, toIndex);
 		});
 
 		//jsPlumb.draggable("gate-input");

@@ -213,8 +213,9 @@ synthbio.gui.displayGateModel = function(gateModel) {
 		if (!confirm("Delete " + gateModel.toString() + "?"))
 			return;
 
-		jsPlumb.removeAllEndpoints(element);
 		element.remove();
+		jsPlumb.removeAllEndpoints(element);
+		synthbio.model.removeGate(gateModel);
 	});
 
 	// Add anchors
@@ -249,6 +250,6 @@ synthbio.gui.pingServer = function() {
 				if(fCount  <= limit+1) fCount++; // Keep counting untill the dialog was shown
 				if(fCount == limit) $('#connection-modal').modal(); // Show the dialog once
 			})
-			.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
+			//.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
 	};
 }();

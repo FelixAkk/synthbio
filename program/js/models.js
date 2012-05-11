@@ -221,22 +221,44 @@ synthbio.Circuit.prototype.addGate = function(gate, position) {
 };
 
 /**
+ * Sort of a setter for gates.
+ * @param gate An instance of synthbio.Gate or an index.
+ */
+synthbio.Circuit.prototype.removeGate = function(gate) {
+	var idx = this.checkGateExists(gate);
+
+	this.removeSignal(idx, undefined);
+	this.removeSignal(undefined, idx);
+
+	return this.gates.splice(idx, 1);
+}
+
+/**
  * Getter for the array of gates.
  */
 synthbio.Circuit.prototype.getGates = function() {
 	return this.gates;
 };
+
+/**
+ * Check if gate exists (throws exception if not existent);
+ * @return Index of gate
+ */
+synthbio.Circuit.prototype.checkGateExists = function(gate) {
+	var idx = (gate instanceof synthbio.Gate) ? this.indexOfGate(gate) : gate;
+	if (!(idx in this.gates)) {
+		throw "Gate " + gate + " undefined";
+	}
+	return idx;
+}
+
 /**
  * Getter for a gate on index. Only returns if there is a gate on that index.
  * @param index Index in the array.
  */
 synthbio.Circuit.prototype.getGate = function(index) {
-	var gate = this.gates[index];
-	if(gate == undefined) {
-		throw "No gate on index " + index + ".";
-	} else {
-		return gate;
-	}
+	this.checkGateExists(index);
+	return this.gates[index];
 }
 
 /**
@@ -254,6 +276,29 @@ synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
 	}
 
 	return signal;
+};
+
+/**
+ * Removes signals based on origin/destination. removeSignal() removes all signals.
+ * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
+ * @param destination Destination integer (not used if origin is a synthbio.Signal). Undefined to accept any destination.
+ */
+synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
+	if (origin instanceof synthbio.Signal) {
+		origin = origin.from;
+		destination = origin.to;
+	}
+
+	var removed = [];
+	for(var i = 0; i < this.signals.length; i++)
+		if (((origin      === undefined) || (this.signals[i].from == origin)) &&
+		    ((destination === undefined) || (this.signals[i].to == destination))) 
+		{
+			removed.push(this.signals.splice(i, 1));
+			i--;
+		}
+
+	return removed;
 };
 
 // (Jieter): eval is a reserved keyword in javascript, could be used...
