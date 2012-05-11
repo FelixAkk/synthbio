@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="Synthetic biological circuit modelling and simulation web application">
 	<meta name="author" content="Group E">
-	<title>BioBrick Modeller/Simulator</title>
+	<title>Zelula</title>
 	
 	<!-- Le styles -->
 	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
@@ -20,7 +20,7 @@
 	<!-- Le NaffBarr -->
 	<!-- ================================================== -->
 	<nav class="navbar">
-		<aside class="nav" id="title"><div id="icon"></div>BioBrick Modeller/Simulator</aside>
+		<aside class="nav" id="title"><div id="icon"></div>Zelula</aside>
 		<ul class="nav">
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
@@ -52,14 +52,13 @@
 	<!-- ================================================== -->
 	<aside id="gates-tab" class="stretch">
 		<h3>Basic gates</h3>
-		<p class="subscript">Predefined AND and NOT gates (fixed)</p>
 		<div id="gates-basic" class="gates">
-			<div id="77" class="gate not">
+			<div class="gate not">
 				<embed src="img/gates/not.svg" type="image/svg+xml" />
 				<div class="mask"></div>
 				<h4>NOT-gate</h4>
 				<p class="subscript">
-					in:1<br>out:1
+					Inverts signal<br>in:1<br>out:1
 				</p>
 			</div>
 			<div class="gate and">
@@ -67,12 +66,11 @@
 				<div class="mask"></div>
 				<h4>AND-gate</h4>
 				<p class="subscript">
-					in:2<br>out:1
+					Factors both<br>in:2<br>out:1
 				</p>
 			</div>
 		</div>
 		<h3>Compound gates</h3>
-		<p class="subscript">User defined compound gates (loaded from .syn)</p>
 		<div id="gates-compound" class="gates">
 		
 		</div>
@@ -97,14 +95,14 @@
 	<!-- ================================================== -->
 	<!-- this is where all the shizzle goes down! I'm tellin' ya -->
 	<div id="grid-container" class="stretch">
-		<div id="gate-input" class="gate input">Input</div>
-		<div id="gate-output" class="gate output">Output</div>
+		<div id="gate-input" class="gate input"><h3 class="handle">Inputs</h3></div>
+		<div id="gate-output" class="gate output"><h3 class="handle">Outputs</h3></div>
 	</div>
 	
 	<!-- Le Status Bar (at the bottom) -->
 	<!-- ================================================== -->
 	<footer class="status subscript">
-		<img id="info-icon" src="img/info.png" alt="Info:" /><span id="info">Mouse over info string</span>
+		<img id="info-icon" src="img/info.png" alt="Info:" /><span id="info"></span>
 		<span id="ping">Server status: <b>Connecting to server <em class="icon-connecting"></em></b></span>
 	</footer>
 	

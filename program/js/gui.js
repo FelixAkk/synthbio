@@ -34,19 +34,57 @@ synthbio.gui.gateCounter = 0;
  */
 synthbio.gui.gatesTabWidth = parseFloat($('#gates-tab').css("width"));
 
+/**
+ * Width of the <aside> element with all the gates in pixels.
+ */
+synthbio.gui.navbarHeight = parseFloat($('.navbar').css("height"));
+
+/**
+ * Get normal gates dimensions
+ */
+synthbio.gui.gateDimensions = function() {
+	// Create
+	var dummyGate = $("<div class=\"gate\"></div>").hide().appendTo("body");
+	// Get
+	var dimensions = {
+		width: parseFloat(dummyGate.css("width"), 10),
+		height: parseFloat(dummyGate.css("height"), 10)
+	};
+	// Clean
+	dummyGate.remove();
+	// Assign
+	return dimensions;
+}();
+console.log(synthbio.gui.gateDimensions);
+/**
+ * Statusbar info tooltip function
+ *
+ * @param element jQuery extended DOM element.
+ * @param infoMessage String to display.
+ */
+synthbio.gui.setTooltip = function(element, infoMessage) {
+	element.bind("mouseover", function(event) { $("#info").html(infoMessage); });
+	// Set bubbling to false, prevents overlapping elements from also firing their tooltip and surpressing the bottom
+	element.bind("mouseover", false);
+	element.bind("mouseout", synthbio.gui.resetTooltip);
+}
+synthbio.gui.resetTooltip = function() {
+	$("#info").html("Mouse over info something for info.");
+}
+
 $(document).ready(function() {
 	// Activate zhe Dropdowns Herr Doktor!
 	$('.dropdown-toggle').dropdown();
 	
 	// Load proteins from server.
 	$('#list-proteins').on('show', function() {
-		synthbio.requests.getCDSs(function(response){
-			if(response instanceof String){
+		synthbio.requests.getCDSs(function(response) {
+			if(response instanceof String) {
 				$('#list-proteins tbody td').html(data.response);
 				return;
 			}
 			var html='';
-			$.each(response, function(i, cds){
+			$.each(response, function(i, cds) {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
 			$('#list-proteins tbody').html(html);
@@ -59,24 +97,33 @@ $(document).ready(function() {
 		containment: 'window',
 		scroll: false,
 		helper: 'clone',
-		start: function(event){
+		start: function(event) {
 			// Prepare transport layer
 			$("#gates-transport").css('display', 'block');
 		},
 		drag: function(event, ui) {
+			// Manually set the position of the helper (the thing you see dragged). Works out much nicer!
+			ui.position.left = event.pageX - synthbio.gui.gateDimensions.width/2;
+			ui.position.top  = event.pageY - synthbio.gui.gateDimensions.height/2;
+
 			// Display gate border if dragging in grid (and gate can be dropped)
 			var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
 			$(ui.helper).toggleClass("gate-border", dragInGrid);
 		},
-		stop: function(event, ui){
-			// Add new gate to circuit
-			var newGate = synthbio.model.addGate(
-				$(this).attr('class').split(' ')[1], // type of gate (second word in class of the element)
-				[event.pageX - synthbio.gui.gatesTabWidth, event.pageY  - $(this).height()] // position
-			);
+		stop: function(event, ui) {
+			// If dragged into the grid
+			if(event.pageX > synthbio.gui.gatesTabWidth) {
+				// Add new gate to circuit
+				var x = event.pageX - (synthbio.gui.gatesTabWidth + synthbio.gui.gateDimensions.width/2);
+				var y = event.pageY - (synthbio.gui.navbarHeight + synthbio.gui.gateDimensions.height/2);
+				var newGate = synthbio.model.addGate(
+					$(this).attr('class').split(' ')[1], // type of gate (second word in class of the element)
+					[x, y] // position of the new gate
+				);
 
-			// Display gate in grid
-			synthbio.gui.displayGate(newGate);
+				// Display gate in grid
+				synthbio.gui.displayGate(newGate);
+			}
 
 			// Clean up transport layer
 			$("#gates-transport .gate").remove();
@@ -86,7 +133,15 @@ $(document).ready(function() {
 
 	// Start pinging
 	synthbio.gui.pingServer();
-
+	// Set default tooltip info-string
+	synthbio.gui.resetTooltip();
+	// Hook mouseover listeners for all elements to display tooltips
+	synthbio.gui.setTooltip($("#gates-basic"),      "Predefined AND and NOT gates (fixed)");
+	synthbio.gui.setTooltip($("#gates-compound"),   "User defined compound gates (loaded from .syn)");
+	synthbio.gui.setTooltip($("#grid-container"),  "Hold Ctrl and drag a marquee to select a group of gates. " +
+		"Alternatively hold Ctrl and click on gates to toggle them as selected.");
+	synthbio.gui.setTooltip($("#gate-input"),       "Drag from here to define an input signal for a gate.");
+	synthbio.gui.setTooltip($("#gate-output"),      "Drop a signal endpoint in here to output the signal values.");
 
 	var map = {
 		"name": "example.syn",
@@ -107,11 +162,11 @@ $(document).ready(function() {
 	};
 	var gates=[], signals=[], groups=[];
 
-	$.each(map.gates, function(i, elem){
+	$.each(map.gates, function(i, elem) {
 		gates[i]=synthbio.Gate.fromMap(elem);
 	});
 
-	$.each(map.signals, function(i, elem){
+	$.each(map.signals, function(i, elem) {
 		signals[i]=synthbio.Signal.fromMap(elem);
 	});
 	var cir = new synthbio.Circuit(map.name, map.description, gates, signals, groups);
@@ -273,7 +328,7 @@ synthbio.gui.displayGate = function(gateModel) {
 
 	// Make the gate draggable
 	jsPlumb.draggable(element, {
-		stop: function(event, ui){
+		stop: function(event, ui) {
 			gateModel.setPosition([
 				element.css("left"), 
 				element.css("top")
