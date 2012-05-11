@@ -92,8 +92,29 @@ $(document).ready(function() {
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
 			connCount++;
 			connInfo.connection.getOverlay("label").setLabel("<a id=\"conn" + connCount + "\" href=#>Choose protein</a>");
-
+			
 			var el = $("#conn" + connCount, 0);
+			synthbio.requests.getCDSs(function(response){
+				var proteins='';
+				$.each(response, function(i, cds){
+					proteins+='<li><a href=\"#\">'+cds.name+'</a></li>';
+				});
+				el.html("<ul class=\"nav\">" +
+					"<li class=\"dropdown\">" +
+						"<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" id=\""+  connCount  +"\">Choose protein<b class=\"caret\"></b></a>"+
+							"<ul class=\"dropdown-menu\">" +
+								proteins +	
+							"</ul> " +
+						"</li>" +
+					"</ul>"
+				);
+			});
+			el.on("click", function(){
+				$(connCount).textContent= "bla";
+			});
+		});
+
+/*			var el = $("#conn" + connCount, 0);
 			el.click(function(){
 				var lp = $('#list-proteins');
 				lp.modal("show");
@@ -107,7 +128,7 @@ $(document).ready(function() {
 		$('#list-proteins').on('hide', function(){
 			$('#list-proteins tbody').off("click", "tr");
 		});
-
+*/
 
 		// listen for disposal of connections; delete endpoints if necessary
 		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) { 
