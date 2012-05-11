@@ -135,8 +135,6 @@ synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints)
 	};
 	inputEndpoints--;
 	outputEndpoints--;
-
-	console.log(arguments);
 	
 	// Function to calculate the placement (1/2 if there's only one to place, else 1/total)
 	var placement = function(num, total) {
@@ -146,18 +144,18 @@ synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints)
 	for (var j = 0; j <= inputEndpoints; j++) {
 		var inputUUID = toId + "_input" + j;
 		res.inputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.inputEndpoint, { 
-			endpoint:[0, placement(j, inputEndpoints), -1, 0], 
+			anchor:[0, placement(j, inputEndpoints), -1, 0], 
 			uuid:inputUUID 
 		}));
 	}
 	for (var i = 0; i <= outputEndpoints; i++) {
 		var outputUUID = toId + "_output" + i;
 		res.outputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { 
-			endpoint:[1, placement(i, outputEndpoints), 1, 0], 
+			anchor:[1, placement(i, outputEndpoints), 1, 0], 
 			uuid:outputUUID 
 		}));
 	}
-	
+
 	return res;
 }
 
@@ -168,7 +166,6 @@ synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints)
  * @return Returns the model, with endpoints properties added
  */
 synthbio.gui.addGateEndpoints = function(gateModel) {
-	console.log(gateModel);
 	var endpoints = synthbio.gui.addPlumbEndpoints(
 		gateModel.element.attr("id"),
 		gateModel.model.getInputCount(),
@@ -284,6 +281,6 @@ synthbio.gui.pingServer = function() {
 				if(fCount  <= limit+1) fCount++; // Keep counting untill the dialog was shown
 				if(fCount == limit) $('#connection-modal').modal(); // Show the dialog once
 			})
-			//.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
+			.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
 	};
 }();
