@@ -42,7 +42,7 @@ public class Solver {
 	public MultiTable solveSyn(String filename, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		String sbml = (new CircuitConverter()).convertSyn(filename);
-		Model model = (new SBMLReader()).readSBML(sbml).getModel();
+		Model model = (new SBMLReader()).readSBMLFromString(sbml).getModel();
 		return solve(model, stepSize, timeEnd);
 	}
 
@@ -52,7 +52,7 @@ public class Solver {
 	public MultiTable solveCircuit(Circuit c, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		String sbml = (new CircuitConverter()).convert(c);
-		Model model = (new SBMLReader()).readSBML(sbml).getModel();
+		Model model = (new SBMLReader()).readSBMLFromString(sbml).getModel();
 		return solve(model, stepSize, timeEnd);
 	}
 
