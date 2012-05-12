@@ -245,6 +245,31 @@ synthbio.gui.addGateEndpoints = function(gateModel) {
 }
 
 /**
+ * Finds a free input or output endpoint for a gate.
+ *
+ * @param id GUI id for the gate
+ * @param input True for input endpoint, false for output endpoint
+ * @param index Integer to define which endpoint to return, if undefined the function will return the first non-full endpoint
+ * @return jsPlumb.Endpoint or GUI id
+ */
+synthbio.gui.getFreeEndpoint = function(id, input, index) {
+	var gate = synthbio.gui.getGateById(id, false);
+	var ep = (input) ? gate.inputEndpoints : gate.outputEndpoints;
+	if (!ep)
+		return id;
+
+	if (index in ep)
+		return ep[index];
+	else {
+		for(var i = 0; i < ep.length; i++) {
+			if (!ep[i].isFull())
+				return ep[i];
+		}
+		return ep[0];
+	}
+}
+
+/**
  * Maps an (display) element ID to the proper gate object
  */
 synthbio.gui.displayGateIdMap = {/*Example:
@@ -288,7 +313,7 @@ synthbio.gui.getGateById = function(id, noException) {
  * Returns gate index by GUI id
  * @param id string
  * @param noException Truthy to not throw exception
- * @return index (exception if not found, false if noException)
+ * @return index (exception if id not found, false if noException)
  */
 synthbio.gui.getGateIndexById = function(id, noException) {
 	var gate = synthbio.gui.getGateById(id, noException);
@@ -419,7 +444,11 @@ synthbio.gui.displaySignal = function(signal, connection) {
 	if (!connection) {
 		var src = synthbio.gui.getGateIdByIndex(signal.from);
 		var dst = synthbio.gui.getGateIdByIndex(signal.to);
-		connection = jsPlumb.connect({source: src, target: dst, parameters: {signal: signal}});
+		connection = jsPlumb.connect({
+			source: synthbio.gui.getFreeEndpoint(src, false, signal.fromEndpoint),
+			target: synthbio.gui.getFreeEndpoint(dst, true, signal.toEndpoint),
+			parameters: {signal: signal}
+		});
 	}
 
 	var res = {connection: connection, signal: signal};
