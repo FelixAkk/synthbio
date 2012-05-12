@@ -85,13 +85,11 @@
 												</apply>
 										</apply>
 								</apply>
-								<apply>
 									<apply>
 										<times/>
 											<ci>d1</ci>
 											<ci>mc</ci>
 									</apply>
-								</apply>
 						</apply>
 					</math>
 					

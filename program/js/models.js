@@ -16,8 +16,8 @@
  * More info on jquery http://api.jquery.com/
  */
 
-/*jslint devel: true, browser: true, sloppy: true, stupid: false, white: true, maxerr: 50, indent: 4 */
-/*global $ */
+/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio */
 
 /**
  * syntbio package.
@@ -90,8 +90,7 @@ synthbio.Gate.prototype.getY = function(){
 synthbio.Gate.prototype.setPosition = function(position){
 	if(position instanceof synthbio.Point) {
 		this.position=position;
-	// if position is an array (i.d. has a length property)
-	} else if(position.length && !isNaN(parseInt(position[0], 10)) && !isNaN(parseInt(position[1], 10))) {
+	} else if($.isArray(position) && !isNaN(parseInt(position[0], 10)) && !isNaN(parseInt(position[1], 10))) {
 		this.position = new synthbio.Point(position);
 	} else {
 		throw "Position could not be parsed";
@@ -134,7 +133,7 @@ synthbio.Gate.fromJSON = function(json){
 
 /**
  * Signals
- * Signals hold proteins, an origin and a destination
+ * Signals hold proteins, an origin and a destination. A.K.A. wire, connection.
  * Note: To convert Signals to JSON use JSON.stringify(Signal)
  */
 synthbio.Signal = function(prot, origin, destination){
@@ -274,7 +273,7 @@ synthbio.Circuit.prototype.checkGateExists = function(gate) {
 synthbio.Circuit.prototype.getGate = function(index) {
 	this.checkGateExists(index);
 	return this.gates[index];
-}
+};
 
 /**
  * Sort of a setter for signals.
@@ -286,8 +285,6 @@ synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
 
 	if (this.signals.indexOf(signal) < 0) {
 		if(signal instanceof synthbio.Signal) {
-			//Make sure there are no duplicates, and then add the signal
-			this.removeSignal(signal);
 			this.signals.push(signal);
 		} else {
 			throw "Provided signal is not of type synthbio.Signal";
