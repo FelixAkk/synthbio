@@ -256,7 +256,7 @@ synthbio.Circuit.prototype.getGates = function() {
 };
 
 /**
- * Check if gate exists (throws exception if not existent);
+ * Check if gate exists (throws exception if not existent).
  * @return Index of gate
  */
 synthbio.Circuit.prototype.checkGateExists = function(gate) {
@@ -362,13 +362,13 @@ synthbio.model = new synthbio.Circuit("", "");
  * @param circuit An instance of synthbio.Circuit
  */
 synthbio.loadCircuit = function(circuit) {
-	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit."
-		+ " This is required.");
+	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
 
-	// Install model
-	synthbio.model = circuit;
 	synthbio.gui.reset();
+
 	// Show the circuit; add all the elements
+	synthbio.model = circuit;
+
 	$.each(synthbio.model.gates, function(index, element) {
 		synthbio.gui.displayGate(element);
 	});
