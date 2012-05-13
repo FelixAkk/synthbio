@@ -210,14 +210,14 @@ synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints)
 	};
 
 	for (var j = 0; j <= inputEndpoints; j++) {
-		var inputUUID = toId + "_input" + j;
+		var inputUUID = toId + "::input::" + j;
 		res.inputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.inputEndpoint, { 
 			anchor:[0, placement(j, inputEndpoints), -1, 0], 
 			uuid:inputUUID 
 		}));
 	}
 	for (var i = 0; i <= outputEndpoints; i++) {
-		var outputUUID = toId + "_output" + i;
+		var outputUUID = toId + "::output::" + i;
 		res.outputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { 
 			anchor:[1, placement(i, outputEndpoints), 1, 0], 
 			uuid:outputUUID 
@@ -245,6 +245,32 @@ synthbio.gui.addGateEndpoints = function(gateModel) {
 }
 
 /**
+ * Adds a new output endpoint to the input "gate"
+ *
+ * @param index Number to use for UUID, if undefined it will use a counter
+ * @return jsPlumb.Endpoint
+ */
+synthbio.gui.newInputEndpoint = function() {
+	var inputCounter = 0;
+
+	return function(index) {
+		var UUID = "gate-input::output::";
+		if (index === undefined) {
+			UUID += inputCounter++;
+		} else {
+			UUID += index;
+			inputCounter = Math.max(inputCounter, index + 1);
+		}
+
+		return jsPlumb.addEndpoint(
+			"gate-input",
+			synthbio.gui.outputEndpoint, 
+			{ anchor: "Continuous", uuid:UUID }
+		);
+	}
+}();
+
+/**
  * Finds a free input or output endpoint for a gate.
  *
  * @param id GUI id for the gate
@@ -253,18 +279,33 @@ synthbio.gui.addGateEndpoints = function(gateModel) {
  * @return jsPlumb.Endpoint or GUI id
  */
 synthbio.gui.getFreeEndpoint = function(id, input, index) {
+	// Get the proper array of endpoints
 	var gate = synthbio.gui.getGateById(id, false);
 	var ep = (input) ? gate.inputEndpoints : gate.outputEndpoints;
-	if (!ep)
-		return id;
 
+	if (!ep) {
+		// If gate has no tracked endpoints, try to get endpoint by UUID
+		ep = jsPlumb.getEndpoint(id + "::" + ((input) ? "input" : "output") + "::" + index);
+
+		// If endpoint does not exist for gate-input, create it
+		if (!ep && !input && id == "gate-input")
+			ep = synthbio.gui.newInputEndpoint(index);
+
+		// Return endpoint if found, else the GUI id
+		return (ep) ? ep : id;
+	}
+
+	// Check if index is in the endpoint array
 	if (index in ep)
 		return ep[index];
 	else {
+		// Else find the first non-full endpoint
 		for(var i = 0; i < ep.length; i++) {
 			if (!ep[i].isFull())
 				return ep[i];
 		}
+
+		// Return ep[0] if none found
 		return ep[0];
 	}
 }
@@ -469,6 +510,13 @@ synthbio.gui.displayConnection = function(connection) {
 	// Calculate source/target indices
 	var fromIndex = synthbio.gui.getGateIndexById(connection.sourceId);
 	var toIndex = synthbio.gui.getGateIndexById(connection.targetId);
+
+	// Calculate source/target endpoints
+	console.log(connection.endpoints[1].getUuid());
+	//var fromEndpoint = connection.endpoints[1].getUuid().split("::").pop();
+	//var toEndPoint = connection.endpoints[0].getUuid().split("::").pop();
+	//console.log("from " + fromEndpoint);
+	//console.log("to " + toEndPoint);
 	
 	// Add signal to circuit and display
 	var signal = synthbio.model.addSignal("", fromIndex, toIndex);

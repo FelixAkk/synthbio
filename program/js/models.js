@@ -234,8 +234,8 @@ synthbio.Circuit.prototype.addGate = function(gate, position) {
 synthbio.Circuit.prototype.removeGate = function(gate) {
 	var idx = this.checkGateExists(gate);
 
-	this.removeSignal(undefined, idx, undefined);
-	this.removeSignal(undefined, undefined, idx);
+	this.removeSignal(idx, undefined);
+	this.removeSignal(undefined, idx);
 
 	for(var i = 0; i < this.signals.length; i++) {
 		if (this.signals[i].from > idx)
@@ -296,26 +296,23 @@ synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
 
 /**
  * Removes signals based on origin/destination. removeSignal() removes all signals.
- * @param protein An instance of synthbio.Signal or a string. Undefined to accept any protein.
- * @param origin Origin integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
+ * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
  * @param destination Destination integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
  * @return array Returns array of removed signals.
  */
-synthbio.Circuit.prototype.removeSignal = function(protein, origin, destination) {
-	if (protein instanceof synthbio.Signal) {
-		var idx = this.signals.indexOf(protein);
+synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
+	if (origin instanceof synthbio.Signal) {
+		var idx = this.signals.indexOf(origin);
 		if (idx >= 0)
 			return [this.signals.splice(idx, 1)];
 
-		origin = protein.from;
-		destination = protein.to;
-		protein = protein.protein;
+		destination = origin.to;
+		origin = origin.from;
 	}
 
 	var removed = [];
 	for(var i = 0; i < this.signals.length; i++)
-		if (((protein     === undefined) || (this.signals[i].protein === protein)) &&
-			((origin      === undefined) || (this.signals[i].from === origin)) &&
+		if (((origin      === undefined) || (this.signals[i].from === origin)) &&
 		    ((destination === undefined) || (this.signals[i].to === destination))) 
 		{
 			removed.push(this.signals.splice(i, 1));

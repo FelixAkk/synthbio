@@ -66,10 +66,14 @@ $(document).ready(function() {
 					return true;
 				}
 
-				var UUID = "input" + ++inputCounter;
-				var src = jsPlumb.addEndpoint("gate-input", synthbio.gui.outputEndpoint, { anchor: "Continuous", uuid:UUID });
-				jsPlumb.connect({source: src, target: opt.target});
+				// Get a free endpoint for "gate-input" and reconnect
+				var src = synthbio.gui.getFreeEndpoint(opt.connection.sourceId, false);
+				jsPlumb.connect({
+					source: src,
+					target: opt.target
+				});
 
+				// Disallow this connection
 				return false;
 			}
 		};
