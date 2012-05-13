@@ -245,6 +245,23 @@ synthbio.gui.addGateEndpoints = function(gateModel) {
 }
 
 /**
+ * Returns the index of an endpoint
+ *
+ * @param endpoint jsPlumb.EndPoint or UUID
+ * @return Endpoint index, undefined if unknown
+ */
+synthbio.gui.getEndpointIndex = function(endpoint) {
+	if (endpoint && endpoint.getUuid)
+		endpoint = endpoint.getUuid();
+
+	if (!endpoint || !endpoint.split)	
+		return undefined;
+
+	var idx = parseInt(endpoint.split("::").pop(), 10);
+	return (isNaN(idx)) ? undefined : idx;
+}
+
+/**
  * Adds a new output endpoint to the input "gate"
  *
  * @param index Number to use for UUID, if undefined it will use a counter
@@ -512,11 +529,8 @@ synthbio.gui.displayConnection = function(connection) {
 	var toIndex = synthbio.gui.getGateIndexById(connection.targetId);
 
 	// Calculate source/target endpoints
-	console.log(connection.endpoints[1].getUuid());
-	//var fromEndpoint = connection.endpoints[1].getUuid().split("::").pop();
-	//var toEndPoint = connection.endpoints[0].getUuid().split("::").pop();
-	//console.log("from " + fromEndpoint);
-	//console.log("to " + toEndPoint);
+	//var fromEndpoint = synthbio.gui.getEndpointIndex(connection.endpoints[0]);
+	//var toEndPoint = synthbio.gui.getEndpointIndex(connection.endpoints[1]);
 	
 	// Add signal to circuit and display
 	var signal = synthbio.model.addSignal("", fromIndex, toIndex);

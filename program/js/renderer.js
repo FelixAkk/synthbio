@@ -73,7 +73,7 @@ $(document).ready(function() {
 					target: opt.target
 				});
 
-				// Disallow this connection
+				// Disallow the old connection
 				return false;
 			}
 		};
@@ -96,6 +96,9 @@ $(document).ready(function() {
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
 			var signal = connInfo.connection.getParameters().signal;
 			signal = (signal) ? signal : synthbio.gui.displayConnection(connInfo.connection).signal;
+
+			signal.fromEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[0]);
+			signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
 
 			connCount++;
 			var lbl = "<a id=\"conn" + connCount + "\" href=#>";
