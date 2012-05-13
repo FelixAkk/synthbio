@@ -9,7 +9,29 @@
  */
 
 $(document).ready(function() {
-
+	
+	var proteins = new Array();
+	
+	synthbio.requests.getCDSs(function(response){
+		$.each(response, function(i, cds){
+			proteins[i] = cds.name; 
+		});
+	});
+	
+	//Check namespace = ok?
+	synthbio.availableCDS = function(){
+		var prot = proteins;
+		//Improve this
+		var taken = $(".wire").val();
+		$.each(taken, function(i, used){
+			var index = $.inArray(used,prot);
+			if(index>-1){
+				prot.splice(index,1);
+			}
+		});
+		return prot;
+	}
+	
 	jsPlumb.ready(function() {
 		jsPlumb.setRenderMode(jsPlumb.SVG);
 		jsPlumb.Defaults.Container = $("#grid-container");
@@ -91,26 +113,23 @@ $(document).ready(function() {
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
 			connCount++;
-			connInfo.connection.getOverlay("label").setLabel("<a id=\"conn" + connCount + "\" href=#>Choose protein</a>");
+			connInfo.connection.getOverlay("label").setLabel("<a class=\"wires\" id=\"conn" + connCount + "\" href=#>Choose protein</a>");
 			
 			var el = $("#conn" + connCount, 0);
-			synthbio.requests.getCDSs(function(response){
-				var proteins='';
-				$.each(response, function(i, cds){
-					proteins+='<li><a href=\"#\">'+cds.name+'</a></li>';
-				});
-				el.html("<ul class=\"nav\">" +
-					"<li class=\"dropdown\">" +
-						"<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" id=\""+  connCount  +"\">Choose protein<b class=\"caret\"></b></a>"+
-							"<ul class=\"dropdown-menu\">" +
-								proteins +	
-							"</ul> " +
-						"</li>" +
-					"</ul>"
-				);
-			});
+			el.html("<select class=\"wire\" id=\"wire"+connCount+"\">" +
+					"<option value=\"0\" selected=\"selected\">Choose protein</option>" +
+					"</select>"
+			);
+			
 			el.on("click", function(){
-				$(connCount).textContent= "bla";
+				var prots='';
+				var available = synthbio.availableCDS();
+				var wire = $("#wire"+connCount);
+				alert(available);
+				$.each(available, function(i, cds){
+					prots+="<option value=\""+cds+"\">"+cds+"</option> ";
+				});
+				wire.html(prots);
 			});
 		});
 
