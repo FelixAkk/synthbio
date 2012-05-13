@@ -136,16 +136,18 @@ synthbio.Gate.fromJSON = function(json){
  * Signals hold proteins, an origin and a destination. A.K.A. wire, connection.
  * Note: To convert Signals to JSON use JSON.stringify(Signal)
  */
-synthbio.Signal = function(prot, origin, destination){
+synthbio.Signal = function(prot, from, to, fromEndpoint, toEndpoint){
 	this.protein = prot;
-	this.from = origin;
-	this.to = destination;
+	this.from = from;
+	this.to = to;
+	this.fromEndpoint = fromEndpoint;
+	this.toEndpoint = toEndpoint;
 };
 synthbio.Signal.prototype.toString = function(){
 	return this.protein + " links " + this.from + " with " + this.to;
 };
 synthbio.Signal.fromMap = function(map){
-	return new synthbio.Signal(map.protein, map.from, map.to);
+	return new synthbio.Signal(map.protein, map.from, map.to, map.fromEndpoint, map.toEndpoint);
 };
 synthbio.Signal.fromJSON = function(json){
 	return synthbio.Signal.fromMap($.parseJSON(json));
@@ -279,9 +281,9 @@ synthbio.Circuit.prototype.getGate = function(index) {
  * Sort of a setter for signals.
  * @param signal An instance of synthbio.Signal
  */
-synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
-	if (!(signal instanceof synthbio.Signal) && origin !== undefined && destination !== undefined)
-		signal = new synthbio.Signal(signal, origin, destination);
+synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, toEndpoint) {
+	if (!(signal instanceof synthbio.Signal) && from !== undefined && to !== undefined)
+		signal = new synthbio.Signal(signal, from, to, fromEndpoint, toEndpoint);
 
 	if (this.signals.indexOf(signal) < 0) {
 		if(signal instanceof synthbio.Signal) {

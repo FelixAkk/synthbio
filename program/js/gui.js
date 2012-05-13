@@ -151,8 +151,8 @@ $(document).ready(function() {
 			{ "kind": "not", "position": {"x": 340,"y": 431}}
 		],
 		"signals": [
-			{ "from": "input", "to": 0, "protein": "A"},
-			{ "from": "input", "to": 0, "protein": "B"},
+			{ "from": "input", "to": 0, "protein": "A", "fromEndpoint": 1, "toEndpoint": 1},
+			{ "from": "input", "to": 0, "protein": "B", "fromEndpoint": 0, "toEndpoint": 0},
 			{ "from": 0, "to": 1, "protein": "C"},
 			{ "from": 1, "to": "output", "protein": "D"}
 		],
@@ -529,11 +529,11 @@ synthbio.gui.displayConnection = function(connection) {
 	var toIndex = synthbio.gui.getGateIndexById(connection.targetId);
 
 	// Calculate source/target endpoints
-	//var fromEndpoint = synthbio.gui.getEndpointIndex(connection.endpoints[0]);
-	//var toEndPoint = synthbio.gui.getEndpointIndex(connection.endpoints[1]);
+	var fromEndpoint = synthbio.gui.getEndpointIndex(connection.endpoints[0]);
+	var toEndPoint = synthbio.gui.getEndpointIndex(connection.endpoints[1]);
 	
 	// Add signal to circuit and display
-	var signal = synthbio.model.addSignal("", fromIndex, toIndex);
+	var signal = synthbio.model.addSignal("", fromIndex, toIndex, fromEndpoint, toEndPoint);
 	return synthbio.gui.displaySignal(signal, connection);
 }
 
