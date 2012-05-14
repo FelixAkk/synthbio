@@ -109,15 +109,15 @@ $(document).ready(function() {
 			signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
 
 			connCount++;
-			var lbl = "<a class=\"wires\" id=\"conn" + connCount + "\" href=#>";
+			var lbl = '<a class="wires" id="conn' + connCount + '" href=#>';
 			lbl += (signal.protein) ? signal.protein : "Choose protein";
 			lbl += "</a>";
 			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
 			var currentProt = [null,false];
 			var el = $("#conn" + connCount, 0);
-			el.html("<select class=\"wire\" id=\"wire"+connCount+"\">" +
-					"<option value=\"0\" selected=\"selected\">Choose protein</option>" +
+			el.html('<select class="wire" id="wire"'+connCount+'">' +
+					'<option value="0" selected="selected">Choose protein</option>' +
 					"</select>"
 			);
 			
@@ -126,7 +126,7 @@ $(document).ready(function() {
 				var wire = $("#wire"+connCount);
 				$.each(proteins, function(i, cds){
 					if(cds[1]){
-						prots+="<option value=\""+cds[0]+"\">"+cds[0]+"</option> ";
+						prots += '<option value="' + cds[0] + '">' + cds[0] + '</option> ';
 					}
 				});
 				wire.html(prots);

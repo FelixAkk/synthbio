@@ -99,7 +99,7 @@ synthbio.Gate.prototype.setPosition = function(position){
 synthbio.Gate.prototype.getImage = function(html){
 	var img = "gates/" + this.getKind() + ".svg";
 	if (html)
-		return "<embed src=\"img/" + img + "\" type=\"image/svg+xml\" />";
+		return '<embed src="img/' + img + '" type="image/svg+xml" />';
 	else
 		return img;
 }
