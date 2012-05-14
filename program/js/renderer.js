@@ -10,7 +10,7 @@
 
 $(document).ready(function() {
 	
-	var usedProteins = new Array();
+	var usedProteins = {};
 	
 	synthbio.requests.getCDSs(function(response){
 		$.each(response, function(i, cds){
@@ -114,7 +114,7 @@ $(document).ready(function() {
 			lbl += "</a>";
 			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
-			var currentProt;
+			var currentProt = "A";
 			var el = $("#conn" + connCount, 0);
 			el.html("<select class=\"wire\" id=\"wire"+connCount+"\">" +
 					"<option value=\"0\" selected=\"selected\">Choose protein</option>" +
@@ -125,16 +125,15 @@ $(document).ready(function() {
 				var prots='';
 				var wire = $("#wire"+connCount);
 				$.each(usedProteins, function(i, cds){
-					if(!(usedProteins[cds].used)){
-						prots+="<option value=\""+cds+"\">"+cds+"</option> ";
+					if(!(cds.used)){
+						prots+="<option value=\""+i+"\">"+i+"</option> ";
 					}
 				});
 				wire.html(prots);
-				
-				if(!(usedProteins[wire.val()].used)){
+				if(!(usedProteins["A"].used)){
 					usedProteins[wire.val()].used = true;
-					usedProteins.currentProt.used = false;
-					currentProt = wire.val();
+					usedProteins[currentProt].used = false;
+					usedProteins.currentProt = wire.val();
 				}
 			});
 		});
