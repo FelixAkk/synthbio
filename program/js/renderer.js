@@ -74,10 +74,14 @@ $(document).ready(function() {
 					return true;
 				}
 
-				var UUID = "input" + ++inputCounter;
-				var src = jsPlumb.addEndpoint("gate-input", synthbio.gui.outputEndpoint, { anchor: "Continuous", uuid:UUID });
-				jsPlumb.connect({source: src, target: opt.target});
+				// Get a free endpoint for "gate-input" and reconnect
+				var src = synthbio.gui.getFreeEndpoint(opt.connection.sourceId, false);
+				jsPlumb.connect({
+					source: src,
+					target: opt.target
+				});
 
+				// Disallow the old connection
 				return false;
 			}
 		};
@@ -98,8 +102,17 @@ $(document).ready(function() {
 		var connCount = 0;
 		// listen for new connections; initialise them the same way we initialise the connections at startup.
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
+			var signal = connInfo.connection.getParameters().signal;
+			signal = (signal) ? signal : synthbio.gui.displayConnection(connInfo.connection).signal;
+
+			signal.fromEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[0]);
+			signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
+
 			connCount++;
-			connInfo.connection.getOverlay("label").setLabel("<a class=\"wires\" id=\"conn" + connCount + "\" href=#>Choose protein</a>");
+			var lbl = "<a class=\"wires\" id=\"conn" + connCount + "\" href=#>";
+			lbl += (signal.protein) ? signal.protein : "Choose protein";
+			lbl += "</a>";
+			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
 			var currentProt = [null,false];
 			var el = $("#conn" + connCount, 0);
@@ -136,7 +149,10 @@ $(document).ready(function() {
 				lp.modal("show");
 				$('#list-proteins tbody').on("click", "tr", function() {
 					lp.modal("hide");
-					el.html($("td", this, 0).html());
+					
+					var prot = $("td", this, 0).html();
+					el.html(prot); //Update label
+					signal.protein = prot; //Update signal in model
 				});
 			});
 		});
@@ -147,15 +163,18 @@ $(document).ready(function() {
 */
 
 		// listen for disposal of connections; delete endpoints if necessary
-		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) { 
+		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) {
 			if (connInfo.sourceId == "gate-input" && !connInfo.sourceEndpoint.connections.length)
 				jsPlumb.deleteEndpoint(connInfo.sourceEndpoint);
 			if (connInfo.targetId == "gate-output" && !connInfo.targetEndpoint.connections.length)
 				jsPlumb.deleteEndpoint(connInfo.targetEndpoint);
+
+			synthbio.gui.removeDisplaySignal(connInfo.connection.id);
 		});
 
-		//jsPlumb.draggable("gate-input");
-		jsPlumb.draggable("gate-output");
+		jsPlumb.draggable("gate-input", {handle: "h4"});
+		//$("gate-output").draggable({ });
+		jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
 
 		var oep = jQuery.extend(true, {	
 			anchor:"Continuous",
@@ -169,7 +188,6 @@ $(document).ready(function() {
 		jsPlumb.makeSource("gate-input", oep);
 		jsPlumb.makeTarget("gate-output", iep);
 
-		//Workaround for bug in jQuery/jsPlumb (Firefox only)
-		jsPlumb.addEndpoint("grid-container").setVisible(false);
+		synthbio.gui.reset();
 	});
 });

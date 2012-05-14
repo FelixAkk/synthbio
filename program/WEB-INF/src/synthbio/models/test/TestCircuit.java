@@ -257,12 +257,12 @@ public class TestCircuit{
 		this.loadTestFile("ambigiousCDS.json");
 	}
 
-		/**
+	/**
 	 * Incorrect signal definition: using string literals to define
 	 * gate indices in a signal.
 	 */
 	@Test
-	public void testFromJSON_StringIndex() throws Exception{
+	public void testFromJSON_StringIndexFrom() throws Exception{
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("Signal[from] should be either a integer index pointing to a gate or the string 'input'");
 

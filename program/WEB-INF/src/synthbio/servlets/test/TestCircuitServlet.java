@@ -13,6 +13,8 @@
 
 package synthbio.servlets.test;
 
+import java.io.File;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -106,7 +108,47 @@ public class TestCircuitServlet{
 		JSONObject expect=Util.fileToJSONObject("data/synstore/example.syn");
 		assertEquals(expect.getString("name"), data.getString("name"));
 		assertEquals(expect.getString("description"), data.getString("description"));
-		
+	}
 
+	/**
+	 * Check if the save actions actually saves something and
+	 * saves the correct file.
+	 */
+	@Test
+	public void testSave() throws Exception{
+		//unlink test.syn
+		File test=new File("data/synstore/test.syn");
+		if(test.isFile()){
+			test.delete();
+		}
+		
+		JSONObject circuit=Util.fileToJSONObject("data/synstore/example.syn");
+		
+		TextPage page=this.getTestPage(this.url+"?action=save&filename=test.syn&circuit="+circuit.toString());
+
+		JSONObject response=new JSONObject(page.getContent());
+		assertTrue(response.getBoolean("success"));
+		assertEquals("Saved succesfully", response.getString("message"));
+
+
+		JSONObject actual=Util.fileToJSONObject("data/synstore/example.syn");
+
+		// 'deep'-equal the json objects.
+		assertEquals(circuit.getString("name"), actual.getString("name"));
+		assertEquals(
+			circuit.getString("description"),
+			actual.getString("description")
+		);
+		assertEquals(
+			circuit.getJSONArray("gates").toString(),
+			actual.getJSONArray("gates").toString()
+		);
+		assertEquals(
+			circuit.getJSONArray("signals").toString(),
+			actual.getJSONArray("signals").toString()
+		);
+		if(test.isFile()){
+			test.delete();
+		}
 	}
 }
