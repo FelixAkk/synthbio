@@ -76,9 +76,7 @@ synthbio.requests.listFiles = function(callback){
 		always: function(){
 			console.log("listFiles called");
 		}
-		
 	});
-	
 };
 
 /**
