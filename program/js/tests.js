@@ -27,7 +27,7 @@ var cds1 = new synthbio.CDS("cds1", "k2", "d1", "d2");
 var cds2 = new synthbio.CDS("cds2", "k2", "d1", "d2");
 
 
-var gateJSON='{"type":"and","position":{"x":10,"y":20}}';
+var gateJSON='{"kind":"and","position":{"x":10,"y":20}}';
 var signalJSON='{"protein":"A","from":1,"to":2}';
 
 var circuitName="testCircuit";
@@ -81,7 +81,7 @@ $(document).ready(function() {
 		 * Gate properties
 		 */
 		test("Gates should have the right properties", function() {
-			equal(gate.type, "and", "Gates store types");
+			equal(gate.kind, "and", "Gates store types");
 			equal(gate.getX(), 10, "Gates store X coordinates");
 			equal(gate.getY(), 20, "Gates store Y coordinates");
 		});
@@ -90,7 +90,7 @@ $(document).ready(function() {
 		 * Gate properties
 		 */
 		test("Gates should have the right properties", function() {
-			equal(notgate.type, "not", "Gates store types");
+			equal(notgate.kind, "not", "Gates store types");
 			equal(notgate.getX(), 10, "Gates store X coordinates");
 			equal(notgate.getY(), 22, "Gates store Y coordinates");
 		});
@@ -99,7 +99,7 @@ $(document).ready(function() {
 		 * Gate toString
 		 */
 		test("Gates should have a working toString method", function() {
-			equal(gate.toString(), gate.type + ": X = " + gate.getX() + ", Y = "+ gate.getY() ,"The toString method works");
+			equal(gate.toString(), gate.kind + ": X = " + gate.getX() + ", Y = "+ gate.getY() ,"The toString method works");
 		});
 		
 		/**
@@ -166,12 +166,12 @@ $(document).ready(function() {
 		 * Adding of gates
 		 */
 		test("Circuits should add and store gates through a method call", function() {
-			circuit.add(notgate); // add gate on index [2].
+			circuit.addGate(notgate); // add gate on index [2].
 			deepEqual(circuit.getGates(), [gate,gate,notgate])
 		})
 	
 		test("Circuits should add and store gates through a method call", function() {
-			circuit.add(notgate); // add gate on index [2].
+			circuit.addGate(notgate); // add gate on index [2].
 			deepEqual(circuit.getGate(2), notgate)
 			raises(function() {circuit.getGate(3)}, "Empty index is given.");
 		})

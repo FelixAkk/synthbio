@@ -52,7 +52,7 @@ synthbio.util.AssertException.prototype.toString = function () {
  * @param message Debugging message.
  */
 synthbio.util.assert = function(exp, message) {
-	if (!exp) {
-		throw new synthbio.util.AssertException(message);
-	}
-};
+    if (!exp) {
+        throw new synthbio.util.AssertException(message);
+    }
+}

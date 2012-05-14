@@ -9,7 +9,7 @@
     { "from": "input", "to": 0, "protein": "A"},
     { "from": "input", "to": 0, "protein": "B"},
     { "from": 0, "to": 1, "protein": "C"},
-    { "from": 1, "to": 'output', "protein": "D"}
+    { "from": 1, "to": "output", "protein": "D"}
   ],
   "grouping": [
 
