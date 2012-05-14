@@ -99,11 +99,16 @@
 	</target>
 
 	<!--
-		Create javadoc documentation
+		Create javadoc documentation.
+
+		Provide a destination to put it in with -Dtest=<destination>
 	-->
-	<target name="javadoc" depends="compile">
+	<target name="require-javadoc-dest" unless="dest">
+		<fail message="You must run this target with -Ddest=Destenation"/>
+	</target>
+	<target name="javadoc" depends="compile, require-javadoc-dest">
 		<javadoc
-			destdir="docs/api"
+			destdir="${dest}"
 			sourcepath="${src}"
 			author="true"
 			version="true"
