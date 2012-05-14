@@ -110,6 +110,10 @@ public class TestCircuitServlet{
 		assertEquals(expect.getString("description"), data.getString("description"));
 	}
 
+	/**
+	 * Check if the save actions actually saves something and
+	 * saves the correct file.
+	 */
 	@Test
 	public void testSave() throws Exception{
 		//unlink test.syn
@@ -143,5 +147,8 @@ public class TestCircuitServlet{
 			circuit.getJSONArray("signals").toString(),
 			actual.getJSONArray("signals").toString()
 		);
+		if(test.isFile()){
+			test.delete();
+		}
 	}
 }
