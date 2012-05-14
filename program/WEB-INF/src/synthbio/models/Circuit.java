@@ -377,6 +377,9 @@ public class Circuit implements JSONString{
 				}
 			}else{
 				//input signal, add to the input list.
+				if(!signal.getString("from").equals("input")){
+					throw new CircuitException("Signal[from] should be either a integer index pointing to a gate or the string 'input'");
+				}
 				circuit.addInput(signal.getString("protein"));
 			}
 
@@ -405,6 +408,9 @@ public class Circuit implements JSONString{
 					}
 				}
 			}else{
+				if(!signal.getString("to").equals("output")){
+					throw new CircuitException("Signal[to] should be either a integer index pointing to a gate or the string 'output'");
+				}
 				//output signal, add to the output list.
 				circuit.addOutput(signal.getString("protein"));
 			}

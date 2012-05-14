@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author jieter
  */
-abstract class Promotor extends BioBrick{
+public abstract class Promotor extends BioBrick{
 	public final double k1;
 	public final double km;
 	public final int n;

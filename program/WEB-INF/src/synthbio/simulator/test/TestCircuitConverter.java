@@ -39,46 +39,37 @@ public class TestCircuitConverter {
 	/**
 	 * Test if a simple Not-gate is properly converted to SBML.
 	 */
-	@Ignore
 	@Test
 	public void testNotCircuit() throws CircuitException, JSONException, IOException {
-		CircuitConverter converter = new CircuitConverter();
-		Circuit circuit = Circuit.fromJSON(Util.fileToJSONObject(notCircuit));
-		String sbmlResult = converter.convert(circuit);
+		String sbmlResult = (new CircuitConverter()).convertFromFile(notCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
 		assertTrue(sbmlResult.contains("<species id=\"mB\""));
-		assertTrue(sbmlResult.contains("<reaction id=\"transcription_not_A_mB\""));
-		assertTrue(sbmlResult.contains("<reaction id=\"translation_not_mB_B\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"Transcription_not_A__mB\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"Translation_not_mB__B\""));
 	}
 	
 	/**
 	 * Test if a simple And-gate is properly converted to SBML.
 	 */
-	@Ignore
 	@Test
 	public void testAndCircuit() throws CircuitException, JSONException, IOException {
-		CircuitConverter converter = new CircuitConverter();
-		Circuit circuit = Circuit.fromJSON(Util.fileToJSONObject(andCircuit));
-		String sbmlResult = converter.convert(circuit);
+		String sbmlResult = (new CircuitConverter()).convertFromFile(andCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
 		assertTrue(sbmlResult.contains("<species id=\"mC\""));
-		assertTrue(sbmlResult.contains("<reaction id=\"transcription_and_A_B_mC\""));
-		assertTrue(sbmlResult.contains("<reaction id=\"translation_and_mC_C\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"Transcription_and_A_B__mC\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"Translation_and_mC__C\""));
 	}
 	
 	/**
 	 * Test if a more complex Nand-gate is properly converted to SBML.
 	 */
-	@Ignore
 	@Test
 	public void testNandCircuit() throws CircuitException, JSONException, IOException {
-		CircuitConverter converter = new CircuitConverter();
-		Circuit circuit = Circuit.fromJSON(Util.fileToJSONObject(nandCircuit));
-		String sbmlResult = converter.convert(circuit);
+		String sbmlResult = (new CircuitConverter()).convertFromFile(nandCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -86,9 +77,9 @@ public class TestCircuitConverter {
 		assertTrue(sbmlResult.contains("<species id=\"D\""));
 		assertTrue(sbmlResult.contains("<species id=\"mC\""));
 		assertTrue(sbmlResult.contains("<species id=\"mD\""));
-		assertTrue(sbmlResult.contains("<reaction id=\"transcription_and_A_B_mC\""));
-		assertTrue(sbmlResult.contains("<reaction id=\"translation_and_mC_C\""));
-		assertTrue(sbmlResult.contains("<reaction id=\"transcription_and_C_mD\""));
-		assertTrue(sbmlResult.contains("<reaction id=\"translation_and_mD_D\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"Transcription_and_A_B__mC\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"Translation_and_mC__C\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"Transcription_not_C__mD\""));
+		assertTrue(sbmlResult.contains("<reaction id=\"Translation_not_mD__D\""));
 	}
 }

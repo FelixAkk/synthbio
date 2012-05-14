@@ -16,8 +16,8 @@
  * More info on jquery http://api.jquery.com/
  */
 
-/*jslint devel: true, browser: true, sloppy: true, stupid: false, white: true, maxerr: 50, indent: 4 */
-/*global $ */
+/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio */
 
 /**
  * syntbio package.
@@ -78,7 +78,7 @@ synthbio.Gate = function(t, position){
 	this.kind = t;
 	this.setPosition(position);
 };
-synthbio.Gate.prototype.getType = function(){
+synthbio.Gate.prototype.getKind = function(){
 	return this.kind;
 }
 synthbio.Gate.prototype.getX = function(){
@@ -90,15 +90,14 @@ synthbio.Gate.prototype.getY = function(){
 synthbio.Gate.prototype.setPosition = function(position){
 	if(position instanceof synthbio.Point) {
 		this.position=position;
-	// if position is an array (i.d. has a length property)
-	} else if(position.length && !isNaN(parseInt(position[0], 10)) && !isNaN(parseInt(position[1], 10))) {
+	} else if($.isArray(position) && !isNaN(parseInt(position[0], 10)) && !isNaN(parseInt(position[1], 10))) {
 		this.position = new synthbio.Point(position);
 	} else {
 		throw "Position could not be parsed";
 	}
 };
 synthbio.Gate.prototype.getImage = function(html){
-	var img = "gates/" + this.getType() + ".svg";
+	var img = "gates/" + this.getKind() + ".svg";
 	if (html)
 		return "<embed src=\"img/" + img + "\" type=\"image/svg+xml\" />";
 	else
@@ -134,19 +133,21 @@ synthbio.Gate.fromJSON = function(json){
 
 /**
  * Signals
- * Signals hold proteins, an origin and a destination
+ * Signals hold proteins, an origin and a destination. A.K.A. wire, connection.
  * Note: To convert Signals to JSON use JSON.stringify(Signal)
  */
-synthbio.Signal = function(prot, origin, destination){
+synthbio.Signal = function(prot, from, to, fromEndpoint, toEndpoint){
 	this.protein = prot;
-	this.from = origin;
-	this.to = destination;
+	this.from = from;
+	this.to = to;
+	this.fromEndpoint = fromEndpoint;
+	this.toEndpoint = toEndpoint;
 };
 synthbio.Signal.prototype.toString = function(){
 	return this.protein + " links " + this.from + " with " + this.to;
 };
 synthbio.Signal.fromMap = function(map){
-	return new synthbio.Signal(map.protein, map.from, map.to);
+	return new synthbio.Signal(map.protein, map.from, map.to, map.fromEndpoint, map.toEndpoint);
 };
 synthbio.Signal.fromJSON = function(json){
 	return synthbio.Signal.fromMap($.parseJSON(json));
@@ -217,10 +218,12 @@ synthbio.Circuit.prototype.addGate = function(gate, position) {
 	if (!(gate instanceof synthbio.Gate) && position)
 		gate = new synthbio.Gate(gate, position);
 
-	if(gate instanceof synthbio.Gate) {
-		this.gates.push(gate);
-	} else {
-		throw "Provided gate is not of type synthbio.Gate";
+	if (this.gates.indexOf(gate) < 0) {
+		if(gate instanceof synthbio.Gate) {
+			this.gates.push(gate);
+		} else {
+			throw "Provided gate is not of type synthbio.Gate";
+		}
 	}
 
 	return gate;
@@ -254,7 +257,7 @@ synthbio.Circuit.prototype.getGates = function() {
 };
 
 /**
- * Check if gate exists (throws exception if not existent);
+ * Check if gate exists (throws exception if not existent).
  * @return Index of gate
  */
 synthbio.Circuit.prototype.checkGateExists = function(gate) {
@@ -272,20 +275,22 @@ synthbio.Circuit.prototype.checkGateExists = function(gate) {
 synthbio.Circuit.prototype.getGate = function(index) {
 	this.checkGateExists(index);
 	return this.gates[index];
-}
+};
 
 /**
  * Sort of a setter for signals.
  * @param signal An instance of synthbio.Signal
  */
-synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
-	if (!(signal instanceof synthbio.Signal) && origin !== undefined && destination !== undefined)
-		signal = new synthbio.Signal(signal, origin, destination);
+synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, toEndpoint) {
+	if (!(signal instanceof synthbio.Signal) && from !== undefined && to !== undefined)
+		signal = new synthbio.Signal(signal, from, to, fromEndpoint, toEndpoint);
 
-	if(signal instanceof synthbio.Signal) {
-		this.signals.push(signal);
-	} else {
-		throw "Provided signal is not of type synthbio.Signal";
+	if (this.signals.indexOf(signal) < 0) {
+		if(signal instanceof synthbio.Signal) {
+			this.signals.push(signal);
+		} else {
+			throw "Provided signal is not of type synthbio.Signal";
+		}
 	}
 
 	return signal;
@@ -294,18 +299,23 @@ synthbio.Circuit.prototype.addSignal = function(signal, origin, destination) {
 /**
  * Removes signals based on origin/destination. removeSignal() removes all signals.
  * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
- * @param destination Destination integer (not used if origin is a synthbio.Signal). Undefined to accept any destination.
+ * @param destination Destination integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
+ * @return array Returns array of removed signals.
  */
 synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 	if (origin instanceof synthbio.Signal) {
-		origin = origin.from;
+		var idx = this.signals.indexOf(origin);
+		if (idx >= 0)
+			return [this.signals.splice(idx, 1)];
+
 		destination = origin.to;
+		origin = origin.from;
 	}
 
 	var removed = [];
 	for(var i = 0; i < this.signals.length; i++)
-		if (((origin      === undefined) || (this.signals[i].from == origin)) &&
-		    ((destination === undefined) || (this.signals[i].to == destination))) 
+		if (((origin      === undefined) || (this.signals[i].from === origin)) &&
+		    ((destination === undefined) || (this.signals[i].to === destination))) 
 		{
 			removed.push(this.signals.splice(i, 1));
 			i--;
@@ -348,18 +358,18 @@ synthbio.model = new synthbio.Circuit("", "");
  * @param circuit An instance of synthbio.Circuit
  */
 synthbio.loadCircuit = function(circuit) {
-	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit."
-		+ " This is required.");
+	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
 
-	// Install model
-	synthbio.model = circuit;
-	//synthbio.gui.reset();
+	synthbio.gui.reset();
+
 	// Show the circuit; add all the elements
+	synthbio.model = circuit;
+
 	$.each(synthbio.model.gates, function(index, element) {
 		synthbio.gui.displayGate(element);
 	});
 	$.each(synthbio.model.signals, function(index, element){
-		//synthbio.gui.displaySignal(element);
+		synthbio.gui.displaySignal(element);
 	});
 	//TODO; implement grouping.
 };

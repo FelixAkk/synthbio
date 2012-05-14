@@ -64,4 +64,16 @@ public class Util{
 	public static JSONObject fileToJSONObject(String filename) throws JSONException, IOException{
 		return new JSONObject(fileToString(filename));
 	}
+	
+	/**
+	 * Helpful method for getting a string of tabs (used in CircuitConverter and Reaction).
+	 */
+	public static String tabs(int n) {
+		String r = "";
+		if(n > 0) {
+			for(int i = 0; i < n; i++)
+				r += "\t";
+		}
+		return r;
+	}
 }
