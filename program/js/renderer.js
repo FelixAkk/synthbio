@@ -39,7 +39,7 @@ $(document).ready(function() {
 			]
 		});			
 
-		// this is the paint style for the connecting lines..
+		// This is the paint style for the connecting lines..
 		var pointHoverStyle = {
 			lineWidth:3,
 			strokeStyle:"purple"
@@ -56,7 +56,7 @@ $(document).ready(function() {
 		};
 
 		var inputCounter = 0;
-		// the definition of input endpoints
+		// The definition of input endpoints
 		synthbio.gui.inputEndpoint = {
 			endpoint:"Rectangle",					
 			paintStyle:{ fillStyle:"#558822",width:11,height:11 },
@@ -86,7 +86,7 @@ $(document).ready(function() {
 			}
 		};
 
-		// the definition of target endpoints
+		// The definition of target endpoints
 		synthbio.gui.outputEndpoint = {
 			endpoint:"Dot",
 			paintStyle:{ fillStyle:"#225588",radius:7 },
@@ -100,7 +100,7 @@ $(document).ready(function() {
 		};
 
 		var connCount = 0;
-		// listen for new connections; initialise them the same way we initialise the connections at startup.
+		// Listen for new connections; initialise them the same way we initialise the connections at startup.
 		jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
 			var signal = connInfo.connection.getParameters().signal;
 			signal = (signal) ? signal : synthbio.gui.displayConnection(connInfo.connection).signal;
@@ -158,7 +158,7 @@ $(document).ready(function() {
 		});
 */
 
-		// listen for disposal of connections; delete endpoints if necessary
+		// Listen for disposal of connections; delete endpoints if necessary
 		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) {
 			if (connInfo.sourceId == "gate-input" && !connInfo.sourceEndpoint.connections.length)
 				jsPlumb.deleteEndpoint(connInfo.sourceEndpoint);
@@ -166,6 +166,12 @@ $(document).ready(function() {
 				jsPlumb.deleteEndpoint(connInfo.targetEndpoint);
 
 			synthbio.gui.removeDisplaySignal(connInfo.connection.id);
+		});
+
+		// Remove connection on double click	
+		jsPlumb.bind("dblclick", function(conn) {
+			if (confirm("Delete this connection?"))
+				synthbio.gui.removeDisplaySignal(conn.id);
 		});
 
 		jsPlumb.draggable("gate-input", {handle: "h4"});
