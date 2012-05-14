@@ -156,8 +156,9 @@ $(document).ready(function() {
 			synthbio.gui.removeDisplaySignal(connInfo.connection.id);
 		});
 
-		jsPlumb.draggable("gate-input");
-		jsPlumb.draggable("gate-output");
+		jsPlumb.draggable("gate-input", {handle: "h4"});
+		//$("gate-output").draggable({ });
+		jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
 
 		var oep = jQuery.extend(true, {	
 			anchor:"Continuous",

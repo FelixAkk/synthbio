@@ -173,6 +173,8 @@ $(document).ready(function() {
 	setTimeout(function() {
 		synthbio.loadCircuit(cir);
 	}, 500);
+
+
 });
 
 synthbio.gui.reset = function() {
