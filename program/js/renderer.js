@@ -116,25 +116,28 @@ $(document).ready(function() {
 			
 			var currentProt = "A";
 			var el = $("#conn" + connCount, 0);
-			el.html("<select class=\"wire\" id=\"wire"+connCount+"\">" +
-					"<option value=\"0\" selected=\"selected\">Choose protein</option>" +
-					"</select>"
-			);
 			
 			el.on("click", function(){
-				var prots='';
-				var wire = $("#wire"+connCount);
+				var prots="";
 				$.each(usedProteins, function(i, cds){
 					if(!(cds.used)){
 						prots+="<option value=\""+i+"\">"+i+"</option> ";
 					}
 				});
-				wire.html(prots);
-				if(!(usedProteins["A"].used)){
+				el.html("<select class=\"wire\" id=\"wire"+connCount+"\">" +
+					prots +
+					"</select>"
+				);
+			});
+			
+			el.on("change", function(){
+				var wire = $("#wire"+connCount);
+				if(!(usedProteins[wire.val()].used)){
 					usedProteins[wire.val()].used = true;
 					usedProteins[currentProt].used = false;
-					usedProteins.currentProt = wire.val();
+					currentProt = wire.val();
 				}
+				el.html(wire.val());
 			});
 		});
 
