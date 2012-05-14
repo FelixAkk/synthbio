@@ -9,6 +9,14 @@
  */
 
 $(document).ready(function() {
+	
+	var proteins = new Array();
+	
+	synthbio.requests.getCDSs(function(response){
+		$.each(response, function(i, cds){
+			proteins[i] = [cds.name,true]; 
+		});
+	});
 
 	jsPlumb.ready(function() {
 		jsPlumb.setRenderMode(jsPlumb.SVG);
@@ -101,29 +109,35 @@ $(document).ready(function() {
 			signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
 
 			connCount++;
-			var lbl = "<a id=\"conn" + connCount + "\" href=#>";
+			var lbl = "<a class=\"wires\" id=\"conn" + connCount + "\" href=#>";
 			lbl += (signal.protein) ? signal.protein : "Choose protein";
 			lbl += "</a>";
 			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
+			var currentProt = [null,false];
 			var el = $("#conn" + connCount, 0);
-			synthbio.requests.getCDSs(function(response){
-				var proteins='';
-				$.each(response, function(i, cds){
-					proteins+='<li><a href=\"#\">'+cds.name+'</a></li>';
-				});
-				el.html("<ul class=\"nav\">" +
-					"<li class=\"dropdown\">" +
-						"<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" id=\""+  connCount  +"\">Choose protein<b class=\"caret\"></b></a>"+
-							"<ul class=\"dropdown-menu\">" +
-								proteins +	
-							"</ul> " +
-						"</li>" +
-					"</ul>"
-				);
-			});
+			el.html("<select class=\"wire\" id=\"wire"+connCount+"\">" +
+					"<option value=\"0\" selected=\"selected\">Choose protein</option>" +
+					"</select>"
+			);
+			
 			el.on("click", function(){
-				$(connCount).textContent= "bla";
+				var prots='';
+				var wire = $("#wire"+connCount);
+				$.each(proteins, function(i, cds){
+					if(cds[1]){
+						prots+="<option value=\""+cds[0]+"\">"+cds[0]+"</option> ";
+					}
+				});
+				wire.html(prots);
+				
+				var indexNew = $.inArray([wire.val(),true],proteins);
+				var indexOld = $.inArray(currentProt, proteins);
+				if(indexNew > -1){
+					proteins[indexNew][1] = false;
+					proteins[indexOld][1] = true;
+					currentProt = proteins[indexNew];
+				}
 			});
 		});
 
