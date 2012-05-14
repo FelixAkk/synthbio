@@ -10,11 +10,11 @@
 
 $(document).ready(function() {
 	
-	var proteins = new Array();
+	var usedProteins;
 	
 	synthbio.requests.getCDSs(function(response){
 		$.each(response, function(i, cds){
-			proteins[i] = [cds.name,true]; 
+			usedProteins[cds.name] = {used: false}; 
 		});
 	});
 
@@ -109,6 +109,8 @@ $(document).ready(function() {
 			);
 			
 			el.on("click", function(){
+				if($("#wire"+connCount).val() ==0)
+				
 				var prots='';
 				var wire = $("#wire"+connCount);
 				$.each(proteins, function(i, cds){
@@ -117,7 +119,7 @@ $(document).ready(function() {
 					}
 				});
 				wire.html(prots);
-				
+			
 				var indexNew = $.inArray([wire.val(),true],proteins);
 				var indexOld = $.inArray(currentProt, proteins);
 				if(indexNew > -1){
