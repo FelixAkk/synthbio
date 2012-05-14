@@ -97,7 +97,7 @@ public class BioBrickRepository{
 	 *
 	 * If no such CDS exists, return null.
 	 *
-	 * @param The protein name to check.
+	 * @param name The protein name to check.
 	 * @return The CDS, or null if none exist.
 	 */
 	public CDS getCDS(String name){

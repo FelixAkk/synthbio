@@ -156,7 +156,7 @@ public class Circuit implements JSONString{
 	 *  - All gates have non-null
 	 *  - Valid use of proteins.
 	 *
-	 * @throws 
+	 * @throws CircuitException
 	 */
 	public void validate() throws CircuitException{
 		/* if there is one gate there should be at least one input and
@@ -283,7 +283,7 @@ public class Circuit implements JSONString{
 	/**
 	 * Deserialize JSON to a Circuit object.
 	 *
-	 * @param The String containin JSON
+	 * @param json The String containing JSON
 	 * @return The Circuit.
 	 */
 	public static Circuit fromJSON(String json) throws CircuitException, JSONException{
@@ -297,7 +297,7 @@ public class Circuit implements JSONString{
 	 * counterpart this method takes care of the non-trivial mappings of
 	 * dumb Signals and Gates to a set of Gates connected by references.
 	 *
-	 * @param The JSONObject containing the circuit information.
+	 * @param json The JSONObject containing the circuit information.
 	 * @return The Circuit.
 	 */
 	public static Circuit fromJSON(JSONObject json) throws CircuitException, JSONException{

@@ -10,14 +10,14 @@
 
 $(document).ready(function() {
 	
-	var proteins = new Array();
+	var usedProteins = {};
 	
 	synthbio.requests.getCDSs(function(response){
 		$.each(response, function(i, cds){
-			proteins[i] = [cds.name,true]; 
+			usedProteins[cds.name] = {used: false}; 
 		});
 	});
-
+	
 	jsPlumb.ready(function() {
 		jsPlumb.setRenderMode(jsPlumb.SVG);
 		jsPlumb.Defaults.Container = $("#grid-container");
@@ -114,30 +114,30 @@ $(document).ready(function() {
 			lbl += "</a>";
 			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
-			var currentProt = [null,false];
+			var currentProt = "A";
 			var el = $("#conn" + connCount, 0);
-			el.html('<select class="wire" id="wire"'+connCount+'">' +
-					'<option value="0" selected="selected">Choose protein</option>' +
-					"</select>"
-			);
 			
 			el.on("click", function(){
-				var prots='';
-				var wire = $("#wire"+connCount);
-				$.each(proteins, function(i, cds){
-					if(cds[1]){
-						prots += '<option value="' + cds[0] + '">' + cds[0] + '</option> ';
+				var prots="";
+				$.each(usedProteins, function(i, cds){
+					if(!(cds.used)){
+						prots += '<option value="' +i+ '">' +i+ "</option>";
 					}
 				});
-				wire.html(prots);
-				
-				var indexNew = $.inArray([wire.val(),true],proteins);
-				var indexOld = $.inArray(currentProt, proteins);
-				if(indexNew > -1){
-					proteins[indexNew][1] = false;
-					proteins[indexOld][1] = true;
-					currentProt = proteins[indexNew];
+				el.html('<select class="wire" id="wire'+connCount+'">' +
+					prots +
+					"</select>"
+				);
+			});
+			
+			el.on("change", function(){
+				var wire = $("#wire"+connCount);
+				if(!(usedProteins[wire.val()].used)){
+					usedProteins[wire.val()].used = true;
+					usedProteins[currentProt].used = false;
+					currentProt = wire.val();
 				}
+				el.html(wire.val());
 			});
 		});
 
