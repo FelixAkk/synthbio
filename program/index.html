@@ -26,7 +26,7 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li><a href="#">Save</a></li>
-					<li><a href="#">Save As…</a></li>
+					<li><a href="#save" data-toggle="modal">Save As…</a></li>
 					<li><a href="#">Open</a></li>
 					<li class="divider"></li>
 					<li><a href="#">Exit application</a></li>
@@ -95,8 +95,8 @@
 	<!-- ================================================== -->
 	<!-- this is where all the shizzle goes down! I'm tellin' ya -->
 	<div id="grid-container" class="stretch">
-		<div id="gate-input" class="gate input"><h3 class="handle">Inputs</h3></div>
-		<div id="gate-output" class="gate output"><h3 class="handle">Outputs</h3></div>
+		<div id="gate-input" class="gate input"><h4 class="handle"><i class="icon-grip"></i>Inputs<i class="icon-grip"></i></h4></div>
+		<div id="gate-output" class="gate output"><h4 class="handle"><i class="icon-grip"></i>Outputs<i class="icon-grip"></i></h4></div>
 	</div>
 	
 	<!-- Le Status Bar (at the bottom) -->
@@ -125,6 +125,31 @@
 			<p>
 				For more information, visit: <a href="https://github.com/FelixAkk/synthbio/">our GitHub page</a>
 			</p>
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal">Close</a>
+		</div>
+	</div>
+
+	<div class="modal hide fade in" id="save" data-keyboard="true">
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h3>Save As…</h3>
+		</div>
+		<div class="modal-body">
+			<table class="table table-bordered">
+				<thead>
+				<tr>
+					<th></th>
+					<th>Filename</th>
+					<th>size?</th>
+					<th>last modified?</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr><td colspan="4">loading...</td></tr>
+				</tbody>
+			</table>
 		</div>
 		<div class="modal-footer">
 			<a href="#" class="btn" data-dismiss="modal">Close</a>

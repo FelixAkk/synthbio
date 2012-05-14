@@ -131,7 +131,7 @@ $(document).ready(function() {
 			synthbio.model.removeSignal(fromIndex, toIndex);
 		});
 
-		//jsPlumb.draggable("gate-input");
+		jsPlumb.draggable("gate-input");
 		jsPlumb.draggable("gate-output");
 
 		var oep = jQuery.extend(true, {	

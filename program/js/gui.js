@@ -138,7 +138,7 @@ $(document).ready(function() {
 	// Hook mouseover listeners for all elements to display tooltips
 	synthbio.gui.setTooltip($("#gates-basic"),      "Predefined AND and NOT gates (fixed)");
 	synthbio.gui.setTooltip($("#gates-compound"),   "User defined compound gates (loaded from .syn)");
-	synthbio.gui.setTooltip($("#grid-container"),  "Hold Ctrl and drag a marquee to select a group of gates. " +
+	synthbio.gui.setTooltip($("#grid-container"),   "Hold Ctrl and drag a marquee to select a group of gates. " +
 		"Alternatively hold Ctrl and click on gates to toggle them as selected.");
 	synthbio.gui.setTooltip($("#gate-input"),       "Drag from here to define an input signal for a gate.");
 	synthbio.gui.setTooltip($("#gate-output"),      "Drop a signal endpoint in here to output the signal values.");
@@ -242,9 +242,9 @@ synthbio.gui.displayGateIdMap = {/*id12: object12, id34: object34*/};
  * @return Object with element, model and endpoints (exception if not found)
  */
 synthbio.gui.getGateById = function(id) {
-	if (id == "gate-input")
+	if (id === "gate-input")
 		return "input";
-	else if (id == "gate-output")
+	else if (id === "gate-output")
 		return "output";
 	else if (synthbio.gui.displayGateIdMap[id])
 		return synthbio.gui.displayGateIdMap[id];
