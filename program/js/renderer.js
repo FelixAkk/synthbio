@@ -14,24 +14,10 @@ $(document).ready(function() {
 	
 	synthbio.requests.getCDSs(function(response){
 		$.each(response, function(i, cds){
-			proteins[i] = cds.name; 
+			proteins[i] = [cds.name,true]; 
 		});
 	});
-	
-	//Check namespace = ok?
-	synthbio.availableCDS = function(){
-		var prot = proteins;
-		//Improve this
-		var taken = $(".wire").val();
-		$.each(taken, function(i, used){
-			var index = $.inArray(used,prot);
-			if(index>-1){
-				prot.splice(index,1);
-			}
-		});
-		return prot;
-	}
-	
+
 	jsPlumb.ready(function() {
 		jsPlumb.setRenderMode(jsPlumb.SVG);
 		jsPlumb.Defaults.Container = $("#grid-container");
@@ -115,6 +101,7 @@ $(document).ready(function() {
 			connCount++;
 			connInfo.connection.getOverlay("label").setLabel("<a class=\"wires\" id=\"conn" + connCount + "\" href=#>Choose protein</a>");
 			
+			var currentProt = [null,false];
 			var el = $("#conn" + connCount, 0);
 			el.html("<select class=\"wire\" id=\"wire"+connCount+"\">" +
 					"<option value=\"0\" selected=\"selected\">Choose protein</option>" +
@@ -123,13 +110,21 @@ $(document).ready(function() {
 			
 			el.on("click", function(){
 				var prots='';
-				var available = synthbio.availableCDS();
 				var wire = $("#wire"+connCount);
-				alert(available);
-				$.each(available, function(i, cds){
-					prots+="<option value=\""+cds+"\">"+cds+"</option> ";
+				$.each(proteins, function(i, cds){
+					if(cds[1]){
+						prots+="<option value=\""+cds[0]+"\">"+cds[0]+"</option> ";
+					}
 				});
 				wire.html(prots);
+				
+				var indexNew = $.inArray([wire.val(),true],proteins);
+				var indexOld = $.inArray(currentProt, proteins);
+				if(indexNew > -1){
+					proteins[indexNew][1] = false;
+					proteins[indexOld][1] = true;
+					currentProt = proteins[indexNew];
+				}
 			});
 		});
 
