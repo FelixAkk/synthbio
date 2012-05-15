@@ -245,15 +245,18 @@ synthbio.Circuit.prototype.removeGate = function(gate) {
 	this.removeSignal(idx, undefined);
 	this.removeSignal(undefined, idx);
 
-	for(var i = 0; i < this.signals.length; i++) {
-		if (this.signals[i].from > idx)
+	var i;
+	for(i = 0; i < this.signals.length; i++) {
+		if (this.signals[i].from > idx) {
 			this.signals[i].from--;
-		if (this.signals[i].to > idx)
+		}
+		if (this.signals[i].to > idx) {
 			this.signals[i].to--;
+		}
 	}
 
 	return this.gates.splice(idx, 1);
-}
+};
 
 /**
  * Getter for the array of gates.
@@ -268,11 +271,11 @@ synthbio.Circuit.prototype.getGates = function() {
  */
 synthbio.Circuit.prototype.checkGateExists = function(gate) {
 	var idx = (gate instanceof synthbio.Gate) ? this.indexOfGate(gate) : gate;
-	if (!(idx in this.gates)) {
+	if (!this.gates[idx]) {
 		throw "Gate " + gate + " undefined";
 	}
 	return idx;
-}
+};
 
 /**
  * Getter for a gate on index. Only returns if there is a gate on that index.
@@ -288,9 +291,10 @@ synthbio.Circuit.prototype.getGate = function(index) {
  * @param signal An instance of synthbio.Signal
  */
 synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, toEndpoint) {
-	if (!(signal instanceof synthbio.Signal) && from !== undefined && to !== undefined)
+	if (!(signal instanceof synthbio.Signal) && from !== undefined && to !== undefined){
 		signal = new synthbio.Signal(signal, from, to, fromEndpoint, toEndpoint);
-
+	}
+	
 	if (this.signals.indexOf(signal) < 0) {
 		if(signal instanceof synthbio.Signal) {
 			this.signals.push(signal);
@@ -311,22 +315,24 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 	if (origin instanceof synthbio.Signal) {
 		var idx = this.signals.indexOf(origin);
-		if (idx >= 0)
+		if (idx >= 0) {
 			return [this.signals.splice(idx, 1)];
-
+		}
+		
 		destination = origin.to;
 		origin = origin.from;
 	}
 
 	var removed = [];
-	for(var i = 0; i < this.signals.length; i++)
+	var i;
+	for(i = 0; i < this.signals.length; i++) {
 		if (((origin      === undefined) || (this.signals[i].from === origin)) &&
 		    ((destination === undefined) || (this.signals[i].to === destination))) 
 		{
 			removed.push(this.signals.splice(i, 1));
 			i--;
 		}
-
+	}
 	return removed;
 };
 
