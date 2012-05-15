@@ -38,7 +38,7 @@
 					<li><a href="#list-proteins" data-toggle="modal">Show proteins</a></li>
 					<li><a href="#">Validate circuit</a></li>
 					<li class="divider"></li>
-					<li><a href="#define-inputs">Define inputs</a></li>
+					<li><a href="#define-inputs" data-toggle="modal">Define inputs</a></li>
 					<li><a href="#">Show output graph</a></li>
 					<li class="divider"></li>
 					<li><a href="#">Run solver</a></li>
@@ -146,12 +146,11 @@
 			<h3>Define input signals</h3>
 		</div>
 		<div class="modal-body">
-			<div class="x-axis" title="One tick equals one second"> t &rarr; </div>
-			<div id="signals"></div>
-			<div id="save-inputs" class="btn btn-primary">Save input</div>
+			<div class="x-axis" title="One tick equals one second"> t &rarr;</div>
+			<div id="input-signals"></div>
 		</div>
 		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal">Save</a>
+			<div id="save-inputs" class="btn btn-primary" data-dismiss="modal">Save input</div>
 		</div>
 	</div>
 

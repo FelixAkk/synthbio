@@ -105,9 +105,66 @@ $(document).ready(function() {
 			$('#list-proteins tbody').html(html);
 		});
 	});
-	$('#list-proteins').on('hidden', function() {
-		$('#list-proteins tbody').html('<tr><td>Loading ...</td></tr>');
+
+	// Build the input thing.
+	$('#define-inputs').on('show', function() {
+		synthbio.gui = synthbio.gui || {};
+		synthbio.gui.inputTicks=40;
+
+		//iterate over signals and create signal input editors.
+			$.each(
+				synthbio.model.getInputSignals(),
+				function(index, name){
+					var signalEditor=$('<div class="signal" id="signal'+name+'">'+name+': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
+					var levels='<div class="levels">';
+					for(i=0; i<synthbio.gui.inputTicks; i++){
+						levels+='<div class="tick low"></div>';
+					}
+					levels+='</div>';
+					
+					signalEditor.append(levels);
+
+					$('#input-signals').append(signalEditor);
+				}
+			);
+			//attach click listener to the high/low button.
+			$('.toggle-highlow').click(function(){
+				var self=$(this);
+				self.toggleClass('high').toggleClass('low');
+				self.parent().find('.levels div').toggleClass('high').toggleClass('low');
+			});
+			
+			//click listener for each .levels div containing ticks.
+			$('.levels').click(function(event){
+				if($(event.target).hasClass('tick')){
+					$(event.target).toggleClass('low').toggleClass('high');
+					$(this).find('toggle-highlow').removeClass('low').removeClass('high');
+				}
+			});
+
+			$('#save-inputs').click(function(){
+				var inputs={
+					"length": synthbio.gui.inputTicks,
+					"values": {}
+				};
+				$('.signal').each(function(index, elem){
+					var signal='';
+					
+					$(this).find('.tick').each(function(index, elem){
+						if($(elem).hasClass('high')){
+							signal+='H';
+						}else{
+							signal+='L';
+						}
+					});
+
+					inputs.values[$(this).attr('id').substr(-1)]=signal;
+				});
+				console.log(JSON.stringify(inputs));
+			});
 	});
+
+	
 
 	// Setup file operation dialog on menu clicks
 	$("#save-as").on("click", function() {

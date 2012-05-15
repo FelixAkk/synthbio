@@ -308,6 +308,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 
 /**
  * Removes signals based on origin/destination. removeSignal() removes all signals.
+ * 
  * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
  * @param destination Destination integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
  * @return array Returns array of removed signals.
@@ -334,6 +335,15 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 		}
 	}
 	return removed;
+};
+
+/**
+ * Return a list of input signals for this circuit.
+ *
+ * @todo: implement.
+ */
+synthbio.Circuit.prototype.getInputSignals = function(){
+	return ["A", "B", "C"];
 };
 
 /**
