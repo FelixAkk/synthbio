@@ -5,8 +5,8 @@
  * TU Delft - University of Technology
  *
  * Authors:
- * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
- * 	Albert ten Napel, Jan Pieter Waagmeester
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
  *
@@ -14,8 +14,8 @@
  * GUI JavaScript Document, concerns all GUI matters except those about the modeling grid.
  */
 
-/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
-/*global $, synthbio */
+/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio, jsPlumb */
 
 /**
  * syntbio package.
@@ -45,7 +45,7 @@ synthbio.gui.navbarHeight = parseFloat($('.navbar').css("height"));
 /**
  * Get normal gates dimensions
  */
-synthbio.gui.gateDimensions = function() {
+synthbio.gui.gateDimensions = (function () {
 	// Create
 	var dummyGate = $('<div class="gate"></div>').hide().appendTo("body");
 	// Get
@@ -57,7 +57,7 @@ synthbio.gui.gateDimensions = function() {
 	dummyGate.remove();
 	// Assign
 	return dimensions;
-}();
+}());
 
 /**
  * Variable that references the function that is to be used for handling a file selection in the file dialog. This is
@@ -82,10 +82,10 @@ synthbio.gui.setTooltip = function(element, infoMessage) {
 	// Set bubbling to false, prevents overlapping elements from also firing their tooltip and surpressing the bottom
 	element.bind("mouseover", false);
 	element.bind("mouseout", synthbio.gui.resetTooltip);
-}
+};
 synthbio.gui.resetTooltip = function() {
 	$("#info").html("Mouse over info something for info.");
-}
+};
 
 $(document).ready(function() {
 	// Activate zhe Dropdowns Herr Doktor!
@@ -95,7 +95,7 @@ $(document).ready(function() {
 	$('#list-proteins').on('show', function() {
 		synthbio.requests.getCDSs(function(response) {
 			if(response instanceof String) {
-				$('#list-proteins tbody td').html(data.response);
+				$('#list-proteins tbody td').html(response);
 				return;
 			}
 			var html='';
@@ -137,7 +137,7 @@ $(document).ready(function() {
 		synthbio.requests.listFiles(function(response) {
 			// problemu technicznego
 			if(response instanceof String) {
-				$('#list-files tbody td').html(data.response);
+				$('#list-files tbody td').html(response);
 				return;
 			}
 			// Setup the text input box for entering the filename operate on
@@ -249,7 +249,7 @@ $(document).ready(function() {
 
 synthbio.gui.reset = function() {
 	jsPlumb.removeEveryEndpoint();
-	for (id in synthbio.gui.displayGateIdMap) {
+	for (var id in synthbio.gui.displayGateIdMap) {
 		synthbio.gui.removeDisplayGate(id);
 	}
 

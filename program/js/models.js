@@ -5,19 +5,20 @@
  * TU Delft - University of Technology
  *
  * Authors:
- * Felix Akkermans, Niels Doekemeijer, Thomas van Helden
- * Albert ten Napel, Jan Pieter Waagmeester
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
- *
- * @author	Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
- *
- * Definition of models.
- * More info on jquery http://api.jquery.com/
  */
 
-/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio */
+
+/**
+ * Definition of models.
+ * @author	Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
+ *
+ */
 
 /**
  * syntbio package.
@@ -80,7 +81,7 @@ synthbio.Gate = function(t, position){
 };
 synthbio.Gate.prototype.getKind = function(){
 	return this.kind;
-}
+};
 synthbio.Gate.prototype.getX = function(){
 	return this.position.getX();
 };
@@ -98,28 +99,31 @@ synthbio.Gate.prototype.setPosition = function(position){
 };
 synthbio.Gate.prototype.getImage = function(html){
 	var img = "gates/" + this.getKind() + ".svg";
-	if (html)
+	if (html) {
 		return '<embed src="img/' + img + '" type="image/svg+xml" />';
-	else
+	} else {
 		return img;
-}
+	}
+};
 synthbio.Gate.prototype.getInputCount = function(){
 	//TODO: better way to determine number of inputs/outputs
-	if(this.kind == "not")
+	if(this.kind === "not") {
 		return 1;
-	else if (this.kind == "and")
+	} else if (this.kind === "and") {
 		return 2;
-	else
+	} else {
 		throw "Cannot determine number of input gates";
-}
+	}
+};
 synthbio.Gate.prototype.getOutputCount = function(){
-	if(this.kind == "not")
+	if(this.kind === "not") {
 		return 1;
-	else if (this.kind == "and")
+	} else if (this.kind === "and") {
 		return 1;
-	else
+	} else {
 		throw "Cannot determine number of output gates";
-}
+	}
+};
 synthbio.Gate.prototype.toString = function(){
 	return this.kind + ": X = " + this.position.getX() + ", Y = "+ this.position.getY();
 };
@@ -205,19 +209,21 @@ synthbio.Circuit.fromJSON = function(json) {
  */
 synthbio.Circuit.prototype.indexOfGate = function(gate) {
 	var idx = this.gates.indexOf(gate);
-	if (idx < 0)
+	if (idx < 0) {
 		throw "Gate is not present in circuit";
+	}
 	return idx;
-}
+};
 
 /**
  * Sort of a setter for gates.
  * @param gate An instance of synthbio.Gate
  */
 synthbio.Circuit.prototype.addGate = function(gate, position) {
-	if (!(gate instanceof synthbio.Gate) && position)
+	if (!(gate instanceof synthbio.Gate) && position) {
 		gate = new synthbio.Gate(gate, position);
-
+	}
+	
 	if (this.gates.indexOf(gate) < 0) {
 		if(gate instanceof synthbio.Gate) {
 			this.gates.push(gate);
