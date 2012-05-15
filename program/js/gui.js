@@ -14,6 +14,9 @@
  * GUI JavaScript Document, concerns all GUI matters except those about the modeling grid.
  */
 
+/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio */
+
 /**
  * syntbio package.
  */
@@ -44,7 +47,7 @@ synthbio.gui.navbarHeight = parseFloat($('.navbar').css("height"));
  */
 synthbio.gui.gateDimensions = function() {
 	// Create
-	var dummyGate = $("<div class=\"gate\"></div>").hide().appendTo("body");
+	var dummyGate = $('<div class="gate"></div>').hide().appendTo("body");
 	// Get
 	var dimensions = {
 		width: parseFloat(dummyGate.css("width"), 10),
@@ -55,6 +58,18 @@ synthbio.gui.gateDimensions = function() {
 	// Assign
 	return dimensions;
 }();
+
+/**
+ * Variable that references the function that is to be used for handling a file selection in the file dialog. This is
+ * a little trickery/hackery because we use 1 dialog for all file operations (save as, open, view), and always set this
+ * variable to the corresponding event handler.
+ *
+ * @param index This function is always given an integer index. This correspons to the selected file in the array the
+ * synthbio.requests.listFiles() AJAX RPC provided just before the file was selected.
+ */
+synthbio.gui.fileOpHandler = function(index) {
+	console.error("Oops! No file selection event handler has been set. This is the default which should never fire!");
+};
 
 /**
  * Statusbar info tooltip function
@@ -88,6 +103,61 @@ $(document).ready(function() {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
 			$('#list-proteins tbody').html(html);
+		});
+	});
+	$('#list-proteins').on('hidden', function() {
+		$('#list-proteins tbody').html('<tr><td>Loading ...</td></tr>');
+	});
+
+	// Setup file operation dialog on menu clicks
+	$("#save-as").on("click", function() {
+		$("#files .modal-header h3").html("Save As…");
+		$("#files .modal-footer .btn-primary").html("Save As…");
+	});
+	$("#open").on("click", function() {
+		$("#files .modal-header h3").html("Open…");
+		$("#files .modal-footer .btn-primary").html("Open…");
+	});
+	// Cleanup time; prepare it for another time
+	$('#files').on('hidden', function() {
+		$("#files tbody").html('<tr><td>Loading ...</td></tr>');
+		var inputfield = $("#files .modal-footer input");
+		// clear entered text
+		inputfield[0].value = '';
+		// clear autocomplete
+		inputfield.typeahead({
+			source: []
+		});
+
+	});
+
+	// List files from server.
+	$('#files').on('show', function(event) {
+		// Request stuff from server and define what happens next
+		synthbio.requests.listFiles(function(response) {
+			// problemu technicznego
+			if(response instanceof String) {
+				$('#list-files tbody td').html(data.response);
+				return;
+			}
+			// Setup the text input box for entering the filename operate on
+			$("#files .modal-footer input").typeahead({
+				// The possible auto completions, the same as the files listed
+				source: response
+			});
+			var html='';
+			$.each(response, function(i, file) {
+				html+='<tr><td>'+file+'</td><td>x</td><td>x</td></tr>';
+			});
+			$('#files tbody').html(html);
+
+			// Make each row respond to selection
+			$("#files tbody tr").each(function(index, element) {
+				element = $(element); // extend to provide the .on() function
+				element.on("click", function() {
+					synthbio.gui.fileOpHandler(index);
+				});
+			});
 		});
 	});
 
@@ -136,8 +206,8 @@ $(document).ready(function() {
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();
 	// Hook mouseover listeners for all elements to display tooltips
-	synthbio.gui.setTooltip($("#gates-basic"),      "Predefined AND and NOT gates (fixed)");
-	synthbio.gui.setTooltip($("#gates-compound"),   "User defined compound gates (loaded from .syn)");
+	synthbio.gui.setTooltip($("#gates-basic"),      "Predefined AND and NOT gates (fixed). Drag into the modelling grid.");
+	synthbio.gui.setTooltip($("#gates-compound"),   "User defined compound gates (loaded from .syn). Drag into the modelling grid.");
 	synthbio.gui.setTooltip($("#grid-container"),   "Hold Ctrl and drag a marquee to select a group of gates. " +
 		"Alternatively hold Ctrl and click on gates to toggle them as selected.");
 	synthbio.gui.setTooltip($("#gate-input"),       "Drag from here to define an input signal for a gate.");
@@ -433,9 +503,9 @@ synthbio.gui.displayGate = function(gateModel) {
 	synthbio.util.assert(gateModel instanceof synthbio.Gate, "Provided gate ojbect must be an instance of 'synthbio.Gate'");
 	
 	// Create new display element
-	var element = $("<div class=\"gate " + gateModel.getKind() + "\">"
+	var element = $('<div class="gate ' + gateModel.getKind() + '">'
 		+ gateModel.getImage(true)
-		+ "<div class=\"mask\"></div>"
+		+ '<div class="mask"></div>'
 		+ "</div>");
 
 	// Place new element in grid

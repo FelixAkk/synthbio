@@ -25,9 +25,9 @@
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
 				<ul class="dropdown-menu">
-					<li><a href="#">Save</a></li>
-					<li><a href="#save" data-toggle="modal">Save As…</a></li>
-					<li><a href="#">Open</a></li>
+					<li><a href="#files" data-toggle="modal" id="open">Open</a></li>
+					<li><a href="#" id="save">Save</a></li>
+					<li><a href="#files" data-toggle="modal" id="save-as">Save As…</a></li>
 					<li class="divider"></li>
 					<li><a href="#">Exit application</a></li>
 				</ul>
@@ -158,27 +158,30 @@
 	<!--
 	Modal to save the circuit to the server.
 	-->
-	<div class="modal hide fade in" id="save" data-keyboard="true">
+	<div class="modal hide fade in" id="files" data-keyboard="true">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">×</a>
-			<h3>Save As…</h3>
+			<h3>Files on server</h3>
 		</div>
 		<div class="modal-body">
 			<table class="table table-bordered">
 				<thead>
 				<tr>
-					<th></th>
 					<th>Filename</th>
-					<th>size?</th>
-					<th>last modified?</th>
+					<th>Gates</th>
+					<th>Last modified</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr><td colspan="4">loading...</td></tr>
+				<tr><td colspan="3">loading...</td></tr>
 				</tbody>
 			</table>
 		</div>
 		<div class="modal-footer">
+			<form class="typeahead-group form-search">
+				<input type="text" class="span3" data-provide="typeahead" data-items="4" placeholder="Filename …"/>
+				<button type="submit" class="btn btn-primary">File action</button>
+			</form>
 			<a href="#" class="btn" data-dismiss="modal">Close</a>
 		</div>
 	</div>
@@ -192,7 +195,7 @@
 			<h3>List of available proteins</h3>
 		</div>
 		<div class="modal-body">
-			<table class="table table-bordered">
+			<table class="table table-bordered" style="margin-bottom: 0;">
 				<thead>
 					<tr>
 						<th></th>

@@ -9,15 +9,13 @@
  * 	Albert ten Napel, Jan Pieter Waagmeester
  * 
  * https://github.com/FelixAkk/synthbio
- */
-
-
-/**
+ *
  * Connection to the server API, as defined in
  * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
- *
- * 
  */
+
+/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio */
 
 /**
  * syntbio package.
