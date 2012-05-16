@@ -87,6 +87,90 @@ synthbio.gui.resetTooltip = function() {
 	$("#info").html("Mouse over info something for info.");
 };
 
+/**
+ * Functions to support the input editor.
+ */
+
+/**
+ * Create the input editor.
+ */
+synthbio.gui.inputEditor = function(){
+	console.log('entered inputEditor');
+	//only initialize once.
+	if($(this).hasClass("initialized")){
+		return;
+	}
+	
+	var i;
+	var inputs=synthbio.model.getInputs();
+	//iterate over signals and create signal input editors.
+	$.each(
+		inputs.values,
+		function(name, ticks){
+			var signalEditor=$('<div class="signal" id="signal'+name+'">'+name+': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
+			var levels='<div class="levels">';
+			var currentLevel;
+			for(i=0; i<inputs.length; i++){
+				if(ticks.length>=i){
+					currentLevel=ticks.charAt(i);
+				}
+				
+				levels+='<div class="tick '+(currentLevel ? 'high': 'low')+'"></div>';
+			}
+			levels+='</div>';
+					
+			signalEditor.append(levels);
+			$('#input-signals').append(signalEditor);
+		}
+	);
+	//attach click listener to the high/low button.
+	$('.toggle-highlow').click(function(){
+		var self=$(this);
+		self.toggleClass('high').toggleClass('low');
+		self.parent().find('.levels div').toggleClass('high').toggleClass('low');
+	});
+	
+	//click listener for each .levels div containing ticks.
+	$('.levels').click(function(event){
+		if($(event.target).hasClass('tick')){
+			$(event.target).toggleClass('low').toggleClass('high');
+			$(this).find('toggle-highlow').removeClass('low').removeClass('high');
+		}
+	});
+	
+	//set the container to initialized.
+	$(this).addClass("initialized");
+};
+synthbio.gui.rebuildInputEditor = function(){
+
+};
+
+/**
+ * Save inputs back to circuit.
+ * 
+ * @param circuit the circuit to save to, defaults to syntbio.model
+ */
+synthbio.gui.saveInputs = function(circuit){
+	circuit=circuit || synthbio.model;
+	var inputs={
+		"length": synthbio.gui.inputTicks,
+		"values": {}
+	};
+	$('.signal').each(function(index, elem){
+		var signal='';
+		$(this).find('.tick').each(function(index, elem){
+			if($(elem).hasClass('high')){
+				signal+='H';
+			}else{
+				signal+='L';
+			}
+		});
+
+		inputs.values[$(this).attr('id').substr(-1)]=signal;
+	});
+	circuit.setInputs(inputs);
+};
+
 $(document).ready(function() {
 	// Activate zhe Dropdowns Herr Doktor!
 	$('.dropdown-toggle').dropdown();
@@ -108,60 +192,14 @@ $(document).ready(function() {
 
 	// Build the input thing.
 	$('#define-inputs').on('show', function() {
-		synthbio.gui = synthbio.gui || {};
-		synthbio.gui.inputTicks=40;
 
-		//iterate over signals and create signal input editors.
-			$.each(
-				synthbio.model.getInputSignals(),
-				function(index, name){
-					var signalEditor=$('<div class="signal" id="signal'+name+'">'+name+': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
-					var levels='<div class="levels">';
-					for(i=0; i<synthbio.gui.inputTicks; i++){
-						levels+='<div class="tick low"></div>';
-					}
-					levels+='</div>';
-					
-					signalEditor.append(levels);
+		// build the editor
+		synthbio.gui.inputEditor();
 
-					$('#input-signals').append(signalEditor);
-				}
-			);
-			//attach click listener to the high/low button.
-			$('.toggle-highlow').click(function(){
-				var self=$(this);
-				self.toggleClass('high').toggleClass('low');
-				self.parent().find('.levels div').toggleClass('high').toggleClass('low');
-			});
-			
-			//click listener for each .levels div containing ticks.
-			$('.levels').click(function(event){
-				if($(event.target).hasClass('tick')){
-					$(event.target).toggleClass('low').toggleClass('high');
-					$(this).find('toggle-highlow').removeClass('low').removeClass('high');
-				}
-			});
-
-			$('#save-inputs').click(function(){
-				var inputs={
-					"length": synthbio.gui.inputTicks,
-					"values": {}
-				};
-				$('.signal').each(function(index, elem){
-					var signal='';
-					
-					$(this).find('.tick').each(function(index, elem){
-						if($(elem).hasClass('high')){
-							signal+='H';
-						}else{
-							signal+='L';
-						}
-					});
-
-					inputs.values[$(this).attr('id').substr(-1)]=signal;
-				});
-				console.log(JSON.stringify(inputs));
-			});
+		// attach action to save button.
+		$('#save-inputs').click(function(){
+			synthbio.gui.saveInputs();
+		});
 	});
 
 	
@@ -259,7 +297,8 @@ $(document).ready(function() {
 	});
 
 	// Start pinging
-	synthbio.gui.pingServer();
+	//synthbio.gui.pingServer();
+	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();
 	// Hook mouseover listeners for all elements to display tooltips

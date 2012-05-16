@@ -136,8 +136,9 @@ synthbio.Gate.fromJSON = function(json){
 
 
 /**
- * Signals
+ * Signal
  * Signals hold proteins, an origin and a destination. A.K.A. wire, connection.
+ * 
  * Note: To convert Signals to JSON use JSON.stringify(Signal)
  */
 synthbio.Signal = function(prot, from, to, fromEndpoint, toEndpoint){
@@ -157,24 +158,31 @@ synthbio.Signal.fromJSON = function(json){
 	return synthbio.Signal.fromMap($.parseJSON(json));
 };
 
-
 /**
- * Circuits
- * Circuits hold a name, a description, gates, how gates are grouped and which signals connect them
+ * Circuit
+ * Circuits hold a name, a description, gates, which signals connect them
+ * and optional grouping information.
+ * 
  * Note: To convert Circuits into JSON use JSON.stringify(Circuit)
  */
-synthbio.Circuit = function(circuitName, desc, gates, signals, groupings){
+synthbio.Circuit = function(circuitName, desc, gates, signals, groupings, inputs){
 	this.name = circuitName;
 	this.description = desc;
 
 	//make gates, signals and groupings default to empty an array 
 	this.gates = gates || [];
 	this.signals = signals || [];
-	this.groups = groupings || []; 
+	this.groups = groupings || [];
+
+	//a default for the inputs object.
+	this.inputs = inputs || { "length": 40, "values": {} };
 };
 
 synthbio.Circuit.prototype.toString = function(){
-	return this.name + ": " + this.desc + " consists of gates:{ " + this.gates.toString() + " } and signals:{ " + this.signals.toString() + " } and groupings:{ " + this.groups + "}";
+	return this.name + ": " + this.desc +
+		" consists of gates:{ " + this.gates.toString() + " }" +
+		" and signals:{ " + this.signals.toString() + " }" +
+		" and groupings:{ " + this.groups + "}";
 };
 
 /**
@@ -185,22 +193,29 @@ synthbio.Circuit.prototype.toString = function(){
 synthbio.Circuit.fromJSON = function(json) {
 	var map = $.parseJSON(json);
 	
-	var gates=[], signals=[], groups=[];
+	var circuit=new synthbio.Circuit(map.name, map.description);
 
-	$.each(map.gates, function(i, elem){
-		gates[i]=synthbio.Gate.fromMap(elem);
+	//add the gates
+	$.each(map.gates, function(i, elem) {
+		circuit.addGate(synthbio.Gate.fromMap(elem));
 	});
 
-	$.each(map.signals, function(i, elem){
-		signals[i]=synthbio.Signal.fromMap(elem);
+	//and the signals
+	$.each(map.signals, function(i, elem) {
+		circuit.addSignal(synthbio.Signal.fromMap(elem));
 	});
 
 	//TODO: implement grouping.
 	//~ $.each(map.groups, function(i, elem){
-	//~		groups[i]=synthbio.Group.fromMap(elem);
+	//~		circuit.addGroup(synthbio.Group.fromMap(elem));
 	//~ });
 
-	return new synthbio.Circuit(map.name, map.description, gates, signals, groups);
+	//if input information is present, add that as well
+	if (map.inputs) {
+		circuit.setInputs(map.inputs);
+	}
+
+	return circuit;
 };
 
 /**
@@ -338,12 +353,18 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 };
 
 /**
- * Return a list of input signals for this circuit.
+ * Return the inputs object for this circuit.
  *
  * @todo: implement.
  */
-synthbio.Circuit.prototype.getInputSignals = function(){
-	return ["A", "B", "C"];
+synthbio.Circuit.prototype.getInputs = function(){
+	
+	return this.inputs;
+};
+
+synthbio.Circuit.prototype.setInputs = function(inputs){
+	this.inputs=inputs;
+	console.log(this);
 };
 
 /**

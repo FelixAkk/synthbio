@@ -52,7 +52,9 @@ var circuitJSON=
 	'"description":"'+circuitDescription+'",'+
 	'"gates":['+gateJSON+','+gateJSON+'],'+
 	'"signals":['+signalJSON+','+signalJSON+'],'+
-	'"groups":[]}';
+	'"groups":[],'+
+	'"inputs":{"length":40,"values":{}}'+
+	'}';
 	
 /**
  * The actual tests
