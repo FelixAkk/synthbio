@@ -113,11 +113,27 @@ $(document).ready(function() {
 	$("#save-as").on("click", function() {
 		$("#files .modal-header h3").html("Save As…");
 		$("#files .modal-footer .btn-primary").html("Save As…");
+		// Set the correct event handler
+		synthbio.gui.fileOpHandler = synthbio.gui.saveAsHandler;
 	});
 	$("#open").on("click", function() {
 		$("#files .modal-header h3").html("Open…");
 		$("#files .modal-footer .btn-primary").html("Open…");
+		// Set the correct event handler
+		synthbio.gui.fileOpHandler = synthbio.gui.openHandler;
+		$("#files form").on("submit", function(event) {
+			// Surpress default redirection due to <form action="destination.html"> action
+			event.stopPropagation();
+			event.preventDefault();
+			var input = $("input", this)[0].value;
+			if($("#files .modal-footer input").typ)
+			console.log();
+			//synthbio.gui.fileOpHandler(this.value);
+
+			return false; // would prevent the form from making us go anywhere if .preventDefault() fails
+		});
 	});
+
 	// Cleanup time; prepare it for another time
 	$('#files').on('hidden', function() {
 		$("#files tbody").html('<tr><td>Loading ...</td></tr>');
@@ -132,7 +148,7 @@ $(document).ready(function() {
 	});
 
 	// List files from server.
-	$('#files').on('show', function(event) {
+	$('#files').on('show', function() {
 		// Request stuff from server and define what happens next
 		synthbio.requests.listFiles(function(response) {
 			// problemu technicznego
@@ -155,7 +171,8 @@ $(document).ready(function() {
 			$("#files tbody tr").each(function(index, element) {
 				element = $(element); // extend to provide the .on() function
 				element.on("click", function() {
-					synthbio.gui.fileOpHandler(index);
+					synthbio.gui.fileOpHandler(response[index]);
+					$('#files').modal('hide');
 				});
 			});
 		});
@@ -246,6 +263,20 @@ $(document).ready(function() {
 
 
 });
+
+/**
+ * Handles whap happens when a file has been selected for opening in the file dialog.
+ *
+ * @param fileName The name of the file that was selected
+ */
+synthbio.gui.openHandler = function(fileName) {
+	synthbio.requests.getFile(fileName, function (response) {
+		if(response.success === false) {
+			console.error(response.message);
+		}
+		console.log(response.data);
+	});
+}
 
 synthbio.gui.reset = function() {
 	jsPlumb.removeEveryEndpoint();
