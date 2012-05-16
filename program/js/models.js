@@ -353,18 +353,34 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 };
 
 /**
- * Return the inputs object for this circuit.
+ * Return a list of input proteins.
  *
  * @todo: implement.
  */
+synthbio.Circuit.prototype.getInputSignals = function(){
+	return ["A", "B"];
+};
+
+/**
+ * Return the inputs object for this circuit.
+ *
+ */
 synthbio.Circuit.prototype.getInputs = function(){
-	
+	//make sure all current signals are contained in the inputs,
+	//set them to low.
+	var signals=this.getInputSignals();
+	var self=this;
+	$.each(signals, function(index, signal){
+		if(!self.inputs.values[signal]){
+			self.inputs.values[signal]="L";
+		}
+	});
 	return this.inputs;
 };
 
 synthbio.Circuit.prototype.setInputs = function(inputs){
+	//@todo: verify proteins in inputs parameter againts this.getInputSignals
 	this.inputs=inputs;
-	console.log(this);
 };
 
 /**

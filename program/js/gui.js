@@ -109,13 +109,12 @@ synthbio.gui.inputEditor = function(){
 		function(name, ticks){
 			var signalEditor=$('<div class="signal" id="signal'+name+'">'+name+': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
 			var levels='<div class="levels">';
-			var currentLevel;
+			var currentLevel="L";
 			for(i=0; i<inputs.length; i++){
-				if(ticks.length>=i){
+				if(i < ticks.length){
 					currentLevel=ticks.charAt(i);
 				}
-				
-				levels+='<div class="tick '+(currentLevel ? 'high': 'low')+'"></div>';
+				levels+='<div class="tick '+(currentLevel==="H" ? 'high': 'low')+'"></div>';
 			}
 			levels+='</div>';
 					
@@ -297,7 +296,7 @@ $(document).ready(function() {
 	});
 
 	// Start pinging
-	//synthbio.gui.pingServer();
+	synthbio.gui.pingServer();
 	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();
