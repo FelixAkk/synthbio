@@ -18,6 +18,7 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
@@ -267,5 +268,22 @@ public class TestCircuit{
 		thrown.expectMessage("Signal[from] should be either a integer index pointing to a gate or the string 'input'");
 
 		this.loadTestFile("invalidGateIndex.json");
+	}
+
+	/**
+	 * Test a Circuit fromJSON conversion with an input object present.
+	 */
+	@Test
+	public void testFromJSON_exampleWithInputs() throws Exception {
+		Circuit c=this.loadTestFile("example-with-inputs.json");
+
+		String[] expectedInputs={"A", "B"};
+		assertThat(c.getInputs(), hasItems(expectedInputs));
+		assertTrue(c.hasInput("A"));
+		assertTrue(c.hasInput("B"));
+
+		System.out.println(c.getSimulationInput());
+		assertThat(c.getSimulationInput("A"), equalTo("H"));
+		assertThat(c.getSimulationInput("B"), equalTo("LLLLLLLLLLLLLLLLLLLLH"));
 	}
 }

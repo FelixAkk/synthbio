@@ -373,6 +373,9 @@ synthbio.Circuit.prototype.getInputs = function(){
 	$.each(signals, function(index, signal){
 		if(!self.inputs.values[signal]){
 			self.inputs.values[signal]="L";
+		}else{
+			//remove spaces from input string.
+			self.inputs.values[signal]=self.inputs.values[signal].replace(" ", "");
 		}
 	});
 	return this.inputs;
