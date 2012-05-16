@@ -135,7 +135,8 @@
 			<!-- provide links to javadocs of certain libraries -->
 			<link href="http://json.org/javadoc/" />
 			<link href="http://junit.sourceforge.net/javadoc/" />
-			<link href="http://download.oracle.com/javase/6/docs/api/"/>
+			<link href="http://download.oracle.com/javase/6/docs/api/" />
+			<link href="http://sbml.org/Special/Software/JSBML/build/apidocs/" />
 <!--
 			<tag name="todo" scope="all" description="To do:"/>
 -->
