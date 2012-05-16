@@ -11,7 +11,7 @@
  * https://github.com/FelixAkk/synthbio
  */
 
-/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*jslint devel: true, browser: true, vars: true, plusplus: true, regexp: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio */
 
 /**
@@ -374,8 +374,8 @@ synthbio.Circuit.prototype.getInputs = function(){
 		if(!self.inputs.values[signal]){
 			self.inputs.values[signal]="L";
 		}else{
-			//remove spaces from input string.
-			self.inputs.values[signal]=self.inputs.values[signal].replace(" ", "");
+			//remove all but (H|L) from input string.
+			self.inputs.values[signal]=self.inputs.values[signal].replace(/[^HL]/g, "");
 		}
 	});
 	return this.inputs;
