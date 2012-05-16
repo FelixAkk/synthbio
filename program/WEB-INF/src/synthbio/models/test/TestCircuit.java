@@ -38,15 +38,6 @@ public class TestCircuit{
 	public ExpectedException thrown = ExpectedException.none();
 
 	/**
-	 * Load a test JSON file from the file system and convert it to JSON
-	 */
-	private Circuit loadTestFile(String filename) throws Exception{
-		String json=Util.fileToString("data/test/models/"+filename);
-		
-		return Circuit.fromJSON(json);
-	}
-
-	/**
 	 * Return a gate (and(A,B)->C).
 	 */
 	private Gate getAndGate(){
@@ -120,7 +111,7 @@ public class TestCircuit{
 
 	
 	@Test
-	public void testValidity_oneGateNoInputs()throws Exception{
+	public void testValidity_oneGateNoInputs() throws Exception {
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("Circuit with one Gate should have at least one input.");
 		
@@ -132,7 +123,7 @@ public class TestCircuit{
 	}
 	
 	@Test
-	public void testValidity_oneGateNoOutputs()throws Exception{
+	public void testValidity_oneGateNoOutputs() throws Exception {
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("Circuit with one Gate should have at least one output.");
 		
@@ -144,146 +135,38 @@ public class TestCircuit{
 		c.validate();
 	}
 	
-
 	/**
-	 * Test some valid example circuits.
+	 * Define some inputs and check if getSimulationInputAt() returns
+	 * things we expect it to return...
 	 */
 	@Test
-	public void testFromJSON_examplesyn() throws Exception{
-		Circuit c=this.loadTestFile("exampleCircuit.json");
+	public void testInputSignals_inputAt() throws Exception {
+		Circuit c=new Circuit("foo", "bar");
+		c.addGate(this.getAndGate());
+		c.addInput("A");
+		c.addInput("B");
 
-		assertEquals("example.syn", c.getName());
-		assertEquals("Logic for this circuit: D = ~(A^B)", c.getDescription());
+		c.setSimulationLength(40);
+		c.addSimulationInput("A", "LLLH");
+		c.addSimulationInput("B", "HLHL");
 
-		assertEquals(2, c.getGates().size());
-
-		assertEquals("[and(A,B)->C @(2.0,2.0)]", c.gateAt(0).toString());
-		assertEquals("[not(C)->D @(2.0,4.0)]", c.gateAt(1).toString());
-
-		//test inputs and outputs
-		assertThat(c.getInputs(), hasItems("A", "B"));
-		assertThat(c.getOutputs(), hasItems("D"));
-	}
-
-	@Test
-	public void testFromJSON_example2syn() throws Exception{
-		Circuit c=this.loadTestFile("exampleCircuit2.json");
-
-		assertEquals("example2.syn", c.getName());
-		assertEquals("Another example G=(A^B^C^D)", c.getDescription());
-
-		assertEquals(3, c.getGates().size());
-
-		assertEquals("[and(A,B)->E @(2.0,2.0)]", c.gateAt(0).toString());
-		assertEquals("[and(C,D)->F @(2.0,4.0)]", c.gateAt(1).toString());
-		assertEquals("[and(E,F)->G @(4.0,3.0)]", c.gateAt(2).toString());
-
-		//test inputs and outputs
-		assertThat(c.getInputs(), hasItems("A", "B", "C", "D"));
-		assertThat(c.getOutputs(), hasItems("G"));
-	}
-	@Test
-	public void testFromJSON_example3syn() throws Exception{
-		Circuit c=this.loadTestFile("exampleCircuit3.json");
+		assertThat(c.getSimulationInputAt("A", 0), equalTo("L"));
+		assertThat(c.getSimulationInputAt("A", 1), equalTo("L"));
+		assertThat(c.getSimulationInputAt("A", 2), equalTo("L"));
+		assertThat(c.getSimulationInputAt("A", 3), equalTo("H"));
+		assertThat(c.getSimulationInputAt("A", 30), equalTo("H"));
 		
-		assertEquals("example3.syn", c.getName());
-		assertEquals("Another example H=(~(A^B))^(C^D)", c.getDescription());
-
-		assertEquals(4, c.getGates().size());
-
-		assertEquals("[and(A,B)->E @(2.0,2.0)]", c.gateAt(0).toString());
-		assertEquals("[and(C,D)->F @(2.0,4.0)]", c.gateAt(1).toString());
-		assertEquals("[and(F,G)->H @(4.0,3.0)]", c.gateAt(2).toString());
-		assertEquals("[not(E)->G @(5.0,5.0)]", c.gateAt(3).toString());
-
-		//test inputs and outputs
-		assertThat(c.getInputs(), hasItems("A", "B", "C", "D"));
-		assertThat(c.getOutputs(), hasItems("H"));
-	}
-
-
-	/**
-	 * An exception should be thrown if an AND gate has not exactly
-	 * two input signals.
-	 */
-	@Test
-	public void testFromJSON_incompleteAnd() throws Exception{
-		thrown.expect(CircuitException.class);
-		thrown.expectMessage("At least one AND gate has only one input.");
-	
-		this.loadTestFile("incompleteAndCircuit.json");
-	}
-	
-	/**
-	 * A circuit with gates but without signals is not valid
-	 */
-	@Test
-	public void testFromJSON_gatesButNoSignals() throws Exception{
-		thrown.expect(CircuitException.class);
-		thrown.expectMessage("Circuit has no signals.");
-
-		this.loadTestFile("gatesButNoSignals.json");
-	}
-
-	/**
-	 * Signal[to] pointing to non-existant gate
-	 */
-	@Test
-	public void testFromJSON_signalToNullPointer() throws Exception{
-		thrown.expect(CircuitException.class);
-		thrown.expectMessage("Signal[to] points to non-existant Gate.");
-
-		this.loadTestFile("signalToNullPointer.json");
-	}
-	
-	/**
-	 * Signal[from] pointing to non-existant gate
-	 */
-	@Test
-	public void testFromJSON_signalFromNullPointer() throws Exception{
-		thrown.expect(CircuitException.class);
-		thrown.expectMessage("Signal[from] points to non-existant Gate.");
-
-		this.loadTestFile("signalFromNullPointer.json");
-	}
-
-	/**
-	 * Ambigious CDS for a gate.
-	 */
-	@Test
-	public void testFromJSON_ambigiousCDS() throws Exception{
-		thrown.expect(CircuitException.class);
-		thrown.expectMessage("CDS for gate 1 is ambigious");
-
-		this.loadTestFile("ambigiousCDS.json");
-	}
-
-	/**
-	 * Incorrect signal definition: using string literals to define
-	 * gate indices in a signal.
-	 */
-	@Test
-	public void testFromJSON_StringIndexFrom() throws Exception{
-		thrown.expect(CircuitException.class);
-		thrown.expectMessage("Signal[from] should be either a integer index pointing to a gate or the string 'input'");
-
-		this.loadTestFile("invalidGateIndex.json");
-	}
-
-	/**
-	 * Test a Circuit fromJSON conversion with an input object present.
-	 */
-	@Test
-	public void testFromJSON_exampleWithInputs() throws Exception {
-		Circuit c=this.loadTestFile("example-with-inputs.json");
-
-		String[] expectedInputs={"A", "B"};
-		assertThat(c.getInputs(), hasItems(expectedInputs));
-		assertTrue(c.hasInput("A"));
-		assertTrue(c.hasInput("B"));
-
-		System.out.println(c.getSimulationInput());
-		assertThat(c.getSimulationInput("A"), equalTo("H"));
-		assertThat(c.getSimulationInput("B"), equalTo("LLLLLLLLLLLLLLLLLLLLH"));
+		//should tick 40 be included? Since 40 ticks starting at 0
+		//yields 39 as upper boundary...
+		//If we decide to change: change assertion in
+		//Circuit::getSimulationInputAt()
+		assertThat(c.getSimulationInputAt("A", 40), equalTo("H"));
+		
+		assertThat(c.getSimulationInputAt("B", 0), equalTo("H"));
+		assertThat(c.getSimulationInputAt("B", 1), equalTo("L"));
+		assertThat(c.getSimulationInputAt("B", 2), equalTo("H"));
+		assertThat(c.getSimulationInputAt("B", 3), equalTo("L"));
+		assertThat(c.getSimulationInputAt("B", 30), equalTo("L"));
+		assertThat(c.getSimulationInputAt("B", 40), equalTo("L"));
 	}
 }

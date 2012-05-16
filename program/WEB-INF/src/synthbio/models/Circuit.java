@@ -88,11 +88,11 @@ public class Circuit implements JSONString{
 	 * @param description	Description of the circuit
 	 * @param gates			Gates in the circuit
 	 */
-	public Circuit(String name, String description, Collection<Gate> gates){
+	public Circuit(String name, String description, Collection<Gate> gates) {
 		this.name=name;
 		this.description=description;
 
-		if(gates!=null){
+		if(gates != null){
 			this.gates.addAll(gates);
 		}
 	}
@@ -100,40 +100,59 @@ public class Circuit implements JSONString{
 	/**
 	 * Construct the Circuit with name and description
 	 */
-	public Circuit(String name, String description){
+	public Circuit(String name, String description) {
 		this(name, description, null);
 	}
 	
 	/**
 	 * Construct the Circuit with only a name.
 	 */
-	public Circuit(String name){
+	public Circuit(String name) {
 		this(name, "");
+	}
+
+	/**
+	 * Check if string p looks like a protein string.
+	 *
+	 * @param p The protein name to check.
+	 */
+	public void assertIsProtein(String p) {
+		assert p.length() == 1 : "Protein is a one letter String";
+	}
+	
+	/**
+	 * Check if string p is an input protein.
+	 * 
+	 * @param p The protein name to check.
+	 */
+	public void assertIsInputProtein(String p) {
+		this.assertIsProtein(p);
+		assert this.hasInput(p) : "Circuit should have the input " + p;
 	}
 
 	/*
 	 * Getters
 	 */
-	public String getName(){
+	public String getName() {
 		return this.name;
 	}
-	public String getDescription(){
+	public String getDescription() {
 		return this.description;
 	}
-	public Collection<Gate> getGates(){
+	public Collection<Gate> getGates() {
 		return this.gates;
 	}
-	public Set<String> getInputs(){
+	public Set<String> getInputs() {
 		return this.inputs;
 	}
-	public int getSimulationLength(){
+	public int getSimulationLength() {
 		return this.simulationLength;
 	}
 
 	/**
 	 * Get the simulation input for each input protein.
 	 */
-	public Map<String, String> getSimulationInput(){
+	public Map<String, String> getSimulationInput() {
 		assert this.getInputs().size() == this.simulationInput.size() : "Number of simulation inputs should equal the number of circuit inputs.";
 		return this.simulationInput;
 	}
@@ -143,33 +162,60 @@ public class Circuit implements JSONString{
 	 *
 	 * @param p The name of the protein.
 	 */
-	public String getSimulationInput(String p){
+	public String getSimulationInput(String p) {
 		assertIsProtein(p);
 		assert this.hasInput(p) : "Circuit does not have such an input protein";
 
 		return this.simulationInput.get(p);
 	}
+
+	/**
+	 * Return high or low for the protein 'p' at tick 'tick'
+	 *
+	 * @param p Input protein.
+	 * @param tick Tick to get a result for.
+	 */
+	public String getSimulationInputAt(String p, int tick) {
+		assertIsInputProtein(p);
+		assert tick <= this.getSimulationLength() : "Tick should not exceed simulation length";
+
+		String input=this.getSimulationInput(p);
+		if (tick>input.length()) {
+			//return last defined tick if requested tick exceeds the
+			//defined input length.
+			return input.substring(input.length() - 1);
+		} else {
+			//return the character at position tick.
+			return input.substring(tick, tick + 1);
+		}
+	}
 	
 	/**
 	 * Get the set of output proteins.
 	 */
-	public Set<String> getOutputs(){
+	public Set<String> getOutputs() {
 		return this.outputs;
 	}
 
 	/* setters
 	 */
-	public void addGate(Gate g){
+	public void addGate(Gate g) {
+		assert g != null : "Gate should not be null";
 		this.gates.add(g);
 	}
-	public void addInput(String p){
+	public void addInput(String p) {
 		assertIsProtein(p);
 		this.inputs.add(p);
 	}
-	public void addOutput(String p){
+	public void setSimulationLength(int length) {
+		assert length > 0 : "Simulation length should be greather than 0";
+		this.simulationLength=length;
+	}
+	public void addOutput(String p) {
 		assertIsProtein(p);
 		this.outputs.add(p);
 	}
+	
 	/**
 	 * Add the simulator input 'input' for protein 'p'.
 	 * If the input string does not span the simulation length, the last
@@ -179,8 +225,7 @@ public class Circuit implements JSONString{
 	 * @param input Input string consisting of (H|L) for each tick.
 	 */
 	public void addSimulationInput(String p, String input){
-		assertIsProtein(p);
-		assert this.hasInput(p): "Circuit should have the input "+p;
+		assertIsInputProtein(p);
 		
 		//replace all spaces by empty string.
 		//@todo: replace all but (H|L) by empty string
@@ -188,13 +233,7 @@ public class Circuit implements JSONString{
 		this.simulationInput.put(p, input);
 	}
 	
-	/**
-	 * Check if string p looks like a protein string.
-	 */
-	public void assertIsProtein(String p){
-		assert p.length()==1 : "Protein is a one letter String";
-	}
-	
+
 	/**
 	 * Do we have a gate with index?
 	 */
@@ -229,7 +268,7 @@ public class Circuit implements JSONString{
 	 * @throws CircuitException
 	 */
 	public void validate() throws CircuitException{
-		/* if there is one gate there should be at least one input and
+		/* If there is one gate there should be at least one input and
 		 * at least one output.
 		 */
 		if(this.getGates().size()>0){
@@ -241,6 +280,7 @@ public class Circuit implements JSONString{
 			}
 		}
 		
+		// Check if each gate has a Promotor and a CDS set.
 		for(Gate g: this.getGates()){
 			if(g.getPromotor()==null){
 				throw new CircuitException("Gate "+g.toString()+" has no Promotor set.");
@@ -491,7 +531,7 @@ public class Circuit implements JSONString{
 			throw new CircuitException("At least one AND gate has only one input.");
 		}
 
-		/* validate the circuit. validate will throw exceptions when it
+		/* Validate the circuit. validate will throw exceptions when it
 		 * encounters invalid things...
 		 * Calling this will double some checks and is quite expensive,
 		 * but since all circuits will be quite small, it should be no
@@ -509,6 +549,9 @@ public class Circuit implements JSONString{
 			}
 			JSONObject values= inputs.getJSONObject("values");
 			for(String p: JSONObject.getNames(values)){
+				if(!circuit.hasInput(p)){
+					throw new CircuitException("Input definition has a protein which is not an input in the signal section");
+				}
 				circuit.addSimulationInput(p, values.getString(p));
 			}
 		}

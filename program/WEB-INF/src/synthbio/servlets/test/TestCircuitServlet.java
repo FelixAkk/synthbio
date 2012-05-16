@@ -127,9 +127,9 @@ public class TestCircuitServlet{
 		TextPage page=this.getTestPage(this.url+"?action=save&filename=test.syn&circuit="+circuit.toString());
 
 		JSONObject response=new JSONObject(page.getContent());
+
 		assertTrue(response.getBoolean("success"));
 		assertEquals("Saved succesfully", response.getString("message"));
-
 
 		JSONObject actual=Util.fileToJSONObject("data/synstore/example.syn");
 
