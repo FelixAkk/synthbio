@@ -55,6 +55,7 @@ public class TestSolver {
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
 	 */
+	@Ignore
 	@Test
 	public void tc1() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveSBMLFile(tc1, 1, 100);
@@ -66,6 +67,7 @@ public class TestSolver {
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
 	 */
+	@Ignore
 	@Test
 	public void tc2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveSBMLFile(tc2, 1, 100);
@@ -85,11 +87,15 @@ public class TestSolver {
 		double b = solution.getColumn("b").getValue(99);
 		
 		assertTrue(a > b);
+		
+		solution = (new Solver()).solveSBMLFile(not, 1, 5);
+//		System.out.println(solution);
 	}
 	
 	/**
 	 * Testing a SBML-file containing a nand-gate.
 	 */
+	@Ignore
 	@Test
 	public void testSBMLnand() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveSBMLFile(nand, 0.1, 100);
