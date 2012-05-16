@@ -5,19 +5,20 @@
  * TU Delft - University of Technology
  *
  * Authors:
- * Felix Akkermans, Niels Doekemeijer, Thomas van Helden
- * Albert ten Napel, Jan Pieter Waagmeester
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
- *
- * @author	Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
- *
- * Definition of models.
- * More info on jquery http://api.jquery.com/
  */
 
-/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio */
+
+/**
+ * Definition of models.
+ * @author	Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
+ *
+ */
 
 /**
  * syntbio package.
@@ -80,7 +81,7 @@ synthbio.Gate = function(t, position){
 };
 synthbio.Gate.prototype.getKind = function(){
 	return this.kind;
-}
+};
 synthbio.Gate.prototype.getX = function(){
 	return this.position.getX();
 };
@@ -98,28 +99,31 @@ synthbio.Gate.prototype.setPosition = function(position){
 };
 synthbio.Gate.prototype.getImage = function(html){
 	var img = "gates/" + this.getKind() + ".svg";
-	if (html)
+	if (html) {
 		return '<embed src="img/' + img + '" type="image/svg+xml" />';
-	else
+	} else {
 		return img;
-}
+	}
+};
 synthbio.Gate.prototype.getInputCount = function(){
 	//TODO: better way to determine number of inputs/outputs
-	if(this.kind == "not")
+	if(this.kind === "not") {
 		return 1;
-	else if (this.kind == "and")
+	} else if (this.kind === "and") {
 		return 2;
-	else
+	} else {
 		throw "Cannot determine number of input gates";
-}
+	}
+};
 synthbio.Gate.prototype.getOutputCount = function(){
-	if(this.kind == "not")
+	if(this.kind === "not") {
 		return 1;
-	else if (this.kind == "and")
+	} else if (this.kind === "and") {
 		return 1;
-	else
+	} else {
 		throw "Cannot determine number of output gates";
-}
+	}
+};
 synthbio.Gate.prototype.toString = function(){
 	return this.kind + ": X = " + this.position.getX() + ", Y = "+ this.position.getY();
 };
@@ -132,8 +136,9 @@ synthbio.Gate.fromJSON = function(json){
 
 
 /**
- * Signals
+ * Signal
  * Signals hold proteins, an origin and a destination. A.K.A. wire, connection.
+ * 
  * Note: To convert Signals to JSON use JSON.stringify(Signal)
  */
 synthbio.Signal = function(prot, from, to, fromEndpoint, toEndpoint){
@@ -153,24 +158,31 @@ synthbio.Signal.fromJSON = function(json){
 	return synthbio.Signal.fromMap($.parseJSON(json));
 };
 
-
 /**
- * Circuits
- * Circuits hold a name, a description, gates, how gates are grouped and which signals connect them
+ * Circuit
+ * Circuits hold a name, a description, gates, which signals connect them
+ * and optional grouping information.
+ * 
  * Note: To convert Circuits into JSON use JSON.stringify(Circuit)
  */
-synthbio.Circuit = function(circuitName, desc, gates, signals, groupings){
+synthbio.Circuit = function(circuitName, desc, gates, signals, groupings, inputs){
 	this.name = circuitName;
 	this.description = desc;
 
 	//make gates, signals and groupings default to empty an array 
 	this.gates = gates || [];
 	this.signals = signals || [];
-	this.groups = groupings || []; 
+	this.groups = groupings || [];
+
+	//a default for the inputs object.
+	this.inputs = inputs || { "length": 40, "values": {} };
 };
 
 synthbio.Circuit.prototype.toString = function(){
-	return this.name + ": " + this.desc + " consists of gates:{ " + this.gates.toString() + " } and signals:{ " + this.signals.toString() + " } and groupings:{ " + this.groups + "}";
+	return this.name + ": " + this.desc +
+		" consists of gates:{ " + this.gates.toString() + " }" +
+		" and signals:{ " + this.signals.toString() + " }" +
+		" and groupings:{ " + this.groups + "}";
 };
 
 /**
@@ -181,22 +193,29 @@ synthbio.Circuit.prototype.toString = function(){
 synthbio.Circuit.fromJSON = function(json) {
 	var map = $.parseJSON(json);
 	
-	var gates=[], signals=[], groups=[];
+	var circuit=new synthbio.Circuit(map.name, map.description);
 
-	$.each(map.gates, function(i, elem){
-		gates[i]=synthbio.Gate.fromMap(elem);
+	//add the gates
+	$.each(map.gates, function(i, elem) {
+		circuit.addGate(synthbio.Gate.fromMap(elem));
 	});
 
-	$.each(map.signals, function(i, elem){
-		signals[i]=synthbio.Signal.fromMap(elem);
+	//and the signals
+	$.each(map.signals, function(i, elem) {
+		circuit.addSignal(synthbio.Signal.fromMap(elem));
 	});
 
 	//TODO: implement grouping.
 	//~ $.each(map.groups, function(i, elem){
-	//~		groups[i]=synthbio.Group.fromMap(elem);
+	//~		circuit.addGroup(synthbio.Group.fromMap(elem));
 	//~ });
 
-	return new synthbio.Circuit(map.name, map.description, gates, signals, groups);
+	//if input information is present, add that as well
+	if (map.inputs) {
+		circuit.setInputs(map.inputs);
+	}
+
+	return circuit;
 };
 
 /**
@@ -205,19 +224,21 @@ synthbio.Circuit.fromJSON = function(json) {
  */
 synthbio.Circuit.prototype.indexOfGate = function(gate) {
 	var idx = this.gates.indexOf(gate);
-	if (idx < 0)
+	if (idx < 0) {
 		throw "Gate is not present in circuit";
+	}
 	return idx;
-}
+};
 
 /**
  * Sort of a setter for gates.
  * @param gate An instance of synthbio.Gate
  */
 synthbio.Circuit.prototype.addGate = function(gate, position) {
-	if (!(gate instanceof synthbio.Gate) && position)
+	if (!(gate instanceof synthbio.Gate) && position) {
 		gate = new synthbio.Gate(gate, position);
-
+	}
+	
 	if (this.gates.indexOf(gate) < 0) {
 		if(gate instanceof synthbio.Gate) {
 			this.gates.push(gate);
@@ -239,15 +260,18 @@ synthbio.Circuit.prototype.removeGate = function(gate) {
 	this.removeSignal(idx, undefined);
 	this.removeSignal(undefined, idx);
 
-	for(var i = 0; i < this.signals.length; i++) {
-		if (this.signals[i].from > idx)
+	var i;
+	for(i = 0; i < this.signals.length; i++) {
+		if (this.signals[i].from > idx) {
 			this.signals[i].from--;
-		if (this.signals[i].to > idx)
+		}
+		if (this.signals[i].to > idx) {
 			this.signals[i].to--;
+		}
 	}
 
 	return this.gates.splice(idx, 1);
-}
+};
 
 /**
  * Getter for the array of gates.
@@ -262,11 +286,11 @@ synthbio.Circuit.prototype.getGates = function() {
  */
 synthbio.Circuit.prototype.checkGateExists = function(gate) {
 	var idx = (gate instanceof synthbio.Gate) ? this.indexOfGate(gate) : gate;
-	if (!(idx in this.gates)) {
+	if (!this.gates[idx]) {
 		throw "Gate " + gate + " undefined";
 	}
 	return idx;
-}
+};
 
 /**
  * Getter for a gate on index. Only returns if there is a gate on that index.
@@ -282,9 +306,10 @@ synthbio.Circuit.prototype.getGate = function(index) {
  * @param signal An instance of synthbio.Signal
  */
 synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, toEndpoint) {
-	if (!(signal instanceof synthbio.Signal) && from !== undefined && to !== undefined)
+	if (!(signal instanceof synthbio.Signal) && from !== undefined && to !== undefined){
 		signal = new synthbio.Signal(signal, from, to, fromEndpoint, toEndpoint);
-
+	}
+	
 	if (this.signals.indexOf(signal) < 0) {
 		if(signal instanceof synthbio.Signal) {
 			this.signals.push(signal);
@@ -298,6 +323,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 
 /**
  * Removes signals based on origin/destination. removeSignal() removes all signals.
+ * 
  * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
  * @param destination Destination integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
  * @return array Returns array of removed signals.
@@ -305,23 +331,59 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 	if (origin instanceof synthbio.Signal) {
 		var idx = this.signals.indexOf(origin);
-		if (idx >= 0)
+		if (idx >= 0) {
 			return [this.signals.splice(idx, 1)];
-
+		}
+		
 		destination = origin.to;
 		origin = origin.from;
 	}
 
 	var removed = [];
-	for(var i = 0; i < this.signals.length; i++)
+	var i;
+	for(i = 0; i < this.signals.length; i++) {
 		if (((origin      === undefined) || (this.signals[i].from === origin)) &&
 		    ((destination === undefined) || (this.signals[i].to === destination))) 
 		{
 			removed.push(this.signals.splice(i, 1));
 			i--;
 		}
-
+	}
 	return removed;
+};
+
+/**
+ * Return a list of input proteins.
+ *
+ * @todo: implement.
+ */
+synthbio.Circuit.prototype.getInputSignals = function(){
+	return ["A", "B"];
+};
+
+/**
+ * Return the inputs object for this circuit.
+ *
+ */
+synthbio.Circuit.prototype.getInputs = function(){
+	//make sure all current signals are contained in the inputs,
+	//set them to low.
+	var signals=this.getInputSignals();
+	var self=this;
+	$.each(signals, function(index, signal){
+		if(!self.inputs.values[signal]){
+			self.inputs.values[signal]="L";
+		}else{
+			//remove spaces from input string.
+			self.inputs.values[signal]=self.inputs.values[signal].replace(" ", "");
+		}
+	});
+	return this.inputs;
+};
+
+synthbio.Circuit.prototype.setInputs = function(inputs){
+	//@todo: verify proteins in inputs parameter againts this.getInputSignals
+	this.inputs=inputs;
 };
 
 /**

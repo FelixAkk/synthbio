@@ -466,3 +466,47 @@ body {
 	overflow: hidden;
 	display: none;
 }
+
+/*
+ * Styles for the define-inputs dialog
+ */
+#define-inputs{
+	.x-axis{
+		width: 50px;
+		float: right;
+		text-align: right;
+	}
+	.signal{
+		clear: right;
+		border-bottom: 1px dotted gray;
+		padding: 10px 4px;
+	}
+	.toggle-highlow{
+		display: inline-block;
+		width: 10px;
+		cursor: pointer;
+	}
+	.levels{
+		display: inline-block;
+		white-space: nowrap;
+
+		.tick{
+			display: inline-block;
+			background-color: #eee;
+			width: 12px;
+			height: 16px;
+			cursor: pointer;
+		}
+		.low{ border-bottom: 2px solid black; }
+		.high{ border-top: 2px solid black; }
+
+		.low + .high{
+			border-left: 1px solid black;
+			width: 11px;
+		}
+		.high + .low{
+			border-left: 1px solid black;
+			width: 11px;
+		}
+	}
+}

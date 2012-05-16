@@ -38,7 +38,7 @@
 					<li><a href="#list-proteins" data-toggle="modal">Show proteins</a></li>
 					<li><a href="javascript: void(0);">Validate circuit</a></li>
 					<li class="divider"></li>
-					<li><a href="javascript: void(0);">Define inputs</a></li>
+					<li><a href="#define-inputs" data-toggle="modal">Define inputs</a></li>
 					<li><a href="javascript: void(0);">Show output graph</a></li>
 					<li class="divider"></li>
 					<li><a href="javascript: void(0);">Run solver</a></li>
@@ -113,6 +113,10 @@
 	
 	<!-- Le Modals -->
 	<!-- ================================================== -->
+
+	<!--
+	Modal with an about dialog
+	-->
 	<div class="modal hide fade in" id="about" data-keyboard="true">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">×</a>
@@ -132,6 +136,27 @@
 		</div>
 	</div>
 
+	<!--
+	Modal to define input signals.
+	@author Jieter
+	-->
+	<div class="modal hide fade in" id="define-inputs" data-keyboard="true">
+		<div class="modal-header">
+			<a class="close" data-dismiss="modal">×</a>
+			<h3>Define input signals</h3>
+		</div>
+		<div class="modal-body">
+			<div class="x-axis" title="One tick equals one second"> t &rarr;</div>
+			<div id="input-signals"></div>
+		</div>
+		<div class="modal-footer">
+			<div id="save-inputs" class="btn btn-primary" data-dismiss="modal">Save input</div>
+		</div>
+	</div>
+
+	<!--
+	Modal to interact with files/circuits on the server.
+	-->
 	<div class="modal hide fade in" id="files" data-keyboard="true">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">×</a>
@@ -159,7 +184,10 @@
 			<a href="javascript: void(0);" class="btn" data-dismiss="modal">Close</a>
 		</div>
 	</div>
-	
+
+	<!--
+	Modal to display a list of proteins
+	-->
 	<div class="modal hide fade in" id="list-proteins" data-keyboard="true">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">&times;</a>
@@ -185,6 +213,9 @@
 		</div>
 	</div>
 	
+	<!--
+	Modal to complain about the state of the connection.
+	-->
 	<div class="modal hide fade in" id="connection-modal" data-keyboard="true">
 		<div class="modal-header">
 			<a class="close" data-dismiss="modal">&times;</a>

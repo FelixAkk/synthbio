@@ -5,15 +5,20 @@
  * TU Delft - University of Technology
  *
  * Authors:
- * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
- * 	Albert ten Napel, Jan Pieter Waagmeester
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
- *
- * @author	Thomas van Helden & Jan Pieter Waagmeester & Felix Akkermans
- *
+ */
+
+/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio, QUnit, module, test, equal, deepEqual, raises, ok */
+
+/**
  * This document contains tests for the JavaScript clientside
  * The JSON coming from the Java server will be translated to circuits and UnitTested here
+ * 
+ * @author Thomas van Helden & Jan Pieter Waagmeester & Felix Akkermans
  */
  
 /**
@@ -40,14 +45,16 @@ var circuit;
 QUnit.testStart = function(testBatchName) {
 	// ensure a clean circuit slate every test
 	circuit = new synthbio.Circuit(circuitName, circuitDescription, [gate, gate], [signal, signal], []);
-}
+};
 
 var circuitJSON=
 	'{"name":"'+circuitName+'",'+
 	'"description":"'+circuitDescription+'",'+
 	'"gates":['+gateJSON+','+gateJSON+'],'+
 	'"signals":['+signalJSON+','+signalJSON+'],'+
-	'"groups":[]}';
+	'"groups":[],'+
+	'"inputs":{"length":40,"values":{}}'+
+	'}';
 	
 /**
  * The actual tests
@@ -74,8 +81,12 @@ $(document).ready(function() {
 		 */
 		test("Gates should only be able to be constructed with certain parameters provided with the constructor call.",
 			function() {
-			raises(function() {new synthbio.Gate("and", 5)}, "Invalid position parameter is given.");
-		})
+				raises(function() {
+					var foo=new synthbio.Gate("and", 5);
+				},
+				"Invalid position parameter is given.");
+			}
+		);
 		
 		/**
 		 * Gate properties
@@ -167,14 +178,14 @@ $(document).ready(function() {
 		 */
 		test("Circuits should add and store gates through a method call", function() {
 			circuit.addGate(notgate); // add gate on index [2].
-			deepEqual(circuit.getGates(), [gate,gate,notgate])
-		})
+			deepEqual(circuit.getGates(), [gate, gate, notgate]);
+		});
 	
 		test("Circuits should add and store gates through a method call", function() {
 			circuit.addGate(notgate); // add gate on index [2].
-			deepEqual(circuit.getGate(2), notgate)
-			raises(function() {circuit.getGate(3)}, "Empty index is given.");
-		})
+			deepEqual(circuit.getGate(2), notgate);
+			raises(function() { circuit.getGate(3); }, "Empty index is given.");
+		});
 
 		/**
 		 * Circuit toString
@@ -204,15 +215,7 @@ $(document).ready(function() {
 				"JSON can be converted to Circuits"
 			);
 		});
-		
-		/**
-		 * Circuit evaluation
-		 */
-		//~ test("Circuits should be evaluated propperly", function() {
-			//~ ok(circuit.eval(), "circuit evaluation not tested yet");
-		//~ });
 
-		
 	/**
 	 * CDS
 	 */

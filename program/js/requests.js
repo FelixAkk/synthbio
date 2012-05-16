@@ -1,21 +1,24 @@
 /**
  * Project Zelula
  *
- * Contextproject TI2800 
+ * Contextproject TI2800
  * TU Delft - University of Technology
- *  
- * Authors: 
- * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
- * 	Albert ten Napel, Jan Pieter Waagmeester
- * 
- * https://github.com/FelixAkk/synthbio
  *
- * Connection to the server API, as defined in
- * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
+ * Authors:
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
+ *
+ * https://github.com/FelixAkk/synthbio
  */
 
-/*jslint devel: true, browser: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio */
+
+/**
+ * Put all the requests to the server in one place...
+ * 
+ * @author Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
+ */
 
 /**
  * syntbio package.
@@ -40,7 +43,7 @@ synthbio.requests.baseXHR = function(provided){
 		dataType: "json",
 		error: function(){},
 		always: function(){}
-	}
+	};
 	//merge provided options with the default options.
 	$.extend(options, provided);
 
@@ -48,7 +51,7 @@ synthbio.requests.baseXHR = function(provided){
 	options.url=synthbio.requests.baseURL+options.url;
 	
 	return $.ajax(options);
-}
+};
 
 /**
  * listFiles
@@ -107,13 +110,13 @@ synthbio.requests.getFile = function(callback, name){
  * Store a circuit, "circ", on the server called "fileName"
  * Callback function will be the return info/errors
  */
-synthbio.requests.putFile = function(callback, name, circ){
+synthbio.requests.putFile = function(callback, fileName, circ){
 	
 	synthbio.requests.baseXHR({
 		url: "/Circuit?action=save",
 		type: "POST",
 		data: {
-			"filename": name,
+			"filename": fileName,
 			"circuit": JSON.stringify(circ)
 		},
 		success: function(response){
