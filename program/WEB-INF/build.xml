@@ -32,7 +32,7 @@
 		Test all non-servlet tests.
 	-->
 	<target name="test" depends="compile">
-		<junit fork="yes" printsummary="yes" showoutput="yes">
+		<junit fork="no" printsummary="yes" showoutput="yes">
 			<classpath>
 				<path refid="project-classpath" />
 				<pathelement path="${build}"/>
@@ -55,7 +55,7 @@
 		Seperate, because they take a lot of time.
 	-->
 	<target name="test-servlets" depends="compile">
-		<junit fork="yes" printsummary="yes" showoutput="yes">
+		<junit fork="no" printsummary="yes" showoutput="yes">
 			<classpath>
 				<path refid="project-classpath" />
 				<pathelement path="${build}"/>
@@ -84,7 +84,7 @@
 		<fail message="You must run this target with -Dtest=TestName"/>
 	</target>
 	<target name="runtest" description="Runs the test you specify on the command line with -Dtest=" depends="compile, ensure-test-name">
-		<junit printsummary="withOutAndErr" fork="yes">
+		<junit printsummary="withOutAndErr" fork="no">
 			<classpath>
 				<path refid="project-classpath" />
 				<pathelement path="${build}"/>
