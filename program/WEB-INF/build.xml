@@ -118,26 +118,30 @@
 	<target name="javadoc" depends="compile, require-javadoc-dest">
 		<javadoc
 			destdir="${dest}"
-			sourcepath="${src}"
 			author="true"
 			version="true"
 			use="true"
-			windowtitle="Zelula API">
-		<classpath>
+			windowtitle="Zelula API"
+		>
+			<classpath>
 				<path refid="project-classpath" />
 				<pathelement path="${build}"/>
-		</classpath>
-		<doctitle><![CDATA[<h1>Zelula Javadoc</h1>]]></doctitle>
-		<tag name="todo" scope="all" description="To do:"/>
-
+			</classpath>
+			<packageset dir="${src}" defaultexcludes="yes">
+				<include name="synthbio/**"/>
+				<exclude name="org/**"/>
+			</packageset>
+			<doctitle><![CDATA[<h1>Zelula Javadoc</h1>]]></doctitle>
+			<!-- provide links to javadocs of certain libraries -->
+			<link href="http://json.org/javadoc/" />
+			<link href="http://junit.sourceforge.net/javadoc/" />
+			<link href="http://download.oracle.com/javase/6/docs/api/"/>
 <!--
-		<link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="C:\tmp"/>
--->
-<!--
-		<link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+			<tag name="todo" scope="all" description="To do:"/>
 -->
 		</javadoc>
 	</target>
+	
 	<!--
 		Clean the compiled stuff
 	-->
