@@ -485,28 +485,24 @@ body {
 	.levels{
 		display: inline-block;
 		white-space: nowrap;
-		
-	}
-	.levels div.tick{
-		display: inline-block;
-		background-color: #eee;
-		width: 12px;
-		height: 16px;
-		cursor: pointer;
-		
-	}
-	.levels div.low{
-		border-bottom: 2px solid black;
-	}
-	.levels div.high{
-		border-top: 2px solid black;
-	}
-	div.low +  div.high{
-		border-left: 1px solid black;
-		width: 11px;
-	}
-	div.high + div.low{
-		border-left: 1px solid black;
-		width: 11px;
+
+		.tick{
+			display: inline-block;
+			background-color: #eee;
+			width: 12px;
+			height: 16px;
+			cursor: pointer;
+		}
+		.low{ border-bottom: 2px solid black; }
+		.high{ border-top: 2px solid black; }
+
+		.low + .high{
+			border-left: 1px solid black;
+			width: 11px;
+		}
+		.high + .low{
+			border-left: 1px solid black;
+			width: 11px;
+		}
 	}
 }
