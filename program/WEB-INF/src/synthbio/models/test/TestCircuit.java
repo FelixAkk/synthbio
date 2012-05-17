@@ -47,6 +47,18 @@ public class TestCircuit{
 			new Position()
 		);
 	}
+	private Circuit getValidCircuit(){
+		Circuit c=new Circuit("foo", "bar");
+		c.addGate(this.getAndGate());
+		c.addInput("A");
+		c.addInput("B");
+
+		c.setSimulationLength(40);
+		c.addSimulationInput("A", "LLLH");
+		c.addSimulationInput("B", "HLHL");
+		
+		return c;
+	}
 	
 	@Test
 	public void testConstructor(){
@@ -74,9 +86,12 @@ public class TestCircuit{
 
 		c.validate();
 	}
-	
+
+	/**
+	 * A Circuit with a gate with a null-Promotor should not validate.
+	 */
 	@Test
-	public void testValidity_invalidGate1()throws Exception{
+	public void testValidity_invalidGate1() throws Exception{
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("Gate [and(?)->C @(0.0,0.0)] has no Promotor set.");
 		
@@ -89,11 +104,15 @@ public class TestCircuit{
 		c.addInput("B");
 		c.addOutput("C");
 
+		//should throw the CircuitException.
 		c.validate();
 	}
-	
+
+	/**
+	 * A Circuit with a gate with a null-CDS should not validate.
+	 */
 	@Test
-	public void testValidity_invalidGate2()throws Exception{
+	public void testValidity_invalidGate2() throws Exception{
 		thrown.expect(CircuitException.class);
 		thrown.expectMessage("Gate [and(A,B)->? @(0.0,0.0)] has no CDS set.");
 		
@@ -105,11 +124,15 @@ public class TestCircuit{
 		c.addInput("A");
 		c.addInput("B");
 		c.addOutput("C");
-
+		
+		//should throw the CircuitException.
 		c.validate();
 	}
 
-	
+
+	/**
+	 * The circuit should not validate if the inputs are not defined.
+	 */
 	@Test
 	public void testValidity_oneGateNoInputs() throws Exception {
 		thrown.expect(CircuitException.class);
@@ -119,9 +142,13 @@ public class TestCircuit{
 		c.addGate(this.getAndGate());
 		c.addOutput("C");
 
+		//should throw the CircuitException.
 		c.validate();
 	}
-	
+
+	/**
+	 * The circuit should not validate if the outputs are not defined.
+	 */
 	@Test
 	public void testValidity_oneGateNoOutputs() throws Exception {
 		thrown.expect(CircuitException.class);
@@ -132,7 +159,27 @@ public class TestCircuit{
 		c.addInput("A");
 		c.addInput("B");
 
+		//should throw an CircuitException
 		c.validate();
+	}
+	
+	/**
+	 * Test if addSimulationInput clears all but (H|L).
+	 */
+	@Test
+	public void testAddSimulationInput() throws Exception {
+		Circuit c=new Circuit("foo", "bar");
+		c.addGate(this.getAndGate());
+		c.addInput("A");
+		c.addInput("B");
+
+		c.setSimulationLength(40);
+		
+		c.addSimulationInput("A", "L /H LL");
+		assertThat(c.getSimulationInput("A"), equalTo("LHLL"));
+
+		c.addSimulationInput("B", "HHHhsblsLL");
+		assertThat(c.getSimulationInput("B"), equalTo("HHHLL"));
 	}
 	
 	/**
@@ -141,14 +188,7 @@ public class TestCircuit{
 	 */
 	@Test
 	public void testInputSignals_inputAt() throws Exception {
-		Circuit c=new Circuit("foo", "bar");
-		c.addGate(this.getAndGate());
-		c.addInput("A");
-		c.addInput("B");
-
-		c.setSimulationLength(40);
-		c.addSimulationInput("A", "LLLH");
-		c.addSimulationInput("B", "HLHL");
+		Circuit c=this.getValidCircuit();
 
 		assertThat(c.getSimulationInputAt("A", 0), equalTo("L"));
 		assertThat(c.getSimulationInputAt("A", 1), equalTo("L"));
@@ -169,4 +209,38 @@ public class TestCircuit{
 		assertThat(c.getSimulationInputAt("B", 30), equalTo("L"));
 		assertThat(c.getSimulationInputAt("B", 40), equalTo("L"));
 	}
+
+	/**
+	 * Ask for the value of a tick outside the simulated length
+	 */
+	@Test
+	public void testInputSignals_inputAt_outOfBounds() throws Exception {
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("Tick should not exceed simulation length.");
+
+		Circuit c=this.getValidCircuit();
+
+		c.getSimulationInputAt("A", 42);
+	}
+	
+	/**
+	 * Define an simulation input which is not an input in the circuit.
+	 */
+	@Test
+	public void testInputSignals_invalidInput() throws Exception {
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("Circuit should have the input D.");
+
+		Circuit c=new Circuit("foo", "bar");
+		c.addGate(this.getAndGate());
+		c.addInput("A");
+		c.addInput("B");
+
+		c.setSimulationLength(40);
+		
+		//this should throw an AssertionError
+		c.addSimulationInput("D", "LLL");
+	}
+
+
 }

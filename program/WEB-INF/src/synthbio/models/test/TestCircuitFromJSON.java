@@ -184,6 +184,7 @@ public class TestCircuitFromJSON{
 		assertTrue(c.hasInput("A"));
 		assertTrue(c.hasInput("B"));
 
+		assertThat(c.getSimulationLength(), equalTo(42));
 		assertThat(c.getSimulationInput("A"), equalTo("H"));
 		assertThat(c.getSimulationInput("B"), equalTo("LLLLLLLLLLLLLLLLLLLLH"));
 	}

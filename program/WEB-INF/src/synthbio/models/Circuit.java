@@ -40,7 +40,7 @@ import synthbio.files.BioBrickRepository;
  * 
  * @author jieter
  */
-public class Circuit implements JSONString{
+public class Circuit implements JSONString {
 
 	/**
 	 * The filename.
@@ -63,9 +63,9 @@ public class Circuit implements JSONString{
 	private Set<String> inputs=new HashSet<String>();
 
 	/**
-	 * Simulation length
+	 * Simulation length, defaults to 40 ticks.
 	 */
-	private int simulationLength=0;
+	private int simulationLength=40;
 
 	/**
 	 * For each input protein, define a String of High/Low (H/L) for
@@ -127,24 +127,42 @@ public class Circuit implements JSONString{
 	 */
 	public void assertIsInputProtein(String p) {
 		this.assertIsProtein(p);
-		assert this.hasInput(p) : "Circuit should have the input " + p;
+		assert this.hasInput(p) : "Circuit should have the input " + p + ".";
 	}
 
-	/*
-	 * Getters
+	/**
+	 * Get the name of the circuit.
 	 */
 	public String getName() {
 		return this.name;
 	}
+
+	/**
+	 * Get the description of the circuit.
+	 */
 	public String getDescription() {
 		return this.description;
 	}
+
+	/**
+	 * Get the collection of gates for the circuit.
+	 */
 	public Collection<Gate> getGates() {
 		return this.gates;
 	}
+
+	/**
+	 * Get a collection of input proteins for the circuit.
+	 *
+	 * @return A collection of one letter strings representing protein names.
+	 */
 	public Set<String> getInputs() {
 		return this.inputs;
 	}
+
+	/**
+	 * Get the length of the simulation to be executed on this circuit.
+	 */
 	public int getSimulationLength() {
 		return this.simulationLength;
 	}
@@ -164,7 +182,7 @@ public class Circuit implements JSONString{
 	 */
 	public String getSimulationInput(String p) {
 		assertIsProtein(p);
-		assert this.hasInput(p) : "Circuit does not have such an input protein";
+		assert this.hasInput(p) : "Circuit does not have such an input protein.";
 
 		return this.simulationInput.get(p);
 	}
@@ -177,7 +195,7 @@ public class Circuit implements JSONString{
 	 */
 	public String getSimulationInputAt(String p, int tick) {
 		assertIsInputProtein(p);
-		assert tick <= this.getSimulationLength() : "Tick should not exceed simulation length";
+		assert tick <= this.getSimulationLength() : "Tick should not exceed simulation length.";
 
 		String input=this.getSimulationInput(p);
 		if (tick>input.length()) {
@@ -197,20 +215,41 @@ public class Circuit implements JSONString{
 		return this.outputs;
 	}
 
-	/* setters
+	/**
+	 * Add a gate to the circuit.
+	 *
+	 * @param g Gate to be added.
 	 */
 	public void addGate(Gate g) {
 		assert g != null : "Gate should not be null";
 		this.gates.add(g);
 	}
+
+	/**
+	 * Define a protein as an input to the circuit.
+	 *
+	 * @param p One letter string containing the name of the protein.
+	 */
 	public void addInput(String p) {
 		assertIsProtein(p);
 		this.inputs.add(p);
 	}
+
+	/**
+	 * Set the number of ticks the circuit should be simulated.
+	 *
+	 * @param length The number of ticks.
+	 */
 	public void setSimulationLength(int length) {
 		assert length > 0 : "Simulation length should be greather than 0";
 		this.simulationLength=length;
 	}
+
+	/**
+	 * Define a protein as an output from the circuit.
+	 *
+	 * @param p One letter string containing the name of the protein.
+	 */
 	public void addOutput(String p) {
 		assertIsProtein(p);
 		this.outputs.add(p);
@@ -228,8 +267,7 @@ public class Circuit implements JSONString{
 		assertIsInputProtein(p);
 		
 		//replace all spaces by empty string.
-		//@todo: replace all but (H|L) by empty string
-		input=input.replace(" ", "");
+		input=input.replaceAll("[^HL]", "");
 		this.simulationInput.put(p, input);
 	}
 	
@@ -547,12 +585,17 @@ public class Circuit implements JSONString{
 			if(!(inputs.has("length") && inputs.has("values"))){
 				throw new CircuitException("JSON input definition should contain a length value and a set of input definitions for each input protein");
 			}
+			
+			//store the simulation length
+			circuit.setSimulationLength(inputs.getInt("length"));
+
+			//store the simulation values for each protein
 			JSONObject values= inputs.getJSONObject("values");
-			for(String p: JSONObject.getNames(values)){
-				if(!circuit.hasInput(p)){
+			for(String protein: JSONObject.getNames(values)){
+				if(!circuit.hasInput(protein)){
 					throw new CircuitException("Input definition has a protein which is not an input in the signal section");
 				}
-				circuit.addSimulationInput(p, values.getString(p));
+				circuit.addSimulationInput(protein, values.getString(protein));
 			}
 		}
 		
@@ -571,7 +614,7 @@ public class Circuit implements JSONString{
 			ret.put("name", this.getName());
 			ret.put("description", this.getDescription());
 			ret.put("gates", this.getGates());
-			//@todo include signals...
+			//@todo: include signals...
 			//ret.put("signals", <signals>);
 
 			JSONObject inputs=new JSONObject();
@@ -585,12 +628,12 @@ public class Circuit implements JSONString{
 	}
 	
 	/**
-	 * Return an SBML document for the current circuit.
+	 * Convert the circuit to a SBML document.
 	 *
 	 * @todo implement
 	 */
 	public String toSBML(){
-		//TODO: Implement toSBML
+		//@todo: Implement toSBML
 		return null;
 	}
 
