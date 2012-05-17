@@ -210,7 +210,7 @@ synthbio.Circuit.fromJSON = function(json) {
 	//~		circuit.addGroup(synthbio.Group.fromMap(elem));
 	//~ });
 
-	//if input information is present, add that as well
+	//If input information is present, add that as well
 	if (map.inputs) {
 		circuit.setInputs(map.inputs);
 	}
@@ -322,7 +322,8 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 };
 
 /**
- * Removes signals based on origin/destination. removeSignal() removes all signals.
+ * Removes signals based on origin/destination.
+ * Calling removeSignal() without parametersremoves all signals.
  * 
  * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
  * @param destination Destination integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
@@ -355,10 +356,15 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 /**
  * Return a list of input proteins.
  *
- * @todo: implement.
  */
 synthbio.Circuit.prototype.getInputSignals = function(){
-	return ["A", "B"];
+	var inputs=[];
+	$.each(this.signals, function(index, elem){
+		if(elem.from=='input'){
+			inputs.push(elem.protein);
+		}
+	});
+	return inputs;
 };
 
 /**

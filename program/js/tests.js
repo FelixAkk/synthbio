@@ -55,6 +55,30 @@ var circuitJSON=
 	'"groups":[],'+
 	'"inputs":{"length":40,"values":{}}'+
 	'}';
+
+var exampleJSON='{ '+
+'  "name": "example.syn",'+
+'  "description": "Logic for this circuit: D = ~(A^B)",'+
+'  "gates": [ '+
+'    { "kind": "and", "position": {"x": 2,"y": 2}},'+
+'    { "kind": "not", "position": {"x": 2,"y": 4}}'+
+'  ],'+
+'  "signals": ['+
+'    { "from": "input", "to": 0, "protein": "A"},'+
+'    { "from": "input", "to": 0, "protein": "B"},'+
+'    { "from": 0, "to": 1, "protein": "C"},'+
+'    { "from": 1, "to": "output", "protein": "D"}'+
+'  ],'+
+'  "grouping": [],'+
+'  "inputs": {'+
+'    "length": 42,'+
+'    "values": {'+
+'      "A": "H",'+
+'      "B": "LLLLLLLLLL LLLLLLLLLLH"'+
+'    }'+
+'  }'+
+'}';
+
 	
 /**
  * The actual tests
@@ -213,6 +237,17 @@ $(document).ready(function() {
 				synthbio.Circuit.fromJSON(circuitJSON),
 				circuit,
 				"JSON can be converted to Circuits"
+			);
+		});
+
+		/**
+		 * Circuit.getInputs()
+		 */
+		test("Circuit.getInputs() should yield the circuit's inputs", function() {
+			var c=synthbio.Circuit.fromJSON(exampleJSON);
+			deepEqual(
+				c.getInputSignals(),
+				["A", "B"]
 			);
 		});
 
