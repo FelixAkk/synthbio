@@ -30,6 +30,7 @@ import org.simulator.math.odes.AbstractDESSolver;
 import org.simulator.math.odes.EulerMethod;
 import org.simulator.math.odes.MultiTable;
 import org.simulator.sbml.SBMLinterpreter;
+import synthbio.Util;
 
 /**
  * A class for solving SBML-files and Model-objects.
@@ -44,6 +45,13 @@ public class Solver {
 		// Convert the SBML-file to a Model-object.
 		String sbml = (new CircuitConverter()).convertFromFile(fileName);
 		return solveSBML(sbml, stepSize, timeEnd);
+	}
+
+	public MultiTable solveWithSynFile(String fileName)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
+		// Convert the SBML-file to a Model-object.
+		Circuit c = Circuit.fromJSON(Util.fileToString(fileName));
+		return solve(c);
 	}
 
 	/**
@@ -62,6 +70,23 @@ public class Solver {
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		String sbml = (new CircuitConverter()).convert(c);
 		return solveSBML(sbml, stepSize, timeEnd);
+	}
+
+	/**
+ 	 * Solves a Circuit-object.
+ 	 */
+	public MultiTable solve(Circuit c)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
+		CircuitConverter cc = new CircuitConverter();
+		String sbml = cc.convert(c);
+		MultiTable input = cc.getInputs(c);
+		return solve(sbmlToModel(sbml), input);	
+	}
+
+	public Model sbmlToModel(String sbml)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		Model model = (new SBMLReader()).readSBMLFromString(sbml).getModel();
+		return model;
 	}
 	
 	/**
@@ -108,6 +133,19 @@ public class Solver {
 		// Compute the solution
 		MultiTable solution = solver.solve(interpreter, interpreter.getInitialValues(), 0d, timeEnd);
 		
+		return solution;
+	}
+
+	public MultiTable solve(Model model, MultiTable inputs)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		// Setup solver
+		AbstractDESSolver solver = new EulerMethod();
+		SBMLinterpreter interpreter = new SBMLinterpreter(model);
+		if (solver instanceof AbstractDESSolver) {
+			((AbstractDESSolver)solver).setIncludeIntermediates(false);
+		}
+		// Compute the solution
+		MultiTable solution = solver.solve(interpreter, inputs.getBlock(0), interpreter.getInitialValues());
 		return solution;
 	}
 } 

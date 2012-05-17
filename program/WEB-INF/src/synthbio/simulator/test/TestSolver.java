@@ -40,7 +40,9 @@ import org.sbml.jsbml.xml.stax.SBMLReader;
 import org.simulator.math.odes.AbstractDESSolver;
 import org.simulator.math.odes.EulerMethod;
 import org.simulator.sbml.SBMLinterpreter;
-
+import org.json.JSONException;
+import synthbio.models.CircuitException;
+ 
 /**
  * Testing Solver.
  * @author Albert ten Napel
@@ -51,11 +53,13 @@ public class TestSolver {
 	
 	private final String tc1 = "data/test/simulator/00001-sbml-l2v4.xml";
 	private final String tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
+
+	private final String circ1 = "data/test/simulator/inputCircuit.syn";
+				
 	
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
 	 */
-	@Ignore
 	@Test
 	public void tc1() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveSBMLFile(tc1, 1, 100);
@@ -67,7 +71,6 @@ public class TestSolver {
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
 	 */
-	@Ignore
 	@Test
 	public void tc2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveSBMLFile(tc2, 1, 100);
@@ -95,7 +98,6 @@ public class TestSolver {
 	/**
 	 * Testing a SBML-file containing a nand-gate.
 	 */
-	@Ignore
 	@Test
 	public void testSBMLnand() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = (new Solver()).solveSBMLFile(nand, 0.1, 100);
@@ -105,7 +107,12 @@ public class TestSolver {
 		
 		assertTrue(c > d);
 	}
-	
+
+	@Test
+	public void testCircuit() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
+		MultiTable solution = (new Solver()).solveWithSynFile(circ1);
+		//showMultiTable(solution);
+	}
 	/**
 	 * A visual representation of the data for manual testing purposes
 	 */
