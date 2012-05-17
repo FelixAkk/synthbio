@@ -159,18 +159,18 @@ public class CircuitConverter {
 		String[] names = circuit.getInputs().toArray(new String[circuit.getInputs().size()]);
 		// setup data
 		double[][] data = new double[length][names.length];
-		System.out.println(length);
 		for(int time = 0; time < length; time++) {
 			for(int name = 0; name < names.length; name++) {
-				System.out.println(time + ", " + name);
+				//System.out.println("a: " + time + ", " + name);
 				String val = circuit.getSimulationInput(names[name]);
-				char cur = (val.length() >= time? val.charAt(time): val.charAt(val.length()-1));
+				char cur = (val.length() > time? val.charAt(time): val.charAt(val.length()-1));
+				//System.out.println("b: " + time + ", " + (val.length()-1) + ", " + val + ", " + cur);
 				data[time][name] = (cur == 'L'? 0: 600);
 			}
 		}
-		System.out.println(Arrays.asList(timePoints));
-		System.out.println(Arrays.asList(data));
-		System.out.println(Arrays.asList(names));
+		//System.out.println(Arrays.asList(timePoints));
+		//System.out.println(Arrays.asList(data));
+		//System.out.println(Arrays.asList(names));
 		return new MultiTable(timePoints, data, names);
 	}
 }

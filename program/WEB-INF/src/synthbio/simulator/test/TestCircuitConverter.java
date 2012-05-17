@@ -88,7 +88,6 @@ public class TestCircuitConverter {
 	/**
 	 * Tests getInputs()
 	 */
-	@Ignore
 	@Test
 	public void testGetInputs() throws IOException, CircuitException, JSONException {
 		// result
@@ -109,6 +108,6 @@ public class TestCircuitConverter {
 		}
 		MultiTable exp = new MultiTable(times, data, names);
 			
-		assertEquals(exp, m);
+		assertEquals(exp.toString(), m.toString());
 	}
 }
