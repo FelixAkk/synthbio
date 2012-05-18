@@ -152,7 +152,7 @@ synthbio.gui.rebuildInputEditor = function(){
 synthbio.gui.saveInputs = function(circuit){
 	circuit=circuit || synthbio.model;
 	var inputs={
-		"length": synthbio.gui.inputTicks,
+		"length": circuit.getSimulationLength(),
 		"values": {}
 	};
 	$('.signal').each(function(index, elem){
@@ -191,11 +191,15 @@ $(document).ready(function() {
 
 	// Validate
 	$('#validate').on('click', function(){
+
+		synthbio.model.getInputs();
+		
 		console.log('Started validating circuit...');
 		synthbio.requests.validate(
 			function(response){
 				if(response.message !== '') {
 					console.log(response.message);
+					console.log(synthbio.model);
 				}
 			},
 			synthbio.model

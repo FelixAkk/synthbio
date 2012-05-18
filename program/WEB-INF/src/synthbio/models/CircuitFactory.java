@@ -89,6 +89,9 @@ public class CircuitFactory{
 	 * @return The Circuit.
 	 */
 	public Circuit fromJSON(JSONObject json) throws CircuitException, JSONException{
+		if(!(json.has("name") && json.has("description"))){
+			throw new CircuitException("JSON should have a name and a description");
+		}
 		Circuit circuit=new Circuit(
 			json.getString("name"),
 			json.getString("description")
@@ -107,6 +110,9 @@ public class CircuitFactory{
 		for(int i=0; i<JSONGates.length(); i++){
 			JSONObject JSONGate=JSONGates.getJSONObject(i);
 
+			if(!(JSONGate.has("position") && JSONGate.has("kind"))){
+				throw new CircuitException("Gate should contain fields: position, kind.");
+			}
 			Gate gate=new Gate(Position.fromJSON(JSONGate.getJSONObject("position")));
 			gate.setKind(JSONGate.getString("kind"));
 			
@@ -124,8 +130,6 @@ public class CircuitFactory{
 			throw new CircuitException("Circuit has no signals.");
 		}
 		
-	
-		
 		JSONObject signal;
 		int from;
 		int to;
@@ -136,6 +140,13 @@ public class CircuitFactory{
 		for(int i=0; i<JSONSignals.length(); i++){
 			signal=JSONSignals.getJSONObject(i);
 
+			if(!(signal.has("protein") && signal.has("from") && signal.has("to"))){
+				throw new CircuitException("Signal should contain fields: protein, from, to.");
+			}
+			
+			if(signal.getString("protein").length() != 1){
+				throw new CircuitException("Signal (" + signal.get("from") + " -> " + signal.get("to") + ") should have a protein assigned.");
+			}
 			//Signal from another Gate or input.
 			if(signal.get("from") instanceof Integer){
 				from=signal.getInt("from");

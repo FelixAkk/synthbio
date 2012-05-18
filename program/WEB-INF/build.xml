@@ -9,7 +9,7 @@
 			(http://www.shaunabram.com/hamcrest/)
 		-->
 		<fileset dir="lib" includes="hamcrest*.jar" />
-		<fileset dir="lib" includes="*.jar" />
+		<fileset dir="lib" includes="*.jar" excludes="ant-jshint*" />
 		<fileset dir="lib/htmlunit" includes="*.jar" />
 	</path>
 
@@ -171,7 +171,19 @@
 			</fileset>
 		</jslint>
 	</target>
-	
+
+	<!--
+		Is JSHint a better way?
+	-->
+	<taskdef name="jshint" classname="com.philmander.ant.JsHintAntTask"
+		classpath="lib/ant-jshint-0.2.1-deps.jar" />
+	<target name="jshint">
+		<jshint dir="../js" options="white=false,plusplus=false">
+			<include name="*.js" />
+			<exclude name="*.min.js" />
+		</jshint>
+	</target>
+
 	<!--
 		Minify all javascript files in js/, except those already minified.
 		http://code.google.com/p/jsmin-ant-task/

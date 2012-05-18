@@ -176,14 +176,21 @@ synthbio.Circuit = function(circuitName, desc, gates, signals, groupings, inputs
 
 	//a default for the inputs object.
 	this.inputs = inputs || { "length": 40, "values": {} };
+
+	this.getSimulationLength = function(){
+		return this.inputs.length;
+	};
+
+	this.toString = function(){
+		return this.name + ": " + this.description +
+			" consists of gates:{ " + this.gates.toString() + " }" +
+			" and signals:{ " + this.signals.toString() + " }" +
+			" and groupings:{ " + this.groups + "}";
+	};
 };
 
-synthbio.Circuit.prototype.toString = function(){
-	return this.name + ": " + this.desc +
-		" consists of gates:{ " + this.gates.toString() + " }" +
-		" and signals:{ " + this.signals.toString() + " }" +
-		" and groupings:{ " + this.groups + "}";
-};
+
+
 
 /**
  * Parses and constructs a circuit from the provided JSON. Assumes a valid circuit.
@@ -317,6 +324,11 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 			throw "Provided signal is not of type synthbio.Signal";
 		}
 	}
+	
+	//If signal is an input signal, initialize to low.
+	if (signal.from == "input") {
+		this.inputs[signal.protein] = "L";
+	}
 
 	return signal;
 };
@@ -350,6 +362,7 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 			i--;
 		}
 	}
+	
 	return removed;
 };
 
@@ -374,10 +387,10 @@ synthbio.Circuit.prototype.getInputSignals = function(){
 synthbio.Circuit.prototype.getInputs = function(){
 	//make sure all current signals are contained in the inputs,
 	//set them to low.
-	var signals=this.getInputSignals();
 	var self=this;
-	$.each(signals, function(index, signal){
+	$.each(this.getInputSignals(), function(index, signal){
 		if(!self.inputs.values[signal]){
+			//default uninitialized inputs to L.
 			self.inputs.values[signal]="L";
 		}else{
 			//remove all but (H|L) from input string.
@@ -388,7 +401,17 @@ synthbio.Circuit.prototype.getInputs = function(){
 };
 
 synthbio.Circuit.prototype.setInputs = function(inputs){
-	//@todo: verify proteins in inputs parameter againts this.getInputSignals
+	//Copy simulation length from existing property if it is omitted
+	if(!inputs.length){
+		inputs.length=this.inputs.length;
+	}
+	// verify proteins in inputs parameter againts this.getInputSignals
+	$.each(this.getInputSignals(), function (index, elem) {
+		if(!inputs.values[elem]){
+			throw "Inputs does not contain definition for protein " + elem;
+		}
+	});
+	
 	this.inputs=inputs;
 };
 

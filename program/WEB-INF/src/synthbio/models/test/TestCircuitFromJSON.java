@@ -190,4 +190,17 @@ public class TestCircuitFromJSON{
 		assertThat(c.getSimulationInput("A"), equalTo("H"));
 		assertThat(c.getSimulationInput("B"), equalTo("LLLLLLLLLLLLLLLLLLLLH"));
 	}
+
+
+	/**
+	 * Check if the fromJSON method complains about empty protein strings
+	 * in signals.
+	 */
+	@Test
+	public void test_EmptyProteinStringInSignal() throws Exception {
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("Signal (input -> 0) should have a protein assigned.");
+
+		this.loadTestFile("invalid-emptyProteinInSignal.json");
+	}
 }
