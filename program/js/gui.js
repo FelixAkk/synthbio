@@ -177,7 +177,7 @@ $(document).ready(function() {
 	// Load proteins from server.
 	$('#list-proteins').on('show', function() {
 		synthbio.requests.getCDSs(function(response) {
-			if(response instanceof String) {
+			if (response instanceof String) {
 				$('#list-proteins tbody td').html(response);
 				return;
 			}
@@ -187,6 +187,19 @@ $(document).ready(function() {
 			});
 			$('#list-proteins tbody').html(html);
 		});
+	});
+
+	// Validate
+	$('#validate').on('click', function(){
+		console.log('Started validating circuit...');
+		synthbio.requests.validate(
+			function(response){
+				if(response.message !== '') {
+					console.log(response.message);
+				}
+			},
+			synthbio.model
+		);
 	});
 
 	// Build the input thing.
@@ -296,7 +309,7 @@ $(document).ready(function() {
 	});
 
 	// Start pinging
-	synthbio.gui.pingServer();
+	//synthbio.gui.pingServer();
 	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();

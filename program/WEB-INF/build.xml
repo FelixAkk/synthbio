@@ -77,7 +77,11 @@
 		</junit> 
 	</target>
 
-	<target name="test-all" depends="test,test-servlets" />
+	
+	<!--
+		Target test-all runs all known tests after a clean build.
+	-->
+	<target name="test-all" depends="clean,test,test-servlets" />
 
 	<!--
 		Run a single test with

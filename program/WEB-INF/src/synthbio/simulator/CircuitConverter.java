@@ -13,13 +13,9 @@
  
 package synthbio.simulator;
 
-import synthbio.models.Circuit;
-import synthbio.models.CircuitException;
+import synthbio.models.*;
 import org.json.JSONException;
 import java.io.IOException;
-import synthbio.models.Gate;
-import synthbio.models.CDS;
-import synthbio.models.Promotor;
 import synthbio.simulator.Reaction;
 import synthbio.files.BioBrickRepository;
 
@@ -71,14 +67,16 @@ public class CircuitConverter {
 	 * Converts a .syn file to SBML.
 	 */
 	public String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
-		return convert(Circuit.fromJSON(Util.fileToString(filename)));
+		CircuitFactory cf=new CircuitFactory();
+		return convert(cf.fromJSON(Util.fileToString(filename)));
 	}
 	
 	/**
 	 * Converts a .syn String.
 	 */
 	public String convert(String syn) throws CircuitException, JSONException, IOException {
-		return convert(Circuit.fromJSON(syn));
+		CircuitFactory cf=new CircuitFactory();
+		return convert(cf.fromJSON(syn));
 	}
 	
 	/**

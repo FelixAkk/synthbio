@@ -18,6 +18,7 @@ import javax.xml.stream.XMLStreamException;
 
 import synthbio.models.Circuit;
 import synthbio.models.CircuitException;
+import synthbio.models.CircuitFactory;
 import org.json.JSONException;
 import synthbio.simulator.CircuitConverter;
 
@@ -50,7 +51,12 @@ public class Solver {
 	public MultiTable solveWithSynFile(String fileName)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		// Convert the SBML-file to a Model-object.
-		Circuit c = Circuit.fromJSON(Util.fileToString(fileName));
+
+		// (Jieter): Since fromJSON is now a method of CircuitFactory,
+		// it might be better to remove this method here, since it
+		// introduces dependencies, and it is not possible to inject a
+		// different BBR.
+		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(fileName));
 		return solve(c);
 	}
 

@@ -228,11 +228,11 @@ synthbio.requests.simulate = function(callback, name, input){
  * Checks if a circuit is ready to be simulated
  * Callback will be applied on the return messages
  */
-synthbio.requests.validate = function(callback,circuit){
+synthbio.requests.validate = function(callback, circuit){
 	
 	synthbio.requests.baseXHR({
 		url: "/Circuit?action=validate",
-		data: JSON.stringify(circuit),
+		data: { 'circuit': JSON.stringify(circuit) },
 		success: function(response){
 			callback(response);
 		},

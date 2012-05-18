@@ -22,9 +22,11 @@ import org.junit.*;
 import org.junit.Test;
 
 import synthbio.models.Circuit;
+import synthbio.models.CircuitException;
+import synthbio.models.CircuitFactory;
 import synthbio.simulator.CircuitConverter;
 import synthbio.Util;
-import synthbio.models.CircuitException;
+
 import org.json.JSONException;
 import java.io.IOException;
 
@@ -91,7 +93,8 @@ public class TestCircuitConverter {
 	@Test
 	public void testGetInputs() throws IOException, CircuitException, JSONException {
 		// result
-		Circuit c = Circuit.fromJSON(Util.fileToString(inputCircuit));
+		
+		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(inputCircuit));
 		MultiTable m = (new CircuitConverter()).getInputs(c);
 		
 		// expected result

@@ -27,6 +27,7 @@ import synthbio.files.BioBrickRepository;
 import synthbio.files.SynRepository;
 import synthbio.models.Circuit;
 import synthbio.models.CircuitException;
+import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
 
 /**
@@ -52,6 +53,13 @@ public class CircuitServlet extends SynthbioServlet {
 	private SynRepository synRepository;
 
 	/**
+	 * The BioBrick repository
+	 */
+	private BioBrickRepository biobrickRepository;
+
+	private CircuitFactory circuitFactory;
+	
+	/**
 	 * Get requests
 	 */
 	@Override
@@ -70,6 +78,20 @@ public class CircuitServlet extends SynthbioServlet {
 		}catch(Exception e){
 			json.fail("Could not load .syn files: "+e.getMessage());
 		}
+
+		try{
+			this.biobrickRepository=this.getBioBrickRepository();
+		}catch(Exception e){
+			json.fail("Could not load BioBrick repostiory: "+e.getMessage());
+		}
+		
+		
+		try{
+			this.circuitFactory=new CircuitFactory(this.biobrickRepository);
+		}catch(Exception e){
+			json.fail("Could not load Circuit factory: "+e.getMessage());
+		}
+			
 		
 		/* Dispatch actions.
 		 */
@@ -131,7 +153,7 @@ public class CircuitServlet extends SynthbioServlet {
 			}
 			this.doExport(circuit);
 		
-		//simulate(circuit, inputs)
+		//simulate(circuit)
 		}else if(action.equals("simulate")){
 			String circuit=request.getParameter("circuit");
 			if(circuit==null){
@@ -139,13 +161,7 @@ public class CircuitServlet extends SynthbioServlet {
 				out.println(json.toJSONString());
 				return;
 			}
-			String inputs=request.getParameter("inputs");
-			if(inputs==null){
-				json.fail("Parameter 'inputs' not set");
-				out.println(json.toJSONString());
-				return;
-			}
-			this.doSimulate(circuit, inputs);
+			this.doSimulate(circuit);
 			
 		//all other cases: invalid action
 		}else{
@@ -196,7 +212,8 @@ public class CircuitServlet extends SynthbioServlet {
 	 */
 	public void doValidate(String circuit){
 		try{
-			Circuit c=Circuit.fromJSON(circuit);
+			Circuit c=this.circuitFactory.fromJSON(circuit);
+			this.log(circuit);
 			json.success=true;
 			json.message="Circuit validates!";
 		}catch(CircuitException e){
@@ -213,7 +230,7 @@ public class CircuitServlet extends SynthbioServlet {
 	public void doExport(String circuit){
 		Circuit c;
 		try{
-			c=Circuit.fromJSON(circuit);
+			c=this.circuitFactory.fromJSON(circuit);
 		}catch(Exception e){
 			json.fail("Circuit does not validate, please use validate to correct errors.");
 			return;
@@ -225,10 +242,10 @@ public class CircuitServlet extends SynthbioServlet {
 	/**
 	 * Action: Simulate circuit
 	 */
-	public void doSimulate(String circuit, String inputs){
+	public void doSimulate(String circuit){
 		Circuit c;
 		try{
-			c=Circuit.fromJSON(circuit);
+			c=this.circuitFactory.fromJSON(circuit);
 		}catch(Exception e){
 			json.fail("Circuit does not validate, please use validate to correct errors.");
 			return;

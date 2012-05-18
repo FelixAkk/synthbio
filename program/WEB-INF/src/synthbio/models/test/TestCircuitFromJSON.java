@@ -40,8 +40,10 @@ public class TestCircuitFromJSON{
 	 */
 	private Circuit loadTestFile(String filename) throws Exception{
 		String json=Util.fileToString("data/test/models/"+filename);
+
+		CircuitFactory cf=new CircuitFactory();
 		
-		return Circuit.fromJSON(json);
+		return cf.fromJSON(json);
 	}
 
 
