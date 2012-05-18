@@ -150,6 +150,9 @@ $(document).ready(function() {
 					currentProt = wire.val();
 				}
 				el.html(wire.val());
+				
+				//update signal in model.
+				signal.protein=wire.val();
 			});
 		});
 
