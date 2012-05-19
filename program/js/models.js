@@ -147,10 +147,22 @@ synthbio.Signal = function(prot, from, to, fromEndpoint, toEndpoint){
 	this.to = to;
 	this.fromEndpoint = fromEndpoint;
 	this.toEndpoint = toEndpoint;
+
+	this.isInput = function () {
+		return this.from == 'input';
+	};
+	this.isOutput = function () {
+		return this.to == 'output';
+	};
+
+	this.getProtein = function () {
+		return this.protein;
+	};
 };
 synthbio.Signal.prototype.toString = function(){
 	return this.protein + " links " + this.from + " with " + this.to;
 };
+
 synthbio.Signal.fromMap = function(map){
 	return new synthbio.Signal(map.protein, map.from, map.to, map.fromEndpoint, map.toEndpoint);
 };
@@ -326,7 +338,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 	}
 	
 	//If signal is an input signal, initialize to low.
-	if (signal.from == "input") {
+	if (signal.isInput()) {
 		this.inputs[signal.protein] = "L";
 	}
 
@@ -372,9 +384,9 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
  */
 synthbio.Circuit.prototype.getInputSignals = function(){
 	var inputs=[];
-	$.each(this.signals, function(index, elem){
-		if(elem.from=='input'){
-			inputs.push(elem.protein);
+	$.each(this.signals, function(index, signal){
+		if(signal.isInput()){
+			inputs.push(signal.getProtein());
 		}
 	});
 	return inputs;
@@ -401,14 +413,14 @@ synthbio.Circuit.prototype.getInputs = function(){
 };
 
 synthbio.Circuit.prototype.setInputs = function(inputs){
-	//Copy simulation length from existing property if it is omitted
+	//Copy simulation length from model if it is omitted
 	if(!inputs.length){
-		inputs.length=this.inputs.length;
+		inputs.length=this.getSimulationLength();
 	}
 	// verify proteins in inputs parameter againts this.getInputSignals
-	$.each(this.getInputSignals(), function (index, elem) {
-		if(!inputs.values[elem]){
-			throw "Inputs does not contain definition for protein " + elem;
+	$.each(this.getInputSignals(), function (index, protein) {
+		if(!inputs.values[protein]){
+			throw "Inputs does not contain definition for protein " + protein;
 		}
 	});
 	

@@ -96,13 +96,16 @@ synthbio.gui.resetTooltip = function() {
  */
 synthbio.gui.inputEditor = function(){
 	console.log('entered inputEditor');
-	//only initialize once.
-	if($(this).hasClass("initialized")){
-		return;
-	}
 	
+	//clear input signals container.
+	$('#input-signals').html('');
+
 	var i;
 	var inputs=synthbio.model.getInputs();
+
+	//@todo check if all inputs are defined.
+
+	
 	//iterate over signals and create signal input editors.
 	$.each(
 		inputs.values,
@@ -122,6 +125,7 @@ synthbio.gui.inputEditor = function(){
 			$('#input-signals').append(signalEditor);
 		}
 	);
+	
 	//attach click listener to the high/low button.
 	$('.toggle-highlow').click(function(){
 		var self=$(this);
@@ -136,12 +140,6 @@ synthbio.gui.inputEditor = function(){
 			$(this).find('toggle-highlow').removeClass('low').removeClass('high');
 		}
 	});
-	
-	//set the container to initialized.
-	$(this).addClass("initialized");
-};
-synthbio.gui.rebuildInputEditor = function(){
-
 };
 
 /**
