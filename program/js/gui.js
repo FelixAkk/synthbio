@@ -213,12 +213,24 @@ $(document).ready(function() {
 		synthbio.requests.validate(
 			function(response){
 				if(response.message !== '') {
-					console.log(response.message);
+					$('#validate-alert p').html(response.message);
+					if(!response.success){
+						
+						$('#validate-alert').addClass("invalid");
+					}
+					
 					console.log(synthbio.model);
+					$('#validate-alert').modal();
 				}
 			},
 			synthbio.model
 		);
+
+		$("#validate-alert").bind('closed', function(){
+			$(this).find("p").html('');
+		});
+			
+		
 	});
 
 	// Build the input thing.
