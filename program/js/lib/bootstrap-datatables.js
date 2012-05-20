@@ -1,3 +1,5 @@
+/* http://datatables.net/blog/Twitter_Bootstrap_2 */
+
 /* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {
 	"sWrapper": "dataTables_wrapper form-inline"
