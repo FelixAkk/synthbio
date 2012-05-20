@@ -1,8 +1,22 @@
 <?xml version="1.0"?>
+<!--
+ * Project Zelula
+ *
+ * Contextproject TI2800
+ * TU Delft - University of Technology
+ *
+ * Authors:
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
+ *
+ * https://github.com/FelixAkk/synthbio
+-->
 <project name="synthbio" default="compile" basedir=".">
 	<property name="src" value="src"/>
 	<property name="build" value="classes"/>
 
+	<property name="js-minified" value="zelula-combined-min.js" />
+	
 	<path id="project-classpath">
 		<!--
 			Make sure Hamcrest is included first, to avoid SecurityExceptions from different Hamcrest versions being included.
@@ -22,7 +36,20 @@
 		Turn debugging on, and include lines in stack traces.
 	-->
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false" debug="on" debuglevel="lines,vars,source" />
+		<javac
+			srcdir="${src}"
+			destdir="${build}"
+			classpathref="project-classpath"
+			includeantruntime="false"
+			debug="on" debuglevel="lines,vars,source"
+		>
+			<!--
+				Turn this option on to see de details about this message:
+				Note: Some input files use unchecked or unsafe operations.
+				Note: Recompile with -Xlint:unchecked for details.
+			-->
+			<!-- <compilerarg value="-Xlint"/> -->
+		</javac>
 	</target>
 
 	<!-- Just an alias -->
@@ -152,7 +179,8 @@
 	-->
 	<target name="clean">
 		<delete dir="${build}" />
-		<mkdir dir="${build}"/> 
+		<delete dir="../js/min/" />
+		<delete file="../${js-minified}" />
 	</target>
 
 	<!--
@@ -187,18 +215,29 @@
 	<!--
 		Minify all javascript files in js/, except those already minified.
 		http://code.google.com/p/jsmin-ant-task/
+		and concatenate them to ${js-minified}
 	-->
 	<taskdef name="jsmin"
 		classname="net.matthaynes.jsmin.JSMin_Task"
 		classpath="lib/jsmin.0.2.4.jar" />
 	
 	<target name="jsmin" depends="jslint">
-		<jsmin destdir="../js/" suffix="true">
+		<jsmin destdir="../js/min/" suffix="true">
 			<fileset dir="../js/">
 				<include name="*.js"/>
 				<exclude name="*min.js"/>
 			</fileset>
+			<fileset dir="../js/lib/">
+				<include name="*.js"/>
+				<exclude name="*min.js"/>
+			</fileset>
 		</jsmin>
-	</target>
+		<concat destfile="../${js-minified}">
+			<fileset file="../js/*min.js" />
+			<fileset file="../js/lib/*min.js" />
+			<fileset file="../js/min/*min.js" />
+		</concat>
 
+		<echo>Minified all javascript files in ../js/** and combined them in ../${js-minified}</echo>
+	</target>
 </project>
