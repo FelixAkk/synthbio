@@ -1,0 +1,53 @@
+%
+\documentclass[a4paper]{article}
+\newcommand{\vcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\usepackage[normalem]{ulem}
+\usepackage{textpos} % Manual positioning
+\usepackage[table]{xcolor}
+
+\title{Agenda \\ Vergadering groep E}
+\author{Voorzitter: Niels Doekemeijer}
+\begin{document}
+
+\maketitle
+\subsection*{Opening}
+\subsection*{Vaststelling agenda}
+\subsection*{Mededelingen}
+\section{SCRUM sprint 3 terugblik}
+\section{SCRUM Sprint 4 planning}
+\section{Taakverdeling}
+\subsection*{W.v.t.t.k.}
+\subsection*{Sluiting}
+
+\vspace{1in}
+Sprintoverzicht:\\
+\begin{textblock*}{0mm}(-40mm,0mm)%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|} \hline
+\multicolumn{2}{|c|}{Q1} & \multicolumn{10}{c|}{Q2} \\ \hline
+\vcell{Week 6 \\ \textbf{(19/3)}} & 
+\vcell{Week 7 \\ \textbf{(26/3)}} &
+\vcell{Week 1 \\ \textbf{(23/4)}} &
+\vcell{Week 2 \\ \textbf{(30/4)}} &
+\vcell{Week 3 \\ \textbf{(7/5)}} &
+\vcell{Week 4 \\ \textbf{(14/5)}} &
+\vcell{Week 5 \\ \textbf{(21/5)}} \cellcolor[gray]{0.9}&
+\vcell{Week 6 \\ \textbf{(28/5)}} &
+\vcell{Week 7 \\ \textbf{(4/6)}} &
+\vcell{Week 8 \\ \textbf{(11/6)}} &
+\vcell{Week 9 \\ \textbf{(18/6)}} &
+\vcell{Week 10 \\ \textbf{(25/6)}} \\ \hline
+
+\multicolumn{2}{|c|}{Sprint 1} & 
+\multicolumn{2}{c|}{Sprint 2} & 
+\multicolumn{2}{c|}{\vcell[t]{Sprint 3 \\ \sout{\& Testen} }} & 
+\multicolumn{2}{c|}{\vcell[t]{Sprint 4 \\ \& Testen }\cellcolor[gray]{0.9}} & 
+\multicolumn{4}{c|}{\vcell[t]{Sprint 5 \\ \& Testen \\ \& Final doc \\ \& Presentatie}}
+
+\\[3cm]
+\hline
+\end{tabular}
+\end{textblock*}
+
+\end{document}
