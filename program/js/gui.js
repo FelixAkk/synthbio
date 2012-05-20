@@ -500,7 +500,7 @@ synthbio.gui.getFreeEndpoint = function(id, input, index) {
 	}
 
 	// Check if index is in the endpoint array
-	if (index && index[ep]) {
+	if (ep[index]) {
 		return ep[index];
 	} else {
 		// Else find the first non-full endpoint
@@ -781,6 +781,6 @@ synthbio.gui.pingServer = (function () {
 					$('#connection-modal').modal();
 				}
 			})
-			.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
+			//.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
 	};
 }());
