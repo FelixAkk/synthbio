@@ -311,7 +311,7 @@ $(document).ready(function() {
 	});
 
 	// Start pinging
-	//synthbio.gui.pingServer();
+	synthbio.gui.pingServer();
 	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();
