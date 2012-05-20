@@ -122,7 +122,7 @@ $(document).ready(function() {
 
 			connCount++;
 			var lbl = '<a class="wires" id="conn' + connCount + '" href=#>';
-			lbl += signal.protein || "Choose protein";
+			lbl += signal.getProtein() || "Choose protein";
 			lbl += "</a>";
 			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
@@ -152,7 +152,7 @@ $(document).ready(function() {
 				el.html(wire.val());
 				
 				//update signal in model.
-				signal.protein=wire.val();
+				signal.setProtein(wire.val());
 			});
 		});
 

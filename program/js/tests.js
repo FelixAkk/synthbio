@@ -116,7 +116,7 @@ $(document).ready(function() {
 		 * Gate properties
 		 */
 		test("Gates should have the right properties", function() {
-			equal(gate.kind, "and", "Gates store types");
+			equal(gate.getKind(), "and", "Gates store types");
 			equal(gate.getX(), 10, "Gates store X coordinates");
 			equal(gate.getY(), 20, "Gates store Y coordinates");
 		});
@@ -125,7 +125,7 @@ $(document).ready(function() {
 		 * Gate properties
 		 */
 		test("Gates should have the right properties", function() {
-			equal(notgate.kind, "not", "Gates store types");
+			equal(notgate.getKind(), "not", "Gates store types");
 			equal(notgate.getX(), 10, "Gates store X coordinates");
 			equal(notgate.getY(), 22, "Gates store Y coordinates");
 		});
@@ -134,7 +134,7 @@ $(document).ready(function() {
 		 * Gate toString
 		 */
 		test("Gates should have a working toString method", function() {
-			equal(gate.toString(), gate.kind + ": X = " + gate.getX() + ", Y = "+ gate.getY() ,"The toString method works");
+			equal(gate.toString(), gate.getKind() + ": (X = " + gate.getX() + ", Y = " + gate.getY() +")" ,"The toString method works");
 		});
 		
 		/**
@@ -157,16 +157,16 @@ $(document).ready(function() {
 		 * Signal properties
 		 */
 		test("Signals should store the right properties", function() {
-			equal(signal.protein, "A", "type of protein");
-			equal(signal.from, "1", "Origin of signal");
-			equal(signal.to, "2", "Destination of signal");
+			equal(signal.getProtein(), "A", "type of protein");
+			equal(signal.getFrom(), "1", "Origin of signal");
+			equal(signal.getTo(), "2", "Destination of signal");
 		});
 		
 		/**
 		 * Signal toString
 		 */
 		test("Signals should have a toString method", function() {
-			equal(signal.toString(), signal.protein + " links " + signal.from + " with " + signal.to);
+			equal(signal.toString(), signal.getProtein() + " links " + signal.getFrom() + " with " + signal.getTo());
 		});
 		
 		/**
@@ -190,11 +190,11 @@ $(document).ready(function() {
 		 * Properties of Circuits
 		 */
 		test("Circuits should have the correct properties", function() {
-			equal(circuit.name, circuitName, "Circuit has a name");
-			equal(circuit.description, circuitDescription, "Circuit has a description");
-			deepEqual(circuit.gates, [gate, gate], "Circuit has a list of gates");
-			deepEqual(circuit.signals, [signal, signal], "Circuit has a list of signals");
-			deepEqual(circuit.groups, [], "Circuit has groupings of gates");
+			equal(circuit.getName(), circuitName, "Circuit has a name");
+			equal(circuit.getDescription(), circuitDescription, "Circuit has a description");
+			deepEqual(circuit.getGates(), [gate, gate], "Circuit has a list of gates");
+			deepEqual(circuit.getSignals(), [signal, signal], "Circuit has a list of signals");
+			deepEqual(circuit.getGroups(), [], "Circuit has groupings of gates");
 		});
 
 		/**

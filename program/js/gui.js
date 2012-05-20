@@ -695,8 +695,8 @@ synthbio.gui.displaySignal = function(signal, connection) {
 	synthbio.util.assert(signal instanceof synthbio.Signal, "Provided signal ojbect must be an instance of 'synthbio.Signal'");
 
 	if (!connection) {
-		var src = synthbio.gui.getGateIdByIndex(signal.from);
-		var dst = synthbio.gui.getGateIdByIndex(signal.to);
+		var src = synthbio.gui.getGateIdByIndex(signal.getFrom());
+		var dst = synthbio.gui.getGateIdByIndex(signal.getTo());
 		connection = jsPlumb.connect({
 			source: synthbio.gui.getFreeEndpoint(src, false, signal.fromEndpoint),
 			target: synthbio.gui.getFreeEndpoint(dst, true, signal.toEndpoint),
