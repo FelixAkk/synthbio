@@ -171,8 +171,22 @@ synthbio.gui.saveInputs = function(circuit){
 $(document).ready(function() {
 	// Activate zhe Dropdowns Herr Doktor!
 	$('.dropdown-toggle').dropdown();
+
+	// Options for DataTables
+	var dtOptions = {
+		"sDom": "<'row'lir>t<'row'fp>",
+		"sPaginationType": "bootstrap",
+		"oLanguage": {"sLengthMenu": "_MENU_ per page"},
+		"bAutoWidth": false,
+		"bDestroy": true,
+		//"bFilter": false,
+		"bInfo": false,
+        "bLengthChange": false,
+        "bPaginate": false
+	};
 	
 	// Load proteins from server.
+	var lpTable;
 	$('#list-proteins').on('show', function() {
 		synthbio.requests.getCDSs(function(response) {
 			if (response instanceof String) {
@@ -183,7 +197,10 @@ $(document).ready(function() {
 			$.each(response, function(i, cds) {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
+
+			if (lpTable) { lpTable.fnClearTable(false); }
 			$('#list-proteins tbody').html(html);
+			lpTable = $('#list-proteins table').dataTable(dtOptions);
 		});
 	});
 
@@ -241,6 +258,7 @@ $(document).ready(function() {
 	});
 
 	// List files from server.
+	var fTable;
 	$('#files').on('show', function(event) {
 		// Request stuff from server and define what happens next
 		synthbio.requests.listFiles(function(response) {
@@ -258,7 +276,11 @@ $(document).ready(function() {
 			$.each(response, function(i, file) {
 				html+='<tr><td>'+file+'</td><td>x</td><td>x</td></tr>';
 			});
+
+			
+			if (fTable) { fTable.fnClearTable(false); }
 			$('#files tbody').html(html);
+			fTable = $('#files table').dataTable(dtOptions);
 
 			// Make each row respond to selection
 			$("#files tbody tr").each(function(index, element) {
@@ -781,6 +803,6 @@ synthbio.gui.pingServer = (function () {
 					$('#connection-modal').modal();
 				}
 			})
-			//.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
+			.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
 	};
 }());
