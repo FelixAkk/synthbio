@@ -128,18 +128,26 @@ $(document).ready(function() {
 			
 			var currentProt = "A";
 			var el = $("#conn" + connCount, 0);
+			var prots = '';
+			
+			$.each(usedProteins, function(i, cds){
+				prots += '<option value="' +i+ '">' +i+ "</option>";
+			});
+			el.html('<select class="wire" id="wire'+connCount+'">' +
+				prots +
+				"</select>"
+			);
 			
 			el.on("click", function(){
-				var prots="";
-				$.each(usedProteins, function(i, cds){
-					if(!(cds.used)){
-						prots += '<option value="' +i+ '">' +i+ "</option>";
+				$.each($('#wire'+connCount)[0], function(i, cds){
+					alert(cds.val())
+					if(usedProteins[cds.val()].used){
+						cds.attr('disabled');
+					}
+					else{
+						cds.removeAttr('disabled');
 					}
 				});
-				el.html('<select class="wire" id="wire'+connCount+'">' +
-					prots +
-					"</select>"
-				);
 			});
 			
 			el.on("change", function(){
