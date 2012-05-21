@@ -198,7 +198,10 @@ $(document).ready(function() {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
 
-			if (lpTable) { lpTable.fnClearTable(false); }
+			if (lpTable) {
+				lpTable.fnClearTable(false);
+			}
+
 			$('#list-proteins tbody').html(html);
 			lpTable = $('#list-proteins table').dataTable(dtOptions);
 		});
@@ -251,11 +254,27 @@ $(document).ready(function() {
 	$("#save-as").on("click", function() {
 		$("#files .modal-header h3").html("Save As…");
 		$("#files .modal-footer .btn-primary").html("Save As…");
+		// Set the correct event handler
+		synthbio.gui.fileOpHandler = synthbio.gui.saveAsHandler;
 	});
 	$("#open").on("click", function() {
 		$("#files .modal-header h3").html("Open…");
 		$("#files .modal-footer .btn-primary").html("Open…");
+		// Set the correct event handler
+		synthbio.gui.fileOpHandler = synthbio.gui.openHandler;
+		$("#files form").on("submit", function(event) {
+			// Surpress default redirection due to <form action="destination.html"> action
+			event.stopPropagation();
+			event.preventDefault();
+			// get the filename
+			var input = $("input", this)[0].value;
+			// TODO: check if the entered filename is in the list
+			// load the file
+			synthbio.gui.fileOpHandler(input);
+			return false; // would prevent the form from making us go anywhere if .preventDefault() fails
+		});
 	});
+
 	// Cleanup time; prepare it for another time
 	$('#files').on('hidden', function() {
 		$("#files tbody").html('<tr><td>Loading ...</td></tr>');
@@ -298,7 +317,8 @@ $(document).ready(function() {
 			$("#files tbody tr").each(function(index, element) {
 				element = $(element); // extend to provide the .on() function
 				element.on("click", function() {
-					synthbio.gui.fileOpHandler(index);
+					synthbio.gui.fileOpHandler(response[index]);
+					$('#files').modal('hide');
 				});
 			});
 		});
@@ -390,6 +410,20 @@ $(document).ready(function() {
 
 
 });
+
+/**
+ * Handles whap happens when a file has been selected for opening in the file dialog.
+ *
+ * @param fileName The name of the file that was selected
+ */
+synthbio.gui.openHandler = function(fileName) {
+	synthbio.requests.getFile(fileName, function(response) {
+		if(response.success === false) {
+			console.error(response.message);
+		}
+		synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
+	});
+}
 
 synthbio.gui.reset = function() {
 	var id;
