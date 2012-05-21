@@ -247,7 +247,7 @@ public class CircuitServlet extends SynthbioServlet {
 		try{
 			c=this.circuitFactory.fromJSON(circuit);
 		}catch(Exception e){
-			json.fail("Circuit does not validate, please use validate to correct errors.");
+			json.fail("Circuit does not validate, please use validate to correct errors."+e.getMessage());
 			return;
 		}
 		json.data=c.toSBML();

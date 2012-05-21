@@ -147,23 +147,23 @@ synthbio.gui.inputEditor = function(){
  * 
  * @param circuit the circuit to save to, defaults to syntbio.model
  */
-synthbio.gui.saveInputs = function(circuit){
-	circuit=circuit || synthbio.model;
+synthbio.gui.saveInputs = function(circuit) {
+	circuit = circuit || synthbio.model;
 	var inputs={
 		"length": circuit.getSimulationLength(),
 		"values": {}
 	};
-	$('.signal').each(function(index, elem){
-		var signal='';
-		$(this).find('.tick').each(function(index, elem){
-			if($(elem).hasClass('high')){
+	$('.signal').each(function(index, elem) {
+		var signal = '';
+		$(this).find('.tick').each(function(index, elem) {
+			if($(elem).hasClass('high')) {
 				signal+='H';
-			}else{
+			} else {
 				signal+='L';
 			}
 		});
 
-		inputs.values[$(this).attr('id').substr(-1)]=signal;
+		inputs.values[$(this).attr('id').substr(-1)] = signal;
 	});
 	circuit.setInputs(inputs);
 };
@@ -189,7 +189,7 @@ $(document).ready(function() {
 	var lpTable;
 	$('#list-proteins').on('show', function() {
 		synthbio.requests.getCDSs(function(response) {
-			if (response instanceof String) {
+			if(response instanceof String) {
 				$('#list-proteins tbody td').html(response);
 				return;
 			}
@@ -198,10 +198,14 @@ $(document).ready(function() {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
 
+<<<<<<< Updated upstream
 			if (lpTable) {
 				lpTable.fnClearTable(false);
 			}
 
+=======
+			if(lpTable) { lpTable.fnClearTable(false); }
+>>>>>>> Stashed changes
 			$('#list-proteins tbody').html(html);
 			lpTable = $('#list-proteins table').dataTable(dtOptions);
 		});
@@ -227,13 +231,11 @@ $(document).ready(function() {
 			}
 		);
 
-		$("#validate-alert").bind('closed', function(){
-			$(this).find("p").html('');
-		});
-			
-		
 	});
-
+	$("#validate-alert").bind('closed', function(){
+		$(this).find("p").html('');
+		$('#validate-alert').addClass("invalid");
+	});
 	$('#dump-circuit').on('click', function() {
 		console.log(synthbio.model);
 	});
@@ -243,7 +245,6 @@ $(document).ready(function() {
 	 *  Build the input editor.
 	 */
 	$('#define-inputs').on('show', function() {
-
 		// build the editor
 		synthbio.gui.inputEditor();
 
@@ -253,9 +254,38 @@ $(document).ready(function() {
 		});
 	});
 
-	
+	/**
+	 * Run simulation
+	 */
+	$('#simulate').on('click', function() {
+		console.log('Simulate initiated.');
+		console.log('circuit before getInputs()', synthbio.model);
+		synthbio.model.getInputs();
+		console.log('circuit after getInputs()', synthbio.model);
+		
+		synthbio.requests.simulate(
+			function(response){
+				console.log("synthbio.request.simulate called response callback");
+				if(response.message !== '') {
+					$('#validate-alert p').html(response.message);
+					if(!response.success){
+						
+						$('#validate-alert').addClass("invalid");
+					}
+					
+					console.log(synthbio.model);
+					$('#validate-alert').modal();
+				}
+					
+			},
+			synthbio.model
+		);
+		
+	});
 
-	// Setup file operation dialog on menu clicks
+	/**
+	 * Setup file operation dialog on menu clicks
+	 */
 	$("#save-as").on("click", function() {
 		$("#files .modal-header h3").html("Save As…");
 		$("#files .modal-footer .btn-primary").html("Save As…");
