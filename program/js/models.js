@@ -213,13 +213,11 @@ synthbio.Circuit = function(circuitName, desc, gates, signals, groupings, inputs
 };
 
 /**
- * Parses and constructs a circuit from the provided JSON. Assumes a valid circuit.
  *
- * @param json JSON (usually from a .syn) file representing a circuit.
+ * @param map Takes a JavaScript object which is a map representing the Circuit and converts it into the type
+ * synthbio.Circuit
  */
-synthbio.Circuit.fromJSON = function(json) {
-	var map = $.parseJSON(json);
-	
+synthbio.Circuit.fromMap = function(map) {
 	var circuit=new synthbio.Circuit(map.name, map.description);
 
 	//add the gates
@@ -232,17 +230,28 @@ synthbio.Circuit.fromJSON = function(json) {
 		circuit.addSignal(synthbio.Signal.fromMap(elem));
 	});
 
-	//TODO: implement grouping.
-	//~ $.each(map.groups, function(i, elem){
-	//~		circuit.addGroup(synthbio.Group.fromMap(elem));
-	//~ });
-
 	//If input information is present, add that as well
 	if (map.inputs) {
 		circuit.setInputs(map.inputs);
 	}
 
+	//TODO: implement grouping.
+	//~ $.each(map.groups, function(i, elem){
+	//~		circuit.addGroup(synthbio.Group.fromMap(elem));
+	//~ });
+
 	return circuit;
+};
+
+/**
+ * Parses and constructs a circuit from the provided JSON. Assumes a valid circuit.
+ *
+ * @param json JSON (usually from a .syn) file representing a circuit.
+ */
+synthbio.Circuit.fromJSON = function(json) {
+	var map = $.parseJSON(json);
+
+	return synthbio.Circuit.fromMap(map);
 };
 
 synthbio.Circuit.prototype.toString = function(){
@@ -288,11 +297,12 @@ synthbio.Circuit.prototype.getInputs = function(){
 };
 
 synthbio.Circuit.prototype.setInputs = function(inputs){
-	//Copy simulation length from model if it is omitted
+	
+	// Copy simulation length from model if it is omitted
 	if(!inputs.length){
 		inputs.length=this.getSimulationLength();
 	}
-	// verify proteins in inputs parameter againts this.getInputSignals
+	// Verify proteins in inputs parameter againts this.getInputSignals
 	$.each(this.getInputSignals(), function (index, protein) {
 		if(!inputs.values[protein]){
 			throw "Inputs does not contain definition for protein " + protein;
@@ -417,7 +427,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 	
 	//If signal is an input signal, initialize to low.
 	if (signal.isInput()) {
-		this.inputs[signal.protein] = "L";
+		this.inputs.values[signal.protein] = "L";
 	}
 
 	return signal;
@@ -491,6 +501,7 @@ synthbio.model = new synthbio.Circuit("", "");
  */
 synthbio.loadCircuit = function(circuit) {
 	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
+	// TODO: try convert fromMap to Circuit.
 
 	synthbio.gui.reset();
 

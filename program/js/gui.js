@@ -147,23 +147,23 @@ synthbio.gui.inputEditor = function(){
  * 
  * @param circuit the circuit to save to, defaults to syntbio.model
  */
-synthbio.gui.saveInputs = function(circuit){
-	circuit=circuit || synthbio.model;
+synthbio.gui.saveInputs = function(circuit) {
+	circuit = circuit || synthbio.model;
 	var inputs={
 		"length": circuit.getSimulationLength(),
 		"values": {}
 	};
-	$('.signal').each(function(index, elem){
-		var signal='';
-		$(this).find('.tick').each(function(index, elem){
-			if($(elem).hasClass('high')){
+	$('.signal').each(function(index, elem) {
+		var signal = '';
+		$(this).find('.tick').each(function(index, elem) {
+			if($(elem).hasClass('high')) {
 				signal+='H';
-			}else{
+			} else {
 				signal+='L';
 			}
 		});
 
-		inputs.values[$(this).attr('id').substr(-1)]=signal;
+		inputs.values[$(this).attr('id').substr(-1)] = signal;
 	});
 	circuit.setInputs(inputs);
 };
@@ -189,7 +189,7 @@ $(document).ready(function() {
 	var lpTable;
 	$('#list-proteins').on('show', function() {
 		synthbio.requests.getCDSs(function(response) {
-			if (response instanceof String) {
+			if(response instanceof String) {
 				$('#list-proteins tbody td').html(response);
 				return;
 			}
@@ -198,7 +198,10 @@ $(document).ready(function() {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
 
-			if (lpTable) { lpTable.fnClearTable(false); }
+			if (lpTable) {
+				lpTable.fnClearTable(false);
+			}
+
 			$('#list-proteins tbody').html(html);
 			lpTable = $('#list-proteins table').dataTable(dtOptions);
 		});
@@ -206,12 +209,57 @@ $(document).ready(function() {
 
 	// Validate
 	$('#validate').on('click', function(){
-
-		synthbio.model.getInputs();
-		
 		console.log('Started validating circuit...');
 		synthbio.requests.validate(
+			synthbio.model,
 			function(response){
+				if(response.message !== '') {
+					$('#validate-alert p').html(response.message);
+					if(!response.success){
+						
+						$('#validate-alert').addClass("invalid");
+					}
+					$('#validate-alert').modal();
+				}else{
+					//call
+					alert('simulation valid, display...');
+				}
+			}
+		);
+
+	});
+	$("#validate-alert").bind('closed', function(){
+		$(this).find("p").html('');
+		$('#validate-alert').addClass("invalid");
+	});
+	$('#dump-circuit').on('click', function() {
+		console.log(synthbio.model);
+	});
+		
+
+	/**
+	 *  Build the input editor.
+	 */
+	$('#define-inputs').on('show', function() {
+		// build the editor
+		synthbio.gui.inputEditor();
+
+		// attach action to save button.
+		$('#save-inputs').click(function(){
+			synthbio.gui.saveInputs();
+		});
+	});
+
+	/**
+	 * Run simulation
+	 */
+	$('#simulate').on('click', function() {
+		console.log('Simulate initiated.');
+	
+		synthbio.requests.simulate(
+			synthbio.model,
+			function(response){
+				console.log("synthbio.request.simulate called response callback");
 				if(response.message !== '') {
 					$('#validate-alert p').html(response.message);
 					if(!response.success){
@@ -222,40 +270,38 @@ $(document).ready(function() {
 					console.log(synthbio.model);
 					$('#validate-alert').modal();
 				}
-			},
-			synthbio.model
+			}
 		);
-
-		$("#validate-alert").bind('closed', function(){
-			$(this).find("p").html('');
-		});
-			
 		
 	});
 
-	// Build the input thing.
-	$('#define-inputs').on('show', function() {
-
-		// build the editor
-		synthbio.gui.inputEditor();
-
-		// attach action to save button.
-		$('#save-inputs').click(function(){
-			synthbio.gui.saveInputs();
-		});
-	});
-
-	
-
-	// Setup file operation dialog on menu clicks
+	/**
+	 * Setup file operation dialog on menu clicks
+	 */
 	$("#save-as").on("click", function() {
 		$("#files .modal-header h3").html("Save As…");
 		$("#files .modal-footer .btn-primary").html("Save As…");
+		// Set the correct event handler
+		synthbio.gui.fileOpHandler = synthbio.gui.saveAsHandler;
 	});
 	$("#open").on("click", function() {
 		$("#files .modal-header h3").html("Open…");
 		$("#files .modal-footer .btn-primary").html("Open…");
+		// Set the correct event handler
+		synthbio.gui.fileOpHandler = synthbio.gui.openHandler;
+		$("#files form").on("submit", function(event) {
+			// Surpress default redirection due to <form action="destination.html"> action
+			event.stopPropagation();
+			event.preventDefault();
+			// get the filename
+			var input = $("input", this)[0].value;
+			// TODO: check if the entered filename is in the list
+			// load the file
+			synthbio.gui.fileOpHandler(input);
+			return false; // would prevent the form from making us go anywhere if .preventDefault() fails
+		});
 	});
+
 	// Cleanup time; prepare it for another time
 	$('#files').on('hidden', function() {
 		$("#files tbody").html('<tr><td>Loading ...</td></tr>');
@@ -298,7 +344,8 @@ $(document).ready(function() {
 			$("#files tbody tr").each(function(index, element) {
 				element = $(element); // extend to provide the .on() function
 				element.on("click", function() {
-					synthbio.gui.fileOpHandler(index);
+					synthbio.gui.fileOpHandler(response[index]);
+					$('#files').modal('hide');
 				});
 			});
 		});
@@ -345,7 +392,7 @@ $(document).ready(function() {
 	});
 
 	// Start pinging
-	synthbio.gui.pingServer();
+	//synthbio.gui.pingServer();
 	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();
@@ -390,6 +437,20 @@ $(document).ready(function() {
 
 
 });
+
+/**
+ * Handles whap happens when a file has been selected for opening in the file dialog.
+ *
+ * @param fileName The name of the file that was selected
+ */
+synthbio.gui.openHandler = function(fileName) {
+	synthbio.requests.getFile(fileName, function(response) {
+		if(response.success === false) {
+			console.error(response.message);
+		}
+		synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
+	});
+}
 
 synthbio.gui.reset = function() {
 	var id;

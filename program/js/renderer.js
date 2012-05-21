@@ -119,46 +119,51 @@ $(document).ready(function() {
 
 			signal.fromEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[0]);
 			signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
-
+			
 			connCount++;
 			var lbl = '<a class="wires" id="conn' + connCount + '" href=#>';
 			lbl += signal.getProtein() || "Choose protein";
 			lbl += "</a>";
 			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
-			var currentProt = "A";
-			var el = $("#conn" + connCount, 0);
-			var prots = '';
+			//Either it's a Char or Choose Protein as a string, hence <2
+			if(signal.getProtein().length<2){
+				usedProteins[signal.getProtein()].used = true;
+			}
 			
-			$.each(usedProteins, function(i, cds){
-				prots += '<option value="' +i+ '">' +i+ "</option>";
-			});
-			el.html('<select class="wire" id="wire'+connCount+'">' +
-				prots +
-				"</select>"
-			);
+			var currentProt = "";
+			var el = $('#conn' + connCount, 0);
+			var prots = '';
+			//boolean which checks if a dropdown (select) menu is active
+			var select = false;
 			
 			el.on("click", function(){
-				var wire =  $("#wire"+connCount);
-				$.each(wire[0], function(i,option){
-					if(usedProteins[option.innerHTML].used && !(option.innerHTML.equal(currentProt))){
-						//or with attr(disable)
-						//or with prop(disable)
-						option.hide();
-					}
-					else{
-						option.show();
-					}
-				});
+				if(!select){
+					prots = '';
+					$.each(usedProteins, function(i,cds){
+						if(!(usedProteins[i].used) || i===currentProt){
+							prots += '<option value="' +i+ '">' +i+ '</option>';
+						}
+					});
+					el.html('<select class="wire" id="wire'+connCount+'">'+ '<option value="">Choose protein</option>' + prots + '</select>');
+					select = true;
+				}
+				else if($('#wire'+connCount).val()===""){
+					$('#wire'+connCount).children[0].remove();
+				}
 			});
 
 			el.on("change", function(){
-				var wire = $("#wire"+connCount);
+				var wire = $('#wire'+connCount);
 				if(!(usedProteins[wire.val()].used)){
 					usedProteins[wire.val()].used = true;
-					usedProteins[currentProt].used = false;
+					if(currentProt!==""){
+						usedProteins[currentProt].used = false;
+					}
 					currentProt = wire.val();
 				}
+				select = false;
+				el.html(wire.val());
 				
 				//update signal in model.
 				signal.setProtein(wire.val());

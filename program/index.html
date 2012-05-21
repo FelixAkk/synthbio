@@ -24,28 +24,29 @@
 		<aside class="nav" id="title"><div id="icon"></div>Zelula</aside>
 		<ul class="nav">
 			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
+				<a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li><a href="#files" data-toggle="modal" id="open">Open</a></li>
-					<li><a href="#" id="save">Save</a></li>
+					<li><a href="javascript: void(0);" id="save">Save</a></li>
 					<li><a href="#files" data-toggle="modal" id="save-as">Save As…</a></li>
 					<li class="divider"></li>
-					<li><a href="#">Exit application</a></li>
+					<li><a href="javascript: void(0);">Exit application</a></li>
 				</ul>
 			</li>
 			<li class="dropdown">
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Simulate<b class="caret"></b></a>
+				<a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown">Simulate<b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li><a href="javascript:void(0)" id="validate">Validate circuit</a></li>
 					<li><a href="#list-proteins" data-toggle="modal">Show proteins</a></li>
 					<li class="divider"></li>
 					<li><a href="#define-inputs" data-toggle="modal">Define inputs</a></li>
-					<li><a href="#">Show output graph</a></li>
+					<li><a href="javascript: void(0);">Show output graph</a></li>
 					<li class="divider"></li>
-					<li><a href="#">Run solver</a></li>
+					<li><a href="javascript: void(0)" id="simulate">Run solver</a></li>
 				</ul>
 			</li>
 			<li><a href="#about" data-toggle="modal">About</a></li>
+			<li><a href="javascript:void(0)" id="dump-circuit">Dump circuit</a></li>
 		</ul>
 	</nav>
 
@@ -133,7 +134,7 @@
 			</p>
 		</div>
 		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal">Close</a>
+			<a href="javascript: void(0);" class="btn" data-dismiss="modal">Close</a>
 		</div>
 	</div>
 
@@ -178,11 +179,11 @@
 			</table>
 		</div>
 		<div class="modal-footer">
-			<form class="typeahead-group form-search">
+			<form class="typeahead-group form-search" onsubmit="return false;">
 				<input type="text" class="span3" data-provide="typeahead" data-items="4" placeholder="Filename …"/>
 				<button type="submit" class="btn btn-primary">File action</button>
 			</form>
-			<a href="#" class="btn" data-dismiss="modal">Close</a>
+			<a href="javascript: void(0);" class="btn" data-dismiss="modal">Close</a>
 		</div>
 	</div>
 
@@ -210,7 +211,7 @@
 			</table>
 		</div>
 		<div class="modal-footer">
-			<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+			<a href="javascript: void(0);" class="btn btn-primary" data-dismiss="modal">Close</a>
 		</div>
 	</div>
 	
@@ -229,7 +230,7 @@
 			project GitHub in <a href="">this Wiki article</a>.</p>
 		</div>
 		<div class="modal-footer">
-			<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+			<a href="javascript: void(0);" class="btn btn-primary" data-dismiss="modal">Close</a>
 		</div>
 	</div>
 
@@ -256,14 +257,14 @@
 	<script type="application/javascript" language="javascript" src="js/lib/jquery-1.7.2.min.js"></script>
 	<script type="application/javascript" language="javascript" src="js/lib/jquery-ui-1.8.19.min.js"></script>
 	<script type="application/javascript" language="javascript" src="js/lib/jquery.jsPlumb-1.3.9-all-min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/lib/jquery.dataTables-1.9.1-min.js"></script>
 	<script type="application/javascript" language="javascript" src="js/lib/bootstrap.min.js"></script>
+	<script type="application/javascript" language="javascript" src="js/lib/bootstrap-datatables.js"></script>
 	<script type="application/javascript" language="javascript" src="js/lib/less-1.3.0.min.js"></script>
 	<script type="application/javascript" language="javascript" src="js/util.js"></script>
 	<script type="application/javascript" language="javascript" src="js/models.js"></script>
 	<script type="application/javascript" language="javascript" src="js/requests.js"></script>
 	<script type="application/javascript" language="javascript" src="js/gui.js"></script>
 	<script type="application/javascript" language="javascript" src="js/renderer.js"></script>
-	<script type="application/javascript" language="javascript" src="js/lib/jquery.dataTables-1.9.1-min.js"></script>
-	<script type="application/javascript" language="javascript" src="js/lib/bootstrap-datatables.js"></script>
 </body>
 </html>
