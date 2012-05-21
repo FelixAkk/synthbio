@@ -154,4 +154,7 @@ public class Solver {
 		MultiTable solution = solver.solve(interpreter, inputs.getBlock(0), interpreter.getInitialValues());
 		return solution;
 	}
+	public String multiTableToJSON(MultiTable mt){
+		return "{\"multitable2json-result\"}";
+	}
 } 

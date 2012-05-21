@@ -255,11 +255,9 @@ $(document).ready(function() {
 	 */
 	$('#simulate').on('click', function() {
 		console.log('Simulate initiated.');
-		console.log('circuit before getInputs()', synthbio.model);
-		synthbio.model.getInputs();
-		console.log('circuit after getInputs()', synthbio.model);
-		
+	
 		synthbio.requests.simulate(
+			synthbio.model,
 			function(response){
 				console.log("synthbio.request.simulate called response callback");
 				if(response.message !== '') {
@@ -272,9 +270,7 @@ $(document).ready(function() {
 					console.log(synthbio.model);
 					$('#validate-alert').modal();
 				}
-					
-			},
-			synthbio.model
+			}
 		);
 		
 	});
@@ -396,7 +392,7 @@ $(document).ready(function() {
 	});
 
 	// Start pinging
-	synthbio.gui.pingServer();
+	//synthbio.gui.pingServer();
 	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();
