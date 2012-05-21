@@ -126,22 +126,24 @@ $(document).ready(function() {
 			lbl += "</a>";
 			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
-			//Either it's a Char or Choose Protein as a string, hence <2
-			if(signal.getProtein().length<2){
-				usedProteins[signal.getProtein()].used = true;
-			}
-			
-			var currentProt = "";
+			var currentProtein = "";
 			var el = $('#conn' + connCount, 0);
 			var prots = '';
 			//boolean which checks if a dropdown (select) menu is active
 			var select = false;
 			
+			//Either it's a Char or Choose Protein as a string, hence <2
+			if(signal.getProtein().length<2){
+				usedProteins[signal.getProtein()].used = true;
+				currentProtein = signal.getProtein();
+			}
+			
+			
 			el.on("click", function(){
 				if(!select){
-					prots = '';
+					prots ='';
 					$.each(usedProteins, function(i,cds){
-						if(!(usedProteins[i].used) || i===currentProt){
+						if(!(usedProteins[i].used) || i===currentProtein){
 							prots += '<option value="' +i+ '">' +i+ '</option>';
 						}
 					});
@@ -157,10 +159,10 @@ $(document).ready(function() {
 				var wire = $('#wire'+connCount);
 				if(!(usedProteins[wire.val()].used)){
 					usedProteins[wire.val()].used = true;
-					if(currentProt!==""){
-						usedProteins[currentProt].used = false;
+					if(currentProtein!==""){
+						usedProteins[currentProtein].used = false;
 					}
-					currentProt = wire.val();
+					currentProtein = wire.val();
 				}
 				select = false;
 				el.html(wire.val());
