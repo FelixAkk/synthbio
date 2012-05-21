@@ -198,7 +198,10 @@ $(document).ready(function() {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
 
-			if (lpTable) { lpTable.fnClearTable(false); }
+			if (lpTable) {
+				lpTable.fnClearTable(false);
+			}
+
 			$('#list-proteins tbody').html(html);
 			lpTable = $('#list-proteins table').dataTable(dtOptions);
 		});
@@ -263,11 +266,11 @@ $(document).ready(function() {
 			// Surpress default redirection due to <form action="destination.html"> action
 			event.stopPropagation();
 			event.preventDefault();
+			// get the filename
 			var input = $("input", this)[0].value;
-			if($("#files .modal-footer input").typ)
-			console.log();
-			//synthbio.gui.fileOpHandler(this.value);
-
+			// TODO: check if the entered filename is in the list
+			// load the file
+			synthbio.gui.fileOpHandler(input);
 			return false; // would prevent the form from making us go anywhere if .preventDefault() fails
 		});
 	});
@@ -414,11 +417,11 @@ $(document).ready(function() {
  * @param fileName The name of the file that was selected
  */
 synthbio.gui.openHandler = function(fileName) {
-	synthbio.requests.getFile(fileName, function (response) {
+	synthbio.requests.getFile(fileName, function(response) {
 		if(response.success === false) {
 			console.error(response.message);
 		}
-		console.log(response.data);
+		synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
 	});
 }
 

@@ -86,7 +86,7 @@ synthbio.requests.listFiles = function(callback){
  * Callback function will be applied to the file that is returned
  * Other info is shown in the console.log
  */
-synthbio.requests.getFile = function(callback, name){
+synthbio.requests.getFile = function(name, callback){
 
 	synthbio.requests.baseXHR({
 		url: "/Circuit?action=load",
