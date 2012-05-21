@@ -139,17 +139,19 @@ $(document).ready(function() {
 			);
 			
 			el.on("click", function(){
-				$.each($('#wire'+connCount)[0], function(i, cds){
-					alert(cds.val())
-					if(usedProteins[cds.val()].used){
-						cds.attr('disabled');
+				var wire =  $("#wire"+connCount);
+				$.each(wire[0], function(i,option){
+					if(usedProteins[option.innerHTML].used && !(option.innerHTML.equal(currentProt))){
+						//or with attr(disable)
+						//or with prop(disable)
+						option.hide();
 					}
 					else{
-						cds.removeAttr('disabled');
+						option.show();
 					}
 				});
 			});
-			
+
 			el.on("change", function(){
 				var wire = $("#wire"+connCount);
 				if(!(usedProteins[wire.val()].used)){
@@ -157,7 +159,6 @@ $(document).ready(function() {
 					usedProteins[currentProt].used = false;
 					currentProt = wire.val();
 				}
-				el.html(wire.val());
 				
 				//update signal in model.
 				signal.setProtein(wire.val());
