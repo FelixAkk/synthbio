@@ -154,6 +154,12 @@ $(document).ready(function() {
 					el.html('<select class="wire" id="wire'+connCount+'">'+ '<option value="">Choose protein</option>' + prots + '</select>');
 					select = true;
 				}
+				//Hier moet nog iets komen wat de choose protein verwijderd. anders kan je de Choose protein optie open laten staan en dan doen de andere wires het niet...
+				//Als je remove gebruikt dan krijg je een bug onderin de select box.
+				
+				/*else if($("#wire"+connCount).val() == ""){
+					$("#wire"+connCount)[0].remove();
+				}*/
 			});
 
 			el.on("change", function(){
