@@ -22,11 +22,11 @@
 
 $(document).ready(function() {
 	
-	synthbio.usedProteins = {};
-	synthbio.resetProteins = function(){
-		synthbio.requests.getCDSs(function(response){
-			$.each(response, function(i, cds){
-				synthbio.usedProteins[cds.name] = {used: false}; 
+	synthbio.proteins = {};
+	synthbio.resetProteins = function() {
+		synthbio.requests.getCDSs(function(response) {
+			$.each(response, function(i, cds) {
+				synthbio.proteins[cds.name] = {used: false}; 
 			});
 		});
 	}
@@ -125,62 +125,64 @@ $(document).ready(function() {
 			signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
 			
 			connCount++;
-			var lbl = '<a class="wires" id="conn' + connCount + '" href=#>';
-			lbl += signal.getProtein() || "Choose protein";
-			lbl += "</a>";
-			connInfo.connection.getOverlay("label").setLabel(lbl);
+			// Instantiate the connection count variable because `connCount` will be incremented later
+			var wireID = connCount;
+			var label = '<a class="wires" id="conn' + connCount + '" href=#>';
+			label += signal.getProtein() || "Choose protein";
+			label += "</a>";
+			connInfo.connection.getOverlay("label").setLabel(label);
 			
 			var currentProtein = "";
 			var el = $('#conn' + connCount, 0);
 			var prots = '';
 			//boolean which checks if a dropdown (select) menu is active
-			var select = false;
 			
 			//Either it's a Char or Choose Protein as a string, hence <2
-			if(signal.getProtein().length<2){
-				synthbio.usedProteins[signal.getProtein()].used = true;
+			if(signal.getProtein().length<2) {
+				synthbio.proteins[signal.getProtein()].used = true;
 				currentProtein = signal.getProtein();
 			}
 			
 			
-			el.on("click", function(){
-				if(!select){
-					prots ='';
-					$.each(synthbio.usedProteins, function(i,cds){
-						if(!(synthbio.usedProteins[i].used) || i===currentProtein){
+			el.on("click", function(event) {
+				// Only proceed and display the dropdown if it doesn't already contain the dropdown
+				if(el.children().length === 0) {
+					// Construct HTML of options
+					prots = '';
+					// Provide all available proteins + the currently selected one
+					$.each(synthbio.proteins, function(i,cds) {
+						if(!(synthbio.proteins[i].used) || i === currentProtein) {
 							prots += '<option value="' +i+ '">' +i+ '</option>';
 						}
 					});
-					el.html('<select class="wire" id="wire'+connCount+'">'+ '<option value="">Choose protein</option>' + prots + '</select>');
-					select = true;
+					el.html('<select class="protein-selector" id="protein-selector-'+wireID+'">'+ '<option value="empty" >Choose protein</option>' + prots + '</select>');
+					$("#protein-selector-" + wireID).select();
+					// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
+					connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
 				}
-				//Hier moet nog iets komen wat de choose protein verwijderd. anders kan je de Choose protein optie open laten staan en dan doen de andere wires het niet...
-				//Als je remove gebruikt dan krijg je een bug onderin de select box.
-				
-				/*else if($("#wire"+connCount).val() == ""){
-					$("#wire"+connCount)[0].remove();
-				}*/
 			});
 
-			el.on("change", function(){
-				var wire = $('#wire'+connCount);
-				if(!(synthbio.usedProteins[wire.val()].used)){
-					synthbio.usedProteins[wire.val()].used = true;
-					if(currentProtein!==""){
-						synthbio.usedProteins[currentProtein].used = false;
+			el.on("change", function() {
+				var proteinSelector = $('#protein-selector-' + wireID);
+				if(!(synthbio.proteins[proteinSelector.val()].used)) {
+					synthbio.proteins[proteinSelector.val()].used = true;
+					if(currentProtein !== 0) {
+						synthbio.proteins[currentProtein].used = false;
 					}
-					currentProtein = wire.val();
+					currentProtein = proteinSelector.val();
 				}
-				select = false;
-				el.html(wire.val());
+				el.html(proteinSelector.val());
+				
+				// A very long line to simply reset the location: make jsPlumb update the GUI so the slunken label is centered again
+				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
 				
 				//update signal in model.
-				signal.setProtein(wire.val());
+				signal.setProtein(proteinSelector.val());
 			});
 		});
 
 /*			var el = $("#conn" + connCount, 0);
-			el.click(function(){
+			el.click(function() {
 				var lp = $('#list-proteins');
 				lp.modal("show");
 				$('#list-proteins tbody').on("click", "tr", function() {
@@ -193,7 +195,7 @@ $(document).ready(function() {
 			});
 		});
 
-		$('#list-proteins').on('hide', function(){
+		$('#list-proteins').on('hide', function() {
 			$('#list-proteins tbody').off("click", "tr");
 		});
 */
