@@ -197,33 +197,6 @@ synthbio.requests.circuitToSBML = function(callback, name, circ){
 };
 
 /**
- * Simulate
- * Request to simulate a circuit "fileName" with "input" proteins
- * Callback will be applied on the returned data
- * Other messages are shown in console.log
- */
-synthbio.requests.simulate = function(callback, name, input){
-	
-	synthbio.requests.baseXHR({
-		url: "/Circuit?action=simulate",
-		data: {
-			"filename": name,
-			"inputs": JSON.stringify(input)
-		},
-		success: function(response){
-			callback(response);
-		},
-		error: function(){
-			console.log("Error has occured. Cannot simulate this circuit");
-		},
-		always: function(){
-			console.log("simulate called");
-		}
-		
-	});
-};
-
-/**
  * Validate
  * Checks if a circuit is ready to be simulated
  * Callback will be applied on the return messages
@@ -241,6 +214,34 @@ synthbio.requests.validate = function(callback, circuit){
 		},
 		always: function(){
 			callback("validate called");
+		}
+		
+	});
+};
+
+/**
+ * Simulate
+ * Request to simulate a circuit 
+ * Callback will be applied on the returned data
+ * Other messages are shown in console.log
+ *
+ * @param callback Function to apply on the response
+ * @param circuit Circuit to simulate.
+ */
+synthbio.requests.simulate = function(circuit, callback){
+	
+	synthbio.requests.baseXHR({
+		url: "/Circuit?action=simulate",
+		data: { 'circuit': JSON.stringify(circuit) },
+		success: function(response){
+			console.log('response', response);
+			callback(response);
+		},
+		error: function(){
+			console.log("Error has occured. Cannot simulate this circuit");
+		},
+		always: function(){
+			callback("Simulate called");
 		}
 		
 	});
