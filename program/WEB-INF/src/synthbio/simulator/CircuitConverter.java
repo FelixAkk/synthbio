@@ -151,8 +151,8 @@ public class CircuitConverter {
 		// setup the time points
 		int length = circuit.getSimulationLength();
 		double[] timePoints = new double[length];
-		for(int i = 1; i <= length; i++)
-			timePoints[i-1] = i;	
+		for(int i = 0; i < length; i++)
+			timePoints[i] = i;	
 		// setup names
 		String[] names = circuit.getInputs().toArray(new String[circuit.getInputs().size()]);
 		// setup data
@@ -172,3 +172,4 @@ public class CircuitConverter {
 		return new MultiTable(timePoints, data, names);
 	}
 }
+

@@ -32,6 +32,8 @@ import org.simulator.math.odes.EulerMethod;
 import org.simulator.math.odes.MultiTable;
 import org.simulator.sbml.SBMLinterpreter;
 import synthbio.Util;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A class for solving SBML-files and Model-objects.
@@ -51,11 +53,6 @@ public class Solver {
 	public MultiTable solveWithSynFile(String fileName)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		// Convert the SBML-file to a Model-object.
-
-		// (Jieter): Since fromJSON is now a method of CircuitFactory,
-		// it might be better to remove this method here, since it
-		// introduces dependencies, and it is not possible to inject a
-		// different BBR.
 		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(fileName));
 		return solve(c);
 	}
@@ -89,6 +86,9 @@ public class Solver {
 		return solve(sbmlToModel(sbml), input);	
 	}
 
+	/**
+ 	 * Converts a SBML-string to a Model.
+ 	 */
 	public Model sbmlToModel(String sbml)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		Model model = (new SBMLReader()).readSBMLFromString(sbml).getModel();
@@ -142,6 +142,9 @@ public class Solver {
 		return solution;
 	}
 
+	/**
+ 	 * solves a Model with specific inputs
+ 	 */
 	public MultiTable solve(Model model, MultiTable inputs)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Setup solver
@@ -154,4 +157,53 @@ public class Solver {
 		MultiTable solution = solver.solve(interpreter, inputs.getBlock(0), interpreter.getInitialValues());
 		return solution;
 	}
-} 
+
+	/**
+ 	 * Converts a MultiTable to a JSON-string of the format:
+ 	 * 	{
+ 	 * 		"columns": [...],
+ 	 * 		"data": [[...],...]
+ 	 * 	}
+ 	 */ 
+	public String multiTableToJSON(MultiTable m) { 
+		StringBuffer json = new StringBuffer("{\n\t\"columns\": ");		
+		
+		// get all names
+		int cc = m.getColumnCount();
+		ArrayList<String> names = new ArrayList<String>();
+		for(int i = 0; i < cc; i++)
+			names.add(m.getColumnName(i));
+		names.remove("gene");
+		names.remove("cell");
+		names.remove("empty");
+		names.remove("Time");
+		Collections.sort(names);
+		names.add(0, "Time");
+		
+		// add names to json	
+		json.append("[" + names.get(0));
+		for(int i = 1; i < names.size(); i++)
+			json.append(", " + names.get(i));		
+		json.append("],\n");
+
+		// add data
+		json.append("\t\"data\": [\n");
+		int simLength = m.getTimePoints().length;	
+		for(int i = 0; i < simLength; i++) {
+			json.append("\t\t[");
+			for(String name: names) {
+				if(name.equals("Time")) {
+					json.append(m.getTimePoints()[i] + ", ");
+				} else {
+					json.append(m.getColumn(name).getValue(i) + ", ");
+				}
+			}
+			json.delete(json.length()-2, json.length());
+			json.append("],\n");	
+		}
+		json.delete(json.length()-2, json.length()-1);
+		json.append("\t]\n}");
+		return json.toString();
+	}
+}
+ 

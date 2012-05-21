@@ -29,6 +29,7 @@ import synthbio.models.Circuit;
 import synthbio.models.CircuitException;
 import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
+import synthbio.simulator.Solver;
 
 /**
  * Servlet ListServlets has different actions on the circuit and replies
@@ -244,13 +245,21 @@ public class CircuitServlet extends SynthbioServlet {
 	 */
 	public void doSimulate(String circuit){
 		Circuit c;
+
 		try{
 			c=this.circuitFactory.fromJSON(circuit);
 		}catch(Exception e){
 			json.fail("Circuit does not validate, please use validate to correct errors.");
 			return;
 		}
-		json.data=c.toSBML();
-		json.success=true;
+		
+		Solver s=new Solver();
+				
+		try{
+			json.data=s.multiTableToJSON(s.solve(c));
+			json.success=true;
+		}catch(Exception e){
+			json.fail("Failed solving: "+e.getMessage());
+		}
 	}
 }

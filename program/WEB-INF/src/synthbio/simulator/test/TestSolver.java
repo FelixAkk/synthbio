@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.*;
 import org.junit.Test;
-
+import java.util.ArrayList;
 import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
 import org.sbml.jsbml.SBMLException;
@@ -30,11 +30,11 @@ import org.simulator.math.odes.MultiTable;
 import synthbio.simulator.Solver;
 
 import java.awt.Dimension;
-
+import java.util.Arrays;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
+import java.util.Collections;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.xml.stax.SBMLReader;
 import org.simulator.math.odes.AbstractDESSolver;
@@ -55,7 +55,6 @@ public class TestSolver {
 	private final String tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
 
 	private final String circ1 = "data/test/simulator/inputCircuit.syn";
-				
 	
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
@@ -107,12 +106,25 @@ public class TestSolver {
 		
 		assertTrue(c > d);
 	}
-
+	
 	@Test
 	public void testCircuit() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
 		MultiTable solution = (new Solver()).solveWithSynFile(circ1);
-		//showMultiTable(solution);
+
+		double c = solution.getColumn("C").getValue(39);
+		double d = solution.getColumn("D").getValue(39);
+
+		assertTrue(c < d);
 	}
+
+	@Test
+	public void testMultiTableConvert() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
+		MultiTable solution = (new Solver()).solveWithSynFile(circ1);
+		String json = (new Solver()).multiTableToJSON(solution);
+
+		assertTrue(json.contains("[Time, A, B, C, D, mC, mD]"));	
+	}
+
 	/**
 	 * A visual representation of the data for manual testing purposes
 	 */
