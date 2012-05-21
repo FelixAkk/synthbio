@@ -154,4 +154,5 @@ public class Solver {
 		MultiTable solution = solver.solve(interpreter, inputs.getBlock(0), interpreter.getInitialValues());
 		return solution;
 	}
-} 
+}
+ 

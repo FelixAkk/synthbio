@@ -101,8 +101,8 @@ public class TestCircuitConverter {
 		//"A": "H",
     //"B": "LLLLLLLLLL LLLLLLLLLL H"
 		double[] times = new double[40];
-		for(int i = 1; i <= 40; i++)
-			times[i-1] = i;
+		for(int i = 0; i < 40; i++)
+			times[i] = i;
 		String[] names = new String[] { "A", "B" };
 		double[][] data = new double[40][2];
 		for(int time = 0; time < 40; time++) {
