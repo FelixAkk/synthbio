@@ -297,11 +297,12 @@ synthbio.Circuit.prototype.getInputs = function(){
 };
 
 synthbio.Circuit.prototype.setInputs = function(inputs){
-	//Copy simulation length from model if it is omitted
+	
+	// Copy simulation length from model if it is omitted
 	if(!inputs.length){
 		inputs.length=this.getSimulationLength();
 	}
-	// verify proteins in inputs parameter againts this.getInputSignals
+	// Verify proteins in inputs parameter againts this.getInputSignals
 	$.each(this.getInputSignals(), function (index, protein) {
 		if(!inputs.values[protein]){
 			throw "Inputs does not contain definition for protein " + protein;
@@ -426,7 +427,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 	
 	//If signal is an input signal, initialize to low.
 	if (signal.isInput()) {
-		this.inputs[signal.protein] = "L";
+		this.inputs.values[signal.protein] = "L";
 	}
 
 	return signal;

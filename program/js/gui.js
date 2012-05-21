@@ -209,11 +209,9 @@ $(document).ready(function() {
 
 	// Validate
 	$('#validate').on('click', function(){
-
-		synthbio.model.getInputs();
-		
 		console.log('Started validating circuit...');
 		synthbio.requests.validate(
+			synthbio.model,
 			function(response){
 				if(response.message !== '') {
 					$('#validate-alert p').html(response.message);
@@ -221,12 +219,12 @@ $(document).ready(function() {
 						
 						$('#validate-alert').addClass("invalid");
 					}
-					
-					console.log(synthbio.model);
 					$('#validate-alert').modal();
+				}else{
+					//call
+					alert('simulation valid, display...');
 				}
-			},
-			synthbio.model
+			}
 		);
 
 		$("#validate-alert").bind('closed', function(){
@@ -236,7 +234,14 @@ $(document).ready(function() {
 		
 	});
 
-	// Build the input thing.
+	$('#dump-circuit').on('click', function() {
+		console.log(synthbio.model);
+	});
+		
+
+	/**
+	 *  Build the input editor.
+	 */
 	$('#define-inputs').on('show', function() {
 
 		// build the editor
