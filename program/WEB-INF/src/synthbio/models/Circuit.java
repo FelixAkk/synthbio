@@ -27,6 +27,7 @@ import org.json.JSONString;
 
 import synthbio.models.CircuitException;
 import synthbio.files.BioBrickRepository;
+import synthbio.simulator.CircuitConverter;
 
 /**
  * Circuit representation.
@@ -40,7 +41,7 @@ import synthbio.files.BioBrickRepository;
  * 
  * @author jieter
  */
-public class Circuit implements JSONString{
+public class Circuit implements JSONString {
 
 	/**
 	 * The filename.
@@ -63,9 +64,9 @@ public class Circuit implements JSONString{
 	private Set<String> inputs=new HashSet<String>();
 
 	/**
-	 * Simulation length
+	 * Simulation length, defaults to 40 ticks.
 	 */
-	private int simulationLength=0;
+	private int simulationLength=40;
 
 	/**
 	 * For each input protein, define a String of High/Low (H/L) for
@@ -88,11 +89,11 @@ public class Circuit implements JSONString{
 	 * @param description	Description of the circuit
 	 * @param gates			Gates in the circuit
 	 */
-	public Circuit(String name, String description, Collection<Gate> gates){
+	public Circuit(String name, String description, Collection<Gate> gates) {
 		this.name=name;
 		this.description=description;
 
-		if(gates!=null){
+		if(gates != null){
 			this.gates.addAll(gates);
 		}
 	}
@@ -100,40 +101,77 @@ public class Circuit implements JSONString{
 	/**
 	 * Construct the Circuit with name and description
 	 */
-	public Circuit(String name, String description){
+	public Circuit(String name, String description) {
 		this(name, description, null);
 	}
 	
 	/**
 	 * Construct the Circuit with only a name.
 	 */
-	public Circuit(String name){
+	public Circuit(String name) {
 		this(name, "");
 	}
 
-	/*
-	 * Getters
+	/**
+	 * Check if string p looks like a protein string.
+	 *
+	 * @param p The protein name to check.
 	 */
-	public String getName(){
+	public void assertIsProtein(String p) {
+		assert p.length() == 1 : "Protein is a one letter String";
+	}
+	
+	/**
+	 * Check if string p is an input protein.
+	 * 
+	 * @param p The protein name to check.
+	 */
+	public void assertIsInputProtein(String p) {
+		this.assertIsProtein(p);
+		assert this.hasInput(p) : "Circuit should have the input " + p + ".";
+	}
+
+	/**
+	 * Get the name of the circuit.
+	 */
+	public String getName() {
 		return this.name;
 	}
-	public String getDescription(){
+
+	/**
+	 * Get the description of the circuit.
+	 */
+	public String getDescription() {
 		return this.description;
 	}
-	public Collection<Gate> getGates(){
+
+	/**
+	 * Get the collection of gates for the circuit.
+	 */
+	public Collection<Gate> getGates() {
 		return this.gates;
 	}
-	public Set<String> getInputs(){
+
+	/**
+	 * Get a collection of input proteins for the circuit.
+	 *
+	 * @return A collection of one letter strings representing protein names.
+	 */
+	public Set<String> getInputs() {
 		return this.inputs;
 	}
-	public int getSimulationLength(){
+
+	/**
+	 * Get the length of the simulation to be executed on this circuit.
+	 */
+	public int getSimulationLength() {
 		return this.simulationLength;
 	}
 
 	/**
 	 * Get the simulation input for each input protein.
 	 */
-	public Map<String, String> getSimulationInput(){
+	public Map<String, String> getSimulationInput() {
 		assert this.getInputs().size() == this.simulationInput.size() : "Number of simulation inputs should equal the number of circuit inputs.";
 		return this.simulationInput;
 	}
@@ -143,33 +181,81 @@ public class Circuit implements JSONString{
 	 *
 	 * @param p The name of the protein.
 	 */
-	public String getSimulationInput(String p){
+	public String getSimulationInput(String p) {
 		assertIsProtein(p);
-		assert this.hasInput(p) : "Circuit does not have such an input protein";
+		assert this.hasInput(p) : "Circuit does not have such an input protein.";
 
 		return this.simulationInput.get(p);
+	}
+
+	/**
+	 * Return high or low for the protein 'p' at tick 'tick'
+	 *
+	 * @param p Input protein.
+	 * @param tick Tick to get a result for.
+	 */
+	public String getSimulationInputAt(String p, int tick) {
+		assertIsInputProtein(p);
+		assert tick <= this.getSimulationLength() : "Tick should not exceed simulation length.";
+
+		String input=this.getSimulationInput(p);
+		if (tick>input.length()) {
+			//return last defined tick if requested tick exceeds the
+			//defined input length.
+			return input.substring(input.length() - 1);
+		} else {
+			//return the character at position tick.
+			return input.substring(tick, tick + 1);
+		}
 	}
 	
 	/**
 	 * Get the set of output proteins.
 	 */
-	public Set<String> getOutputs(){
+	public Set<String> getOutputs() {
 		return this.outputs;
 	}
 
-	/* setters
+	/**
+	 * Add a gate to the circuit.
+	 *
+	 * @param g Gate to be added.
 	 */
-	public void addGate(Gate g){
+	public void addGate(Gate g) {
+		assert g != null : "Gate should not be null";
 		this.gates.add(g);
 	}
-	public void addInput(String p){
+
+	/**
+	 * Define a protein as an input to the circuit.
+	 *
+	 * @param p One letter string containing the name of the protein.
+	 */
+	public void addInput(String p) {
 		assertIsProtein(p);
 		this.inputs.add(p);
 	}
-	public void addOutput(String p){
+
+	/**
+	 * Set the number of ticks the circuit should be simulated.
+	 *
+	 * @param length The number of ticks.
+	 */
+	public void setSimulationLength(int length) {
+		assert length > 0 : "Simulation length should be greather than 0";
+		this.simulationLength=length;
+	}
+
+	/**
+	 * Define a protein as an output from the circuit.
+	 *
+	 * @param p One letter string containing the name of the protein.
+	 */
+	public void addOutput(String p) {
 		assertIsProtein(p);
 		this.outputs.add(p);
 	}
+	
 	/**
 	 * Add the simulator input 'input' for protein 'p'.
 	 * If the input string does not span the simulation length, the last
@@ -179,22 +265,14 @@ public class Circuit implements JSONString{
 	 * @param input Input string consisting of (H|L) for each tick.
 	 */
 	public void addSimulationInput(String p, String input){
-		assertIsProtein(p);
-		assert this.hasInput(p): "Circuit should have the input "+p;
+		assertIsInputProtein(p);
 		
 		//replace all spaces by empty string.
-		//@todo: replace all but (H|L) by empty string
-		input=input.replace(" ", "");
+		input=input.replaceAll("[^HL]", "");
 		this.simulationInput.put(p, input);
 	}
 	
-	/**
-	 * Check if string p looks like a protein string.
-	 */
-	public void assertIsProtein(String p){
-		assert p.length()==1 : "Protein is a one letter String";
-	}
-	
+
 	/**
 	 * Do we have a gate with index?
 	 */
@@ -229,7 +307,7 @@ public class Circuit implements JSONString{
 	 * @throws CircuitException
 	 */
 	public void validate() throws CircuitException{
-		/* if there is one gate there should be at least one input and
+		/* If there is one gate there should be at least one input and
 		 * at least one output.
 		 */
 		if(this.getGates().size()>0){
@@ -241,6 +319,7 @@ public class Circuit implements JSONString{
 			}
 		}
 		
+		// Check if each gate has a Promotor and a CDS set.
 		for(Gate g: this.getGates()){
 			if(g.getPromotor()==null){
 				throw new CircuitException("Gate "+g.toString()+" has no Promotor set.");
@@ -351,173 +430,9 @@ public class Circuit implements JSONString{
 	}
 
 	/**
-	 * Deserialize JSON to a Circuit object.
+	 * Convert the current object state to JSON.
 	 *
-	 * @param json The String containing JSON
-	 * @return The Circuit.
-	 */
-	public static Circuit fromJSON(String json) throws CircuitException, JSONException{
-		return Circuit.fromJSON(new JSONObject(json));
-	}
-
-	/**
-	 * Deserialize JSON to a Circuit object.
-	 * 
-	 * Since Java data structures are more advanced than the JSON
-	 * counterpart this method takes care of the non-trivial mappings of
-	 * dumb Signals and Gates to a set of Gates connected by references.
-	 *
-	 * @param json The JSONObject containing the circuit information.
-	 * @return The Circuit.
-	 */
-	public static Circuit fromJSON(JSONObject json) throws CircuitException, JSONException{
-		Circuit circuit=new Circuit(
-			json.getString("name"),
-			json.getString("description")
-		);
-		
-		/* Fetch the gates, add them in their order to a local list of
-		 * gates.
-		 */
-		JSONArray JSONGates=json.getJSONArray("gates");
-		
-		//If no gates present, don't bother about the Signals, just return.
-		if(JSONGates.length()<=0){
-			return circuit;
-		}
-		
-		for(int i=0; i<JSONGates.length(); i++){
-			JSONObject JSONGate=JSONGates.getJSONObject(i);
-
-			Gate gate=new Gate(Position.fromJSON(JSONGate.getJSONObject("position")));
-			gate.setKind(JSONGate.getString("kind"));
-			
-			circuit.addGate(gate);
-		}
-
-		/* Use the data from the signals to update the Gates with the
-		 * right Promototors and CDSs
-		 */
-		JSONArray JSONSignals=json.getJSONArray("signals");
-		if(JSONSignals.length()<=0){
-			/* Circuit is only defined with gates and signals, so fail if
-			 * no signals are present.
-			 */
-			throw new CircuitException("Circuit has no signals.");
-		}
-		
-		/* Create BioBrick repository.
-		 */
-		BioBrickRepository bbr;
-		try{
-			bbr=new BioBrickRepository();
-		}catch(Exception e){
-			throw new CircuitException("Could not load BioBrick Repository.");
-		}
-		
-		JSONObject signal;
-		int from;
-		int to;
-
-		//remember the first transcription factor for a And-gate.
-		Map<Integer, String> tmpTF=new HashMap<Integer, String>();
-		
-		for(int i=0; i<JSONSignals.length(); i++){
-			signal=JSONSignals.getJSONObject(i);
-
-			//Signal from another Gate or input.
-			if(signal.get("from") instanceof Integer){
-				from=signal.getInt("from");
-				if(!circuit.hasGateAt(from)){
-					throw new CircuitException("Signal[from] points to non-existant Gate.");
-				}
-				
-				//update from gate with the right CDS.
-				if(circuit.gateAt(from).getCDS()==null){
-					circuit.gateAt(from).setCDS(
-						bbr.getCDS(signal.getString("protein"))
-					);
-				}else{
-					//this is not the first connection from gate 'from'
-					//check if this signal protein is the same as
-					//already present, if not, throw an exception.
-					if(!circuit.gateAt(from).getCDS().getName().equals(signal.getString("protein"))){
-						throw new CircuitException("CDS for gate "+from+" is ambigious");
-					}
-				}
-			}else{
-				//input signal, add to the input list.
-				if(!signal.getString("from").equals("input")){
-					throw new CircuitException("Signal[from] should be either a integer index pointing to a gate or the string 'input'");
-				}
-				circuit.addInput(signal.getString("protein"));
-			}
-
-			//signal from another Gate, or output.
-			if(signal.get("to") instanceof Integer){
-				to=signal.getInt("to");
-				if(!circuit.hasGateAt(to)){
-					throw new CircuitException("Signal[to] points to non-existant Gate.");
-				}
-
-				//Not Gate can be connected right away.
-				if(circuit.gateAt(to).getKind().equals("not")){
-					circuit.gateAt(to).setPromotor(
-						bbr.getNotPromotor(signal.getString("protein"))
-					);
-				}else{
-					//and gate, requires two inputs, so wait till whe have two.
-					if(!tmpTF.containsKey(to)){
-						tmpTF.put(to, signal.getString("protein"));
-					}else{
-						//now we have two inputs, add the AndPromtor to the Gate.
-						circuit.gateAt(to).setPromotor(
-							bbr.getAndPromotor(signal.getString("protein"), tmpTF.get(to))
-						);
-						tmpTF.remove(to);
-					}
-				}
-			}else{
-				if(!signal.getString("to").equals("output")){
-					throw new CircuitException("Signal[to] should be either a integer index pointing to a gate or the string 'output'");
-				}
-				//output signal, add to the output list.
-				circuit.addOutput(signal.getString("protein"));
-			}
-		}
-
-		//check voor leftovers 
-		if(tmpTF.size()!=0){
-			throw new CircuitException("At least one AND gate has only one input.");
-		}
-
-		/* validate the circuit. validate will throw exceptions when it
-		 * encounters invalid things...
-		 * Calling this will double some checks and is quite expensive,
-		 * but since all circuits will be quite small, it should be no
-		 * problem.
-		 */
-		circuit.validate();
-
-		/* Add the input signal specification if present in JSON. 
-		 */
-		if(json.has("inputs")){
-			JSONObject inputs=json.getJSONObject("inputs");
-			
-			if(!(inputs.has("length") && inputs.has("values"))){
-				throw new CircuitException("JSON input definition should contain a length value and a set of input definitions for each input protein");
-			}
-			JSONObject values= inputs.getJSONObject("values");
-			for(String p: JSONObject.getNames(values)){
-				circuit.addSimulationInput(p, values.getString(p));
-			}
-		}
-		
-		return circuit;
-	}
-	
-	/**
-	 * Convert the current object state to JSON
+	 * Not yet used or tested anywhere.
 	 * 
 	 * @return Serialized JSON string representation of the Circuit.
 	 */
@@ -528,7 +443,7 @@ public class Circuit implements JSONString{
 			ret.put("name", this.getName());
 			ret.put("description", this.getDescription());
 			ret.put("gates", this.getGates());
-			//@todo include signals...
+			//@todo: include signals...
 			//ret.put("signals", <signals>);
 
 			JSONObject inputs=new JSONObject();
@@ -542,13 +457,11 @@ public class Circuit implements JSONString{
 	}
 	
 	/**
-	 * Return an SBML document for the current circuit.
+	 * Convert the circuit to a SBML document.
 	 *
-	 * @todo implement
 	 */
 	public String toSBML(){
-		//TODO: Implement toSBML
-		return null;
+		return (new CircuitConverter()).convert(this);
 	}
 
 	/**

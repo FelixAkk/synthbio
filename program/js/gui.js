@@ -96,13 +96,16 @@ synthbio.gui.resetTooltip = function() {
  */
 synthbio.gui.inputEditor = function(){
 	console.log('entered inputEditor');
-	//only initialize once.
-	if($(this).hasClass("initialized")){
-		return;
-	}
 	
+	//clear input signals container.
+	$('#input-signals').html('');
+
 	var i;
 	var inputs=synthbio.model.getInputs();
+
+	//@todo check if all inputs are defined.
+
+	
 	//iterate over signals and create signal input editors.
 	$.each(
 		inputs.values,
@@ -122,6 +125,7 @@ synthbio.gui.inputEditor = function(){
 			$('#input-signals').append(signalEditor);
 		}
 	);
+	
 	//attach click listener to the high/low button.
 	$('.toggle-highlow').click(function(){
 		var self=$(this);
@@ -136,12 +140,6 @@ synthbio.gui.inputEditor = function(){
 			$(this).find('toggle-highlow').removeClass('low').removeClass('high');
 		}
 	});
-	
-	//set the container to initialized.
-	$(this).addClass("initialized");
-};
-synthbio.gui.rebuildInputEditor = function(){
-
 };
 
 /**
@@ -152,7 +150,7 @@ synthbio.gui.rebuildInputEditor = function(){
 synthbio.gui.saveInputs = function(circuit){
 	circuit=circuit || synthbio.model;
 	var inputs={
-		"length": synthbio.gui.inputTicks,
+		"length": circuit.getSimulationLength(),
 		"values": {}
 	};
 	$('.signal').each(function(index, elem){
@@ -173,11 +171,25 @@ synthbio.gui.saveInputs = function(circuit){
 $(document).ready(function() {
 	// Activate zhe Dropdowns Herr Doktor!
 	$('.dropdown-toggle').dropdown();
+
+	// Options for DataTables
+	var dtOptions = {
+		"sDom": "<'row'lir>t<'row'fp>",
+		"sPaginationType": "bootstrap",
+		"oLanguage": {"sLengthMenu": "_MENU_ per page"},
+		"bAutoWidth": false,
+		"bDestroy": true,
+		//"bFilter": false,
+		"bInfo": false,
+        "bLengthChange": false,
+        "bPaginate": false
+	};
 	
 	// Load proteins from server.
+	var lpTable;
 	$('#list-proteins').on('show', function() {
 		synthbio.requests.getCDSs(function(response) {
-			if(response instanceof String) {
+			if (response instanceof String) {
 				$('#list-proteins tbody td').html(response);
 				return;
 			}
@@ -185,8 +197,40 @@ $(document).ready(function() {
 			$.each(response, function(i, cds) {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
+
+			if (lpTable) { lpTable.fnClearTable(false); }
 			$('#list-proteins tbody').html(html);
+			lpTable = $('#list-proteins table').dataTable(dtOptions);
 		});
+	});
+
+	// Validate
+	$('#validate').on('click', function(){
+
+		synthbio.model.getInputs();
+		
+		console.log('Started validating circuit...');
+		synthbio.requests.validate(
+			function(response){
+				if(response.message !== '') {
+					$('#validate-alert p').html(response.message);
+					if(!response.success){
+						
+						$('#validate-alert').addClass("invalid");
+					}
+					
+					console.log(synthbio.model);
+					$('#validate-alert').modal();
+				}
+			},
+			synthbio.model
+		);
+
+		$("#validate-alert").bind('closed', function(){
+			$(this).find("p").html('');
+		});
+			
+		
 	});
 
 	// Build the input thing.
@@ -242,7 +286,8 @@ $(document).ready(function() {
 	});
 
 	// List files from server.
-	$('#files').on('show', function() {
+	var fTable;
+	$('#files').on('show', function(event) {
 		// Request stuff from server and define what happens next
 		synthbio.requests.listFiles(function(response) {
 			// problemu technicznego
@@ -259,7 +304,11 @@ $(document).ready(function() {
 			$.each(response, function(i, file) {
 				html+='<tr><td>'+file+'</td><td>x</td><td>x</td></tr>';
 			});
+
+			
+			if (fTable) { fTable.fnClearTable(false); }
 			$('#files tbody').html(html);
+			fTable = $('#files table').dataTable(dtOptions);
 
 			// Make each row respond to selection
 			$("#files tbody tr").each(function(index, element) {
@@ -516,7 +565,7 @@ synthbio.gui.getFreeEndpoint = function(id, input, index) {
 	}
 
 	// Check if index is in the endpoint array
-	if (index && index[ep]) {
+	if (ep[index]) {
 		return ep[index];
 	} else {
 		// Else find the first non-full endpoint
@@ -711,8 +760,8 @@ synthbio.gui.displaySignal = function(signal, connection) {
 	synthbio.util.assert(signal instanceof synthbio.Signal, "Provided signal ojbect must be an instance of 'synthbio.Signal'");
 
 	if (!connection) {
-		var src = synthbio.gui.getGateIdByIndex(signal.from);
-		var dst = synthbio.gui.getGateIdByIndex(signal.to);
+		var src = synthbio.gui.getGateIdByIndex(signal.getFrom());
+		var dst = synthbio.gui.getGateIdByIndex(signal.getTo());
 		connection = jsPlumb.connect({
 			source: synthbio.gui.getFreeEndpoint(src, false, signal.fromEndpoint),
 			target: synthbio.gui.getFreeEndpoint(dst, true, signal.toEndpoint),

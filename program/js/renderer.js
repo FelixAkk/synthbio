@@ -122,26 +122,36 @@ $(document).ready(function() {
 
 			connCount++;
 			var lbl = '<a class="wires" id="conn' + connCount + '" href=#>';
-			lbl += signal.protein || "Choose protein";
+			lbl += signal.getProtein() || "Choose protein";
 			lbl += "</a>";
 			connInfo.connection.getOverlay("label").setLabel(lbl);
 			
 			var currentProt = "A";
 			var el = $("#conn" + connCount, 0);
+			var prots = '';
+			
+			$.each(usedProteins, function(i, cds){
+				prots += '<option value="' +i+ '">' +i+ "</option>";
+			});
+			el.html('<select class="wire" id="wire'+connCount+'">' +
+				prots +
+				"</select>"
+			);
 			
 			el.on("click", function(){
-				var prots="";
-				$.each(usedProteins, function(i, cds){
-					if(!(cds.used)){
-						prots += '<option value="' +i+ '">' +i+ "</option>";
+				var wire =  $("#wire"+connCount);
+				$.each(wire[0], function(i,option){
+					if(usedProteins[option.innerHTML].used && !(option.innerHTML.equal(currentProt))){
+						//or with attr(disable)
+						//or with prop(disable)
+						option.hide();
+					}
+					else{
+						option.show();
 					}
 				});
-				el.html('<select class="wire" id="wire'+connCount+'">' +
-					prots +
-					"</select>"
-				);
 			});
-			
+
 			el.on("change", function(){
 				var wire = $("#wire"+connCount);
 				if(!(usedProteins[wire.val()].used)){
@@ -149,7 +159,9 @@ $(document).ready(function() {
 					usedProteins[currentProt].used = false;
 					currentProt = wire.val();
 				}
-				el.html(wire.val());
+				
+				//update signal in model.
+				signal.setProtein(wire.val());
 			});
 		});
 

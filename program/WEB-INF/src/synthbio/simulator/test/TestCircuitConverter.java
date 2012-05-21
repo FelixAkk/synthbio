@@ -17,13 +17,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.simulator.math.odes.MultiTable;
 import org.junit.*;
 import org.junit.Test;
 
 import synthbio.models.Circuit;
+import synthbio.models.CircuitException;
+import synthbio.models.CircuitFactory;
 import synthbio.simulator.CircuitConverter;
 import synthbio.Util;
-import synthbio.models.CircuitException;
+
 import org.json.JSONException;
 import java.io.IOException;
 
@@ -35,6 +38,7 @@ public class TestCircuitConverter {
 	private final String notCircuit = "data/test/simulator/notCircuit.syn";
 	private final String andCircuit = "data/test/simulator/andCircuit.syn";
 	private final String nandCircuit = "data/test/simulator/nandCircuit.syn";
+	private final String inputCircuit = "data/test/simulator/inputCircuit.syn";
 	
 	/**
 	 * Test if a simple Not-gate is properly converted to SBML.
@@ -81,5 +85,32 @@ public class TestCircuitConverter {
 		assertTrue(sbmlResult.contains("<reaction id=\"Translation_and_mC__C\""));
 		assertTrue(sbmlResult.contains("<reaction id=\"Transcription_not_C__mD\""));
 		assertTrue(sbmlResult.contains("<reaction id=\"Translation_not_mD__D\""));
+	}
+	
+	/**
+	 * Tests getInputs()
+	 */
+	@Test
+	public void testGetInputs() throws IOException, CircuitException, JSONException {
+		// result
+		
+		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(inputCircuit));
+		MultiTable m = (new CircuitConverter()).getInputs(c);
+		
+		// expected result
+		//"A": "H",
+    //"B": "LLLLLLLLLL LLLLLLLLLL H"
+		double[] times = new double[40];
+		for(int i = 1; i <= 40; i++)
+			times[i-1] = i;
+		String[] names = new String[] { "A", "B" };
+		double[][] data = new double[40][2];
+		for(int time = 0; time < 40; time++) {
+			data[time][0] = 600d;
+			data[time][1] = (time < 20? 0d: 600d);
+		}
+		MultiTable exp = new MultiTable(times, data, names);
+			
+		assertEquals(exp.toString(), m.toString());
 	}
 }

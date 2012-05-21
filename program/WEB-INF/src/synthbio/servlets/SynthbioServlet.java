@@ -36,6 +36,11 @@ public abstract class SynthbioServlet extends HttpServlet {
 
 	/**
 	 * Log a message to the servlets log.
+	 *
+	 * In the case of a default tomcat6 installation @linux, it can be
+	 * found in /var/log/tomcat6/localhost-<date>.log
+	 *
+	 * @param message The message to be logged.
 	 */
 	public void log(String message){
 		this.getServletContext().log(message);

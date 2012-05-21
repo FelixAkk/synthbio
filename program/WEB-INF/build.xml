@@ -1,15 +1,29 @@
 <?xml version="1.0"?>
+<!--
+ * Project Zelula
+ *
+ * Contextproject TI2800
+ * TU Delft - University of Technology
+ *
+ * Authors:
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
+ *
+ * https://github.com/FelixAkk/synthbio
+-->
 <project name="synthbio" default="compile" basedir=".">
 	<property name="src" value="src"/>
 	<property name="build" value="classes"/>
 
+	<property name="js-minified" value="zelula-combined-min.js" />
+	
 	<path id="project-classpath">
 		<!--
 			Make sure Hamcrest is included first, to avoid SecurityExceptions from different Hamcrest versions being included.
 			(http://www.shaunabram.com/hamcrest/)
 		-->
 		<fileset dir="lib" includes="hamcrest*.jar" />
-		<fileset dir="lib" includes="*.jar" />
+		<fileset dir="lib" includes="*.jar" excludes="ant-jshint*" />
 		<fileset dir="lib/htmlunit" includes="*.jar" />
 	</path>
 
@@ -22,7 +36,20 @@
 		Turn debugging on, and include lines in stack traces.
 	-->
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${build}" classpathref="project-classpath" includeantruntime="false" debug="on" debuglevel="lines,vars,source" />
+		<javac
+			srcdir="${src}"
+			destdir="${build}"
+			classpathref="project-classpath"
+			includeantruntime="false"
+			debug="on" debuglevel="lines,vars,source"
+		>
+			<!--
+				Turn this option on to see de details about this message:
+				Note: Some input files use unchecked or unsafe operations.
+				Note: Recompile with -Xlint:unchecked for details.
+			-->
+			<!-- <compilerarg value="-Xlint"/> -->
+		</javac>
 	</target>
 
 	<!-- Just an alias -->
@@ -33,6 +60,9 @@
 	-->
 	<target name="test" depends="compile">
 		<junit fork="yes" printsummary="yes" showoutput="yes">
+			<assertions>
+				<enable/>
+			</assertions>
 			<classpath>
 				<path refid="project-classpath" />
 				<pathelement path="${build}"/>
@@ -56,6 +86,9 @@
 	-->
 	<target name="test-servlets" depends="compile">
 		<junit fork="yes" printsummary="yes" showoutput="yes">
+			<assertions>
+				<enable/>
+			</assertions>
 			<classpath>
 				<path refid="project-classpath" />
 				<pathelement path="${build}"/>
@@ -71,7 +104,11 @@
 		</junit> 
 	</target>
 
-	<target name="test-all" depends="test,test-servlets" />
+	
+	<!--
+		Target test-all runs all known tests after a clean build.
+	-->
+	<target name="test-all" depends="clean,test,test-servlets" />
 
 	<!--
 		Run a single test with
@@ -85,6 +122,9 @@
 	</target>
 	<target name="runtest" description="Runs the test you specify on the command line with -Dtest=" depends="compile, ensure-test-name">
 		<junit printsummary="withOutAndErr" fork="yes">
+			<assertions>
+				<enable/>
+			</assertions>
 			<classpath>
 				<path refid="project-classpath" />
 				<pathelement path="${build}"/>
@@ -109,32 +149,38 @@
 	<target name="javadoc" depends="compile, require-javadoc-dest">
 		<javadoc
 			destdir="${dest}"
-			sourcepath="${src}"
 			author="true"
 			version="true"
 			use="true"
-			windowtitle="Zelula API">
-		<classpath>
+			windowtitle="Zelula API"
+		>
+			<classpath>
 				<path refid="project-classpath" />
 				<pathelement path="${build}"/>
-		</classpath>
-		<doctitle><![CDATA[<h1>Zelula Javadoc</h1>]]></doctitle>
-		<tag name="todo" scope="all" description="To do:"/>
-
+			</classpath>
+			<packageset dir="${src}" defaultexcludes="yes">
+				<include name="synthbio/**"/>
+				<exclude name="org/**"/>
+			</packageset>
+			<doctitle><![CDATA[<h1>Zelula Javadoc</h1>]]></doctitle>
+			<!-- provide links to javadocs of certain libraries -->
+			<link href="http://json.org/javadoc/" />
+			<link href="http://junit.sourceforge.net/javadoc/" />
+			<link href="http://download.oracle.com/javase/6/docs/api/" />
+			<link href="http://sbml.org/Special/Software/JSBML/build/apidocs/" />
 <!--
-		<link offline="true" href="http://download.oracle.com/javase/6/docs/api/" packagelistLoc="C:\tmp"/>
--->
-<!--
-		<link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/>
+			<tag name="todo" scope="all" description="To do:"/>
 -->
 		</javadoc>
 	</target>
+	
 	<!--
 		Clean the compiled stuff
 	-->
 	<target name="clean">
 		<delete dir="${build}" />
-		<mkdir dir="${build}"/> 
+		<delete dir="../js/min/" />
+		<delete file="../${js-minified}" />
 	</target>
 
 	<!--
@@ -153,22 +199,45 @@
 			</fileset>
 		</jslint>
 	</target>
-	
+
+	<!--
+		Is JSHint a better way?
+	-->
+	<taskdef name="jshint" classname="com.philmander.ant.JsHintAntTask"
+		classpath="lib/ant-jshint-0.2.1-deps.jar" />
+	<target name="jshint">
+		<jshint dir="../js" options="white=false,plusplus=false">
+			<include name="*.js" />
+			<exclude name="*.min.js" />
+		</jshint>
+	</target>
+
 	<!--
 		Minify all javascript files in js/, except those already minified.
 		http://code.google.com/p/jsmin-ant-task/
+		and concatenate them to ${js-minified}
 	-->
 	<taskdef name="jsmin"
 		classname="net.matthaynes.jsmin.JSMin_Task"
 		classpath="lib/jsmin.0.2.4.jar" />
 	
 	<target name="jsmin" depends="jslint">
-		<jsmin destdir="../js/" suffix="true">
+		<jsmin destdir="../js/min/" suffix="true">
 			<fileset dir="../js/">
 				<include name="*.js"/>
 				<exclude name="*min.js"/>
 			</fileset>
+			<fileset dir="../js/lib/">
+				<include name="*.js"/>
+				<exclude name="*min.js"/>
+			</fileset>
 		</jsmin>
-	</target>
+		<concat destfile="../${js-minified}">
+			<fileset file="../js/*min.js" />
+			<fileset file="../js/lib/*min.js" />
+			<fileset file="../js/min/*min.js" />
+		</concat>
 
+		<echo>Minified all javascript files in ../js/** and combined them in ../${js-minified}</echo>
+	</target>
 </project>

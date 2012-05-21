@@ -40,7 +40,9 @@ import org.sbml.jsbml.xml.stax.SBMLReader;
 import org.simulator.math.odes.AbstractDESSolver;
 import org.simulator.math.odes.EulerMethod;
 import org.simulator.sbml.SBMLinterpreter;
-
+import org.json.JSONException;
+import synthbio.models.CircuitException;
+ 
 /**
  * Testing Solver.
  * @author Albert ten Napel
@@ -51,6 +53,9 @@ public class TestSolver {
 	
 	private final String tc1 = "data/test/simulator/00001-sbml-l2v4.xml";
 	private final String tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
+
+	private final String circ1 = "data/test/simulator/inputCircuit.syn";
+				
 	
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
@@ -85,6 +90,9 @@ public class TestSolver {
 		double b = solution.getColumn("b").getValue(99);
 		
 		assertTrue(a > b);
+		
+		solution = (new Solver()).solveSBMLFile(not, 1, 5);
+//		System.out.println(solution);
 	}
 	
 	/**
@@ -99,7 +107,12 @@ public class TestSolver {
 		
 		assertTrue(c > d);
 	}
-	
+
+	@Test
+	public void testCircuit() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
+		MultiTable solution = (new Solver()).solveWithSynFile(circ1);
+		//showMultiTable(solution);
+	}
 	/**
 	 * A visual representation of the data for manual testing purposes
 	 */

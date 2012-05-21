@@ -9,13 +9,13 @@
     { "from": "input", "to": 0, "protein": "A"},
     { "from": "input", "to": 0, "protein": "B"},
     { "from": 0, "to": 1, "protein": "C"},
-    { "from": 1, "to": 'output', "protein": "D"}
+    { "from": 1, "to": "output", "protein": "D"}
   ],
   "grouping": [
 
   ],
   "inputs": {
-    "length": 40,
+    "length": 42,
     "values": {
       "A": "H",
       "B": "LLLLLLLLLL LLLLLLLLLLH"
