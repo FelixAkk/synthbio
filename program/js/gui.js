@@ -285,6 +285,7 @@ $(document).ready(function() {
 		synthbio.gui.fileOpHandler = synthbio.gui.saveAsHandler;
 	});
 	$("#open").on("click", function() {
+		synthbio.resetProteins();
 		$("#files .modal-header h3").html("Open…");
 		$("#files .modal-footer .btn-primary").html("Open…");
 		// Set the correct event handler

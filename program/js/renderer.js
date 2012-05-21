@@ -22,15 +22,19 @@
 
 $(document).ready(function() {
 	
-	var usedProteins = {};
-	
-	synthbio.requests.getCDSs(function(response){
-		$.each(response, function(i, cds){
-			usedProteins[cds.name] = {used: false}; 
+	synthbio.usedProteins = {};
+	synthbio.resetProteins = function(){
+		synthbio.requests.getCDSs(function(response){
+			$.each(response, function(i, cds){
+				synthbio.usedProteins[cds.name] = {used: false}; 
+			});
 		});
-	});
+	}
+	
 	
 	jsPlumb.ready(function() {
+		synthbio.resetProteins();
+		
 		jsPlumb.setRenderMode(jsPlumb.SVG);
 		jsPlumb.Defaults.Container = $("#grid-container");
 
@@ -134,7 +138,7 @@ $(document).ready(function() {
 			
 			//Either it's a Char or Choose Protein as a string, hence <2
 			if(signal.getProtein().length<2){
-				usedProteins[signal.getProtein()].used = true;
+				synthbio.usedProteins[signal.getProtein()].used = true;
 				currentProtein = signal.getProtein();
 			}
 			
@@ -142,25 +146,22 @@ $(document).ready(function() {
 			el.on("click", function(){
 				if(!select){
 					prots ='';
-					$.each(usedProteins, function(i,cds){
-						if(!(usedProteins[i].used) || i===currentProtein){
+					$.each(synthbio.usedProteins, function(i,cds){
+						if(!(synthbio.usedProteins[i].used) || i===currentProtein){
 							prots += '<option value="' +i+ '">' +i+ '</option>';
 						}
 					});
 					el.html('<select class="wire" id="wire'+connCount+'">'+ '<option value="">Choose protein</option>' + prots + '</select>');
 					select = true;
 				}
-				else if($('#wire'+connCount).val()===""){
-					$('#wire'+connCount).children[0].remove();
-				}
 			});
 
 			el.on("change", function(){
 				var wire = $('#wire'+connCount);
-				if(!(usedProteins[wire.val()].used)){
-					usedProteins[wire.val()].used = true;
+				if(!(synthbio.usedProteins[wire.val()].used)){
+					synthbio.usedProteins[wire.val()].used = true;
 					if(currentProtein!==""){
-						usedProteins[currentProtein].used = false;
+						synthbio.usedProteins[currentProtein].used = false;
 					}
 					currentProtein = wire.val();
 				}
