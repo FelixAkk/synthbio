@@ -198,14 +198,10 @@ $(document).ready(function() {
 				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
 
-<<<<<<< Updated upstream
 			if (lpTable) {
 				lpTable.fnClearTable(false);
 			}
 
-=======
-			if(lpTable) { lpTable.fnClearTable(false); }
->>>>>>> Stashed changes
 			$('#list-proteins tbody').html(html);
 			lpTable = $('#list-proteins table').dataTable(dtOptions);
 		});
