@@ -451,7 +451,7 @@ synthbio.gui.openHandler = function(fileName) {
 		}
 		synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
 	});
-}
+};
 
 synthbio.gui.reset = function() {
 	var id;

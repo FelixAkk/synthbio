@@ -29,7 +29,7 @@ $(document).ready(function() {
 				synthbio.proteins[cds.name] = {used: false}; 
 			});
 		});
-	}
+	};
 	
 	
 	jsPlumb.ready(function() {
@@ -137,7 +137,7 @@ $(document).ready(function() {
 			var prots = '';
 			
 			//If it's one char it succesfully selected a protein from the start.
-			if(signal.getProtein().length == 1) {
+			if(signal.getProtein().length === 1) {
 				synthbio.proteins[signal.getProtein()].used = true;
 				currentProtein = signal.getProtein();
 			}
@@ -164,7 +164,7 @@ $(document).ready(function() {
 				var proteinSelector = $('#protein-selector-' + wireID);
 				if(!(synthbio.proteins[proteinSelector.val()].used)) {
 					synthbio.proteins[proteinSelector.val()].used = true;
-					if(currentProtein.length == 1) {
+					if(currentProtein.length === 1) {
 						synthbio.proteins[currentProtein].used = false;
 					}
 					currentProtein = proteinSelector.val();
