@@ -135,10 +135,9 @@ $(document).ready(function() {
 			var currentProtein = "";
 			var el = $('#conn' + connCount, 0);
 			var prots = '';
-			//boolean which checks if a dropdown (select) menu is active
 			
-			//Either it's a Char or Choose Protein as a string, hence <2
-			if(signal.getProtein().length<2) {
+			//If it's one char it succesfully selected a protein from the start.
+			if(signal.getProtein().length == 1) {
 				synthbio.proteins[signal.getProtein()].used = true;
 				currentProtein = signal.getProtein();
 			}
@@ -155,8 +154,7 @@ $(document).ready(function() {
 							prots += '<option value="' +i+ '">' +i+ '</option>';
 						}
 					});
-					el.html('<select class="protein-selector" id="protein-selector-'+wireID+'">'+ '<option value="empty" >Choose protein</option>' + prots + '</select>');
-					$("#protein-selector-" + wireID).select();
+					el.html('<select class="protein-selector" id="protein-selector-'+wireID+'">'+ '<option value="empty">Choose protein</option>' + prots + '</select>');
 					// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
 					connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
 				}
@@ -166,7 +164,7 @@ $(document).ready(function() {
 				var proteinSelector = $('#protein-selector-' + wireID);
 				if(!(synthbio.proteins[proteinSelector.val()].used)) {
 					synthbio.proteins[proteinSelector.val()].used = true;
-					if(currentProtein !== 0) {
+					if(currentProtein.length == 1) {
 						synthbio.proteins[currentProtein].used = false;
 					}
 					currentProtein = proteinSelector.val();
