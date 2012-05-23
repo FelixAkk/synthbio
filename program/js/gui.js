@@ -154,36 +154,25 @@ synthbio.gui.saveInputs = function(circuit) {
 
 	var simulationInput=circuit.getSimulationInputs();
 	
-	
+	//copy the options from the form to the object.
 	synthbio.util.form2object(
 		simulationInput,
 		[
-			{
-				selector: '#simulate-tick-width',
-				setter: 'setTickWidth'
-			},
-			{
-				selector: '#simulate-length',
-				setter: 'setLength'
-			},
-			{
-				selector: '#simulate-low-threshold',
-				setter: 'setLowThreshold'
-			},
-			{
-				selector: '#simulate-high-threshold',
-				setter: 'setHighThreshold'
-			}
+			{ selector: '#simulate-tick-width', setter: 'setTickWidth' },
+			{ selector: '#simulate-length', setter: 'setLength' },
+			{ selector: '#simulate-low-threshold', setter: 'setLowThreshold' },
+			{ selector: '#simulate-high-threshold', setter: 'setHighThreshold' }
 		]
 	);
-	
+
+	//copy the values for each input signal 
 	$('.signal').each(function(index, elem) {
 		var signal = '';
-		$(this).find('.tick').each(function(index, elem) {
-			if($(elem).hasClass('high')) {
-				signal+='H';
+		$(this).find('.tick').each(function(index, tick) {
+			if($(tick).hasClass('high')) {
+				signal += 'H';
 			} else {
-				signal+='L';
+				signal += 'L';
 			}
 		});
 		

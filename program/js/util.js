@@ -66,8 +66,9 @@ synthbio.util.assert = function(exp, message) {
  * form2object(
  *		circuit,
  *		[
- * 			{ selector: '#length', setter: 'setLength' }
- * 		]
+ *			{ selector: '#length', setter: 'setLength' },
+ *			{ ... }
+ *		]
  * 
  * @param object The target object.
  * @param mappings an array of selector-setter mappings
@@ -78,7 +79,7 @@ synthbio.util.form2object = function(target, mappings) {
 	$.each(mappings, function (index, mapping) {
 		
 		if(mapping.selector.jquery) {
-			selector = mapping.selector
+			selector = mapping.selector;
 		} else {
 			selector = $(mapping.selector);
 		}
