@@ -46,38 +46,38 @@ public class Circuit implements JSONString {
 	/**
 	 * The filename.
 	 */
-	private String name;
+	private final String name;
 
 	/**
 	 * The Circuit description.
 	 */
-	private String description;
+	private final String description;
 
 	/**
 	 * List of Gates
 	 */
-	private ArrayList<Gate> gates=new ArrayList<Gate>();
+	private final ArrayList<Gate> gates=new ArrayList<Gate>();
 
 	/**
 	 * List of input proteins.
 	 */
-	private Set<String> inputs=new HashSet<String>();
+	private final Set<String> inputs=new HashSet<String>();
 
 	/**
 	 * Simulation length, defaults to 40 ticks.
 	 */
-	private int simulationLength=40;
+	private final int simulationLength=40;
 
 	/**
 	 * For each input protein, define a String of High/Low (H/L) for
 	 * each tick in the simulation.
 	 */
-	private Map<String, String> simulationInput=new HashMap<String, String>();
+	private final Map<String, String> simulationInput=new HashMap<String, String>();
 	
 	/**
 	 * List of output proteins.
 	 */
-	private Set<String> outputs=new HashSet<String>();
+	private final Set<String> outputs=new HashSet<String>();
 	
 	/**
 	 * Construct the Circuit.
