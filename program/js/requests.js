@@ -234,7 +234,6 @@ synthbio.requests.simulate = function(circuit, callback){
 		url: "/Circuit?action=simulate",
 		data: { 'circuit': JSON.stringify(circuit) },
 		success: function(response){
-			console.log('response', response);
 			callback(response);
 		},
 		error: function(){

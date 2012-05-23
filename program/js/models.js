@@ -542,9 +542,6 @@ synthbio.SimulationInputs.prototype.setHighThreshold = function(threshold) {
 };
 
 
-
-
-
 /**
  * Retrieve the Simulation input values for an input signal.
  */
@@ -584,9 +581,17 @@ synthbio.SimulationInputs.prototype.updateInputs = function(){
 /**
  * Get a <protein, values> map for each input signal
  */
-synthbio.SimulationInputs.prototype.getValues = function(){
+synthbio.SimulationInputs.prototype.getValues = function() {
 	this.updateInputs();
 	return this.values;
+};
+
+/**
+ * toJSON method.
+ * Change structure a little...
+ */
+synthbio.SimulationInputs.prototype.toJSON = function() {
+	return $.extend({}, this.options, {values: this.values});
 };
 
 /**
@@ -594,7 +599,7 @@ synthbio.SimulationInputs.prototype.getValues = function(){
  *
  * @todo: implement
  */
-synthbio.SimulationInputs.prototype.toString = function(){
+synthbio.SimulationInputs.prototype.toString = function() {
 	return ' length: '+this.getLength();
 };
 
