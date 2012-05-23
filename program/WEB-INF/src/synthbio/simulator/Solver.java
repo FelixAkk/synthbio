@@ -35,6 +35,11 @@ import synthbio.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONString;
+
 /**
  * A class for solving SBML-files and Model-objects.
  * @author Albert ten Napel
@@ -43,14 +48,14 @@ public class Solver {
 	/**
 	 * Solves a .syn file.
 	 */
-	public MultiTable solveWithSynFile(String fileName, double stepSize, double timeEnd)
+	public static MultiTable solveWithSynFile(String fileName, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		// Convert the SBML-file to a Model-object.
 		String sbml = (new CircuitConverter()).convertFromFile(fileName);
 		return solveSBML(sbml, stepSize, timeEnd);
 	}
 
-	public MultiTable solveWithSynFile(String fileName)
+	public static MultiTable solveWithSynFile(String fileName)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		// Convert the SBML-file to a Model-object.
 		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(fileName));
@@ -60,7 +65,7 @@ public class Solver {
 	/**
 	 * Solves a .syn String.
 	 */
-	public MultiTable solve(String syn, double stepSize, double timeEnd)
+	public static MultiTable solve(String syn, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		String sbml = (new CircuitConverter()).convert(syn);
 		return solveSBML(sbml, stepSize, timeEnd);
@@ -69,7 +74,7 @@ public class Solver {
 	/**
 	 * Solves a Circuit-object.
 	 */
-	public MultiTable solve(Circuit c, double stepSize, double timeEnd)
+	public static MultiTable solve(Circuit c, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		String sbml = (new CircuitConverter()).convert(c);
 		return solveSBML(sbml, stepSize, timeEnd);
@@ -78,7 +83,7 @@ public class Solver {
 	/**
  	 * Solves a Circuit-object.
  	 */
-	public MultiTable solve(Circuit c)
+	public static MultiTable solve(Circuit c)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		CircuitConverter cc = new CircuitConverter();
 		String sbml = cc.convert(c);
@@ -89,7 +94,7 @@ public class Solver {
 	/**
  	 * Converts a SBML-string to a Model.
  	 */
-	public Model sbmlToModel(String sbml)
+	public static Model sbmlToModel(String sbml)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		Model model = (new SBMLReader()).readSBMLFromString(sbml).getModel();
 		return model;
@@ -98,7 +103,7 @@ public class Solver {
 	/**
 	 * Solve SBML String.
 	 */
-	public MultiTable solveSBML(String sbml, double stepSize, double timeEnd)
+	public static MultiTable solveSBML(String sbml, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Convert the SBML-string to a Model-object.
 		Model model = (new SBMLReader()).readSBMLFromString(sbml).getModel();
@@ -112,7 +117,7 @@ public class Solver {
 	 * @param		timeEnd		the amount of time to simulate 
 	 * @return						A MultiTable-object containing the solution
 	 */
-	public MultiTable solveSBMLFile(String fileName, double stepSize, double timeEnd)
+	public static MultiTable solveSBMLFile(String fileName, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Convert the SBML-file to a Model-object.
 		Model model = (new SBMLReader()).readSBML(fileName).getModel();
@@ -126,7 +131,7 @@ public class Solver {
 	 * @param		timeEnd 	the amount of time to simulate 
 	 * @return 						A MultiTable-object containing the solution
 	 */
-	public MultiTable solve(Model model, double stepSize, double timeEnd)
+	public static MultiTable solve(Model model, double stepSize, double timeEnd)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Setup solver
 		AbstractDESSolver solver = new EulerMethod();
@@ -145,7 +150,7 @@ public class Solver {
 	/**
  	 * solves a Model with specific inputs
  	 */
-	public MultiTable solve(Model model, MultiTable inputs)
+	public static MultiTable solve(Model model, MultiTable inputs)
 	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Setup solver
 		AbstractDESSolver solver = new EulerMethod();
@@ -158,13 +163,16 @@ public class Solver {
 		return solution;
 	}
 
-	/**
+	 
+	/* 
  	 * Converts a MultiTable to a JSON-string of the format:
  	 * 	{
  	 * 		"columns": [...],
  	 * 		"data": [[...],...]
  	 * 	}
- 	 */ 
+ 	 *
+ 	 * 	this format was not useful enough scroll down for the better method.
+ 	 *
 	public String multiTableToJSON(MultiTable m) { 
 		StringBuffer json = new StringBuffer("{\n\t\"columns\": ");		
 		
@@ -204,6 +212,56 @@ public class Solver {
 		json.delete(json.length()-2, json.length()-1);
 		json.append("\t]\n}");
 		return json.toString();
+	}
+	*/
+	
+	/**
+ 	 * Converts a MultiTable to a JSON-string of the format:
+ 	 * 	{
+ 	 * 		"names": [Time, A, B],
+ 	 * 		"length": 10,
+ 	 * 		"step": 1,
+ 	 * 		"data": {
+ 	 *			"Time": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 	 *			"A": [0, 0, 0, 0, 0, 600, 600, 600, 600, 600],
+ 	 *			"B": [...]
+ 	 * 		}
+ 	 * 	}
+ 	 */
+	public static String multiTableToJSON(MultiTable m) {
+		double[] timePoints = m.getTimePoints();
+		double timeLength = timePoints.length;
+		double step = 1;
+		
+		// get all names
+		int cc = m.getColumnCount() - 3; // - 3 because gene, cell and empty are unused.
+		ArrayList<String> names = new ArrayList<String>(cc);
+		for(int i = 0; i < cc + 3; i++) {
+			String cur = m.getColumnName(i);
+			if(!cur.equals("gene") && !cur.equals("cell") && !cur.equals("empty"))
+				names.add(cur);
+		}
+
+		JSONObject r = new JSONObject();
+		try {
+			r.put("names", new JSONArray(names));
+			r.put("length", timeLength);
+			r.put("step", step);
+			JSONObject data = new JSONObject();
+			for(String name: names) {
+				ArrayList<Double> cur = new ArrayList<Double>((int)timeLength);
+				for(Double d: m.getColumn(name))
+					cur.add(d);
+				data.put(name, new JSONArray(cur));
+				
+			}
+			r.put("data", data);
+		} catch(Exception e) {
+			System.out.println(e);
+			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
+		}
+
+		return r.toString();	
 	}
 }
  

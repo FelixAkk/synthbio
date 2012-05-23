@@ -36,7 +36,7 @@ import org.simulator.math.odes.MultiTable;
  */
 public class CircuitConverter {	
 	// The header and trailer that has to be included in every SBML file.
-	private final String header =
+	private static final String header =
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
 		"<sbml xmlns=\"http://www.sbml.org/sbml/level2/version4\" level=\"2\" version=\"4\">\n"+
 			tabs(1)+"<model>\n"+
@@ -58,7 +58,7 @@ public class CircuitConverter {
 				tabs(2)+"<listOfSpecies>\n"+
 					tabs(3)+"<species id=\"gene\" compartment=\"cell\" initialAmount=\"3\" hasOnlySubstanceUnits=\"true\" boundaryCondition=\"true\" constant=\"true\"/>\n"+
 					tabs(3)+"<species id=\"empty\" compartment=\"cell\" initialAmount=\"0\"/>\n";
-	private final String trailer =
+	private static final String trailer =
 			tabs(2)+"</listOfReactions>\n"+
 		tabs(1)+"</model>\n"+
 		"</sbml>";
@@ -66,7 +66,7 @@ public class CircuitConverter {
 	/**
 	 * Converts a .syn file to SBML.
 	 */
-	public String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
+	public static String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
 		CircuitFactory cf=new CircuitFactory();
 		return convert(cf.fromJSON(Util.fileToString(filename)));
 	}
@@ -74,7 +74,7 @@ public class CircuitConverter {
 	/**
 	 * Converts a .syn String.
 	 */
-	public String convert(String syn) throws CircuitException, JSONException, IOException {
+	public static String convert(String syn) throws CircuitException, JSONException, IOException {
 		CircuitFactory cf=new CircuitFactory();
 		return convert(cf.fromJSON(syn));
 	}
@@ -84,7 +84,7 @@ public class CircuitConverter {
 	 * @param		circuit	The Circuit-object to convert.
 	 * @return					The SBML-formatted string.
 	 */
-	public String convert(Circuit circuit) {
+	public static String convert(Circuit circuit) {
 		// First retrieve all gates
 		Collection<Gate> gates = circuit.getGates();
 		
@@ -140,14 +140,14 @@ public class CircuitConverter {
 		return r+trailer;
 	}
 	
-	private String speciesString(String species, double amount) {
+	private static String speciesString(String species, double amount) {
 		return "<species id=\""+species+"\" compartment=\"cell\" initialAmount=\""+amount+"\" substanceUnits=\"substance\"/>\n";
 	}
 	
 	/**
 	 * Returns a MultiTable that contains the (simulation)inputs of the circuits.
 	 */
-	public MultiTable getInputs(Circuit circuit) {
+	public static MultiTable getInputs(Circuit circuit) {
 		// setup the time points
 		int length = circuit.getSimulationLength();
 		double[] timePoints = new double[length];

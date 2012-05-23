@@ -45,7 +45,7 @@ public class TestCircuitConverter {
 	 */
 	@Test
 	public void testNotCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertFromFile(notCircuit);
+		String sbmlResult = CircuitConverter.convertFromFile(notCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -59,7 +59,7 @@ public class TestCircuitConverter {
 	 */
 	@Test
 	public void testAndCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertFromFile(andCircuit);
+		String sbmlResult = CircuitConverter.convertFromFile(andCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -73,7 +73,7 @@ public class TestCircuitConverter {
 	 */
 	@Test
 	public void testNandCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertFromFile(nandCircuit);
+		String sbmlResult = CircuitConverter.convertFromFile(nandCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -95,7 +95,7 @@ public class TestCircuitConverter {
 		// result
 		
 		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(inputCircuit));
-		MultiTable m = (new CircuitConverter()).getInputs(c);
+		MultiTable m = CircuitConverter.getInputs(c);
 		
 		// expected result
 		//"A": "H",
