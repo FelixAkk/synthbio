@@ -7,6 +7,7 @@
 
 \usepackage{tabto}
 
+\usepackage{pdfpages}
 %~ TikZ is not in use in this document
 %~ \usepackage{pgf}
 %~ \usepackage{tikz}
@@ -19,6 +20,7 @@
   {1.5ex \@plus .2ex}%
   {\normalfont\normalsize\bfseries}}
 \makeatother
+
 
 \title{Programming Life - Final report}
 
@@ -66,5 +68,22 @@ A common issue using server-client setup is the actual connection between the tw
 \subsection{Jan Pieter Waagmeester}
 
 \section{Lightweight SCRUM Plans}
+The following pages will include the relevent parts of our lightweight scrumplans for each iteration. The colored and numbers with a hashtag refer to GitHub issues on \url{https://github.com/FelixAkk/synthbio/issues}. For each iteration, a milestone is available providing a nice overview of the issues for each iteration.
+
+\includepdf[
+	landscape, frame, nup=1x2, pages=2-3,
+	addtotoc={2 , subsection , 1 , Scrumplan 1 , scrum-1}
+]{../scrumplan-1/scrumplan-1.pdf}
+
+\includepdf[
+	landscape, frame, nup=1x2, pages=2-3,
+	addtotoc={2 , subsection , 1 , Scrumplan 2 , scrum-2}
+]{../scrumplan-2/scrumplan-2.pdf}
+
+\includepdf[
+	landscape, frame, nup=1x2, pages=2-3,
+	addtotoc={2 , subsection , 1 , Scrumplan 3 , scrum-3}
+]{../scrumplan-3/scrumplan-3.pdf}
+
 
 \end{document}
