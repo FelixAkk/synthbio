@@ -42,6 +42,9 @@ import org.simulator.math.odes.EulerMethod;
 import org.simulator.sbml.SBMLinterpreter;
 import org.json.JSONException;
 import synthbio.models.CircuitException;
+import synthbio.models.Circuit;
+import synthbio.models.CircuitFactory;
+import synthbio.Util;
  
 /**
  * Testing Solver.
@@ -55,13 +58,30 @@ public class TestSolver {
 	private final String tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
 
 	private final String circ1 = "data/test/simulator/inputCircuit.syn";
+
+	/**
+ 	 * Solve a Syn file
+ 	 */	
+	private static MultiTable solveSyn(String fileName)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
+		return Solver.solve((new CircuitFactory()).fromJSON(Util.fileToString(fileName)));
+	}
+
+	/**
+	 * Solves a SBML file.
+	 */
+	private static MultiTable solveSBML(String fileName, double stepSize, double timeEnd)
+	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
+		Model m = (new SBMLReader()).readSBML(fileName).getModel();
+		return Solver.solve(m, stepSize, timeEnd);
+	}
 	
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
 	 */
 	@Test
 	public void tc1() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = Solver.solveSBMLFile(tc1, 1, 100);
+		MultiTable solution = solveSBML(tc1, 1, 100);
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
 		assertTrue(s2 > s1);
@@ -72,7 +92,7 @@ public class TestSolver {
 	 */
 	@Test
 	public void tc2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = Solver.solveSBMLFile(tc2, 1, 100);
+		MultiTable solution = solveSBML(tc2, 1, 100);
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
 		assertTrue(s2 > s1);
@@ -83,15 +103,10 @@ public class TestSolver {
 	 */
 	@Test
 	public void testSBMLnot() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = Solver.solveSBMLFile(not, 0.1, 100);
-		
+		MultiTable solution = solveSBML(not, 0.1, 100);
 		double a = solution.getColumn("a").getValue(99);
 		double b = solution.getColumn("b").getValue(99);
-		
 		assertTrue(a > b);
-		
-		solution = Solver.solveSBMLFile(not, 1, 5);
-//		System.out.println(solution);
 	}
 	
 	/**
@@ -99,27 +114,29 @@ public class TestSolver {
 	 */
 	@Test
 	public void testSBMLnand() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = Solver.solveSBMLFile(nand, 0.1, 100);
-		
-		double c = solution.getColumn("c").getValue(4);
-		double d = solution.getColumn("d").getValue(4);
-		
+		MultiTable solution = solveSBML(nand, 0.1, 100);
+		double c = solution.getColumn("c").getValue(99);
+		double d = solution.getColumn("d").getValue(99);
 		assertTrue(c > d);
 	}
-	
+
+	/**
+ 	 * Testing the solving of a Syn file.
+ 	 */	
 	@Test
 	public void testCircuit() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
-		MultiTable solution = Solver.solveWithSynFile(circ1);
-
+		MultiTable solution = solveSyn(circ1);
 		double c = solution.getColumn("C").getValue(39);
 		double d = solution.getColumn("D").getValue(39);
-
 		assertTrue(c < d);
 	}
 	
+	/**
+ 	 * Testing the conversion of the results to JSON.
+ 	 */ 
 	@Test
 	public void testMultiTableConvert() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
-		MultiTable solution = Solver.solveWithSynFile(circ1);
+		MultiTable solution = solveSyn(circ1);
 		String json = Solver.multiTableToJSON(solution);
 		assertTrue(json.contains("\"length\":40,\"names\":[\"Time\",\"D\",\"A\",\"B\",\"C\",\"mD\",\"mC\"],\"step\":1"));	
 	}

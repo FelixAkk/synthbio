@@ -14,19 +14,14 @@
 package synthbio.simulator;
 
 import synthbio.models.*;
-import org.json.JSONException;
-import java.io.IOException;
 import synthbio.simulator.Reaction;
-import synthbio.files.BioBrickRepository;
 
-import synthbio.Util;
 import static synthbio.Util.tabs;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.HashSet;
-import java.util.Arrays;
 
 import org.simulator.math.odes.MultiTable;
 
@@ -62,22 +57,6 @@ public class CircuitConverter {
 			tabs(2)+"</listOfReactions>\n"+
 		tabs(1)+"</model>\n"+
 		"</sbml>";
-	
-	/**
-	 * Converts a .syn file to SBML.
-	 */
-	public static String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
-		CircuitFactory cf=new CircuitFactory();
-		return convert(cf.fromJSON(Util.fileToString(filename)));
-	}
-	
-	/**
-	 * Converts a .syn String.
-	 */
-	public static String convert(String syn) throws CircuitException, JSONException, IOException {
-		CircuitFactory cf=new CircuitFactory();
-		return convert(cf.fromJSON(syn));
-	}
 	
 	/**
 	 * Converts a Circuit-object to SBML.
@@ -140,6 +119,9 @@ public class CircuitConverter {
 		return r+trailer;
 	}
 	
+	/**
+ 	 * Returns a species definition of the given species, as used in SBML.
+ 	 */ 	
 	private static String speciesString(String species, double amount) {
 		return "<species id=\""+species+"\" compartment=\"cell\" initialAmount=\""+amount+"\" substanceUnits=\"substance\"/>\n";
 	}
@@ -159,16 +141,11 @@ public class CircuitConverter {
 		double[][] data = new double[length][names.length];
 		for(int time = 0; time < length; time++) {
 			for(int name = 0; name < names.length; name++) {
-				//System.out.println("a: " + time + ", " + name);
 				String val = circuit.getSimulationInput(names[name]);
 				char cur = (val.length() > time? val.charAt(time): val.charAt(val.length()-1));
-				//System.out.println("b: " + time + ", " + (val.length()-1) + ", " + val + ", " + cur);
 				data[time][name] = (cur == 'L'? 0: 600);
 			}
 		}
-		//System.out.println(Arrays.asList(timePoints));
-		//System.out.println(Arrays.asList(data));
-		//System.out.println(Arrays.asList(names));
 		return new MultiTable(timePoints, data, names);
 	}
 }
