@@ -250,14 +250,18 @@ public class Solver {
 			JSONObject data = new JSONObject();
 			for(String name: names) {
 				ArrayList<Double> cur = new ArrayList<Double>((int)timeLength);
-				for(Double d: m.getColumn(name))
-					cur.add(d);
+				if(name.equals("Time")) {
+					for(Double d: timePoints)
+						cur.add(d);
+				} else {
+					for(Double d: m.getColumn(name))
+						cur.add(d);
+				}
 				data.put(name, new JSONArray(cur));
 				
 			}
 			r.put("data", data);
 		} catch(Exception e) {
-			System.out.println(e);
 			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
 		}
 

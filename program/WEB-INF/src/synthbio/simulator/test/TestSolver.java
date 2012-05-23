@@ -117,13 +117,11 @@ public class TestSolver {
 		assertTrue(c < d);
 	}
 	
-	@Ignore
 	@Test
 	public void testMultiTableConvert() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		MultiTable solution = Solver.solveWithSynFile(circ1);
 		String json = Solver.multiTableToJSON(solution);
-		System.out.println(json);
-		assertTrue(json.contains("[Time, A, B, C, D, mC, mD]"));	
+		assertTrue(json.contains("\"length\":40,\"names\":[\"Time\",\"D\",\"A\",\"B\",\"C\",\"mD\",\"mC\"],\"step\":1"));	
 	}
 
 	/**
