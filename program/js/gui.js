@@ -153,6 +153,30 @@ synthbio.gui.saveInputs = function(circuit) {
 	circuit = circuit || synthbio.model;
 
 	var simulationInput=circuit.getSimulationInputs();
+	
+	
+	synthbio.util.form2object(
+		simulationInput,
+		[
+			{
+				selector: '#simulate-tick-width',
+				setter: 'setTickWidth'
+			},
+			{
+				selector: '#simulate-length',
+				setter: 'setLength'
+			},
+			{
+				selector: '#simulate-low-threshold',
+				setter: 'setLowThreshold'
+			},
+			{
+				selector: '#simulate-high-threshold',
+				setter: 'setHighThreshold'
+			}
+		]
+	);
+	
 	$('.signal').each(function(index, elem) {
 		var signal = '';
 		$(this).find('.tick').each(function(index, elem) {
@@ -394,7 +418,7 @@ $(document).ready(function() {
 	});
 
 	// Start pinging
-	//synthbio.gui.pingServer();
+	synthbio.gui.pingServer();
 	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();

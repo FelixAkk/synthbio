@@ -259,7 +259,7 @@ synthbio.Circuit.prototype.toString = function(){
 		" consists of gates:{ " + this.getGates().toString() + " }" +
 		" and signals:{ " + this.getSignals().toString() + " }" +
 		" and groupings:{ " + this.getGroups() + "}" +
-		" and SimulationInput: {" + this.getSimulationInput() + "}";
+		" and SimulationInputs: {" + this.getSimulationInputs() + "}";
 };
 synthbio.Circuit.prototype.getName = function() {
 	return this.name;
@@ -458,40 +458,6 @@ synthbio.CDS.prototype.toString = function(){
 };
 
 /**
- * The object that will represent the entire circuit that is in the app.
- * Might be a slight delay between synchronization but should correspond
- * to the circuit pretty accurately. This should only matter with trivial
- * things like the position of gates. This object is instantiated as an
- * empty circuit with no name or description.
- */
-synthbio.model = new synthbio.Circuit("", "");
-
-/**
- * Cleans the current workspace and loads the provided circuit.
- *
- * @param circuit An instance of synthbio.Circuit
- */
-synthbio.loadCircuit = function(circuit) {
-	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
-	// TODO: try convert fromMap to Circuit.
-
-	synthbio.gui.reset();
-
-	// Show the circuit; add all the elements
-	synthbio.model = circuit;
-
-	$.each(synthbio.model.getGates(), function(index, element) {
-		synthbio.gui.displayGate(element);
-	});
-	$.each(synthbio.model.getSignals(), function(index, element){
-		synthbio.gui.displaySignal(element);
-	});
-	//TODO; implement grouping.
-};
-
-
-
-/**
  * SimulalionInputs records settings to run the simulation.
  * 
  * Might be initialized with two maps or with one map.
@@ -506,9 +472,9 @@ synthbio.SimulationInputs = function(options, values) {
 	this.options = $.extend(
 		{
 			"length": 40,				//total ticks.
-			"tick_width": 1,			//length in seconds for one tick.
-			"low_threshold": 0,			//concentration regarded as low.
-			"high_threshold": 600		//concentration regarded as high.
+			"tickWidth": 1,			//length in seconds for one tick.
+			"lowThreshold": 0,			//concentration regarded as low.
+			"highThreshold": 600		//concentration regarded as high.
 		}, options);
 		
 	/**
@@ -547,9 +513,36 @@ synthbio.SimulationInputs.prototype.setValue = function(protein, value) {
 	this.values[protein]=value.replace(/[^HL]/g, "");
 };
 
+
 synthbio.SimulationInputs.prototype.getLength = function() {
 	return this.options.length;
 };
+synthbio.SimulationInputs.prototype.getTickWidth = function() {
+	return this.options.tickWidth;
+};
+synthbio.SimulationInputs.prototype.getLowThreshold = function() {
+	return this.options.lowThreshold;
+};
+synthbio.SimulationInputs.prototype.getHighThreshold = function() {
+	return this.options.highThreshold;
+};
+
+synthbio.SimulationInputs.prototype.setLength = function(length) {
+	this.options.length = length;
+};
+synthbio.SimulationInputs.prototype.setTickWidth = function(width) {
+	console.log(this);
+	this.options.tickWidth = width;
+};
+synthbio.SimulationInputs.prototype.setLowThreshold = function(threshold) {
+	this.options.lowThreshold = threshold;
+};
+synthbio.SimulationInputs.prototype.setHighThreshold = function(threshold) {
+	this.options.highThreshold = threshold;
+};
+
+
+
 
 
 /**
@@ -603,4 +596,39 @@ synthbio.SimulationInputs.prototype.getValues = function(){
  */
 synthbio.SimulationInputs.prototype.toString = function(){
 	return ' length: '+this.getLength();
+};
+
+
+//@NielsAD should the following stay here?
+
+/**
+ * The object that will represent the entire circuit that is in the app.
+ * Might be a slight delay between synchronization but should correspond
+ * to the circuit pretty accurately. This should only matter with trivial
+ * things like the position of gates. This object is instantiated as an
+ * empty circuit with no name or description.
+ */
+synthbio.model = new synthbio.Circuit("", "");
+
+/**
+ * Cleans the current workspace and loads the provided circuit.
+ *
+ * @param circuit An instance of synthbio.Circuit
+ */
+synthbio.loadCircuit = function(circuit) {
+	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
+	// TODO: try convert fromMap to Circuit.
+
+	synthbio.gui.reset();
+
+	// Show the circuit; add all the elements
+	synthbio.model = circuit;
+
+	$.each(synthbio.model.getGates(), function(index, element) {
+		synthbio.gui.displayGate(element);
+	});
+	$.each(synthbio.model.getSignals(), function(index, element){
+		synthbio.gui.displaySignal(element);
+	});
+	//TODO; implement grouping.
 };
