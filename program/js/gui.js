@@ -100,20 +100,21 @@ synthbio.gui.inputEditor = function(){
 	//clear input signals container.
 	$('#input-signals').html('');
 
-	var i;
-	var inputs=synthbio.model.getInputs();
+	
+	var inputs=synthbio.model.getSimulationInputs();
 
 	//@todo check if all inputs are defined.
 
 	
 	//iterate over signals and create signal input editors.
 	$.each(
-		inputs.values,
+		inputs.getValues(),
 		function(name, ticks){
 			var signalEditor=$('<div class="signal" id="signal'+name+'">'+name+': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
 			var levels='<div class="levels">';
 			var currentLevel="L";
-			for(i=0; i<inputs.length; i++){
+			var i;
+			for(i=0; i<inputs.getLength(); i++){
 				if(i < ticks.length){
 					currentLevel=ticks.charAt(i);
 				}
@@ -140,6 +141,7 @@ synthbio.gui.inputEditor = function(){
 			$(this).find('toggle-highlow').removeClass('low').removeClass('high');
 		}
 	});
+
 };
 
 /**
@@ -149,10 +151,8 @@ synthbio.gui.inputEditor = function(){
  */
 synthbio.gui.saveInputs = function(circuit) {
 	circuit = circuit || synthbio.model;
-	var inputs={
-		"length": circuit.getSimulationLength(),
-		"values": {}
-	};
+
+	var simulationInput=circuit.getSimulationInputs();
 	$('.signal').each(function(index, elem) {
 		var signal = '';
 		$(this).find('.tick').each(function(index, elem) {
@@ -162,10 +162,11 @@ synthbio.gui.saveInputs = function(circuit) {
 				signal+='L';
 			}
 		});
-
-		inputs.values[$(this).attr('id').substr(-1)] = signal;
+		
+		var protein=$(this).attr('id').substr(-1);
+		simulationInput.setValue(protein, signal);
 	});
-	circuit.setInputs(inputs);
+	
 };
 
 $(document).ready(function() {
@@ -434,7 +435,10 @@ $(document).ready(function() {
 	var cir = new synthbio.Circuit(map.name, map.description, gates, signals, groups);
 	setTimeout(function() {
 		synthbio.loadCircuit(cir);
+		//display the define-inputs modal for quicker development.
+		//$('#define-inputs').modal();
 	}, 500);
+	
 
 
 });

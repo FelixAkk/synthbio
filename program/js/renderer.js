@@ -26,7 +26,7 @@ $(document).ready(function() {
 	synthbio.resetProteins = function() {
 		synthbio.requests.getCDSs(function(response) {
 			$.each(response, function(i, cds) {
-				synthbio.proteins[cds.name] = {used: false}; 
+				synthbio.proteins[cds.name] = { "used": false}; 
 			});
 		});
 	};
@@ -104,15 +104,15 @@ $(document).ready(function() {
 
 		// The definition of target endpoints
 		synthbio.gui.outputEndpoint = {
-			endpoint:"Dot",
+			endpoint: "Dot",
 			paintStyle:{ fillStyle:"#225588",radius:7 },
 			//connector:[ "Flowchart", { stub:40 } ],
 			connector: ["Bezier", { curviness:50 } ],
-			connectorStyle:connectorPaintStyle,
-			hoverPaintStyle:pointHoverStyle,
-			connectorHoverStyle:connectorHoverStyle,
-			isSource:true,
-			maxConnections:-1
+			connectorStyle: connectorPaintStyle,
+			hoverPaintStyle: pointHoverStyle,
+			connectorHoverStyle: connectorHoverStyle,
+			isSource: true,
+			maxConnections: -1
 		};
 
 		var connCount = 0;
