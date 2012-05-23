@@ -129,13 +129,15 @@ public class CircuitConverter {
 		// time to create the SBML-string
 		String r = header;
 		// add all the species
-		for(String s: species)
+		for(String s: species) {
 			r += tabs(3) + speciesString(s, 0d);
+		}
 		r += tabs(2) + "</listOfSpecies>\n";
 		// add the reactions
 		r += tabs(2) + "<listOfReactions>\n";
-		for(Reaction reaction: reactions)
+		for(Reaction reaction: reactions) {
 			r += reaction.getSBMLString();
+		}
 		
 		return r+trailer;
 	}
@@ -151,8 +153,9 @@ public class CircuitConverter {
 		// setup the time points
 		int length = circuit.getSimulationLength();
 		double[] timePoints = new double[length];
-		for(int i = 0; i < length; i++)
-			timePoints[i] = i;	
+		for(int i = 0; i < length; i++) {
+			timePoints[i] = i;
+		}
 		// setup names
 		String[] names = circuit.getInputs().toArray(new String[circuit.getInputs().size()]);
 		// setup data
