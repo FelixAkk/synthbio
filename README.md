@@ -1,4 +1,4 @@
-# Zelula - Programming life contextproject (TU Delft, 2012, group E)
+# Zelula - Programming life contextproject TU Delft, 2012 (group E)
 
 The aim of Zelula (also referred to with `synthbio`) is to develop a graphical modeling and simulation package for synthetic biological/genetic networks.
 
