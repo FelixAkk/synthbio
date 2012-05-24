@@ -39,13 +39,21 @@ public class TestCircuitConverter {
 	private final String andCircuit = "data/test/simulator/andCircuit.syn";
 	private final String nandCircuit = "data/test/simulator/nandCircuit.syn";
 	private final String inputCircuit = "data/test/simulator/inputCircuit.syn";
-	
+
+  /**
+	 * Converts a .syn file to SBML.
+	 * Useful method for the tests.
+	 */
+	public static String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
+		return CircuitConverter.convert((new CircuitFactory()).fromJSON(Util.fileToString(filename)));
+	}
+
 	/**
 	 * Test if a simple Not-gate is properly converted to SBML.
 	 */
 	@Test
 	public void testNotCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertFromFile(notCircuit);
+		String sbmlResult = convertFromFile(notCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -59,7 +67,7 @@ public class TestCircuitConverter {
 	 */
 	@Test
 	public void testAndCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertFromFile(andCircuit);
+		String sbmlResult = convertFromFile(andCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -73,7 +81,7 @@ public class TestCircuitConverter {
 	 */
 	@Test
 	public void testNandCircuit() throws CircuitException, JSONException, IOException {
-		String sbmlResult = (new CircuitConverter()).convertFromFile(nandCircuit);
+		String sbmlResult = convertFromFile(nandCircuit);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
@@ -95,7 +103,7 @@ public class TestCircuitConverter {
 		// result
 		
 		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(inputCircuit));
-		MultiTable m = (new CircuitConverter()).getInputs(c);
+		MultiTable m = CircuitConverter.getInputs(c);
 		
 		// expected result
 		//"A": "H",

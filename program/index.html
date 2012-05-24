@@ -148,6 +148,30 @@
 			<h3>Define input signals</h3>
 		</div>
 		<div class="modal-body">
+			<div onclick="$('#simulation-advanced').toggle(500)" class="btn btn-small">Advanced</div>
+			<div id="simulation-advanced" class="hide">
+				<form class="form-horizontal">
+					<div class="control-group">
+						<label class="control-label" for="simulate-tick-width">Tick width</label>
+						<div class="controls">
+							<div class="input-append">
+								<input type="text" id="simulate-tick-width" class="input-mini" /><span class="add-on">s</span>
+							</div>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">Levels</label>
+						<div class="controls">
+							<div class="input-append">
+								<input type="text" id="simulate-low-level" class="input-mini" /><span class="add-on">low</span>
+							</div>
+							<div class="input-append">
+								 <input type="text" id="simulate-high-level" class="input-mini" /><span class="add-on">high</span>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
 			<div class="x-axis" title="One tick equals one second"> t &rarr;</div>
 			<div id="input-signals"></div>
 		</div>

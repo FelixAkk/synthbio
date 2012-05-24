@@ -40,114 +40,116 @@ A list of tasks, assignments and effort estimations is included in a table.
 \tasktableheading
 
 \task{42}
-        {Client: Specify protein for wires by drop-down menu}
-        {Thomas}
-        {3}{7}
+	{Client: Specify protein for wires by drop-down menu}
+	{Thomas}
+	{3}{12}
 
 \task{44}
-        {Client: Specify input signals}
-        {Jan-Pieter}
-        {16}{20}[2mm]
+	{Client: Specify input signals}
+	{Jan-Pieter}
+	{16}{20}[2mm]
 
 
 \task{22}
-        {Client: Circuit bookkeeping}
-        {Felix+Niels}
-        {\multirow{3}{*}{$\Bigg\}$ 2*15}}{5+15}
-        
+	{Client: Circuit bookkeeping}
+	{Felix+Niels}
+	{\multirow{3}{*}{$\Bigg\}$ 2*15}}{5+15}
+		
 \task{45}
-        {Client: Save Circuit}
-        {Felix+Niels}
-        {}{5+0}
+	{Client: Save Circuit}
+	{Felix+Niels}
+	{}{5+0}
 
 \task{46}
-        {Client: Load Circuit}
-        {Felix+Niels}
-        {}{8+4}[2mm]
-        
+	{Client: Load Circuit}
+	{Felix+Niels}
+	{}{8+4}[2mm]
+	
 \task{47}
-        {Server: Simulate Circuit}
-        {Albert}
-        {2}{Actual}
-        
+	{Server: Simulate Circuit}
+	{Albert}
+	{2}{2}
+		
 \task{48}
-        {Server: Convert circuit to simulator input}
-        {Albert}
-        {14}{Actual}
+	{Server: Convert circuit to simulator input}
+	{Albert}
+	{14}{16}
 
 \task{49}
-        {Wiki: Simulator}
-        {Albert}
-        {1}{Actual}[2mm]
+	{Wiki: Simulator}
+	{Albert}
+	{1}{0}[2mm]
 
 \task{}
-        {Code Review}
-        {All}
-        {5*4}{2+3}
+	{Code Review}
+	{All}
+	{5*4}{2+3+4+1+1} % jieter did 4 hours
 
 \task{50}
-        {Final Scrumplan-3}
-        {Thomas}
-        {2}{Actual}
+	{Final Scrumplan-3}
+	{Thomas}
+	{2}{3}
 
 \task{51}
-        {Scaffolding Scrumplan-4}
-        {Thomas}
-        {1}{Actual}
+	{Scaffolding Scrumplan-4}
+	{Thomas}
+	{1}{1}
 
 \task{52}
-        {Final report: Key Problems/Solutions}
-        {Thomas}
-        {4}{Actual}
+	{Final report: Key Problems/Solutions}
+	{Thomas}
+	{4}{0}
 
-\subtotal{93}{}
+\subtotal{93}{92}
  
 \subheading{
-        Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
+	Optional tasks\footnote{Things from next iterations that could be done if sufficient time is available}
 }
 
 \task{43}
-        {Polishing modelling/grid styles and workflow}
-        {Felix+Niels}
-        {-}{1+1}
+	{Polishing modelling/grid styles and workflow}
+	{Felix+Niels}
+	{-}{1+1}
 
 \task{53}
-        {Client: Output visualisation}
-        {-}
-        {-}{Actual}
+	{Client: Output visualisation}
+	{-}
+	{-}{-}
 
 \task{54}
-        {Client: Simulate Circuit}
-        {-}
-        {2}{Actual}
+	{Client: Simulate Circuit}
+	{-}
+	{-}{-}
 
 \task{55}
-        {Final report: Reflection on teamwork}
-        {-}
-        {-}{Actual}
+	{Final report: Reflection on teamwork}
+	{-}
+	{-}{-}
 
 
-\subtotal{\textgreater2}{-}
+\subtotal{-}{2}
 
 \subheading{
-        Added during iteration
+	Added during iteration
 }
 
 \task{}
-        {JSLint ant target and style review.\footnote{To ensure some best practices in our JavaScript code, including coding style, we use JSLint/JSHint}}
-        {Jan Pieter}
-        {-}{2}
-        
+	{JSLint ant target and style review.\footnote{To ensure some best practices in our JavaScript code, including coding style, we use JSLint/JSHint}}
+	{Jan Pieter}
+	{-}{2}
+		
 \task{}
-        {Client: validate Circuit\footnote{For some reason, this task was not in the initial scrum plan \#3, but it was an optional task in \#2.}}
-        {Jan Pieter}
-        {-}{2}
+	{Client: validate Circuit\footnote{For some reason, this task was not in the initial scrum plan \#3, but it was an optional task in \#2.}}
+	{Jan Pieter}
+	{-}{2}
 
 \subtotal{-}{4}
 
-\grandtotal{}{-}
+\grandtotal{93}{98}
 \end{tabularx}
 \end{center}
+
+\pagebreak
 
 \section{Reflection on this iteration}
 During this iteration one of the main problems we encountered were in late commits and a lack of communication when someone was getting behind on schedule. This would lead to a lack of time to correct late work or to help someone catch up with the schedule. During the scrum-reflection we discussed this and noticed that as before this is still a problem. Some improvements were noticed this scrum iteration, and we further emphasized that this is still to be worked on and requires more attention during in our group-process. Everyone agreed on this and plans to show improvements in this aspect.
@@ -160,10 +162,10 @@ Another thing we noticed is that our actual time expenditure on code review was 
 We had planned to quite some work this iteration even though there was a holiday during this scrum run. We were requested to have a working program during the next sprint, so we looked at what was still missing and aimed to complete a great proportion of that during this sprint. We mainly shoved the Circuit Simulation on the client side to the next scrum run. The rest of the big chunks we tried to tackle this iteration. We also had a little bit of work left from the previous sprint so we planned that in as well. We acknowledged that our final report will be a big piece of work as well, so we decided to work a little bit in advance on that.
  
 \subsection{Implementation}
-During the implementation of all of our functions we encountered some difficulties. Going through our task list we had some issues while implementing the dropdown menu for proteins. We didn't expect this but it seems jsPlumb combined with bootstrap can give quite some errors. We are still working on this.
-We tried a workaround, building a selectable dropdown menu from a regular list as well as putting a select menu on a wire. Both do not fully function.
+During the implementation of all of our functions we encountered some difficulties. We had some difficulties implementing dropdown menus on wires. We didn't expect this but it seems jsPlumb combined with bootstrap gave quite some errors. We didn't manage to fully complete this part so we pushed the remainder on to the next sprint.
 
-Other issues will come here....
+Other than this we mainly made a lot of small improvements to our program. We did not encounter great problems, instead we found a lot of room for minor improvements. We took these enhancements and set them as optional in our next sprint.
+
 
 
 \end{document}

@@ -144,7 +144,8 @@ public class CircuitFactory{
 				throw new CircuitException("Signal should contain fields: protein, from, to.");
 			}
 			
-			if(signal.getString("protein").length() != 1){
+			// Make sure the protein string is not empty.
+			if(signal.getString("protein").length() < 1){
 				throw new CircuitException("Signal (" + signal.get("from") + " -> " + signal.get("to") + ") should have a protein assigned.");
 			}
 			//Signal from another Gate or input.
@@ -164,7 +165,7 @@ public class CircuitFactory{
 					//check if this signal protein is the same as
 					//already present, if not, throw an exception.
 					if(!circuit.gateAt(from).getCDS().getName().equals(signal.getString("protein"))){
-						throw new CircuitException("CDS for gate "+from+" is ambigious");
+						throw new CircuitException("CDS for gate "+circuit.gateAt(from).toString()+" is ambigious.");
 					}
 				}
 			}else{

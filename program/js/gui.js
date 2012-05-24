@@ -94,20 +94,26 @@ synthbio.gui.inputEditor = function(){
 	//clear input signals container.
 	$('#input-signals').html('');
 
-	var i;
-	var inputs=synthbio.model.getInputs();
+	
+	var inputs=synthbio.model.getSimulationInputs();
 
 	//@todo check if all inputs are defined.
 
+	//fill advanced settings form fields
+	$('#simulate-length').val(inputs.getLength());
+	$('#simulate-low-level').val(inputs.getLowLevel());
+	$('#simulate-high-level').val(inputs.getHighLevel());
+	$('#simulate-tick-width').val(inputs.getTickWidth());
 	
 	//iterate over signals and create signal input editors.
 	$.each(
-		inputs.values,
+		inputs.getValues(),
 		function(name, ticks){
 			var signalEditor=$('<div class="signal" id="signal'+name+'">'+name+': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
 			var levels='<div class="levels">';
 			var currentLevel="L";
-			for(i=0; i<inputs.length; i++){
+			var i;
+			for(i=0; i<inputs.getLength(); i++){
 				if(i < ticks.length){
 					currentLevel=ticks.charAt(i);
 				}
@@ -134,6 +140,7 @@ synthbio.gui.inputEditor = function(){
 			$(this).find('toggle-highlow').removeClass('low').removeClass('high');
 		}
 	});
+
 };
 
 /**
@@ -143,23 +150,35 @@ synthbio.gui.inputEditor = function(){
  */
 synthbio.gui.saveInputs = function(circuit) {
 	circuit = circuit || synthbio.model;
-	var inputs={
-		"length": circuit.getSimulationLength(),
-		"values": {}
-	};
+
+	var simulationInput=circuit.getSimulationInputs();
+	
+	//copy the options from the form to the object.
+	synthbio.util.form2object(
+		simulationInput,
+		[
+			{ selector: '#simulate-tick-width', setter: 'setTickWidth' },
+			{ selector: '#simulate-length', setter: 'setLength' },
+			{ selector: '#simulate-low-level', setter: 'setLowLevel' },
+			{ selector: '#simulate-high-level', setter: 'setHighLevel' }
+		]
+	);
+
+	//copy the values for each input signal 
 	$('.signal').each(function(index, elem) {
 		var signal = '';
-		$(this).find('.tick').each(function(index, elem) {
-			if($(elem).hasClass('high')) {
-				signal+='H';
+		$(this).find('.tick').each(function(index, tick) {
+			if($(tick).hasClass('high')) {
+				signal += 'H';
 			} else {
-				signal+='L';
+				signal += 'L';
 			}
 		});
-
-		inputs.values[$(this).attr('id').substr(-1)] = signal;
+		
+		var protein=$(this).attr('id').substr(-1);
+		simulationInput.setValue(protein, signal);
 	});
-	circuit.setInputs(inputs);
+	
 };
 
 $(document).ready(function() {
@@ -232,8 +251,13 @@ $(document).ready(function() {
 		$(this).find("p").html('');
 		$('#validate-alert').addClass("invalid");
 	});
+	
+	/**
+	 * Dump the circuit to console.
+	 */
 	$('#dump-circuit').on('click', function() {
 		console.log(synthbio.model);
+		console.log(JSON.stringify(synthbio.model));
 	});
 		
 
@@ -269,6 +293,9 @@ $(document).ready(function() {
 					
 					console.log(synthbio.model);
 					$('#validate-alert').modal();
+				}else{
+					//@todo: implement output visualisation here.
+					console.log("Simulation result: ", response.data);
 				}
 			}
 		);
@@ -328,6 +355,7 @@ $(document).ready(function() {
 	 * Setup/rig file operation dialog when the `Open` menu item is clicked.
 	 */
 	$("#open").on("click", function() {
+		synthbio.resetProteins();
 		$("#files .modal-header h3").html("Open…");
 		$("#files .modal-footer .btn-primary").html("Open…");
 		$("#files .modal-footer input").attr("placeholder", "Search...");
@@ -507,7 +535,10 @@ $(document).ready(function() {
 	var cir = new synthbio.Circuit(map.name, map.description, gates, signals, groups);
 	setTimeout(function() {
 		synthbio.loadCircuit(cir);
+		//display the define-inputs modal for quicker development.
+		//$('#define-inputs').modal();
 	}, 500);
+	
 
 
 });

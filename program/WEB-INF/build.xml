@@ -175,6 +175,20 @@
 	</target>
 	
 	<!--
+		And why not throw in a Checkstyle target?
+	-->
+	<taskdef resource="checkstyletask.properties" classpath="lib/checkstyle-5.5-all.jar"/>
+	<target name="checkstyle">
+		<checkstyle config="checkstyle.xml">
+			<fileset dir="src/" includes="**/*.java" excludes="**/org/json/**" />
+
+			<formatter type="plain"/>
+			<formatter type="xml" toFile="classes/checkstyle_errors.xml"/>
+		</checkstyle>
+
+	</target>
+	
+	<!--
 		Clean the compiled stuff
 	-->
 	<target name="clean">

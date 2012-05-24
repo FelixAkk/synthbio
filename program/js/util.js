@@ -58,3 +58,36 @@ synthbio.util.assert = function(exp, message) {
 		throw new synthbio.util.AssertException(message);
 	}
 };
+
+/**
+ * Copy the value of form fields to an object.
+ * 
+ * For example:
+ * form2object(
+ *		circuit,
+ *		[
+ *			{ selector: '#length', setter: 'setLength' },
+ *			{ ... }
+ *		]
+ * 
+ * @param object The target object.
+ * @param mappings an array of selector-setter mappings
+ */
+synthbio.util.form2object = function(target, mappings) {
+	
+	var selector;
+	$.each(mappings, function (index, mapping) {
+		
+		if(mapping.selector.jquery) {
+			selector = mapping.selector;
+		} else {
+			selector = $(mapping.selector);
+		}
+
+		if(selector.length && selector.length === 1) {
+			synthbio.util.assert(selector.val, "No val() method on selected element " + selector);
+			synthbio.util.assert(target[mapping.setter], "No such setter on object: " + mapping.setter);
+			target[mapping.setter](selector.val());
+		}
+	});
+};

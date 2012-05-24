@@ -207,9 +207,9 @@ synthbio.Circuit = function(circuitName, desc, gates, signals, groupings, inputs
 	this.signals = signals || [];
 	this.groups = groupings || [];
 
-	//a default for the inputs object.
-	this.inputs = inputs || { "length": 40, "values": {} };
-	//TODO: "class" definition for inputs?
+	//Create the SimulationInputs object.
+	this.inputs = inputs || new synthbio.SimulationInputs();
+	this.inputs.bindCircuit(this);
 };
 
 /**
@@ -232,7 +232,7 @@ synthbio.Circuit.fromMap = function(map) {
 
 	//If input information is present, add that as well
 	if (map.inputs) {
-		circuit.setInputs(map.inputs);
+		circuit.setSimulationInput(new synthbio.SimulationInput(map.inputs));
 	}
 
 	//TODO: implement grouping.
@@ -258,7 +258,8 @@ synthbio.Circuit.prototype.toString = function(){
 	return this.getName() + ": " + this.getDescription() +
 		" consists of gates:{ " + this.getGates().toString() + " }" +
 		" and signals:{ " + this.getSignals().toString() + " }" +
-		" and groupings:{ " + this.getGroups() + "}";
+		" and groupings:{ " + this.getGroups() + "}" +
+		" and SimulationInputs: {" + this.getSimulationInputs() + "}";
 };
 synthbio.Circuit.prototype.getName = function() {
 	return this.name;
@@ -276,51 +277,17 @@ synthbio.Circuit.prototype.getGroups = function() {
 	return this.groups;
 };
 
-/**
- * Return the inputs object for this circuit.
- *
- */
-synthbio.Circuit.prototype.getInputs = function(){
-	//make sure all current signals are contained in the inputs,
-	//set them to low.
-	var self=this;
-	$.each(this.getInputSignals(), function(index, signal){
-		if(!self.inputs.values[signal]){
-			//default uninitialized inputs to L.
-			self.inputs.values[signal]="L";
-		}else{
-			//remove all but (H|L) from input string.
-			self.inputs.values[signal]=self.inputs.values[signal].replace(/[^HL]/g, "");
-		}
-	});
+synthbio.Circuit.prototype.getSimulationInputs = function(){
 	return this.inputs;
 };
-
-synthbio.Circuit.prototype.setInputs = function(inputs){
-	
-	// Copy simulation length from model if it is omitted
-	if(!inputs.length){
-		inputs.length=this.getSimulationLength();
-	}
-	// Verify proteins in inputs parameter againts this.getInputSignals
-	$.each(this.getInputSignals(), function (index, protein) {
-		if(!inputs.values[protein]){
-			throw "Inputs does not contain definition for protein " + protein;
-		}
-	});
-	
-	this.inputs=inputs;
-};
-
-synthbio.Circuit.prototype.getSimulationLength = function(){
-	return this.inputs.length;
+synthbio.Circuit.prototype.setSimulationInput = function(map){
+	this.inputs=new synthbio.SimulationInputs(map);
 };
 
 /**
  * Return a list of input proteins.
- *
  */
-synthbio.Circuit.prototype.getInputSignals = function(){
+synthbio.Circuit.prototype.getInputSignals = function() {
 	var inputs=[];
 	$.each(this.getSignals(), function(index, signal){
 		if(signal.isInput()){
@@ -328,6 +295,10 @@ synthbio.Circuit.prototype.getInputSignals = function(){
 		}
 	});
 	return inputs;
+};
+
+synthbio.Circuit.prototype.hasInputSignal = function(protein) {
+	return $.inArray(protein, this.getInputSignals());
 };
 
 /**
@@ -375,8 +346,7 @@ synthbio.Circuit.prototype.addGate = function(gate, position) {
 };
 
 /**
- * Sort of a setter for gates.
- * @param gate An instance of synthbio.Gate or an index.
+ * Remove a gate.
  */
 synthbio.Circuit.prototype.removeGate = function(gate) {
 	var idx = this.checkGateExists(gate);
@@ -488,9 +458,160 @@ synthbio.CDS.prototype.toString = function(){
 };
 
 /**
- * The object that will represent the entire circuit that is in the app. Might be a slight delay between synchronization
- * but should correspond to the circuit pretty accurately. This should only matter with trivial things like the position
- * of gates. This object is instantiated as an empty circuit with no name or description.
+ * SimulalionInputs records settings to run the simulation.
+ * 
+ * Might be initialized with two maps or with one map.
+ *
+ * One argument: 'options' should contain a <protein, values>-map in
+ * the values field, the onther fields defining the simulation parameters.
+ *
+ * Two-argument: 'options' contains simulation parameters, 'values' is a
+ * <protein, values>-hashmap.
+ */
+synthbio.SimulationInputs = function(options, values) {
+	this.options = $.extend(
+		{
+			"length": 40,				//total ticks.
+			"tickWidth": 1,			//length in seconds for one tick.
+			"lowLevel": 0,			//concentration regarded as low.
+			"highLevel": 600		//concentration regarded as high.
+		}, options);
+		
+	/**
+	 * Hashmap containing the values for each input protein.
+	 */
+	this.values = values || {};
+	
+	//if values is undefined, but set in the options map, copy it.
+	if(!values && this.options.values) {
+		this.values=this.options.values;
+		delete this.options.values;
+	}
+
+	/**
+	 * Reference to the circuit the SimulationInputs object belongs to.
+	 */
+	this.circuit = undefined;
+}; 
+
+/**
+ * Bind the circuit to the the SimulationInputs object to be able
+ * to ask about its inputs.
+ */
+synthbio.SimulationInputs.prototype.bindCircuit = function(circuit){
+	this.circuit=circuit;
+	this.updateInputs();
+};
+
+
+synthbio.SimulationInputs.prototype.setValue = function(protein, value) {
+	this.updateInputs();
+	if(!this.values[protein]){
+		throw "No such input signal in circuit: "+protein; 
+	}
+	//remove all but (H|L) from input string.
+	this.values[protein]=value.replace(/[^HL]/g, "");
+};
+
+
+synthbio.SimulationInputs.prototype.getLength = function() {
+	return this.options.length;
+};
+synthbio.SimulationInputs.prototype.getTickWidth = function() {
+	return this.options.tickWidth;
+};
+synthbio.SimulationInputs.prototype.getLowLevel= function() {
+	return this.options.lowLevel;
+};
+synthbio.SimulationInputs.prototype.getHighLevel = function() {
+	return this.options.highLevel;
+};
+
+synthbio.SimulationInputs.prototype.setLength = function(length) {
+	this.options.length = length;
+};
+synthbio.SimulationInputs.prototype.setTickWidth = function(width) {
+	console.log(this);
+	this.options.tickWidth = width;
+};
+synthbio.SimulationInputs.prototype.setLowLevel = function(level) {
+	this.options.lowLevel = level;
+};
+synthbio.SimulationInputs.prototype.setHighThreshold = function(level) {
+	this.options.highLevel = level;
+};
+
+
+/**
+ * Retrieve the Simulation input values for an input signal.
+ */
+synthbio.SimulationInputs.prototype.getValue = function(protein) {
+	this.updateInputs();
+	if(!this.values[protein]){
+		throw "No such input signal in circuit: "+protein; 
+	}
+	return this.values[protein];
+};
+
+/**
+ * Fetch the list of input signals from the circuit and make sure all
+ * input signals are present in this.inputs; Throw away signals that are
+ * not input signals anymore.
+ */
+synthbio.SimulationInputs.prototype.updateInputs = function(){
+	if(!this.circuit){
+		throw "Circuit should be bound to SimulationInputs first!";
+	}
+	
+	//Make a copy of the current values.
+	var newValues=$.extend({}, this.values);
+	var self=this;
+	$.each(this.circuit.getInputSignals(), function(index, protein){
+		if(self.values[protein]){
+			//keep old value
+			newValues[protein]=self.values[protein];
+		}else{
+			newValues[protein]="L";
+		}
+	});
+	//copy new values to values property
+	this.values=newValues;
+};
+
+/**
+ * Get a <protein, values> map for each input signal
+ */
+synthbio.SimulationInputs.prototype.getValues = function() {
+	this.updateInputs();
+	return this.values;
+};
+
+/**
+ * toJSON method.
+ * Change structure a little...
+ */
+synthbio.SimulationInputs.prototype.toJSON = function() {
+	return $.extend({}, this.options, {values: this.values});
+};
+
+/**
+ * toString method.
+ *
+ * @todo: implement
+ */
+synthbio.SimulationInputs.prototype.toString = function() {
+	return ' length: '+this.getLength();
+};
+
+
+//@NielsAD should the following stay here?
+
+/**
+ * The object that will represent the entire circuit that is in the app.
+ * Might be a slight delay between synchronization but should correspond
+ * to the circuit pretty accurately. This should only matter with trivial
+ * things like the position of gates. This object is instantiated as an
+ * empty circuit with no name or description.
  */
 synthbio.model = new synthbio.Circuit("", "");
 

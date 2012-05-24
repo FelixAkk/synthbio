@@ -7,6 +7,7 @@
 
 \usepackage{tabto}
 
+\usepackage{pdfpages}
 %~ TikZ is not in use in this document
 %~ \usepackage{pgf}
 %~ \usepackage{tikz}
@@ -19,6 +20,7 @@
   {1.5ex \@plus .2ex}%
   {\normalfont\normalsize\bfseries}}
 \makeatother
+
 
 \title{Programming Life - Final report}
 
@@ -44,6 +46,18 @@ Jan Pieter Waagmeester}
 
 \section{Key problems and solutions - highlights}
 
+During this project we have encountered some problems. In this section we will have a look at some of the highlights of these problems and how we fixed them.
+
+Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQeury testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing.
+
+Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work.
+
+At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from Javascript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved after trying several options.
+
+A common issue using server-client setup is the actual connection between the two. In the beginning we had some trouble with this but this was mainly caused by out of sync code and trouble with Apache Tomcat.
+
+
+
 \section{Reflection on the teamwork}
 
 \section{Individual reflection on the project} %max 1 A4 per teammember
@@ -54,5 +68,22 @@ Jan Pieter Waagmeester}
 \subsection{Jan Pieter Waagmeester}
 
 \section{Lightweight SCRUM Plans}
+The following pages will include the relevent parts of our lightweight scrumplans for each iteration. The colored and numbers with a hashtag refer to GitHub issues on \url{https://github.com/FelixAkk/synthbio/issues}. For each iteration, a milestone is available providing a nice overview of the issues for each iteration.
+
+\includepdf[
+	landscape, frame, nup=1x2, pages=2-3,
+	addtotoc={2 , subsection , 1 , Scrumplan 1 , scrum-1}
+]{../scrumplan-1/scrumplan-1.pdf}
+
+\includepdf[
+	landscape, frame, nup=1x2, pages=2-3,
+	addtotoc={2 , subsection , 1 , Scrumplan 2 , scrum-2}
+]{../scrumplan-2/scrumplan-2.pdf}
+
+\includepdf[
+	landscape, frame, nup=1x2, pages=2-3,
+	addtotoc={2 , subsection , 1 , Scrumplan 3 , scrum-3}
+]{../scrumplan-3/scrumplan-3.pdf}
+
 
 \end{document}

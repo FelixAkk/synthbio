@@ -75,8 +75,9 @@ class Reaction {
 	 */
 	private String getReactionId() {
 		String r = type + "_" + gate + "_";
-		for(String p: fromProteins)
+		for(String p: fromProteins) {
 			r += p + "_";
+		}
 		r += "_" + toProtein;
 		return r;
 	}

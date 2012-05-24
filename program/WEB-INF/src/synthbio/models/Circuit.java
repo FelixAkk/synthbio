@@ -56,12 +56,12 @@ public class Circuit implements JSONString {
 	/**
 	 * List of Gates
 	 */
-	private ArrayList<Gate> gates=new ArrayList<Gate>();
+	private final ArrayList<Gate> gates=new ArrayList<Gate>();
 
 	/**
 	 * List of input proteins.
 	 */
-	private Set<String> inputs=new HashSet<String>();
+	private final Set<String> inputs=new HashSet<String>();
 
 	/**
 	 * Simulation length, defaults to 40 ticks.
@@ -72,12 +72,12 @@ public class Circuit implements JSONString {
 	 * For each input protein, define a String of High/Low (H/L) for
 	 * each tick in the simulation.
 	 */
-	private Map<String, String> simulationInput=new HashMap<String, String>();
+	private final Map<String, String> simulationInput=new HashMap<String, String>();
 	
 	/**
 	 * List of output proteins.
 	 */
-	private Set<String> outputs=new HashSet<String>();
+	private final Set<String> outputs=new HashSet<String>();
 	
 	/**
 	 * Construct the Circuit.
@@ -118,7 +118,7 @@ public class Circuit implements JSONString {
 	 * @param p The protein name to check.
 	 */
 	public void assertIsProtein(String p) {
-		assert p.length() == 1 : "Protein is a one letter String";
+		assert p.length() > 0 : "Protein is String with at least one character.";
 	}
 	
 	/**

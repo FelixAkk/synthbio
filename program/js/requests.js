@@ -199,7 +199,7 @@ synthbio.requests.circuitToSBML = function(callback, name, circ){
  * Checks if a circuit is ready to be simulated
  * Callback will be applied on the return messages
  */
-synthbio.requests.validate = function(callback, circuit){
+synthbio.requests.validate = function(circuit, callback){
 	
 	synthbio.requests.baseXHR({
 		url: "/Circuit?action=validate",
@@ -232,7 +232,6 @@ synthbio.requests.simulate = function(circuit, callback){
 		url: "/Circuit?action=simulate",
 		data: { 'circuit': JSON.stringify(circuit) },
 		success: function(response){
-			console.log('response', response);
 			callback(response);
 		},
 		error: function(){

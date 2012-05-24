@@ -22,15 +22,19 @@
 
 $(document).ready(function() {
 	
-	var usedProteins = {};
-	
-	synthbio.requests.getCDSs(function(response){
-		$.each(response, function(i, cds){
-			usedProteins[cds.name] = {used: false}; 
+	synthbio.proteins = {};
+	synthbio.resetProteins = function() {
+		synthbio.requests.getCDSs(function(response) {
+			$.each(response, function(i, cds) {
+				synthbio.proteins[cds.name] = { "used": false}; 
+			});
 		});
-	});
+	};
+	
 	
 	jsPlumb.ready(function() {
+		synthbio.resetProteins();
+		
 		jsPlumb.setRenderMode(jsPlumb.SVG);
 		jsPlumb.Defaults.Container = $("#grid-container");
 
@@ -100,15 +104,15 @@ $(document).ready(function() {
 
 		// The definition of target endpoints
 		synthbio.gui.outputEndpoint = {
-			endpoint:"Dot",
+			endpoint: "Dot",
 			paintStyle:{ fillStyle:"#225588",radius:7 },
 			//connector:[ "Flowchart", { stub:40 } ],
 			connector: ["Bezier", { curviness:50 } ],
-			connectorStyle:connectorPaintStyle,
-			hoverPaintStyle:pointHoverStyle,
-			connectorHoverStyle:connectorHoverStyle,
-			isSource:true,
-			maxConnections:-1
+			connectorStyle: connectorPaintStyle,
+			hoverPaintStyle: pointHoverStyle,
+			connectorHoverStyle: connectorHoverStyle,
+			isSource: true,
+			maxConnections: -1
 		};
 
 		var connCount = 0;
@@ -121,57 +125,62 @@ $(document).ready(function() {
 			signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
 			
 			connCount++;
-			var lbl = '<a class="wires" id="conn' + connCount + '" href=#>';
-			lbl += signal.getProtein() || "Choose protein";
-			lbl += "</a>";
-			connInfo.connection.getOverlay("label").setLabel(lbl);
+			// Instantiate the connection count variable because `connCount` will be incremented later
+			var wireID = connCount;
+			var label = '<a class="wires" id="conn' + connCount + '" href=#>';
+			label += signal.getProtein() || "Choose protein";
+			label += "</a>";
+			connInfo.connection.getOverlay("label").setLabel(label);
 			
-			//Either it's a Char or Choose Protein as a string, hence <2
-			if(signal.getProtein().length<2){
-				usedProteins[signal.getProtein()].used = true;
-			}
-			
-			var currentProt = "";
+			var currentProtein = "";
 			var el = $('#conn' + connCount, 0);
 			var prots = '';
-			//boolean which checks if a dropdown (select) menu is active
-			var select = false;
 			
-			el.on("click", function(){
-				if(!select){
+			//If it's one char it succesfully selected a protein from the start.
+			if(signal.getProtein().length === 1) {
+				synthbio.proteins[signal.getProtein()].used = true;
+				currentProtein = signal.getProtein();
+			}
+			
+			
+			el.on("click", function(event) {
+				// Only proceed and display the dropdown if it doesn't already contain the dropdown
+				if(el.children().length === 0) {
+					// Construct HTML of options
 					prots = '';
-					$.each(usedProteins, function(i,cds){
-						if(!(usedProteins[i].used) || i===currentProt){
+					// Provide all available proteins + the currently selected one
+					$.each(synthbio.proteins, function(i,cds) {
+						if(!(synthbio.proteins[i].used) || i === currentProtein) {
 							prots += '<option value="' +i+ '">' +i+ '</option>';
 						}
 					});
-					el.html('<select class="wire" id="wire'+connCount+'">'+ '<option value="">Choose protein</option>' + prots + '</select>');
-					select = true;
-				}
-				else if($('#wire'+connCount).val()===""){
-					$('#wire'+connCount).children[0].remove();
+					el.html('<select class="protein-selector" id="protein-selector-'+wireID+'">'+ '<option value="empty">Choose protein</option>' + prots + '</select>');
+					// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
+					connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
 				}
 			});
 
-			el.on("change", function(){
-				var wire = $('#wire'+connCount);
-				if(!(usedProteins[wire.val()].used)){
-					usedProteins[wire.val()].used = true;
-					if(currentProt!==""){
-						usedProteins[currentProt].used = false;
+			el.on("change", function() {
+				var proteinSelector = $('#protein-selector-' + wireID);
+				if(!(synthbio.proteins[proteinSelector.val()].used)) {
+					synthbio.proteins[proteinSelector.val()].used = true;
+					if(currentProtein.length === 1) {
+						synthbio.proteins[currentProtein].used = false;
 					}
-					currentProt = wire.val();
+					currentProtein = proteinSelector.val();
 				}
-				select = false;
-				el.html(wire.val());
+				el.html(proteinSelector.val());
+				
+				// A very long line to simply reset the location: make jsPlumb update the GUI so the slunken label is centered again
+				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
 				
 				//update signal in model.
-				signal.setProtein(wire.val());
+				signal.setProtein(proteinSelector.val());
 			});
 		});
 
 /*			var el = $("#conn" + connCount, 0);
-			el.click(function(){
+			el.click(function() {
 				var lp = $('#list-proteins');
 				lp.modal("show");
 				$('#list-proteins tbody').on("click", "tr", function() {
@@ -184,7 +193,7 @@ $(document).ready(function() {
 			});
 		});
 
-		$('#list-proteins').on('hide', function(){
+		$('#list-proteins').on('hide', function() {
 			$('#list-proteins tbody').off("click", "tr");
 		});
 */
