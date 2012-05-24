@@ -28,13 +28,16 @@ import synthbio.models.*;
 public class TestBioBrickRepository{
 	double delta=0.0001;
 	
-	public String biobrickPath="data/biobricks/default";
+	public final String defaultBiobrickPath="data/biobricks/default/";
+	public final String multicharBiobrickPath="data/biobricks/multichar/";
 
 	public BioBrickRepository bbr;
+	public BioBrickRepository mbbr;
 
 	@Before
 	public void setUp() throws Exception {
-		this.bbr=new BioBrickRepository(this.biobrickPath);
+		this.bbr =new BioBrickRepository(this.defaultBiobrickPath);
+		this.mbbr = new BioBrickRepository(this.multicharBiobrickPath);
 	}
 
 	/**
@@ -112,8 +115,38 @@ public class TestBioBrickRepository{
 	 * Check getAndPromotor response for a non-existant AndPromotor.
 	 */
 	@Test
-	public void testGetNonExistantAndPromotor(){
-		AndPromotor p=bbr.getAndPromotor("A", "A");
+	public void testGetNonExistantAndPromotor() {
+		AndPromotor p = bbr.getAndPromotor("A", "A");
+
+		assertNull(p);
+	}
+
+	/**
+	 * Check if reader returns the right amount of biobricks
+	 * per kind.
+	 */
+	@Test
+	public void testMbbr_BioBrickCounts(){
+		assertEquals(45, bbr.getAndPromotors().size());
+		assertEquals(10, bbr.getCDSs().size());
+		assertEquals(10, bbr.getNotPromotors().size());
+	}
+	
+	@Test
+	public void testMbbr_getAndPromotor() {
+		AndPromotor p = mbbr.getAndPromotor("Aaa", "Bee");
+
+		assertNotNull(p);
+		assertEquals("Aaa", p.getTf1());
+		assertEquals("Bee", p.getTf2());
+	}
+
+	/**
+	 * Check getAndPromotor response for a non-existant AndPromotor.
+	 */
+	@Test
+	public void testMbbr_GetNonExistantAndPromotor() {
+		AndPromotor p = bbr.getAndPromotor("A", "A");
 
 		assertNull(p);
 	}

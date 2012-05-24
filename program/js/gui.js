@@ -105,6 +105,11 @@ synthbio.gui.inputEditor = function(){
 
 	//@todo check if all inputs are defined.
 
+	//fill advanced settings form fields
+	$('#simulate-length').val(inputs.getLength());
+	$('#simulate-low-level').val(inputs.getLowLevel());
+	$('#simulate-high-level').val(inputs.getHighLevel());
+	$('#simulate-tick-width').val(inputs.getTickWidth());
 	
 	//iterate over signals and create signal input editors.
 	$.each(

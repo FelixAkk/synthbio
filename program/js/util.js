@@ -85,15 +85,9 @@ synthbio.util.form2object = function(target, mappings) {
 		}
 
 		if(selector.length && selector.length === 1) {
-			if(!selector.val){
-				throw "No val() method on selected element " + selector;
-			}
-
-			if(!target[mapping.setter]) {
-				throw "No such setter on object: " + mapping.setter;
-			}else{
-				target[mapping.setter](selector.val());
-			}
+			synthbio.util.assert(selector.val, "No val() method on selected element " + selector);
+			synthbio.util.assert(target[mapping.setter], "No such setter on object: " + mapping.setter);
+			target[mapping.setter](selector.val());
 		}
 	});
 };

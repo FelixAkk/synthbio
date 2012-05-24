@@ -144,7 +144,8 @@ public class CircuitFactory{
 				throw new CircuitException("Signal should contain fields: protein, from, to.");
 			}
 			
-			if(signal.getString("protein").length() != 1){
+			// Make sure the protein string is not empty.
+			if(signal.getString("protein").length() < 1){
 				throw new CircuitException("Signal (" + signal.get("from") + " -> " + signal.get("to") + ") should have a protein assigned.");
 			}
 			//Signal from another Gate or input.

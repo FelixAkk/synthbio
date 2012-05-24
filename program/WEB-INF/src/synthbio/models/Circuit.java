@@ -118,7 +118,7 @@ public class Circuit implements JSONString {
 	 * @param p The protein name to check.
 	 */
 	public void assertIsProtein(String p) {
-		assert p.length() == 1 : "Protein is a one letter String";
+		assert p.length() > 0 : "Protein is String with at least one character.";
 	}
 	
 	/**

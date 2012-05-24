@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.*;
 
 import synthbio.Util;
+import synthbio.files.BioBrickRepository;
 import synthbio.models.*;
 
 /**
@@ -29,7 +30,7 @@ import synthbio.models.*;
  * 
  * @author jieter
  */
-public class TestCircuitFromJSON{
+public class TestCircuitFactory{
 	double delta=0.0001;
 
 	@Rule
@@ -39,13 +40,16 @@ public class TestCircuitFromJSON{
 	 * Load a test JSON file from the file system and convert it to JSON
 	 */
 	private Circuit loadTestFile(String filename) throws Exception{
+		return this.loadTestFileWithBioBrickRepository(filename, new BioBrickRepository());
+	}
+
+	private Circuit loadTestFileWithBioBrickRepository(String filename, BioBrickRepository bbr) throws Exception {
 		String json=Util.fileToString("data/test/models/"+filename);
 
-		CircuitFactory cf=new CircuitFactory();
+		CircuitFactory cf=new CircuitFactory(bbr);
 		
 		return cf.fromJSON(json);
 	}
-
 
 	/**
 	 * Test some valid example circuits.
@@ -202,5 +206,15 @@ public class TestCircuitFromJSON{
 		thrown.expectMessage("Signal (input -> 0) should have a protein assigned.");
 
 		this.loadTestFile("invalid-emptyProteinInSignal.json");
+	}
+
+	@Test
+	public void test_exampleMultichar() throws Exception {
+		BioBrickRepository mbbr = new BioBrickRepository("data/biobricks/multichar/");
+
+		this.loadTestFileWithBioBrickRepository(
+			"example-multichar-proteins.json",
+			mbbr
+		);
 	}
 }

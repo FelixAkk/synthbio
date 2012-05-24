@@ -254,7 +254,7 @@ public class CircuitServlet extends SynthbioServlet {
 			json.fail("Circuit does not validate, please use validate to correct errors.");
 			return;
 		}
-						
+
 		try {
 			json.data = Util.multiTableToJSON(Solver.solve(c));
 			json.success = true;
