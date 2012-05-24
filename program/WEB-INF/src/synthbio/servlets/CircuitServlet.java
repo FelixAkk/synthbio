@@ -31,6 +31,8 @@ import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
 import synthbio.simulator.Solver;
 
+import synthbio.Util;
+
 /**
  * Servlet ListServlets has different actions on the circuit and replies
  * with the default JSON response.
@@ -254,7 +256,7 @@ public class CircuitServlet extends SynthbioServlet {
 		}
 						
 		try {
-			json.data = Solver.multiTableToJSON(Solver.solve(c));
+			json.data = Util.multiTableToJSON(Solver.solve(c));
 			json.success = true;
 		} catch(Exception e) {
 			json.fail("Failed solving: "+e.getMessage());
