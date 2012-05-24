@@ -160,8 +160,8 @@ synthbio.gui.saveInputs = function(circuit) {
 		[
 			{ selector: '#simulate-tick-width', setter: 'setTickWidth' },
 			{ selector: '#simulate-length', setter: 'setLength' },
-			{ selector: '#simulate-low-threshold', setter: 'setLowThreshold' },
-			{ selector: '#simulate-high-threshold', setter: 'setHighThreshold' }
+			{ selector: '#simulate-low-level', setter: 'setLowLevel' },
+			{ selector: '#simulate-high-level', setter: 'setHighLevel' }
 		]
 	);
 
