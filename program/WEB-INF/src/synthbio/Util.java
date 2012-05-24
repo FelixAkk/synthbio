@@ -19,6 +19,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 
+import java.util.ArrayList;
+import org.simulator.math.odes.MultiTable;
 import org.json.*;
 
 /**
