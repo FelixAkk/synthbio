@@ -110,11 +110,10 @@ synthbio.requests.getFile = function(name, callback){
  * Store a circuit, "circ", on the server called "fileName"
  * Callback function will be the return info/errors
  */
-synthbio.requests.putFile = function(callback, fileName, circ){
-	
+synthbio.requests.putFile = function(fileName, circ, callback) {
 	synthbio.requests.baseXHR({
 		url: "/Circuit?action=save",
-		type: "POST",
+		type: "GET",
 		data: {
 			"filename": fileName,
 			"circuit": JSON.stringify(circ)
@@ -131,7 +130,6 @@ synthbio.requests.putFile = function(callback, fileName, circ){
 		always: function(){
 			callback("putFile called");
 		}
-		
 	});
 };
 
