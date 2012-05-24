@@ -28,7 +28,7 @@ import synthbio.models.*;
 public class TestBioBrickRepository{
 	double delta=0.0001;
 	
-	public String biobrickPath="data/biobricks/";
+	public String biobrickPath="data/biobricks/default";
 
 	public BioBrickRepository bbr;
 
