@@ -165,7 +165,7 @@ public class CircuitFactory{
 					//check if this signal protein is the same as
 					//already present, if not, throw an exception.
 					if(!circuit.gateAt(from).getCDS().getName().equals(signal.getString("protein"))){
-						throw new CircuitException("CDS for gate "+from+" is ambigious");
+						throw new CircuitException("CDS for gate "+circuit.gateAt(from).toString()+" is ambigious.");
 					}
 				}
 			}else{

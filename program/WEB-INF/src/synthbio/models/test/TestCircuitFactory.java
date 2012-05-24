@@ -159,7 +159,7 @@ public class TestCircuitFactory{
 	@Test
 	public void test_ambigiousCDS() throws Exception{
 		thrown.expect(CircuitException.class);
-		thrown.expectMessage("CDS for gate 1 is ambigious");
+		thrown.expectMessage("CDS for gate [and(A,B)->C @(2.0,2.0)] is ambigious.");
 
 		this.loadTestFile("ambigiousCDS.json");
 	}
