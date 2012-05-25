@@ -45,21 +45,29 @@ $(document).ready(function() {
 	*/
 	synthbio.clickWire = function(wire, wireID, currentProtein) {
 		
+		//close all other wire dropdown menus. If open they are set to "Choose protein"
+		$.each($('.protein-selector'), function(i, menu){
+			$('.protein-selector').parent().html("Choose protein");
+			//set all labels to the right position
+			jsPlumb.repaintEverything();
+		});
+		
 		var prots = "";
-		// Only proceed and display the dropdown if it doesn't already contain the dropdown
-		if(wire.children().length === 0) {
-			// Provide all available proteins + the currently selected one
-			$.each(synthbio.proteins, function(i,cds) {
-				if(!(synthbio.proteins[i].used) || i === currentProtein) {
-					prots += '<option val="' + i + '">' + i + '</option>';
-				}
-			});
-			//Draw dropdown list on the wire
-			wire.html('<select id="protein-select-' + wireID +'">' +
-			'<option value="none">Choose protein</option>' +
-			prots + 
-			'</select>');
-		}
+		// Provide all available proteins + the currently selected one
+		$.each(synthbio.proteins, function(i,cds) {
+			if(!(synthbio.proteins[i].used) || i === currentProtein) {
+				prots += '<option val="' + i + '">' + i + '</option>';
+			}
+		});
+		
+		//Draw dropdown list on the wire
+		wire.html('<select class="protein-selector" id="protein-select-' + wireID +'">' +
+		'<option value="none">Choose protein</option>' +
+		prots + 
+		'</select>');
+		
+		//Open them by default
+		$('#protein-select-' + wireID).attr('size', ($(prots).size()+1));
 	};
 	
 	/**
@@ -81,7 +89,7 @@ $(document).ready(function() {
 		//Set new protein value in GUI
 		wire.html(selectedProtein);
 
-		//update signal in model.
+		//Update signal in model.
 		signal.setProtein(selectedProtein);
 	};
 });

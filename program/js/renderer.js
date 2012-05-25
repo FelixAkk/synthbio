@@ -116,10 +116,11 @@ $(document).ready(function() {
 			connCount++;
 			// Instantiate the connection count variable because `connCount` will be incremented later
 			var wireID = connCount;
+			var connectionOverlay = connInfo.connection.getOverlay("label");
 			var label = '<a id="conn' + connCount + '" href=#>';
 			label += signal.getProtein() || "Choose protein";
 			label += '</a>';
-			connInfo.connection.getOverlay("label").setLabel(label);
+			connectionOverlay.setLabel(label);
 			
 			var currentProtein = "";
 			var wire = $('#conn' + connCount, 0);
@@ -131,16 +132,15 @@ $(document).ready(function() {
 			}
 			
 			wire.on("click", function(event) {
-				synthbio.clickWire(wire, wireID, currentProtein);
-				// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
-				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
+				synthbio.clickWire(wire, wireID, currentProtein, connectionOverlay);
+				//Set proper menu location
+				connectionOverlay.setLocation(connectionOverlay.getLocation());
 			});
 			
 			wire.on("change", function(event) {
-				synthbio.changeWire(wire, wireID, currentProtein, signal);
-				// A very long line to simply reset the location: make jsPlumb update the GUI so the slunken label is centered again
-				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
-			
+				synthbio.changeWire(wire, wireID, currentProtein, signal, connectionOverlay);
+				//Set proper label location
+				connectionOverlay.setLocation(connectionOverlay.getLocation());
 			});
 		});
 
