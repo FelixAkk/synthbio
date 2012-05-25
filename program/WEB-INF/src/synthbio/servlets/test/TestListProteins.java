@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import synthbio.Util;
 
-import com.gargoylesoftware.htmlunit.TextPage;
+import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 
 /**
@@ -43,13 +43,13 @@ public class TestListProteins{
 	@Test
 	public void testResponse() throws Exception{
 		final WebClient webClient = new WebClient();
-		final TextPage page = webClient.getPage(url);
+		final Page page = webClient.getPage(url);
 
 		String expected=Util.fileToString("data/test/servlets/listProteins-expected.json").trim();
 
 		assertEquals(
 			expected,
-			page.getContent().trim()
+			page.getWebResponse().getContentAsString().trim()
 		);
 
 		webClient.closeAllWindows();
