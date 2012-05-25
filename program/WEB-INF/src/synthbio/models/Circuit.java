@@ -56,17 +56,33 @@ public class Circuit implements JSONString {
 	/**
 	 * List of Gates
 	 */
-	private final ArrayList<Gate> gates=new ArrayList<Gate>();
+	private final ArrayList<Gate> gates = new ArrayList<Gate>();
 
 	/**
 	 * List of input proteins.
 	 */
-	private final Set<String> inputs=new HashSet<String>();
+	private final Set<String> inputs = new HashSet<String>();
 
 	/**
 	 * Simulation length, defaults to 40 ticks.
 	 */
-	private int simulationLength=40;
+	private int simulationLength = 40;
+
+	/**
+	 * The length in seconds for each tick.
+	 */
+	private int simulationTickWidth = 1;
+	
+	/**
+	 * Simulation low value.
+	 * in micromole/L
+	 */
+	private int simulationLowLevel = 0;
+	/**
+	 * Simulation high value.
+	 * in micromole/L
+	 */
+	private int simulationHighLevel=600;
 
 	/**
 	 * For each input protein, define a String of High/Low (H/L) for
@@ -169,6 +185,29 @@ public class Circuit implements JSONString {
 	}
 
 	/**
+	 * Get the width of a tick in seconds.
+	 */
+	public int getSimulationTickWidth() {
+		return this.simulationTickWidth;
+	}
+
+	/**
+	 * Simulation low value
+	 * Concentration in micromole/liter inputted as the low level.
+	 */
+	public int getSimulationLowLevel() {
+		return this.simulationLowLevel;
+	}
+
+	/**
+	 * Simulation high value
+	 * Concentration in micromole/liter inputted as the high level.
+	 */
+	public int getSimulationHighLevel() {
+		return this.simulationHighLevel;
+	}
+	
+	/**
 	 * Get the simulation input for each input protein.
 	 */
 	public Map<String, String> getSimulationInput() {
@@ -242,10 +281,40 @@ public class Circuit implements JSONString {
 	 * @param length The number of ticks.
 	 */
 	public void setSimulationLength(int length) {
-		assert length > 0 : "Simulation length should be greather than 0";
-		this.simulationLength=length;
+		assert length > 0 : "Simulation length should be greather than 0.";
+		this.simulationLength = length;
 	}
 
+	/**
+	 * Set the simulation tick width.
+	 *
+	 * @param width Width in seconds of one tick.
+	 */
+	public void setSimulationTickWidth(int width) {
+		assert width >= 1 : "Tick width should be greater than 0.";
+		this.simulationTickWidth = width;
+	}
+
+	/**
+	 * Set simulation low level.
+	 *
+	 * @param level Concentration used in simulation as logic low level.
+	 */
+	public void setSimulationLowLevel(int level) {
+		assert level >= 0 : "Low level concentration should be positive.";
+		this.simulationLowLevel = level;
+	}
+
+	/**
+	 * Set simulation high level.
+	 *
+	 * @param level Concentration used in simulation as logic high level.
+	 */
+	public void setSimulationHighLevel(int level) {
+		assert level >= 0 : "High level concentration should be positive.";
+		this.simulationHighLevel = level;
+	}
+		
 	/**
 	 * Define a protein as an output from the circuit.
 	 *
