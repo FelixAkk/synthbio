@@ -138,7 +138,7 @@ $(document).ready(function() {
 			});
 			
 			wire.on("change", function(event) {
-				synthbio.changeWire(wire, wireID, currentProtein, signal, connectionOverlay);
+				currentProtein = synthbio.changeWire(wire, wireID, currentProtein, signal, connectionOverlay);
 				//Set proper label location
 				connectionOverlay.setLocation(connectionOverlay.getLocation());
 			});

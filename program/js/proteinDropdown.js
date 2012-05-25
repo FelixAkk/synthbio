@@ -38,7 +38,6 @@ synthbio.resetProteins = function() {
 synthbio.closeProteinDropdown = function(){
 	$.each($('.protein-selector'), function(i, menu){
 		$('.protein-selector').parent().html("Choose protein");
-		//set all labels to the right position
 		jsPlumb.repaintEverything();
 	});
 };
@@ -84,7 +83,8 @@ synthbio.changeWire = function(wire, wireID, currentProtein, signal) {
 	//Update which proteins are used
 	if(!(synthbio.proteins[selectedProtein].used)) {
 		synthbio.proteins[selectedProtein].used = true;
-		if(currentProtein !== "Choose protein") {
+		if(currentProtein != "Choose protein") {
+			console.log("currentProtein is reset > " + currentProtein);
 			synthbio.proteins[currentProtein].used = false;
 		}
 		currentProtein = selectedProtein;
@@ -97,6 +97,9 @@ synthbio.changeWire = function(wire, wireID, currentProtein, signal) {
 	
 	//Update signal in model.
 	signal.setProtein(selectedProtein);
+	
+	//return new currentProtein to update this in the wire
+	return currentProtein;
 };
  
 $(document).ready(function() {
@@ -107,4 +110,10 @@ $(document).ready(function() {
 	//Beginning of the page, so reset all proteins
 	synthbio.resetProteins();	
 
+	//Make sure dropdowns close when user clicks outside of menu
+	$('body').on("click", function(event){
+		if(!(event.srcElement instanceof HTMLAnchorElement || event.srcElement instanceof HTMLOptionElement)){
+			synthbio.closeProteinDropdown();
+		}
+	});
 });
