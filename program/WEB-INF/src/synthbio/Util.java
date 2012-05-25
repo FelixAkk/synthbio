@@ -114,7 +114,7 @@ public final class Util {
  	 * 		}
  	 * 	}
  	 */
-	public static String multiTableToJSON(MultiTable m) {
+	public static JSONObject multiTableToJSON(MultiTable m) throws JSONException {
 		double[] timePoints = m.getTimePoints();
 		double timeLength = timePoints.length;
 		double step = 1;
@@ -130,30 +130,27 @@ public final class Util {
 
 		// creating the JSON object
 		JSONObject r = new JSONObject();
-		try {
-			r.put("names", new JSONArray(names));
-			r.put("length", timeLength);
-			r.put("step", step);
-			// for every name, get the data in the column of that name.
-			JSONObject data = new JSONObject();
-			for(String name: names) {
-				ArrayList<Double> cur = new ArrayList<Double>((int)timeLength);
-				if(name.equals("Time")) {
-					for(Double d: timePoints)
-						cur.add(d);
-				} else {
-					for(Double d: m.getColumn(name))
-						cur.add(d);
-				}
-				data.put(name, new JSONArray(cur));
-				
-			}
-			r.put("data", data);
-		} catch(Exception e) {
-			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
-		}
 
-		return r.toString();	
+		r.put("names", new JSONArray(names));
+		r.put("length", timeLength);
+		r.put("step", step);
+		// for every name, get the data in the column of that name.
+		JSONObject data = new JSONObject();
+		for(String name: names) {
+			ArrayList<Double> cur = new ArrayList<Double>((int)timeLength);
+			if(name.equals("Time")) {
+				for(Double d: timePoints)
+					cur.add(d);
+			} else {
+				for(Double d: m.getColumn(name))
+					cur.add(d);
+			}
+			data.put(name, new JSONArray(cur));
+			
+		}
+		r.put("data", data);
+
+		return r;	
 	}
 }
 

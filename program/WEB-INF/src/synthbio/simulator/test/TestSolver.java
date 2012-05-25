@@ -130,16 +130,6 @@ public class TestSolver {
 		double d = solution.getColumn("D").getValue(39);
 		assertTrue(c < d);
 	}
-	
-	/**
- 	 * Testing the conversion of the results to JSON.
- 	 */ 
-	@Test
-	public void testMultiTableConvert() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
-		MultiTable solution = solveSyn(circ1);
-		String json = Util.multiTableToJSON(solution);
-		assertTrue(json.contains("\"length\":40,\"names\":[\"Time\",\"D\",\"A\",\"B\",\"C\",\"mD\",\"mC\"],\"step\":1"));	
-	}
 
 	/**
 	 * A visual representation of the data for manual testing purposes

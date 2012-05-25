@@ -71,7 +71,7 @@ public class CircuitServlet extends SynthbioServlet {
 		//create new JSONResponse for this request.
 		this.json=new JSONResponse();
 
-		response.setContentType("text/plain");
+		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
 		/* Load syn repository
@@ -244,7 +244,8 @@ public class CircuitServlet extends SynthbioServlet {
 			json.data = Util.multiTableToJSON(Solver.solve(c));
 			json.success = true;
 		} catch(Exception e) {
-			json.fail("Failed solving: "+e.getMessage());
+			json.success=false;
+			json.message="Failed solving: "+e.getMessage();
 		}
 	}
 }

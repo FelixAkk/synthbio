@@ -35,7 +35,7 @@ public class ListProteinsServlet extends SynthbioServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		response.setContentType("text/plain");
+		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
 		JSONResponse json=new JSONResponse();
