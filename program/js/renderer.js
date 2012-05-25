@@ -136,64 +136,8 @@ $(document).ready(function() {
 				// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
 				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
 				
-			/*
-				// Only proceed and display the dropdown if it doesn't already contain the dropdown
-				if(wire.children().length === 0) {
-					// Construct HTML of options
-					prots = '';
-					// Provide all available proteins + the currently selected one
-					$.each(synthbio.proteins, function(i,cds) {
-						if(!(synthbio.proteins[i].used) || i === currentProtein) {
-							prots += '<option value="' +i+ '">' +i+ '</option>';
-						}
-					});
-					wire.html('<select class="protein-selector" id="protein-selector-'+wireID+'">'+ '<option value="empty">Choose protein</option>' + prots + '</select>');
-					// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
-					connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
-				}
-			*/
-			});
-
-			/*wire.on("change", function() {
-				/*var proteinSelector = $('#protein-selector-' + wireID);
-				if(!(synthbio.proteins[proteinSelector.val()].used)) {
-					synthbio.proteins[proteinSelector.val()].used = true;
-					if(currentProtein.length === 1) {
-						synthbio.proteins[currentProtein].used = false;
-					}
-					currentProtein = proteinSelector.val();
-				}
-				wire.html(proteinSelector.val());
-				
-				synthbio.proteinDropdownChange(wire, wireID, currentProtein);
-				
-				// A very long line to simply reset the location: make jsPlumb update the GUI so the slunken label is centered again
-				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
-				
-				//update signal in model.
-				signal.setProtein(proteinSelector.val());
-				
-			});*/
-		});
-
-/*			var wire = $("#conn" + connCount, 0);
-			wire.click(function() {
-				var lp = $('#list-proteins');
-				lp.modal("show");
-				$('#list-proteins tbody').on("click", "tr", function() {
-					lp.modal("hide");
-					
-					var prot = $("td", this, 0).html();
-					wire.html(prot); //Update label
-					signal.protein = prot; //Update signal in model
-				});
 			});
 		});
-
-		$('#list-proteins').on('hide', function() {
-			$('#list-proteins tbody').off("click", "tr");
-		});
-*/
 
 		// Listen for disposal of connections; delete endpoints if necessary
 		jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) {
