@@ -63,7 +63,7 @@ synthbio.gui.gateDimensions = (function () {
  * This variable holds the array of files coming from the last synthbio.requests.getFiles() call.
  * These are reused later when for example checking if the entered file name is existent when overwriting a file.
  */
-synthbio.gui.recentFilesList;
+synthbio.gui.recentFilesList = [];
 
 /**
  * Statusbar info tooltip function
@@ -188,6 +188,7 @@ $(document).ready(function() {
 	// DataTables objects: are initialized on the first showing of each table, and updated every new showing.
 	var lpTable; // For: List proteins dialog
 	var fTable; // For: Files dialog
+
 	// Generic options used for the DataTables
 	var dtOptions = {
 		"sDom": "<'row'lir>t<'row'p>",
@@ -309,7 +310,6 @@ $(document).ready(function() {
 		$("#files .modal-header h3").html("Save As…");
 		$("#files .modal-footer .btn-primary").html("Save As…");
 		$("#files .modal-footer input").attr("placeholder", "Filename...");
-		synthbio.gui.fileModalDesignation = $(this).attr('id');
 
 		// (Re)set to false. Represents whether we have prompted the user for confirmation once before
 		var confirmation = false;
@@ -319,6 +319,7 @@ $(document).ready(function() {
 			event.preventDefault();
 			// get the filename
 			var input = $("input", this)[0].value.trim();
+			console.log(confirmation);
 			// Check if the user is about to overwrite an existing file and hasn't confirmed yet
 			if(
 				(
@@ -328,12 +329,11 @@ $(document).ready(function() {
 				&& !confirmation) {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					"<strong>Overwrite file?</strong> Press enter again to confirm");
-				confirmation = true
-				console.log(confirmation);
+				confirmation = true;
 				return false;
 			}
 			// Check if filename is empty
-			if(input == "") {
+			if(input === "") {
 				// Show alert
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					"<strong>Incorrect filename:</strong> Filename may not be empty or consist of spaces/tabs.");
@@ -361,7 +361,6 @@ $(document).ready(function() {
 		$("#files .modal-header h3").html("Open…");
 		$("#files .modal-footer .btn-primary").html("Open…");
 		$("#files .modal-footer input").attr("placeholder", "Search...");
-		synthbio.gui.fileModalDesignation = $(this).attr('id');
 
 		$("#files form").on("submit", function(event) {
 			// Surpress default redirection due to <form action="destination.html"> action
@@ -371,7 +370,7 @@ $(document).ready(function() {
 			var input = $("input", this)[0].value.trim();
 
 			// Check if filename is empty
-			if(input == "") {
+			if(input === "") {
 				// Show alert
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>Incorrect filename:</strong> Filename may not be empty or consist of spaces/tabs.');
@@ -396,6 +395,8 @@ $(document).ready(function() {
 	// Cleanup time; prepare the file dialog for another time
 	$('#files').on('hidden', function() {
 		$("#files tbody").html('<tr><td>Loading ...</td></tr>');
+		// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
+		$("#files form").off("submit");
 		var inputfield = $("#files .modal-footer input");
 		// clear entered text
 		inputfield[0].value = '';
@@ -407,7 +408,6 @@ $(document).ready(function() {
 	});
 
 	// List files from server.
-	var fTable;
 	$('#files').on('show', function(event) {
 		// Request stuff from server and define what happens next
 		synthbio.requests.listFiles(function(response) {
@@ -441,15 +441,9 @@ $(document).ready(function() {
 			$("#files tbody tr").each(function(index, element) {
 				element = $(element); // extend to provide the .on() function
 				element.on("click", function() {
-
-					switch(synthbio.gui.fileModalDesignation) {
-						case "open":
-							console.log("select for open");
-							break;
-						case "save-as":
-							console.log("select for save overwrite");
-							break;
-					}
+					$("#files .modal-footer input").val(synthbio.gui.recentFilesList[index]);
+					// Trigger submit
+					$("#files form").submit();
 				});
 			});
 		});
@@ -952,7 +946,7 @@ synthbio.gui.showAdModalAlert = function(modal, alertClass, innerHTML) {
 	$("#files .height-transition-box .modal-footer").html('<div class="alert ' + alertClass +
 		'" style="margin-bottom: 0;">' + innerHTML + '</div>');
 	$("#files .height-transition-box").addClass("visible");
-}
+};
 /**
  * Ping server to check for connection 'vitals'. Shown a warning if things go really bad. Declared as a closure to keep
  * variables local.
