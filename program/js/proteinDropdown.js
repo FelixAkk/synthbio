@@ -43,7 +43,7 @@ $(document).ready(function() {
 	* Defines what should happen when a wire is clicked
 	* Required the DOM element of the wire, the connectionCount of that wire and the currentProtein selected on that wire
 	*/
-	synthbio.clickWire = function(wire, wireID, currentProtein, signal) {
+	synthbio.clickWire = function(wire, wireID, currentProtein) {
 		
 		var prots = "";
 		// Only proceed and display the dropdown if it doesn't already contain the dropdown
@@ -51,37 +51,37 @@ $(document).ready(function() {
 			// Provide all available proteins + the currently selected one
 			$.each(synthbio.proteins, function(i,cds) {
 				if(!(synthbio.proteins[i].used) || i === currentProtein) {
-					prots += '<li class="proteinItem"><a href="#">' + i + '</a></li>';
+					prots += '<option val="' + i + '">' + i + '</option>';
 				}
 			});
 			//Draw dropdown list on the wire
-			wire.html('<ul class="nav" id="something">' +
-					'<li class="dropdown">' +
-						'<a href="#" class="dropdown-toggle" data-toggle="dropdown">Choose protein<b class="caret"></b></a>' +
-						'<ul class="dropdown-menu" >' + 
-							prots + 
-						'</ul>' +
-					'</li>' +
-				'</ul>');
+			wire.html('<select id="protein-select-' + wireID +'">' +
+			'<option value="none">Choose protein</option>' +
+			prots + 
+			'</select>');
 		}
-		//Make it dropdownable
-		$('.dropdown-toggle').dropdown();
-		
-		//Bind function to the list items
-		$('#something li .proteinItem').on('click', function(e) { 
-			e.preventDefault();
-			var selectedProtein = ($(this).children()[0]).innerHTML;
-			if(!(synthbio.proteins[selectedProtein].used)) {
-				synthbio.proteins[selectedProtein].used = true;
-				if(currentProtein !== "Choose protein") {
-					synthbio.proteins[currentProtein].used = false;
-				}
-				currentProtein = selectedProtein;
+	};
+	
+	/**
+	* Defines what should happen when a wires' select changes value
+	* Required the DOM element of the wire, the connectionCount of that wire, the currentProtein selected on that wire and the connection signal
+	*/
+	synthbio.changeWire = function(wire, wireID, currentProtein, signal) {
+	
+		//Get the selected value
+		var selectedProtein = $('#protein-select-' + wireID).val();
+		//Update which proteins are used
+		if(!(synthbio.proteins[selectedProtein].used)) {
+			synthbio.proteins[selectedProtein].used = true;
+			if(currentProtein !== "Choose protein") {
+				synthbio.proteins[currentProtein].used = false;
 			}
-			wire.html('<a id="conn' + wireID + '" href=#>' + selectedProtein + '</a>');
+			currentProtein = selectedProtein;
+		}
+		//Set new protein value in GUI
+		wire.html(selectedProtein);
 
-			//update signal in model.
-			signal.setProtein(selectedProtein);
-		});			
-	};	
+		//update signal in model.
+		signal.setProtein(selectedProtein);
+	};
 });

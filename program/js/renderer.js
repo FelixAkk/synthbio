@@ -131,11 +131,16 @@ $(document).ready(function() {
 			}
 			
 			wire.on("click", function(event) {
-			
-				synthbio.clickWire(wire,wireID,currentProtein, signal);
+				synthbio.clickWire(wire, wireID, currentProtein);
 				// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
 				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
-				
+			});
+			
+			wire.on("change", function(event) {
+				synthbio.changeWire(wire, wireID, currentProtein, signal);
+				// A very long line to simply reset the location: make jsPlumb update the GUI so the slunken label is centered again
+				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
+			
 			});
 		});
 
