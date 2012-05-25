@@ -107,8 +107,9 @@ synthbio.requests.getFile = function(name, callback){
 
 /**
  * putFile
- * Store a circuit, "circ", on the server called "fileName"
- * Callback function will be the return info/errors
+ * Store a circuit on the server called. Callback function will be the return info/errors.
+ *
+ * @param fileName Filename with or without the .syn extension, trimmed (so no starting/trailing spaces).
  */
 synthbio.requests.putFile = function(fileName, circ, callback) {
 	synthbio.requests.baseXHR({

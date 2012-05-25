@@ -328,7 +328,8 @@ $(document).ready(function() {
 				&& !confirmation) {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					"<strong>Overwrite file?</strong> Press enter again to confirm");
-				confirmation = true;
+				confirmation = true
+				console.log(confirmation);
 				return false;
 			}
 			// Check if filename is empty
@@ -336,6 +337,7 @@ $(document).ready(function() {
 				// Show alert
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					"<strong>Incorrect filename:</strong> Filename may not be empty or consist of spaces/tabs.");
+				confirmation = false; // Something else was shown, so allow asking for a confirmation again
 				return false;
 			}
 			// Save the file, let's see if it works

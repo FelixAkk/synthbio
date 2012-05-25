@@ -101,13 +101,6 @@
 		transition: @cssProperty @time ease-in-out;
 }
 
-.statusSpace() {
-	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
-}
-.navSpace() {
-	top: @iconSize * 1.75;
-}
-
 .gateBorder() {
   -webkit-box-shadow: 0px 0px 4px 0px #ffffff; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
           box-shadow: 0px 0px 4px 0px #ffffff; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
@@ -236,10 +229,10 @@ body {
 #gates-tab {
 	background-color: @grStart;
 	.borderDown(@baseColor, @contrast, @borderHeight);
-	border-width: 0 1px 0 0; /* Right border only */
+	border-width: 0 1px 0 0; /* Right and bottom border only */
 	width: @tabWidth;
-	.statusSpace;
-	.navSpace;
+	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
+	top: @iconSize * 1.75;
 	color: @textColorFaded;
 	overflow: auto;
 }
@@ -252,6 +245,16 @@ body {
 #gates-tab p {
 	margin-left: @gatesTabPadding;
 	line-height: 10px;
+}
+
+#circuit-details {
+	background-color: @grStart;
+	.borderDown(@baseColor, @contrast, @borderHeight);
+	box-shadow: inset 0 1px 0 lighten(saturate(@baseColor, 5%), @contrast * @borderHeight);
+	border-width: 1px 0 0; /* Right border only */
+	width: @tabWidth;
+	height: 100px;
+	top: auto;
 }
 
 .gates {
@@ -329,8 +332,8 @@ body {
 
 #grid-container {
 	left: @tabWidth;
-	.statusSpace;
-	.navSpace;
+	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
+	top: @iconSize * 1.75;
 	background-color: lighten(@baseColor, 20%);
 	overflow: auto;
 
@@ -468,8 +471,8 @@ body {
 }
 
 #gates-transport {
-	.statusSpace;
-	.navSpace;
+	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
+	top: @iconSize * 1.75;
 	overflow: hidden;
 	display: none;
 }

@@ -154,6 +154,48 @@ public class TestCircuitServlet{
 	}
 
 	/**
+	 * Test if the server rejects a file with an extension which is not
+	 * .syn.
+	 */
+	@Test
+	public void testSave_notDotSyn() throws Exception {
+		String content="abracadabra";
+		TextPage page=this.getTestPage(this.url+"?action=save&filename=test.foo&circuit="+content);
+
+		JSONObject response=new JSONObject(page.getContent());
+
+		assertFalse(response.getBoolean("success"));
+		assertEquals("Filename should end with .syn.", response.getString("message"));
+	}
+
+	/**
+	 * Test if the server complains about unset filename.
+	 */
+	@Test
+	public void testSave_noFilename() throws Exception {
+		String content="abracadabra";
+		TextPage page=this.getTestPage(this.url+"?action=save&circuit="+content);
+
+		JSONObject response=new JSONObject(page.getContent());
+
+		assertFalse(response.getBoolean("success"));
+		assertEquals("Parameter 'filename' not set.", response.getString("message"));
+	}
+	
+	/**
+	 * Test if the server complains about unset circuit.
+	 */
+	@Test
+	public void testSave_noCircuit() throws Exception {
+		TextPage page=this.getTestPage(this.url+"?action=save&filename=test.syn");
+
+		JSONObject response=new JSONObject(page.getContent());
+
+		assertFalse(response.getBoolean("success"));
+		assertEquals("Parameter 'circuit' not set.", response.getString("message"));
+	}
+
+	/**
 	 * Test if the servlet returns a succes if a valid circuit is thrown
 	 * in.
 	 */
