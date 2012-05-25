@@ -244,8 +244,7 @@ public class CircuitServlet extends SynthbioServlet {
 			json.data = Util.multiTableToJSON(Solver.solve(c));
 			json.success = true;
 		} catch(Exception e) {
-			json.success=false;
-			json.message="Failed solving: "+e.getMessage();
+			json.fail("Failed solving: "+e.getMessage());
 		}
 	}
 }
