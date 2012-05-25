@@ -22,18 +22,7 @@
 
 $(document).ready(function() {
 	
-	synthbio.proteins = {};
-	synthbio.resetProteins = function() {
-		synthbio.requests.getCDSs(function(response) {
-			$.each(response, function(i, cds) {
-				synthbio.proteins[cds.name] = { "used": false}; 
-			});
-		});
-	};
-	
-	
 	jsPlumb.ready(function() {
-		synthbio.resetProteins();
 		
 		jsPlumb.setRenderMode(jsPlumb.SVG);
 		jsPlumb.Defaults.Container = $("#grid-container");
@@ -127,14 +116,13 @@ $(document).ready(function() {
 			connCount++;
 			// Instantiate the connection count variable because `connCount` will be incremented later
 			var wireID = connCount;
-			var label = '<a class="wires" id="conn' + connCount + '" href=#>';
+			var label = '<a id="conn' + connCount + '" href=#>';
 			label += signal.getProtein() || "Choose protein";
-			label += "</a>";
+			label += '</a>';
 			connInfo.connection.getOverlay("label").setLabel(label);
 			
 			var currentProtein = "";
-			var el = $('#conn' + connCount, 0);
-			var prots = '';
+			var wire = $('#conn' + connCount, 0);
 			
 			//If it's one char it succesfully selected a protein from the start.
 			if(signal.getProtein().length === 1) {
@@ -142,10 +130,15 @@ $(document).ready(function() {
 				currentProtein = signal.getProtein();
 			}
 			
+			wire.on("click", function(event) {
 			
-			el.on("click", function(event) {
+				synthbio.clickWire(wire,wireID,currentProtein, signal);
+				// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
+				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
+				
+			/*
 				// Only proceed and display the dropdown if it doesn't already contain the dropdown
-				if(el.children().length === 0) {
+				if(wire.children().length === 0) {
 					// Construct HTML of options
 					prots = '';
 					// Provide all available proteins + the currently selected one
@@ -154,14 +147,15 @@ $(document).ready(function() {
 							prots += '<option value="' +i+ '">' +i+ '</option>';
 						}
 					});
-					el.html('<select class="protein-selector" id="protein-selector-'+wireID+'">'+ '<option value="empty">Choose protein</option>' + prots + '</select>');
+					wire.html('<select class="protein-selector" id="protein-selector-'+wireID+'">'+ '<option value="empty">Choose protein</option>' + prots + '</select>');
 					// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
 					connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
 				}
+			*/
 			});
 
-			el.on("change", function() {
-				var proteinSelector = $('#protein-selector-' + wireID);
+			/*wire.on("change", function() {
+				/*var proteinSelector = $('#protein-selector-' + wireID);
 				if(!(synthbio.proteins[proteinSelector.val()].used)) {
 					synthbio.proteins[proteinSelector.val()].used = true;
 					if(currentProtein.length === 1) {
@@ -169,25 +163,28 @@ $(document).ready(function() {
 					}
 					currentProtein = proteinSelector.val();
 				}
-				el.html(proteinSelector.val());
+				wire.html(proteinSelector.val());
+				
+				synthbio.proteinDropdownChange(wire, wireID, currentProtein);
 				
 				// A very long line to simply reset the location: make jsPlumb update the GUI so the slunken label is centered again
 				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
 				
 				//update signal in model.
 				signal.setProtein(proteinSelector.val());
-			});
+				
+			});*/
 		});
 
-/*			var el = $("#conn" + connCount, 0);
-			el.click(function() {
+/*			var wire = $("#conn" + connCount, 0);
+			wire.click(function() {
 				var lp = $('#list-proteins');
 				lp.modal("show");
 				$('#list-proteins tbody').on("click", "tr", function() {
 					lp.modal("hide");
 					
 					var prot = $("td", this, 0).html();
-					el.html(prot); //Update label
+					wire.html(prot); //Update label
 					signal.protein = prot; //Update signal in model
 				});
 			});
