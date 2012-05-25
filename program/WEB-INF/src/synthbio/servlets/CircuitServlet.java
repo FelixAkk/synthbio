@@ -105,68 +105,18 @@ public class CircuitServlet extends SynthbioServlet {
 			return;
 		}
 
-		//listFiles
 		if(action.equals("list")){
 			this.doList();
-
-		//loadFile(filename)
 		}else if(action.equals("load")){
-			String filename=request.getParameter("filename");
-			if(filename==null){
-				json.fail("Parameter 'filename' not set");
-				out.println(json.toJSONString());
-				return;
-			}
-			this.doLoad(filename);
-		
-		//saveFile(filename, circuit)
+			this.doLoad(request);
 		}else if(action.equals("save")){
-			String filename=request.getParameter("filename");
-			if(filename==null){
-				json.fail("Parameter 'filename' not set");
-				out.println(json.toJSONString());
-				return;
-			}
-			
-			String circuit=request.getParameter("circuit");
-			if(circuit==null){
-				json.fail("Parameter 'circuit' not set");
-				out.println(json.toJSONString());
-				return;
-			}
-			this.doSave(filename, circuit);
-		
-		//validate(circuit)
+			this.doSave(request);
 		}else if(action.equals("validate")){
-			String circuit=request.getParameter("circuit");
-			if(circuit==null){
-				json.fail("Parameter 'circuit' not set");
-				out.println(json.toJSONString());
-				return;
-			}
-			this.doValidate(circuit);
-			
-		//toSBML(circuit)
+			this.doValidate(request);
 		}else if(action.equals("exportSBML")){
-			String circuit=request.getParameter("circuit");
-			if(circuit==null){
-				json.fail("Parameter 'circuit' not set");
-				out.println(json.toJSONString());
-				return;
-			}
-			this.doExport(circuit);
-		
-		//simulate(circuit)
+			this.doExport(request);
 		}else if(action.equals("simulate")){
-			String circuit=request.getParameter("circuit");
-			if(circuit==null){
-				json.fail("Parameter 'circuit' not set");
-				out.println(json.toJSONString());
-				return;
-			}
-			this.doSimulate(circuit);
-			
-		//all other cases: invalid action
+			this.doSimulate(request);
 		}else{
 			json.fail("CircuitServlet: Invalid Action: "+action);
 		}
@@ -188,7 +138,12 @@ public class CircuitServlet extends SynthbioServlet {
 	/**
 	 * Action: Load a file from the syn store.
 	 */
-	public void doLoad(String filename){
+	public void doLoad(HttpServletRequest request){
+		String filename=request.getParameter("filename");
+		if(filename == null) {
+			json.fail("Parameter 'filename' not set");
+			return;
+		}
 		try{
 			json.data=new JSONObject(this.synRepository.getFile(filename));
 			json.success=true;
@@ -200,7 +155,22 @@ public class CircuitServlet extends SynthbioServlet {
 	/**
 	 * Action: Save a file to the syn store.
 	 */
-	public void doSave(String filename, String circuit){
+	public void doSave(HttpServletRequest request){
+		String filename = request.getParameter("filename");
+		if(filename == null) {
+			json.fail("Parameter 'filename' not set.");
+			return;
+		}
+		if(!filename.endsWith(".syn")) {
+			json.fail("Filename should end with .syn.");
+			return;
+		}
+		
+		String circuit = request.getParameter("circuit");
+		if(circuit == null) {
+			json.fail("Parameter 'circuit' not set.");
+			return;
+		}
 		try{
 			this.synRepository.putFile(filename, circuit);
 			json.message="Saved succesfully";
@@ -213,10 +183,14 @@ public class CircuitServlet extends SynthbioServlet {
 	/**
 	 * Action: Validate a circuit.
 	 */
-	public void doValidate(String circuit){
+	public void doValidate(HttpServletRequest request){
+		String circuit=request.getParameter("circuit");
+		if(circuit==null){
+			json.fail("Parameter 'circuit' not set");
+			return;
+		}
 		try{
 			Circuit c=this.circuitFactory.fromJSON(circuit);
-			this.log(circuit);
 			json.success=true;
 			json.message="Circuit validates!";
 		}catch(CircuitException e){
@@ -230,7 +204,13 @@ public class CircuitServlet extends SynthbioServlet {
 	/**
 	 * Action: Export to SBML
 	 */
-	public void doExport(String circuit){
+	public void doExport(HttpServletRequest request){
+		String circuit = request.getParameter("circuit");
+		if(circuit == null) {
+			json.fail("Parameter 'circuit' not set");
+			return;
+		}
+		
 		Circuit c;
 		try{
 			c=this.circuitFactory.fromJSON(circuit);
@@ -245,9 +225,14 @@ public class CircuitServlet extends SynthbioServlet {
 	/**
 	 * Action: Simulate circuit
 	 */
-	public void doSimulate(String circuit) {
-		Circuit c;
+	public void doSimulate(HttpServletRequest request) {
+		String circuit=request.getParameter("circuit");
+		if(circuit==null){
+			json.fail("Parameter 'circuit' not set");
+			return;
+		}
 
+		Circuit c;
 		try {
 			c = this.circuitFactory.fromJSON(circuit);
 		} catch(Exception e) {
