@@ -137,7 +137,7 @@ public class TestSolver {
 	@Test
 	public void testMultiTableConvert() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
 		MultiTable solution = solveSyn(circ1);
-		String json = Solver.multiTableToJSON(solution);
+		String json = Util.multiTableToJSON(solution);
 		assertTrue(json.contains("\"length\":40,\"names\":[\"Time\",\"D\",\"A\",\"B\",\"C\",\"mD\",\"mC\"],\"step\":1"));	
 	}
 

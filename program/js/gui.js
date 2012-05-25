@@ -35,12 +35,12 @@ synthbio.gui.gateCounter = 0;
 /**
  * Width of the <aside> element with all the gates in pixels.
  */
-synthbio.gui.gatesTabWidth = parseFloat($('#gates-tab').css("width"));
+synthbio.gui.gatesTabWidth = $('#gates-tab').width();
 
 /**
  * Width of the <aside> element with all the gates in pixels.
  */
-synthbio.gui.navbarHeight = parseFloat($('.navbar').css("height"));
+synthbio.gui.navbarHeight = $('.navbar').height();
 
 /**
  * Get normal gates dimensions
@@ -50,8 +50,8 @@ synthbio.gui.gateDimensions = (function () {
 	var dummyGate = $('<div class="gate"></div>').hide().appendTo("body");
 	// Get
 	var dimensions = {
-		width: parseFloat(dummyGate.css("width"), 10),
-		height: parseFloat(dummyGate.css("height"), 10)
+		width: dummyGate.width(),
+		height: dummyGate.height()
 	};
 	// Clean
 	dummyGate.remove();
@@ -60,16 +60,10 @@ synthbio.gui.gateDimensions = (function () {
 }());
 
 /**
- * Variable that references the function that is to be used for handling a file selection in the file dialog. This is
- * a little trickery/hackery because we use 1 dialog for all file operations (save as, open, view), and always set this
- * variable to the corresponding event handler.
- *
- * @param index This function is always given an integer index. This correspons to the selected file in the array the
- * synthbio.requests.listFiles() AJAX RPC provided just before the file was selected.
+ * This variable holds the array of files coming from the last synthbio.requests.getFiles() call.
+ * These are reused later when for example checking if the entered file name is existent when overwriting a file.
  */
-synthbio.gui.fileOpHandler = function(index) {
-	console.error("Oops! No file selection event handler has been set. This is the default which should never fire!");
-};
+synthbio.gui.recentFilesList;
 
 /**
  * Statusbar info tooltip function
@@ -105,6 +99,11 @@ synthbio.gui.inputEditor = function(){
 
 	//@todo check if all inputs are defined.
 
+	//fill advanced settings form fields
+	$('#simulate-length').val(inputs.getLength());
+	$('#simulate-low-level').val(inputs.getLowLevel());
+	$('#simulate-high-level').val(inputs.getHighLevel());
+	$('#simulate-tick-width').val(inputs.getTickWidth());
 	
 	//iterate over signals and create signal input editors.
 	$.each(
@@ -160,8 +159,8 @@ synthbio.gui.saveInputs = function(circuit) {
 		[
 			{ selector: '#simulate-tick-width', setter: 'setTickWidth' },
 			{ selector: '#simulate-length', setter: 'setLength' },
-			{ selector: '#simulate-low-threshold', setter: 'setLowThreshold' },
-			{ selector: '#simulate-high-threshold', setter: 'setHighThreshold' }
+			{ selector: '#simulate-low-level', setter: 'setLowLevel' },
+			{ selector: '#simulate-high-level', setter: 'setHighLevel' }
 		]
 	);
 
@@ -186,38 +185,44 @@ $(document).ready(function() {
 	// Activate zhe Dropdowns Herr Doktor!
 	$('.dropdown-toggle').dropdown();
 
-	// Options for DataTables
+	// DataTables objects: are initialized on the first showing of each table, and updated every new showing.
+	var lpTable; // For: List proteins dialog
+	var fTable; // For: Files dialog
+	// Generic options used for the DataTables
 	var dtOptions = {
-		"sDom": "<'row'lir>t<'row'fp>",
+		"sDom": "<'row'lir>t<'row'p>",
 		"sPaginationType": "bootstrap",
 		"oLanguage": {"sLengthMenu": "_MENU_ per page"},
 		"bAutoWidth": false,
 		"bDestroy": true,
-		//"bFilter": false,
+		"bFilter": true,
 		"bInfo": false,
-        "bLengthChange": false,
-        "bPaginate": false
+		"bLengthChange": false,
+		"bPaginate": false
 	};
-	
+
 	// Load proteins from server.
-	var lpTable;
 	$('#list-proteins').on('show', function() {
 		synthbio.requests.getCDSs(function(response) {
 			if(response instanceof String) {
 				$('#list-proteins tbody td').html(response);
 				return;
 			}
-			var html='';
+			// construct table body contents
+			var html = '';
 			$.each(response, function(i, cds) {
-				html+='<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
+				html += '<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
 			});
 
-			if (lpTable) {
-				lpTable.fnClearTable(false);
-			}
-
 			$('#list-proteins tbody').html(html);
+
+			// Convert the new content into a DataTable; clear the variable if it was used before
+			if (lpTable) { lpTable.fnClearTable(false); }
 			lpTable = $('#list-proteins table').dataTable(dtOptions);
+			// Hook up custom search/filter input box for this table. Only the `keyup` event seems give a good result
+			$("#list-proteins .modal-footer input").bind("keyup", function(event) {
+				lpTable.fnFilter($(this).val());
+			});
 		});
 	});
 
@@ -298,34 +303,95 @@ $(document).ready(function() {
 	});
 
 	/**
-	 * Setup file operation dialog on menu clicks
+	 * Setup/rig file operation dialog when the `Save As` menu item is clicked.
 	 */
 	$("#save-as").on("click", function() {
 		$("#files .modal-header h3").html("Save As…");
 		$("#files .modal-footer .btn-primary").html("Save As…");
-		// Set the correct event handler
-		synthbio.gui.fileOpHandler = synthbio.gui.saveAsHandler;
-	});
-	$("#open").on("click", function() {
-		synthbio.resetProteins();
-		$("#files .modal-header h3").html("Open…");
-		$("#files .modal-footer .btn-primary").html("Open…");
-		// Set the correct event handler
-		synthbio.gui.fileOpHandler = synthbio.gui.openHandler;
+		$("#files .modal-footer input").attr("placeholder", "Filename...");
+		synthbio.gui.fileModalDesignation = $(this).attr('id');
+
+		// (Re)set to false. Represents whether we have prompted the user for confirmation once before
+		var confirmation = false;
 		$("#files form").on("submit", function(event) {
 			// Surpress default redirection due to <form action="destination.html"> action
 			event.stopPropagation();
 			event.preventDefault();
 			// get the filename
-			var input = $("input", this)[0].value;
-			// TODO: check if the entered filename is in the list
-			// load the file
-			synthbio.gui.fileOpHandler(input);
+			var input = $("input", this)[0].value.trim();
+			// Check if the user is about to overwrite an existing file and hasn't confirmed yet
+			if(
+				(
+					$.inArray(input, synthbio.gui.recentFilesList) >= 0 ||
+					$.inArray(input+".syn", synthbio.gui.recentFilesList) >= 0
+				)
+				&& !confirmation) {
+				synthbio.gui.showAdModalAlert('files', 'alert-error',
+					"<strong>Overwrite file?</strong> Press enter again to confirm");
+				confirmation = true;
+				return false;
+			}
+			// Check if filename is empty
+			if(input == "") {
+				// Show alert
+				synthbio.gui.showAdModalAlert('files', 'alert-error',
+					"<strong>Incorrect filename:</strong> Filename may not be empty or consist of spaces/tabs.");
+				return false;
+			}
+			// Save the file, let's see if it works
+			synthbio.requests.putFile(input, synthbio.model, function(response) {
+				if(response.success === false) {
+					synthbio.gui.showAdModalAlert('files', 'alert-error',
+						'<strong>File was not saved.</strong> ' + response.message + '</div>');
+					console.error(response.message);
+				}
+				// We're done; hide
+				$("#files").modal("hide");
+			});
+			return false; // would prevent the form from making us go anywhere if .preventDefault() fails
+		});
+	});
+	/**
+	 * Setup/rig file operation dialog when the `Open` menu item is clicked.
+	 */
+	$("#open").on("click", function() {
+		synthbio.resetProteins();
+		$("#files .modal-header h3").html("Open…");
+		$("#files .modal-footer .btn-primary").html("Open…");
+		$("#files .modal-footer input").attr("placeholder", "Search...");
+		synthbio.gui.fileModalDesignation = $(this).attr('id');
+
+		$("#files form").on("submit", function(event) {
+			// Surpress default redirection due to <form action="destination.html"> action
+			event.stopPropagation();
+			event.preventDefault();
+			// Get the filename
+			var input = $("input", this)[0].value.trim();
+
+			// Check if filename is empty
+			if(input == "") {
+				// Show alert
+				synthbio.gui.showAdModalAlert('files', 'alert-error',
+					'<strong>Incorrect filename:</strong> Filename may not be empty or consist of spaces/tabs.');
+				return false;
+			}
+
+			// Load the file, let's see if it works
+			synthbio.requests.getFile(input, function(response) {
+				if(response.success === false) {
+					console.error(response.message);
+					synthbio.gui.showAdModalAlert('files', 'alert-error',
+						'<strong>File was not opened.</strong> ' + response.message);
+				}
+				synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
+				// We're done; hide
+				$("#files").modal("hide");
+			});
 			return false; // would prevent the form from making us go anywhere if .preventDefault() fails
 		});
 	});
 
-	// Cleanup time; prepare it for another time
+	// Cleanup time; prepare the file dialog for another time
 	$('#files').on('hidden', function() {
 		$("#files tbody").html('<tr><td>Loading ...</td></tr>');
 		var inputfield = $("#files .modal-footer input");
@@ -335,7 +401,7 @@ $(document).ready(function() {
 		inputfield.typeahead({
 			source: []
 		});
-
+		$("#files .height-transition-box").removeClass("visible");
 	});
 
 	// List files from server.
@@ -348,6 +414,10 @@ $(document).ready(function() {
 				$('#list-files tbody td').html(response);
 				return;
 			}
+
+			// Save the list of files for later
+			synthbio.gui.recentFilesList = response;
+
 			// Setup the text input box for entering the filename operate on
 			$("#files .modal-footer input").typeahead({
 				// The possible auto completions, the same as the files listed
@@ -358,17 +428,26 @@ $(document).ready(function() {
 				html+='<tr><td>'+file+'</td><td>x</td><td>x</td></tr>';
 			});
 
-			
-			if (fTable) { fTable.fnClearTable(false); }
+
 			$('#files tbody').html(html);
+
+			// convert the new content into a DataTable; clear the variable if it was used before
+			if (fTable) { fTable.fnClearTable(false); }
 			fTable = $('#files table').dataTable(dtOptions);
 
 			// Make each row respond to selection
 			$("#files tbody tr").each(function(index, element) {
 				element = $(element); // extend to provide the .on() function
 				element.on("click", function() {
-					synthbio.gui.fileOpHandler(response[index]);
-					$('#files').modal('hide');
+
+					switch(synthbio.gui.fileModalDesignation) {
+						case "open":
+							console.log("select for open");
+							break;
+						case "save-as":
+							console.log("select for save overwrite");
+							break;
+					}
 				});
 			});
 		});
@@ -415,7 +494,7 @@ $(document).ready(function() {
 	});
 
 	// Start pinging
-	synthbio.gui.pingServer();
+	//synthbio.gui.pingServer();
 	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();
@@ -463,20 +542,6 @@ $(document).ready(function() {
 
 
 });
-
-/**
- * Handles whap happens when a file has been selected for opening in the file dialog.
- *
- * @param fileName The name of the file that was selected
- */
-synthbio.gui.openHandler = function(fileName) {
-	synthbio.requests.getFile(fileName, function(response) {
-		if(response.success === false) {
-			console.error(response.message);
-		}
-		synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
-	});
-};
 
 synthbio.gui.reset = function() {
 	var id;
@@ -873,6 +938,19 @@ synthbio.gui.removeDisplaySignal = function(id) {
 	return obj;
 };
 
+/**
+ * Function for animating in an alert at the bottom of a modal.
+ *
+ * @param modal the ID of the modal in the HTML, without the hash character
+ * @param alertClass One of the Bootstrap alert classes, like "alert-error" or "alert-success".
+ * See http://twitter.github.com/bootstrap/components.html#alerts
+ * @param innerHTML The HTML for inside the alert div
+ */
+synthbio.gui.showAdModalAlert = function(modal, alertClass, innerHTML) {
+	$("#files .height-transition-box .modal-footer").html('<div class="alert ' + alertClass +
+		'" style="margin-bottom: 0;">' + innerHTML + '</div>');
+	$("#files .height-transition-box").addClass("visible");
+}
 /**
  * Ping server to check for connection 'vitals'. Shown a warning if things go really bad. Declared as a closure to keep
  * variables local.

@@ -19,8 +19,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import org.simulator.math.odes.MultiTable;
+import org.json.*;
 
 /**
  * Utility class.
@@ -99,4 +100,60 @@ public final class Util {
 		}
 		return r;
 	}
+
+	/**
+ 	 * Converts a MultiTable to a JSON-string of the format:
+ 	 * 	{
+ 	 * 		"names": [Time, A, B],
+ 	 * 		"length": 10,
+ 	 * 		"step": 1,
+ 	 * 		"data": {
+ 	 *			"Time": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+ 	 *			"A": [0, 0, 0, 0, 0, 600, 600, 600, 600, 600],
+ 	 *			"B": [...]
+ 	 * 		}
+ 	 * 	}
+ 	 */
+	public static String multiTableToJSON(MultiTable m) {
+		double[] timePoints = m.getTimePoints();
+		double timeLength = timePoints.length;
+		double step = 1;
+		
+		// get all names
+		int cc = m.getColumnCount() - 3; // - 3 because gene, cell and empty are unused.
+		ArrayList<String> names = new ArrayList<String>(cc);
+		for(int i = 0; i < cc + 3; i++) {
+			String cur = m.getColumnName(i);
+			if(!cur.equals("gene") && !cur.equals("cell") && !cur.equals("empty"))
+				names.add(cur);
+		}
+
+		// creating the JSON object
+		JSONObject r = new JSONObject();
+		try {
+			r.put("names", new JSONArray(names));
+			r.put("length", timeLength);
+			r.put("step", step);
+			// for every name, get the data in the column of that name.
+			JSONObject data = new JSONObject();
+			for(String name: names) {
+				ArrayList<Double> cur = new ArrayList<Double>((int)timeLength);
+				if(name.equals("Time")) {
+					for(Double d: timePoints)
+						cur.add(d);
+				} else {
+					for(Double d: m.getColumn(name))
+						cur.add(d);
+				}
+				data.put(name, new JSONArray(cur));
+				
+			}
+			r.put("data", data);
+		} catch(Exception e) {
+			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
+		}
+
+		return r.toString();	
+	}
 }
+

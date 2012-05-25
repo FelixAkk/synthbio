@@ -80,10 +80,10 @@
 	background-color: @grStop;
 	background-image: -webkit-gradient(linear, left top, left bottom, from(@grStart), to(@grStop)); /* Saf4+, Chrome */
 	background-image: -webkit-linear-gradient(top, @grStart, @grStop); /* Chrome 10+, Saf5.1+, iOS 5+ */
-	background-image:	-moz-linear-gradient(top, @grStart, @grStop); /* FF3.6 */
-	background-image:	 -ms-linear-gradient(top, @grStart, @grStop); /* IE10 */
-	background-image:	  -o-linear-gradient(top, @grStart, @grStop); /* Opera 11.10+ */
-	background-image:		 linear-gradient(to bottom, @grStart, @grStop);
+	background-image:	 -moz-linear-gradient(top, @grStart, @grStop); /* FF3.6 */
+	background-image:	  -ms-linear-gradient(top, @grStart, @grStop); /* IE10 */
+	background-image:	   -o-linear-gradient(top, @grStart, @grStop); /* Opera 11.10+ */
+	background-image:		  linear-gradient(to bottom, @grStart, @grStop);
 }
 .unselectable() {
 -webkit-touch-callout: none;
@@ -93,6 +93,14 @@
       -ms-user-select: none; /* Introduced in IE 10. See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/ */
           user-select: none;
 }
+.transition(@cssProperty, @time) {
+-webkit-transition: @cssProperty @time ease-in-out;
+   -moz-transition: @cssProperty @time ease-in-out;
+	 -o-transition: @cssProperty @time ease-in-out;
+	-ms-transition: @cssProperty @time ease-in-out;
+		transition: @cssProperty @time ease-in-out;
+}
+
 .statusSpace() {
 	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
 }
@@ -179,7 +187,7 @@ body {
 }
 
 .typeahead-group {
-	display: inline;
+	display: inline-block;
 
     input {
 		margin-right: 0;
@@ -201,12 +209,11 @@ body {
 			  border-top-left-radius: 0;
 	}
 }
-
-/*
-------------------------------
-	Application styles
-------------------------------
-*/
+/** Section:
+ * ------------------------------
+ * Application styles
+ * ------------------------------
+ */
 #title {
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	border-width: 0 1px 0 0; /* Right border only */
@@ -510,6 +517,27 @@ body {
 		}
 	}
 }
+
 #validate-alert.invalid .modal-body{
 	background-color: #f2dede;
+}
+
+/** Section:
+ * ------------------------------
+ * Modal styles
+ * ------------------------------
+ */
+
+.height-transition-box {
+    overflow: hidden;
+    height: 0;
+	.transition(height, 0.2s);
+	.transition(min-height, 0.2s);
+	.transition(max-height, 0.2s);
+
+	&.visible {
+	     height: auto;
+	     min-height: 10px;
+	     max-height: 300px;
+	}
 }

@@ -160,13 +160,13 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label">Thresholds</label>
+						<label class="control-label">Levels</label>
 						<div class="controls">
 							<div class="input-append">
-								<input type="text" id="simulate-low-threshold" class="input-mini" /><span class="add-on">low</span>
+								<input type="text" id="simulate-low-level" class="input-mini" /><span class="add-on">low</span>
 							</div>
 							<div class="input-append">
-								 <input type="text" id="simulate-high-threshold" class="input-mini" /><span class="add-on">high</span>
+								 <input type="text" id="simulate-high-level" class="input-mini" /><span class="add-on">high</span>
 							</div>
 						</div>
 					</div>
@@ -203,11 +203,16 @@
 			</table>
 		</div>
 		<div class="modal-footer">
-			<form class="typeahead-group form-search" onsubmit="return false;">
-				<input type="text" class="span3" data-provide="typeahead" data-items="4" placeholder="Filename …"/>
+			<form class="typeahead-group form-search modal-form" onsubmit="return false;">
+				<input type="text" class="span3" data-provide="typeahead" data-items="4" placeholder="Filter..." />
 				<button type="submit" class="btn btn-primary">File action</button>
 			</form>
 			<a href="javascript: void(0);" class="btn" data-dismiss="modal">Close</a>
+		</div>
+		<!-- wrapper to fade in this extra footer by using the height property -->
+		<div class="height-transition-box">
+			<!-- extra footer for displaying warnings, errors and info -->
+			<div class="modal-footer"></div>
 		</div>
 	</div>
 
@@ -235,6 +240,7 @@
 			</table>
 		</div>
 		<div class="modal-footer">
+			<input type="text" data-provide="typeahead"  placeholder="Filter..." />
 			<a href="javascript: void(0);" class="btn btn-primary" data-dismiss="modal">Close</a>
 		</div>
 	</div>

@@ -396,7 +396,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 	}
 	
 	//If signal is an input signal, initialize to low.
-	if (signal.isInput()) {
+	if (signal.isInput() && signal.protein !== "") {
 		this.inputs.values[signal.protein] = "L";
 	}
 
@@ -432,7 +432,7 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 			i--;
 		}
 	}
-	
+	//@todo remove from SimulationInputs?
 	return removed;
 };
 
@@ -473,8 +473,8 @@ synthbio.SimulationInputs = function(options, values) {
 		{
 			"length": 40,				//total ticks.
 			"tickWidth": 1,			//length in seconds for one tick.
-			"lowThreshold": 0,			//concentration regarded as low.
-			"highThreshold": 600		//concentration regarded as high.
+			"lowLevel": 0,			//concentration regarded as low.
+			"highLevel": 600		//concentration regarded as high.
 		}, options);
 		
 	/**
@@ -520,11 +520,11 @@ synthbio.SimulationInputs.prototype.getLength = function() {
 synthbio.SimulationInputs.prototype.getTickWidth = function() {
 	return this.options.tickWidth;
 };
-synthbio.SimulationInputs.prototype.getLowThreshold = function() {
-	return this.options.lowThreshold;
+synthbio.SimulationInputs.prototype.getLowLevel= function() {
+	return this.options.lowLevel;
 };
-synthbio.SimulationInputs.prototype.getHighThreshold = function() {
-	return this.options.highThreshold;
+synthbio.SimulationInputs.prototype.getHighLevel = function() {
+	return this.options.highLevel;
 };
 
 synthbio.SimulationInputs.prototype.setLength = function(length) {
@@ -534,11 +534,11 @@ synthbio.SimulationInputs.prototype.setTickWidth = function(width) {
 	console.log(this);
 	this.options.tickWidth = width;
 };
-synthbio.SimulationInputs.prototype.setLowThreshold = function(threshold) {
-	this.options.lowThreshold = threshold;
+synthbio.SimulationInputs.prototype.setLowLevel = function(level) {
+	this.options.lowLevel = level;
 };
-synthbio.SimulationInputs.prototype.setHighThreshold = function(threshold) {
-	this.options.highThreshold = threshold;
+synthbio.SimulationInputs.prototype.setHighThreshold = function(level) {
+	this.options.highLevel = level;
 };
 
 

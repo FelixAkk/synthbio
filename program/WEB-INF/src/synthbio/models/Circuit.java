@@ -46,12 +46,12 @@ public class Circuit implements JSONString {
 	/**
 	 * The filename.
 	 */
-	private final String name;
+	private String name;
 
 	/**
 	 * The Circuit description.
 	 */
-	private final String description;
+	private String description;
 
 	/**
 	 * List of Gates
@@ -66,7 +66,7 @@ public class Circuit implements JSONString {
 	/**
 	 * Simulation length, defaults to 40 ticks.
 	 */
-	private final int simulationLength=40;
+	private int simulationLength=40;
 
 	/**
 	 * For each input protein, define a String of High/Low (H/L) for
@@ -118,7 +118,7 @@ public class Circuit implements JSONString {
 	 * @param p The protein name to check.
 	 */
 	public void assertIsProtein(String p) {
-		assert p.length() == 1 : "Protein is a one letter String";
+		assert p.length() > 0 : "Protein is String with at least one character.";
 	}
 	
 	/**

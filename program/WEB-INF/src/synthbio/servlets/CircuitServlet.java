@@ -31,6 +31,8 @@ import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
 import synthbio.simulator.Solver;
 
+import synthbio.Util;
+
 /**
  * Servlet ListServlets has different actions on the circuit and replies
  * with the default JSON response.
@@ -103,11 +105,11 @@ public class CircuitServlet extends SynthbioServlet {
 			return;
 		}
 
-		//listFiles
+		//API call listFiles
 		if(action.equals("list")){
 			this.doList();
 
-		//loadFile(filename)
+		//API call loadFile(filename)
 		}else if(action.equals("load")){
 			String filename=request.getParameter("filename");
 			if(filename==null){
@@ -117,24 +119,29 @@ public class CircuitServlet extends SynthbioServlet {
 			}
 			this.doLoad(filename);
 		
-		//saveFile(filename, circuit)
+		//API call saveFile(filename, circuit)
 		}else if(action.equals("save")){
-			String filename=request.getParameter("filename");
-			if(filename==null){
+			String filename = request.getParameter("filename");
+			if(filename == null) {
 				json.fail("Parameter 'filename' not set");
 				out.println(json.toJSONString());
 				return;
 			}
+			if(!filename.endsWith(".syn")) {
+				json.fail("Filename should end with .syn");
+				out.println(json.toJSONString());
+				return;
+			}
 			
-			String circuit=request.getParameter("circuit");
-			if(circuit==null){
+			String circuit = request.getParameter("circuit");
+			if(circuit == null) {
 				json.fail("Parameter 'circuit' not set");
 				out.println(json.toJSONString());
 				return;
 			}
 			this.doSave(filename, circuit);
 		
-		//validate(circuit)
+		//API call validate(circuit)
 		}else if(action.equals("validate")){
 			String circuit=request.getParameter("circuit");
 			if(circuit==null){
@@ -144,7 +151,7 @@ public class CircuitServlet extends SynthbioServlet {
 			}
 			this.doValidate(circuit);
 			
-		//toSBML(circuit)
+		//API call toSBML(circuit)
 		}else if(action.equals("exportSBML")){
 			String circuit=request.getParameter("circuit");
 			if(circuit==null){
@@ -154,7 +161,7 @@ public class CircuitServlet extends SynthbioServlet {
 			}
 			this.doExport(circuit);
 		
-		//simulate(circuit)
+		//API call simulate(circuit)
 		}else if(action.equals("simulate")){
 			String circuit=request.getParameter("circuit");
 			if(circuit==null){
@@ -252,9 +259,9 @@ public class CircuitServlet extends SynthbioServlet {
 			json.fail("Circuit does not validate, please use validate to correct errors.");
 			return;
 		}
-						
+
 		try {
-			json.data = Solver.multiTableToJSON(Solver.solve(c));
+			json.data = Util.multiTableToJSON(Solver.solve(c));
 			json.success = true;
 		} catch(Exception e) {
 			json.fail("Failed solving: "+e.getMessage());
