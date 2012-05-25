@@ -68,6 +68,10 @@ $(document).ready(function() {
 		
 		//Open them by default
 		$('#protein-select-' + wireID).attr('size', ($(prots).size()+1));
+		$('#protein-select-' + wireID).width("auto");
+		
+		//Bring selected wire to the front
+		wire.parent().css('z-index', 99);
 	};
 	
 	/**
@@ -89,6 +93,9 @@ $(document).ready(function() {
 		//Set new protein value in GUI
 		wire.html(selectedProtein);
 
+		//Reset the z-Index of wire
+		wire.parent().css('z-index', "1");
+		
 		//Update signal in model.
 		signal.setProtein(selectedProtein);
 	};
