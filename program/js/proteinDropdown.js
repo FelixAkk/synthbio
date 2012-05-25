@@ -55,10 +55,10 @@ $(document).ready(function() {
 				}
 			});
 			//Draw dropdown list on the wire
-			wire.html('<ul class="nav" id="something">' +
+			wire.html('<ul class="nav">' +
 					'<li class="dropdown">' +
 						'<a href="#" class="dropdown-toggle" data-toggle="dropdown">Choose protein<b class="caret"></b></a>' +
-						'<ul class="dropdown-menu" >' + 
+						'<ul class="dropdown-menu">' + 
 							prots + 
 						'</ul>' +
 					'</li>' +
@@ -66,10 +66,12 @@ $(document).ready(function() {
 		}
 		//Make it dropdownable
 		$('.dropdown-toggle').dropdown();
-		
+
 		//Bind function to the list items
-		$('#something li .proteinItem').on('click', function(e) { 
+		$('.dropdown-menu .proteinItem').on('click', function(e) { 
+			//Prevents the standard action of anchors once clicked
 			e.preventDefault();
+			//Get value of <li><a> selectedProtein </a></li>
 			var selectedProtein = ($(this).children()[0]).innerHTML;
 			if(!(synthbio.proteins[selectedProtein].used)) {
 				synthbio.proteins[selectedProtein].used = true;
