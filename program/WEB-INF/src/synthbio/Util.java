@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import org.simulator.math.odes.MultiTable;
 import org.json.*;
 
+import java.util.Arrays;
+
 /**
  * Utility class.
  *
@@ -104,11 +106,11 @@ public final class Util {
 	/**
  	 * Converts a MultiTable to a JSON-string of the format:
  	 * 	{
- 	 * 		"names": [Time, A, B],
+ 	 * 		"names": [A, B],
  	 * 		"length": 10,
  	 * 		"step": 1,
+ 	 *		"time": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
  	 * 		"data": {
- 	 *			"Time": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
  	 *			"A": [0, 0, 0, 0, 0, 600, 600, 600, 600, 600],
  	 *			"B": [...]
  	 * 		}
@@ -124,7 +126,7 @@ public final class Util {
 		ArrayList<String> names = new ArrayList<String>(cc);
 		for(int i = 0; i < cc + 3; i++) {
 			String cur = m.getColumnName(i);
-			if(!cur.equals("gene") && !cur.equals("cell") && !cur.equals("empty"))
+			if(!cur.equals("gene") && !cur.equals("cell") && !cur.equals("empty") && !cur.equals("Time"))
 				names.add(cur);
 		}
 
@@ -134,19 +136,14 @@ public final class Util {
 		r.put("names", new JSONArray(names));
 		r.put("length", timeLength);
 		r.put("step", step);
+		r.put("time", Arrays.asList(timePoints));	
 		// for every name, get the data in the column of that name.
 		JSONObject data = new JSONObject();
 		for(String name: names) {
 			ArrayList<Double> cur = new ArrayList<Double>((int)timeLength);
-			if(name.equals("Time")) {
-				for(Double d: timePoints)
-					cur.add(d);
-			} else {
-				for(Double d: m.getColumn(name))
-					cur.add(d);
-			}
+			for(Double d: m.getColumn(name))
+				cur.add(d);
 			data.put(name, new JSONArray(cur));
-			
 		}
 		r.put("data", data);
 
