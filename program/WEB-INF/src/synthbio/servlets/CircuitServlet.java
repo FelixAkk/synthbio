@@ -123,19 +123,19 @@ public class CircuitServlet extends SynthbioServlet {
 		}else if(action.equals("save")){
 			String filename = request.getParameter("filename");
 			if(filename == null) {
-				json.fail("Parameter 'filename' not set");
+				json.fail("Parameter 'filename' not set.");
 				out.println(json.toJSONString());
 				return;
 			}
 			if(!filename.endsWith(".syn")) {
-				json.fail("Filename should end with .syn");
+				json.fail("Filename should end with .syn.");
 				out.println(json.toJSONString());
 				return;
 			}
 			
 			String circuit = request.getParameter("circuit");
 			if(circuit == null) {
-				json.fail("Parameter 'circuit' not set");
+				json.fail("Parameter 'circuit' not set.");
 				out.println(json.toJSONString());
 				return;
 			}
