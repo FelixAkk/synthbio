@@ -396,7 +396,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 	}
 	
 	//If signal is an input signal, initialize to low.
-	if (signal.isInput()) {
+	if (signal.isInput() && signal.protein !== "") {
 		this.inputs.values[signal.protein] = "L";
 	}
 
@@ -432,7 +432,7 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 			i--;
 		}
 	}
-	
+	//@todo remove from SimulationInputs?
 	return removed;
 };
 
