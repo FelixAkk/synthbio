@@ -95,7 +95,6 @@ $(document).ready(function() {
 		synthbio.gui.outputEndpoint = {
 			endpoint: "Dot",
 			paintStyle:{ fillStyle:"#225588",radius:7 },
-			//connector:[ "Flowchart", { stub:40 } ],
 			connector: ["Bezier", { curviness:50 } ],
 			connectorStyle: connectorPaintStyle,
 			hoverPaintStyle: pointHoverStyle,
@@ -132,13 +131,13 @@ $(document).ready(function() {
 			}
 			
 			wire.on("click", function(event) {
-				synthbio.clickWire(wire, wireID, currentProtein, connectionOverlay);
+				synthbio.clickWire(wire, wireID);
 				//Set proper menu location
 				connectionOverlay.setLocation(connectionOverlay.getLocation());
 			});
 			
 			wire.on("change", function(event) {
-				currentProtein = synthbio.changeWire(wire, wireID, currentProtein, signal, connectionOverlay);
+				currentProtein = synthbio.changeWire(wire, wireID, currentProtein, signal);
 				//Set proper label location
 				connectionOverlay.setLocation(connectionOverlay.getLocation());
 			});
@@ -164,7 +163,6 @@ $(document).ready(function() {
 		});
 
 		jsPlumb.draggable("gate-input", {handle: "h4"});
-		//$("gate-output").draggable({ });
 		jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
 
 		var oep = $.extend(true, {

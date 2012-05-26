@@ -14,7 +14,7 @@
 /*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio, jsPlumb */
 
-//TODO: Click anywhere to make wires dissapear, adjust currentProtein when you do, wires work when proteins not loaded.
+//TODO: Click anywhere to make wires dissapear, adjust currentProtein when you do, wires work when proteins not loaded, reset protein after removal of wire
 
 /**
  * Dropdown menus on wires.
@@ -42,7 +42,7 @@ synthbio.resetProteins = function() {
 synthbio.closeProteinDropdown = function(){
 	$.each($('.protein-selector'), function(i, menu){
 		$('.protein-selector').parent().parent().css('z-index', "1");
-		//console.log($('.protein-selector').parent().parent());
+		//Change this wires currentProtein to Choose protein and set the old protein value to false in synthbio.proteins
 		$('.protein-selector').parent().html("Choose protein");
 		jsPlumb.repaintEverything();
 	});
@@ -52,14 +52,14 @@ synthbio.closeProteinDropdown = function(){
  * Defines what should happen when a wire is clicked
  * Required the DOM element of the wire, the connectionCount of that wire and the currentProtein selected on that wire
  */
-synthbio.clickWire = function(wire, wireID, currentProtein) {
+synthbio.clickWire = function(wire, wireID) {
 	
 	synthbio.closeProteinDropdown();
 	
 	var prots = "";
 	// Provide all available proteins + the currently selected one
 	$.each(synthbio.proteins, function(i,cds) {
-		if(!(synthbio.proteins[i]) || i === currentProtein) {
+		if(!(synthbio.proteins[i]) || i === wire.html()) {
 			prots += '<option val="' + i + '">' + i + '</option>';
 		}
 	});
@@ -109,9 +109,6 @@ synthbio.changeWire = function(wire, wireID, currentProtein, signal) {
  
 $(document).ready(function() {
 
-	//Set proteins list which will be checked for available proteins
-	synthbio.proteins = {};
-	
 	//Beginning of the page, so reset all proteins
 	synthbio.resetProteins();	
 
