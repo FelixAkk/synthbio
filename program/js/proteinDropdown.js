@@ -14,6 +14,8 @@
 /*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio, jsPlumb */
 
+//TODO: Click anywhere to make wires dissapear, adjust currentProtein when you do, wires work when proteins not loaded.
+
 /**
  * Dropdown menus on wires.
  * 
@@ -22,11 +24,13 @@
 
 /**
  * Reset proteins so everything is available. Done after loading circuits or restarting page.
+ * Proteins have a value of true or false, meaning if they are used or not.
  */
 synthbio.resetProteins = function() {
-	synthbio.requests.getCDSs(function(response) {
+		synthbio.proteins = {};
+		synthbio.requests.getCDSs(function(response) {
 		$.each(response, function(i, cds) {
-			synthbio.proteins[cds.name] = { "used": false}; 
+			synthbio.proteins[cds.name] = false; 
 		});
 	});
 };
@@ -37,6 +41,8 @@ synthbio.resetProteins = function() {
  */
 synthbio.closeProteinDropdown = function(){
 	$.each($('.protein-selector'), function(i, menu){
+		$('.protein-selector').parent().parent().css('z-index', "1");
+		//console.log($('.protein-selector').parent().parent());
 		$('.protein-selector').parent().html("Choose protein");
 		jsPlumb.repaintEverything();
 	});
@@ -53,7 +59,7 @@ synthbio.clickWire = function(wire, wireID, currentProtein) {
 	var prots = "";
 	// Provide all available proteins + the currently selected one
 	$.each(synthbio.proteins, function(i,cds) {
-		if(!(synthbio.proteins[i].used) || i === currentProtein) {
+		if(!(synthbio.proteins[i]) || i === currentProtein) {
 			prots += '<option val="' + i + '">' + i + '</option>';
 		}
 	});
@@ -81,11 +87,10 @@ synthbio.changeWire = function(wire, wireID, currentProtein, signal) {
 	//Get the selected value
 	var selectedProtein = $('#protein-select-' + wireID).val();
 	//Update which proteins are used
-	if(!(synthbio.proteins[selectedProtein].used)) {
-		synthbio.proteins[selectedProtein].used = true;
+	if(!(synthbio.proteins[selectedProtein])) {
+		synthbio.proteins[selectedProtein] = true;
 		if(currentProtein != "Choose protein") {
-			console.log("currentProtein is reset > " + currentProtein);
-			synthbio.proteins[currentProtein].used = false;
+			synthbio.proteins[currentProtein] = false;
 		}
 		currentProtein = selectedProtein;
 	}
@@ -112,8 +117,9 @@ $(document).ready(function() {
 
 	//Make sure dropdowns close when user clicks outside of menu
 	$('body').on("click", function(event){
-		if(!(event.srcElement instanceof HTMLAnchorElement || event.srcElement instanceof HTMLOptionElement)){
-			synthbio.closeProteinDropdown();
+		if($($(event.srcElement).children()[0]).hasClass("protein-selector")){
+			return;
 		}
+		synthbio.closeProteinDropdown();
 	});
 });

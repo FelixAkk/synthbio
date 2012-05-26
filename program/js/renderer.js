@@ -127,7 +127,7 @@ $(document).ready(function() {
 			
 			//If it's one char it succesfully selected a protein from the start.
 			if(signal.getProtein().length === 1) {
-				synthbio.proteins[signal.getProtein()].used = true;
+				synthbio.proteins[signal.getProtein()] = true;
 				currentProtein = signal.getProtein();
 			}
 			
