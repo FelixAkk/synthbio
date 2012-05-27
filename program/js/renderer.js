@@ -95,7 +95,6 @@ $(document).ready(function() {
 		synthbio.gui.outputEndpoint = {
 			endpoint: "Dot",
 			paintStyle:{ fillStyle:"#225588",radius:7 },
-			//connector:[ "Flowchart", { stub:40 } ],
 			connector: ["Bezier", { curviness:50 } ],
 			connectorStyle: connectorPaintStyle,
 			hoverPaintStyle: pointHoverStyle,
@@ -116,31 +115,31 @@ $(document).ready(function() {
 			connCount++;
 			// Instantiate the connection count variable because `connCount` will be incremented later
 			var wireID = connCount;
+			var connectionOverlay = connInfo.connection.getOverlay("label");
 			var label = '<a id="conn' + connCount + '" href=#>';
 			label += signal.getProtein() || "Choose protein";
 			label += '</a>';
-			connInfo.connection.getOverlay("label").setLabel(label);
+			connectionOverlay.setLabel(label);
 			
 			var currentProtein = "";
 			var wire = $('#conn' + connCount, 0);
 			
 			//If it's one char it succesfully selected a protein from the start.
 			if(signal.getProtein().length === 1) {
-				synthbio.proteins[signal.getProtein()].used = true;
+				synthbio.proteins[signal.getProtein()] = true;
 				currentProtein = signal.getProtein();
 			}
 			
 			wire.on("click", function(event) {
-				synthbio.clickWire(wire, wireID, currentProtein);
-				// A very long line to simply reset the location: make jsPlumb update the GUI so the fattened label is centered again
-				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
+				synthbio.clickWire(wire, wireID);
+				//Set proper menu location
+				connectionOverlay.setLocation(connectionOverlay.getLocation());
 			});
 			
 			wire.on("change", function(event) {
-				synthbio.changeWire(wire, wireID, currentProtein, signal);
-				// A very long line to simply reset the location: make jsPlumb update the GUI so the slunken label is centered again
-				connInfo.connection.getOverlay("label").setLocation(connInfo.connection.getOverlay("label").getLocation());
-			
+				currentProtein = synthbio.changeWire(wire, wireID, currentProtein, signal);
+				//Set proper label location
+				connectionOverlay.setLocation(connectionOverlay.getLocation());
 			});
 		});
 
@@ -164,7 +163,6 @@ $(document).ready(function() {
 		});
 
 		jsPlumb.draggable("gate-input", {handle: "h4"});
-		//$("gate-output").draggable({ });
 		jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
 
 		var oep = $.extend(true, {

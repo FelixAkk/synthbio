@@ -191,6 +191,9 @@ public class TestCircuitFactory{
 		assertTrue(c.hasInput("B"));
 
 		assertThat(c.getSimulationLength(), equalTo(42));
+		assertThat(c.getSimulationTickWidth(), equalTo(2));
+		assertThat(c.getSimulationLowLevel(), equalTo(1));
+		assertThat(c.getSimulationHighLevel(), equalTo(616));
 		assertThat(c.getSimulationInput("A"), equalTo("H"));
 		assertThat(c.getSimulationInput("B"), equalTo("LLLLLLLLLLLLLLLLLLLLH"));
 	}

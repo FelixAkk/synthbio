@@ -28,7 +28,6 @@ import org.json.JSONObject;
 
 import synthbio.Util;
 
-import com.gargoylesoftware.htmlunit.TextPage;
 import com.gargoylesoftware.htmlunit.WebClient;
 
 /**
@@ -42,9 +41,9 @@ public class TestCircuitServlet{
 	 */
 	public static final String url="http://localhost:8080/Circuit";
 
-	public TextPage getTestPage(String url) throws Exception{
+	public String getTestPage(String url) throws Exception{
 		final WebClient webClient = new WebClient();
-		return webClient.getPage(url);
+		return webClient.getPage(url).getWebResponse().getContentAsString().trim();
 	}
 
 	/**
@@ -52,10 +51,10 @@ public class TestCircuitServlet{
 	 */
 	@Test
 	public void testNoAction() throws Exception{
-		TextPage page=this.getTestPage(this.url);
+		String page=this.getTestPage(this.url);
 		String expected="Parameter 'action' not set.";
 
-		assertThat(page.getContent(), containsString(expected));
+		assertThat(page, containsString(expected));
 	}
 
 	/**
@@ -67,9 +66,9 @@ public class TestCircuitServlet{
 	 */
 	@Test
 	public void testList() throws Exception{
-		TextPage page=this.getTestPage(this.url+"?action=list");
+		String page=this.getTestPage(this.url+"?action=list");
 
-		JSONObject response=new JSONObject(page.getContent());
+		JSONObject response=new JSONObject(page);
 
 		//check success and empty message string.
 		assertTrue(response.getBoolean("success"));
@@ -89,7 +88,7 @@ public class TestCircuitServlet{
 		}
 
 		//check that the file list contains 'example.syn'
-		assertThat(page.getContent(), containsString("example.syn"));
+		assertThat(page, containsString("example.syn"));
 	}
 
 	/**
@@ -97,9 +96,8 @@ public class TestCircuitServlet{
 	 */
 	@Test
 	public void testLoad() throws Exception{
-		TextPage page=this.getTestPage(this.url+"?action=load&filename=example.syn");
-
-		JSONObject response=new JSONObject(page.getContent());
+		String page=this.getTestPage(this.url+"?action=load&filename=example.syn");
+		JSONObject response=new JSONObject(page);
 
 		//check success and empty message string.
 		assertTrue(response.getBoolean("success"));
@@ -125,9 +123,9 @@ public class TestCircuitServlet{
 		
 		JSONObject circuit=Util.fileToJSONObject("data/synstore/example.syn");
 		
-		TextPage page=this.getTestPage(this.url+"?action=save&filename=test.syn&circuit="+circuit.toString());
+		String page=this.getTestPage(this.url+"?action=save&filename=test.syn&circuit="+circuit.toString());
 
-		JSONObject response=new JSONObject(page.getContent());
+		JSONObject response=new JSONObject(page);
 
 		assertTrue(response.getBoolean("success"));
 		assertEquals("Saved succesfully", response.getString("message"));
@@ -160,9 +158,9 @@ public class TestCircuitServlet{
 	@Test
 	public void testSave_notDotSyn() throws Exception {
 		String content="abracadabra";
-		TextPage page=this.getTestPage(this.url+"?action=save&filename=test.foo&circuit="+content);
+		String page=this.getTestPage(this.url+"?action=save&filename=test.foo&circuit="+content);
 
-		JSONObject response=new JSONObject(page.getContent());
+		JSONObject response=new JSONObject(page);
 
 		assertFalse(response.getBoolean("success"));
 		assertEquals("Filename should end with .syn.", response.getString("message"));
@@ -174,9 +172,9 @@ public class TestCircuitServlet{
 	@Test
 	public void testSave_noFilename() throws Exception {
 		String content="abracadabra";
-		TextPage page=this.getTestPage(this.url+"?action=save&circuit="+content);
+		String page=this.getTestPage(this.url+"?action=save&circuit="+content);
 
-		JSONObject response=new JSONObject(page.getContent());
+		JSONObject response=new JSONObject(page);
 
 		assertFalse(response.getBoolean("success"));
 		assertEquals("Parameter 'filename' not set.", response.getString("message"));
@@ -187,9 +185,9 @@ public class TestCircuitServlet{
 	 */
 	@Test
 	public void testSave_noCircuit() throws Exception {
-		TextPage page=this.getTestPage(this.url+"?action=save&filename=test.syn");
+		String page=this.getTestPage(this.url+"?action=save&filename=test.syn");
 
-		JSONObject response=new JSONObject(page.getContent());
+		JSONObject response=new JSONObject(page);
 
 		assertFalse(response.getBoolean("success"));
 		assertEquals("Parameter 'circuit' not set.", response.getString("message"));
@@ -203,9 +201,9 @@ public class TestCircuitServlet{
 	public void testValidate_withValid() throws Exception {
 		JSONObject circuit=Util.fileToJSONObject("data/synstore/example-with-inputs.syn");
 
-		TextPage page=this.getTestPage(this.url+"?action=validate&circuit="+circuit.toString());
+		String page=this.getTestPage(this.url+"?action=validate&circuit="+circuit.toString());
 
-		JSONObject response=new JSONObject(page.getContent());
+		JSONObject response=new JSONObject(page);
 		
 		assertTrue(response.getBoolean("success"));
 	}
@@ -219,9 +217,9 @@ public class TestCircuitServlet{
 	public void testValidate_withoutInputs() throws Exception {
 		JSONObject circuit=Util.fileToJSONObject("data/test/models/incompleteAndCircuit.json");
 
-		TextPage page=this.getTestPage(this.url+"?action=validate&circuit="+circuit.toString());
+		String page=this.getTestPage(this.url+"?action=validate&circuit="+circuit.toString());
 
-		JSONObject response=new JSONObject(page.getContent());
+		JSONObject response=new JSONObject(page);
 
 		assertFalse(response.getBoolean("success"));
 		assertThat(response.getString("message"), equalTo("Error in Circuit: At least one AND gate has only one input."));

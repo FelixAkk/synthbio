@@ -564,7 +564,7 @@ synthbio.SimulationInputs.prototype.updateInputs = function(){
 	}
 	
 	//Make a copy of the current values.
-	var newValues=$.extend({}, this.values);
+	var newValues={};
 	var self=this;
 	$.each(this.circuit.getInputSignals(), function(index, protein){
 		if(self.values[protein]){
@@ -591,6 +591,7 @@ synthbio.SimulationInputs.prototype.getValues = function() {
  * Change structure a little...
  */
 synthbio.SimulationInputs.prototype.toJSON = function() {
+	this.updateInputs();
 	return $.extend({}, this.options, {values: this.values});
 };
 
