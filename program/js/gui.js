@@ -313,13 +313,19 @@ $(document).ready(function() {
 
 		// (Re)set to false. Represents whether we have prompted the user for confirmation once before
 		var confirmation = false;
+		// Used for comparing to the recently submitted input, to detect selection of a different file
+		var previousInput = "";
 		$("#files form").on("submit", function(event) {
 			// Surpress default redirection due to <form action="destination.html"> action
 			event.stopPropagation();
 			event.preventDefault();
 			// get the filename
 			var input = $("input", this)[0].value.trim();
-			console.log(confirmation);
+			// Allow prompting for confirmation again if a different filename has been entered this time.
+			if(input !== previousInput) {
+				confirmation = false;
+				previousInput = input;
+			}
 			// Check if the user is about to overwrite an existing file and hasn't confirmed yet
 			if(
 				(
@@ -404,7 +410,7 @@ $(document).ready(function() {
 		inputfield.typeahead({
 			source: []
 		});
-		$("#files .height-transition-box").removeClass("visible");
+		$("#files .modal-alert-fader").height("0px");
 	});
 
 	// List files from server.
@@ -943,9 +949,14 @@ synthbio.gui.removeDisplaySignal = function(id) {
  * @param innerHTML The HTML for inside the alert div
  */
 synthbio.gui.showAdModalAlert = function(modal, alertClass, innerHTML) {
-	$("#files .height-transition-box .modal-footer").html('<div class="alert ' + alertClass +
+	var fader = $("#"+modal+" .modal-alert-fader");
+	// Place content in the footer
+	$(".modal-footer", fader).html('<div class="alert ' + alertClass +
 		'" style="margin-bottom: 0;">' + innerHTML + '</div>');
-	$("#files .height-transition-box").addClass("visible");
+
+	// Get the real/actual/computed height of what the fader whould be if we let it set it's own hieght (height: auto;).
+	// This is a bit of non-semantic jiggery-pokery because animating from height: 0-auto; is not supported in browsers.
+	fader.css("height", $(".modal-footer", fader).outerHeight() + "px");
 };
 /**
  * Ping server to check for connection 'vitals'. Shown a warning if things go really bad. Declared as a closure to keep

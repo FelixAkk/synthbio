@@ -63,11 +63,11 @@
  * -----------------------------------
  */
 .borderDown(@baseColor, @contrast, @borderHeight) {
-	border: 1px solid darken(saturate(@baseColor, 5%), @contrast * @borderHeight);
+	border: solid darken(saturate(@baseColor, 5%), @contrast * @borderHeight) 1px;
 }
 
 .borderUp(@baseColor, @contrast, @borderHeight) {
-	border: 1px solid lighten(saturate(@baseColor, 5%), @contrast * @borderHeight);
+	border: solid lighten(saturate(@baseColor, 5%), @contrast * @borderHeight) 1px;
 }
 
 .cornerRadius(@cornerRadius) {
@@ -105,6 +105,11 @@
   -webkit-box-shadow: 0px 0px 4px 0px #ffffff; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
           box-shadow: 0px 0px 4px 0px #ffffff; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
 }
+.innerShadow(@horizontalOffset, @verticalOffset, @blur, @spread, @color) {
+-webkit-box-shadow: inset @horizontalOffset @verticalOffset @blur @spread @color;
+		box-shadow: inset @horizontalOffset @verticalOffset @blur @spread @color;
+}
+
 
 /**
  * Selftitled class
@@ -124,7 +129,7 @@ body {
 
 .navbar {
 	.borderDown(@baseColor, @contrast, @borderHeight);
-	border-width: 0 0 1px 0; /* Bottom border only */
+	border-width: 0px 0px 1px 0px; /* Bottom border only */
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 	height: @iconSize * @menuHeight;
 	min-width: 896px;
@@ -141,6 +146,53 @@ body {
 	color: @textColorFaded;
 	font-size: 18px;
 	font-weight: bold;
+	margin-bottom: 0px;
+}
+#simulation-tab .nav-tabs > ul {
+	margin-bottom: 0;
+}
+#simulation-tab .navbar .nav > li > a, .nav-tabs > li > a {
+	color: lighten(@baseColor, 20%);
+	&:hover {
+		color: @textColorFaded;
+	}
+}
+#simulation-tab .nav-tabs > li > a {
+    &.tab-utilities {
+        float: right;
+    }
+	font-size: 14px;
+	.borderDown(@baseColor, @contrast, @borderHeight);
+	border-width: 1px 1px 0px 1px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	margin-top: 4px;
+	padding-left: 12px;
+	padding-right: 12px;
+	margin-left: 4px;
+	margin-right: 4px;
+
+	.innerShadow(0, 4px, 2px, -4px, rgba(0, 0, 0, 0.3));
+    .gradient(lighten(@grStart, 10%), lighten(@grStop, 5%));
+}
+#simulation-tab .nav-tabs > li > a:hover {
+    .gradient(lighten(@grStart, 15%), lighten(@grStop, 10%));
+}
+#simulation-tab .nav-tabs > .active > a {
+    .gradient(@grStart, darken(@grStart, 5%));
+	color: #FFFFFF;
+}
+
+#simulation-tab .nav-tabs {
+	height: auto;
+}
+
+#simulation-tab .tab-utilities {
+    z-index: 110;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	padding: 5px;
 }
 
 .navbar .nav > li > a {
@@ -171,6 +223,9 @@ body {
 
 #files table td {
 	cursor: pointer;
+}
+.typeahead.dropdown-menu {
+	min-width: 210px;
 }
 
 .modal-footer, #grid-container {
@@ -209,7 +264,7 @@ body {
  */
 #title {
 	.borderDown(@baseColor, @contrast, @borderHeight);
-	border-width: 0 1px 0 0; /* Right border only */
+	border-width: 0px 1px 0px 0px; /* Right border only */
 	background-color: rgba(0,0,0, 0.1); /* Fade */
 	float: left;
 	padding: (@iconSize * 0.5) 0 (@iconSize * 0.5) (@iconSize * 0.5)*2 + @iconSize;
@@ -229,7 +284,7 @@ body {
 #gates-tab {
 	background-color: @grStart;
 	.borderDown(@baseColor, @contrast, @borderHeight);
-	border-width: 0 1px 0 0; /* Right and bottom border only */
+	border-width: 0px 1px 0px 0px; /* Right and bottom border only */
 	width: @tabWidth;
 	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
 	top: @iconSize * 1.75;
@@ -251,8 +306,7 @@ body {
 #circuit-details {
 	background-color: @grStart;
 	.borderDown(@baseColor, @contrast, @borderHeight);
-	box-shadow: inset 0 1px 0 lighten(saturate(@baseColor, 5%), @contrast * @borderHeight);
-	border-width: 1px 0 0; /* Right border only */
+	border-width: 1px 0px 0px 0px; /* Right border only */
 	width: @tabWidth;
 	top: auto;
 }
@@ -260,7 +314,7 @@ body {
 .gates {
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	.cornerRadius(@cornerRadius);
-	box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25);
+	.innerShadow(0, 2px, 10px, 0, rgba(0, 0, 0, 0.25));
 	background-color: @baseColor;
 	margin: @gatesTabPadding;
 	padding: @gatesTabPadding;
@@ -331,13 +385,14 @@ body {
 }
 
 #grid-container {
-	left: @tabWidth;
-	bottom: @statusHeight + 1; /* Keep some distance for the status bar (+1 pixel for the border) */
+     /* Keep some distance for the status bar and gates-tab (+1 pixel for the border) */
+	left: @tabWidth + 1;
+	bottom: @statusHeight + 1;
 	top: @iconSize * 1.75;
 	background-color: lighten(@baseColor, 20%);
 	overflow: auto;
 
-	box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25);
+	.innerShadow(0, 2px, 10px, 0, rgba(0, 0, 0, 0.25));
 	/*.borderDown(@baseColor, @contrast, 10%); */
 	/*margin: 5px; */
 
@@ -367,7 +422,7 @@ body {
 			color: @textColorFaded;
 			text-shadow: 1px -1px 2px rgba(0, 0, 0, 0.5);
 			text-align: center;
-			border-width: 0 0 1px 0;
+			border-width: 0px 0px 1px 0px;
 			padding: 4px 0 8px 0;
 
 			.icon-grip {
@@ -413,6 +468,34 @@ body {
 #grid {
 }
 
+#simulation-tab {
+    top: auto;
+    /* Keep some distance for the status bar and gates tab (+1 pixel for the border) */
+	left: @tabWidth + 1;
+	bottom: @statusHeight + 1;
+	height: 150px;
+	background-color: @baseColor;
+	.borderUp(@baseColor, @contrast, @borderHeight);
+	border-width: 1px 0px 0px 0px; /* Top border only */
+	.innerShadow(2px, 0, 10px, 0, rgba(0, 0, 0, 0.25));
+	color: @textColorFaded;
+	z-index: 30;
+
+	.handle {
+	    display: block;
+		color: @textColorFaded;
+		text-shadow: 1px -1px 2px rgba(0, 0, 0, 0.5);
+		.gradient(lighten(@grStart, 20%), @grStart);
+
+		.icon-grip {
+			background-image: url("../img/grip.png");
+			background-position: 3px 5px;
+			opacity: 0.5;
+			margin: 0 5px;
+		}
+	}
+}
+
 .subscript {
 	font-size: 9px;
 }
@@ -429,14 +512,14 @@ body {
 	background-color: @grStart;
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	color: @textColorFaded;
-	border-width: 1px 0 0 0; /* Top border only */
+	border-width: 1px 0px 0px 0px; /* Top border only */
 	bottom: 0;
 	height: @statusHeight;
 	left: 0;
 	line-height: 24px;
 	position: absolute;
 	width: 100%;
-	z-index: 17;
+	z-index: 20;
 	
 	#info-icon {
 		height: @statusHeight - 8;
@@ -531,16 +614,8 @@ body {
  * ------------------------------
  */
 
-.height-transition-box {
+.modal-alert-fader {
     overflow: hidden;
-    height: 0;
+    height: 0px;
 	.transition(height, 0.2s);
-	.transition(min-height, 0.2s);
-	.transition(max-height, 0.2s);
-
-	&.visible {
-	     height: auto;
-	     min-height: 10px;
-	     max-height: 300px;
-	}
 }

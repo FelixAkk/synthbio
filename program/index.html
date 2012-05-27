@@ -106,6 +106,25 @@
 		<div id="gate-input" class="gate input"><h4 class="handle"><i class="icon-grip"></i>Inputs<i class="icon-grip"></i></h4></div>
 		<div id="gate-output" class="gate output"><h4 class="handle"><i class="icon-grip"></i>Outputs<i class="icon-grip"></i></h4></div>
 	</div>
+
+	<!-- Le simulation tab (just below the grid) -->
+	<!-- ================================================== -->
+	<!-- this is where all the simulation related graphs are shown (in a seperate tab) and also validation results -->
+	<div id="simulation-tab" class="stretch">
+		<ul class="nav nav-tabs navbar">
+			<li><a href="#inputs" data-toggle="tab">Inputs</a></li>
+			<li><a href="#outputs" data-toggle="tab">Outputs</a></li>
+			<li><a href="#validation" data-toggle="tab">Validation</a></li>
+		</ul>
+		<div class="tab-utilities">
+			<a class="close">×</a>
+		</div>
+		<div class="tab-content">
+			<div class="tab-pane active" id="inputs">homebla</div>
+			<div class="tab-pane" id="outputs">profile</div>
+			<div class="tab-pane" id="validation">message</div>
+		</div>
+	</div>
 	
 	<!-- Le Status Bar (at the bottom) -->
 	<!-- ================================================== -->
@@ -217,7 +236,7 @@
 			<a href="javascript: void(0);" class="btn" data-dismiss="modal">Close</a>
 		</div>
 		<!-- wrapper to fade in this extra footer by using the height property -->
-		<div class="height-transition-box">
+		<div class="modal-alert-fader">
 			<!-- extra footer for displaying warnings, errors and info -->
 			<div class="modal-footer"></div>
 		</div>
