@@ -235,7 +235,7 @@ synthbio.Circuit.fromMap = function(map) {
 
 	//If input information is present, add that as well
 	if (map.inputs) {
-		circuit.setSimulationInput(new synthbio.SimulationInput(map.inputs));
+		circuit.setSimulationInput(map.inputs);
 	}
 
 	//TODO: implement grouping.
@@ -463,7 +463,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 	//If signal is an input signal, initialize to low.
 	var prot = signal.getProtein();
 	if (prot !== "") {
-		this.updateSignals(signal);
+		//this.updateSignals(signal);
 		if (signal.isInput() && !this.inputs.values[prot]) {
 			this.inputs.values[prot] = "L";
 		}
