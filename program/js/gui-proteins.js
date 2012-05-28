@@ -11,24 +11,30 @@
  * https://github.com/FelixAkk/synthbio
  */
 
-/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
-/*global $, synthbio, jsPlumb */
-
-//TODO: Click anywhere to make wires dissapear, adjust currentProtein when you do, wires work when proteins not loaded, reset protein after removal of wire
-
 /**
  * Dropdown menus on wires.
  * 
  * @author Felix Akkermans & Thomas van Helden
  */
 
+/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio, jsPlumb */
+
+//TODO: Click anywhere to make wires dissapear, adjust currentProtein when you do, wires work when proteins not loaded, reset protein after removal of wire
+
+/**
+ * syntbio package.
+ */
+var synthbio = synthbio || {};
+synthbio.gui = synthbio.gui || {};
+
 /**
  * Reset proteins so everything is available. Done after loading circuits or restarting page.
  * Proteins have a value of true or false, meaning if they are used or not.
  */
 synthbio.resetProteins = function() {
-		synthbio.proteins = {};
-		synthbio.requests.getCDSs(function(response) {
+	synthbio.proteins = {};
+	synthbio.requests.getCDSs(function(response) {
 		$.each(response, function(i, cds) {
 			synthbio.proteins[cds.name] = false; 
 		});

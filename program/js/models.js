@@ -603,38 +603,3 @@ synthbio.SimulationInputs.prototype.toJSON = function() {
 synthbio.SimulationInputs.prototype.toString = function() {
 	return ' length: '+this.getLength();
 };
-
-
-//@NielsAD should the following stay here?
-
-/**
- * The object that will represent the entire circuit that is in the app.
- * Might be a slight delay between synchronization but should correspond
- * to the circuit pretty accurately. This should only matter with trivial
- * things like the position of gates. This object is instantiated as an
- * empty circuit with no name or description.
- */
-synthbio.model = new synthbio.Circuit("", "");
-
-/**
- * Cleans the current workspace and loads the provided circuit.
- *
- * @param circuit An instance of synthbio.Circuit
- */
-synthbio.loadCircuit = function(circuit) {
-	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
-	// TODO: try convert fromMap to Circuit.
-
-	synthbio.gui.reset();
-
-	// Show the circuit; add all the elements
-	synthbio.model = circuit;
-
-	$.each(synthbio.model.getGates(), function(index, element) {
-		synthbio.gui.displayGate(element);
-	});
-	$.each(synthbio.model.getSignals(), function(index, element){
-		synthbio.gui.displaySignal(element);
-	});
-	//TODO; implement grouping.
-};
