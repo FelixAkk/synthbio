@@ -127,32 +127,4 @@ $(document).ready(function() {
 		"Alternatively hold Ctrl and click on gates to toggle them as selected.");
 	synthbio.gui.setTooltip($("#gate-input"),       "Drag from here to define an input signal for a gate.");
 	synthbio.gui.setTooltip($("#gate-output"),      "Drop a signal endpoint in here to output the signal values.");	
-
-	// DataTables objects for proteins dialog
-	var lpTable; 
-
-	// Load proteins from server
-	$('#list-proteins').on('show', function() {
-		synthbio.requests.getCDSs(function(response) {
-			if(response instanceof String) {
-				$('#list-proteins tbody td').html(response);
-				return;
-			}
-			// construct table body contents
-			var html = '';
-			$.each(response, function(i, cds) {
-				html += '<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
-			});
-
-			$('#list-proteins tbody').html(html);
-
-			// Convert the new content into a DataTable; clear the variable if it was used before
-			if (lpTable) { lpTable.fnClearTable(false); }
-			lpTable = $('#list-proteins table').dataTable(synthbio.gui.dataTableOptions);
-			// Hook up custom search/filter input box for this table. Only the `keyup` event seems give a good result
-			$("#list-proteins .modal-footer input").bind("keyup", function(event) {
-				lpTable.fnFilter($(this).val());
-			});
-		});
-	});
 });

@@ -225,16 +225,6 @@ synthbio.gui.displayGateIdMap = {/*Example:
 */};
 
 /**
- * Maps an (display) element ID to the proper signal object
- */
-synthbio.gui.displaySignalIdMap = {/*Example:
-	elementID: {
-		connection: jsPlumb connection,
-		signal: synthbio.Signal,
-	}
-*/};
-
-/**
  * Returns gate object by GUI id
  * @param id string
  * @param noException Truthy to not throw exception
@@ -293,23 +283,6 @@ synthbio.gui.getGateIdByIndex = function(idx, noException) {
 		} else {
 			throw "Cannot map index to id";
 		}
-	}
-};
-
-/**
- * Returns signal object by GUI id
- * @param id string
- * @param noException Truthy to not throw exception
- * @return Object with connection and signal (exception if not found, false if noException)
- */
-synthbio.gui.getSignalById = function(id, noException) {
-	var signal = synthbio.gui.displaySignalIdMap[id];
-	if (signal) {
-		return signal;
-	} else if (noException) {
-		return false;
-	} else {
-		throw "Cannot map id to signal";
 	}
 };
 
@@ -382,6 +355,33 @@ synthbio.gui.removeDisplayGate = function(id) {
 };
 
 /**
+ * Maps an (display) element ID to the proper signal object
+ */
+synthbio.gui.displaySignalIdMap = {/*Example:
+	elementID: {
+		connection: jsPlumb connection,
+		signal: synthbio.Signal,
+	}
+*/};
+
+/**
+ * Returns signal object by GUI id
+ * @param id string
+ * @param noException Truthy to not throw exception
+ * @return Object with connection and signal (exception if not found, false if noException)
+ */
+synthbio.gui.getSignalById = function(id, noException) {
+	var signal = synthbio.gui.displaySignalIdMap[id];
+	if (signal) {
+		return signal;
+	} else if (noException) {
+		return false;
+	} else {
+		throw "Cannot map id to signal";
+	}
+};
+
+/**
  * Adds a new wire to the grid.
  *
  * @param signal synthbio.Signal
@@ -448,85 +448,6 @@ synthbio.gui.removeDisplaySignal = function(id) {
 	}
 	return obj;
 };
-
-$(document).ready(function() {
-	// Initialize gate-dragging
-	$('#gates-tab .gate').draggable({ 
-		appendTo: "#gates-transport",
-		containment: 'window',
-		scroll: false,
-		helper: 'clone',
-		start: function(event) {
-			// Prepare transport layer
-			$("#gates-transport").css('display', 'block');
-		},
-		drag: function(event, ui) {
-			// Manually set the position of the helper (the thing you see dragged). Works out much nicer!
-			ui.position.left = event.pageX - synthbio.gui.gateDimensions.width/2;
-			ui.position.top  = event.pageY - synthbio.gui.gateDimensions.height/2;
-
-			// Display gate border if dragging in grid (and gate can be dropped)
-			var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
-			$(ui.helper).toggleClass("gate-border", dragInGrid);
-		},
-		stop: function(event, ui) {
-			// If dragged into the grid
-			if(event.pageX > synthbio.gui.gatesTabWidth) {
-				// Add new gate to circuit
-				var x = event.pageX - (synthbio.gui.gatesTabWidth + synthbio.gui.gateDimensions.width/2);
-				var y = event.pageY - (synthbio.gui.navbarHeight + synthbio.gui.gateDimensions.height/2);
-				var newGate = synthbio.model.addGate(
-					$(this).attr('class').split(' ')[1], // type of gate (second word in class of the element)
-					[x, y] // position of the new gate
-				);
-
-				// Display gate in grid
-				synthbio.gui.displayGate(newGate);
-			}
-
-			// Clean up transport layer
-			$("#gates-transport .gate").remove();
-			$("#gates-transport").css('display', 'none');
-		}
-	});
-
-	//synthbio.gui.resetWorkspace();
-	//synthbio.loadCircuit(new synthbio.Circuit("", ""));
-
-	var map = {
-		"name": "example.syn",
-		"description": "Logic for this circuit: D = ~(A^B)",
-		"gates": [
-			{ "kind": "not", "position": {"x": 250,"y": 223}},
-			{ "kind": "not", "position": {"x": 340,"y": 431}}
-		],
-		"signals": [
-			{ "from": "input", "to": 0, "protein": "A", "fromEndpoint": 1, "toEndpoint": 1},
-			//{ "from": "input", "to": 0, "protein": "B", "fromEndpoint": 0, "toEndpoint": 0},
-			{ "from": 0, "to": 1, "protein": "C"},
-			{ "from": 1, "to": "output", "protein": "D"}
-		],
-		"grouping": [
-
-		]
-	};
-	var gates=[], signals=[], groups=[];
-
-	$.each(map.gates, function(i, elem) {
-		gates[i]=synthbio.Gate.fromMap(elem);
-	});
-
-	$.each(map.signals, function(i, elem) {
-		signals[i]=synthbio.Signal.fromMap(elem);
-	});
-	var cir = new synthbio.Circuit(map.name, map.description, gates, signals, groups);
-	setTimeout(function() {
-		synthbio.loadCircuit(cir);
-		//display the define-inputs modal for quicker development.
-		//$('#define-inputs').modal();
-	}, 500);
-
-});
 
 jsPlumb.ready(function() {
 	
@@ -612,40 +533,17 @@ jsPlumb.ready(function() {
 	// Listen for new connections; initialise them the same way we initialise the connections at startup.
 	jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
 		var signal = connInfo.connection.getParameters().signal;
-		signal =  signal || synthbio.gui.displayConnection(connInfo.connection).signal;
+		signal = signal || synthbio.gui.displayConnection(connInfo.connection).signal;
 
 		signal.fromEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[0]);
 		signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
-		
-		connCount++;
-		// Instantiate the connection count variable because `connCount` will be incremented later
-		var wireID = connCount;
-		var connectionOverlay = connInfo.connection.getOverlay("label");
-		var label = '<a id="conn' + connCount + '" href=#>';
-		label += signal.getProtein() || "Choose protein";
-		label += '</a>';
-		connectionOverlay.setLabel(label);
-		
-		var currentProtein = "";
-		var wire = $('#conn' + connCount, 0);
-		
-		//If it's one char it succesfully selected a protein from the start.
-		if(signal.getProtein().length === 1) {
-			synthbio.proteins[signal.getProtein()] = true;
-			currentProtein = signal.getProtein();
+
+		if (!signal.getProtein()) {
+			var prot = synthbio.model.determineProtein(signal.getFrom(), signal.fromEndpoint);
+			signal.setProtein(prot);
 		}
-		
-		wire.on("click", function(event) {
-			synthbio.clickWire(wire, wireID);
-			//Set proper menu location
-			connectionOverlay.setLocation(connectionOverlay.getLocation());
-		});
-		
-		wire.on("change", function(event) {
-			currentProtein = synthbio.changeWire(wire, wireID, currentProtein, signal);
-			//Set proper label location
-			connectionOverlay.setLocation(connectionOverlay.getLocation());
-		});
+
+		synthbio.gui.setProteinLabel(signal, connInfo.connection);
 	});
 
 	// Listen for disposal of connections; delete endpoints if necessary
@@ -681,4 +579,83 @@ jsPlumb.ready(function() {
 
 	jsPlumb.makeSource("gate-input", oep);
 	jsPlumb.makeTarget("gate-output", iep);
+});
+
+$(document).ready(function() {
+	// Initialize gate-dragging
+	$('#gates-tab .gate').draggable({ 
+		appendTo: "#gates-transport",
+		containment: 'window',
+		scroll: false,
+		helper: 'clone',
+		start: function(event) {
+			// Prepare transport layer
+			$("#gates-transport").css('display', 'block');
+		},
+		drag: function(event, ui) {
+			// Manually set the position of the helper (the thing you see dragged). Works out much nicer!
+			ui.position.left = event.pageX - synthbio.gui.gateDimensions.width/2;
+			ui.position.top  = event.pageY - synthbio.gui.gateDimensions.height/2;
+
+			// Display gate border if dragging in grid (and gate can be dropped)
+			var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
+			$(ui.helper).toggleClass("gate-border", dragInGrid);
+		},
+		stop: function(event, ui) {
+			// If dragged into the grid
+			if(event.pageX > synthbio.gui.gatesTabWidth) {
+				// Add new gate to circuit
+				var x = event.pageX - (synthbio.gui.gatesTabWidth + synthbio.gui.gateDimensions.width/2);
+				var y = event.pageY - (synthbio.gui.navbarHeight + synthbio.gui.gateDimensions.height/2);
+				var newGate = synthbio.model.addGate(
+					$(this).attr('class').split(' ')[1], // type of gate (second word in class of the element)
+					[x, y] // position of the new gate
+				);
+
+				// Display gate in grid
+				synthbio.gui.displayGate(newGate);
+			}
+
+			// Clean up transport layer
+			$("#gates-transport .gate").remove();
+			$("#gates-transport").css('display', 'none');
+		}
+	});
+
+	//synthbio.gui.resetWorkspace();
+	//synthbio.loadCircuit(new synthbio.Circuit("", ""));
+
+	var map = {
+		"name": "example.syn",
+		"description": "Logic for this circuit: D = ~(A^B)",
+		"gates": [
+			{ "kind": "not", "position": {"x": 250,"y": 223}},
+			{ "kind": "not", "position": {"x": 340,"y": 431}}
+		],
+		"signals": [
+			{ "from": "input", "to": 0, "protein": "A", "fromEndpoint": 1, "toEndpoint": 1},
+			//{ "from": "input", "to": 0, "protein": "B", "fromEndpoint": 0, "toEndpoint": 0},
+			{ "from": 0, "to": 1, "protein": "C"},
+			{ "from": 1, "to": "output", "protein": "D"}
+		],
+		"grouping": [
+
+		]
+	};
+	var gates=[], signals=[], groups=[];
+
+	$.each(map.gates, function(i, elem) {
+		gates[i]=synthbio.Gate.fromMap(elem);
+	});
+
+	$.each(map.signals, function(i, elem) {
+		signals[i]=synthbio.Signal.fromMap(elem);
+	});
+	var cir = new synthbio.Circuit(map.name, map.description, gates, signals, groups);
+	setTimeout(function() {
+		synthbio.loadCircuit(cir);
+		//display the define-inputs modal for quicker development.
+		//$('#define-inputs').modal();
+	}, 500);
+
 });

@@ -29,15 +29,72 @@ var synthbio = synthbio || {};
 synthbio.gui = synthbio.gui || {};
 
 /**
- * Reset proteins so everything is available. Done after loading circuits or restarting page.
- * Proteins have a value of true or false, meaning if they are used or not.
+ * Returns the available proteins (loads them from the server at the start of the program)
+ * @return Object {protein1: true (used), protein2: false (not used), ..}
  */
-synthbio.resetProteins = function() {
-	synthbio.proteins = {};
+synthbio.getProteins = (function() {
+	var proteins = {};
 	synthbio.requests.getCDSs(function(response) {
+		synthbio.util.assert(response.length, "Loading proteins failed");
+
 		$.each(response, function(i, cds) {
-			synthbio.proteins[cds.name] = false; 
+			proteins[cds.name] = false; 
 		});
+
+		synthbio.gui.fillProteins(response);
+	});
+
+	return function() {
+		return $.extend({}, proteins, synthbio.model.getUsedProteins());
+	};
+}());
+
+/**
+ * Returns the available unused proteins
+ * @return Array [protein1, protein2, ..]
+ */
+synthbio.getUnusedProteins = function() {
+	var res = [];
+	$.each(synthbio.getProteins(), function(protein, used){
+		if (!used) {
+			res.push(protein);
+		}
+	});
+	return res;
+};
+
+/**
+ * Checks if protein is valid
+ * @protein String Name of protein
+ * @return boolean
+ */
+synthbio.validProtein = function(protein) {
+	var proteins = synthbio.getProteins();
+	return protein && proteins && (proteins[protein] !== undefined);
+};
+
+/**
+ * Fill the "show proteins" modal with proteins
+ * @param response Reponse object for the synthbio.requests.getCDSs
+ */
+synthbio.gui.fillProteins = function(response) {
+	if(response instanceof String) {
+		$('#list-proteins tbody td').html(response);
+		return;
+	}
+	// construct table body contents
+	var html = '';
+	$.each(response, function(i, cds) {
+		html += '<tr><td>'+cds.name+'</td><td>'+cds.k2+'</td><td>'+cds.d1+'</td><td>'+cds.d2+'</td></tr>';
+	});
+
+	$('#list-proteins tbody').html(html);
+
+	var lpTable = $('#list-proteins table').dataTable(synthbio.gui.dataTableOptions);
+	
+	// Hook up custom search/filter input box for this table. Only the `keyup` event seems give a good result
+	$("#list-proteins .modal-footer input").bind("keyup", function(event) {
+		lpTable.fnFilter($(this).val());
 	});
 };
 
@@ -45,7 +102,7 @@ synthbio.resetProteins = function() {
  * Closes all dropdown menus which are still open.
  * Should be done when selecting a new wire or clicking outside of a dropdown
  */
-synthbio.closeProteinDropdown = function(){
+synthbio.gui.closeProteinDropdowns = function(){
 	$.each($('.protein-selector'), function(i, menu){
 		$('.protein-selector').parent().parent().css('z-index', "1");
 		//Change this wires currentProtein to Choose protein and set the old protein value to false in synthbio.proteins
@@ -56,18 +113,20 @@ synthbio.closeProteinDropdown = function(){
 
 /**
  * Defines what should happen when a wire is clicked
- * Required the DOM element of the wire, the connectionCount of that wire and the currentProtein selected on that wire
+ * Required the DOM element of the wire, the id of that wire and the currentProtein selected on that wire
  */
-synthbio.clickWire = function(wire, wireID) {
+synthbio.gui.openProteinDropdown = function(wire, wireID, currentProtein) {
 	
-	synthbio.closeProteinDropdown();
-	
-	var prots = "";
+	synthbio.gui.closeProteinDropdowns();
+
 	// Provide all available proteins + the currently selected one
-	$.each(synthbio.proteins, function(i,cds) {
-		if(!(synthbio.proteins[i]) || i === wire.html()) {
-			prots += '<option val="' + i + '">' + i + '</option>';
-		}
+	var prots = "";
+	$.each(synthbio.getUnusedProteins(), function(i, protein) {
+		prots += '<option ' +
+			'val="' + protein + '"' + 
+			((currentProtein === protein) ? ' selected ' : '') + '>' + 
+			protein + 
+			'</option>';
 	});
 	
 	//Draw dropdown list on the wire
@@ -86,43 +145,61 @@ synthbio.clickWire = function(wire, wireID) {
 
 /**
  * Defines what should happen when a wires' select changes value
- * Required the DOM element of the wire, the connectionCount of that wire, the currentProtein selected on that wire and the connection signal
+ * Required the DOM element of the wire, the connectionCount of that wire and the connection signal
  */
-synthbio.changeWire = function(wire, wireID, currentProtein, signal) {
+synthbio.gui.selectProtein = function(wire, wireID, signal) {
 
 	//Get the selected value
 	var selectedProtein = $('#protein-select-' + wireID).val();
-	//Update which proteins are used
-	if(!(synthbio.proteins[selectedProtein])) {
-		synthbio.proteins[selectedProtein] = true;
-		if(currentProtein !== "Choose protein") {
-			synthbio.proteins[currentProtein] = false;
-		}
-		currentProtein = selectedProtein;
+	if (!synthbio.validProtein(selectedProtein)) {
+		selectedProtein = "";
 	}
-	//Set new protein value in GUI
-	wire.html(selectedProtein);
+
+	//Update signal in model.
+	signal.setProtein(selectedProtein);
+	synthbio.gui.updateConnections();
 
 	//Reset the z-Index of wire
 	wire.parent().css('z-index', "1");
-	
-	//Update signal in model.
-	signal.setProtein(selectedProtein);
-	
-	//return new currentProtein to update this in the wire
-	return currentProtein;
+};
+
+synthbio.gui.setProteinLabel = function(signal, connection) {
+	var overlay = connection.getOverlay("label");
+	var wire = $('#lbl_' + connection.id, 0);
+
+	if (!wire || !wire.length) {
+		overlay.setLabel('<a id="lbl_' + connection.id + '" href=#></a>');
+		wire = $('#lbl_' + connection.id, 0);
+
+		wire.on("click", function(event) {
+			var oldProtein = signal.getProtein();
+			signal.setProtein("");
+
+			synthbio.gui.openProteinDropdown(wire, connection.id, oldProtein);
+			overlay.setLocation(overlay.getLocation()); //Workaround for proper location
+		});
+		
+		wire.on("change", function(event) {
+			synthbio.gui.selectProtein(wire, connection.id, signal);
+			overlay.setLocation(overlay.getLocation()); //Workaround for proper location
+		});
+	}
+
+	wire.html(signal.getProtein() || "Choose protein");
+};
+
+synthbio.gui.updateConnections = function() {
+	$.each(synthbio.gui.displaySignalIdMap, function(conn, obj) {
+		synthbio.gui.setProteinLabel(obj.signal, obj.connection);
+	});
 };
  
 $(document).ready(function() {
 
-	//Beginning of the page, so reset all proteins
-	synthbio.resetProteins();	
-
 	//Make sure dropdowns close when user clicks outside of menu
 	$('body').on("click", function(event){
-		if($($(event.srcElement).children()[0]).hasClass("protein-selector")){
-			return;
+		if(!$($(event.srcElement).children()[0]).hasClass("protein-selector")){
+			synthbio.gui.closeProteinDropdowns();
 		}
-		synthbio.closeProteinDropdown();
 	});
 });

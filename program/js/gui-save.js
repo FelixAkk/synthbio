@@ -93,7 +93,6 @@ $(document).ready(function() {
 	 * Setup/rig file operation dialog when the `Open` menu item is clicked.
 	 */
 	$("#open").on("click", function() {
-		synthbio.resetProteins();
 		$("#files .modal-header h3").html("Open…");
 		$("#files .modal-footer .btn-primary").html("Open…");
 		$("#files .modal-footer input").attr("placeholder", "Search...");

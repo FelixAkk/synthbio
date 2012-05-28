@@ -116,7 +116,7 @@ synthbio.Gate.prototype.setPosition = function(position){
 synthbio.Gate.prototype.getImage = function(html){
 	var img = "gates/" + this.getKind() + ".svg";
 	if (html) {
-		return '<embed src="img/' + img + '" type="image/svg+xml" />';
+		return '<img src="img/' + img + '" />';
 	} else {
 		return img;
 	}
@@ -183,6 +183,9 @@ synthbio.Signal.prototype.isOutput = function () {
 
 synthbio.Signal.prototype.setProtein = function(protein) {
 	this.protein = protein;
+	if (this.onProteinChange instanceof Function) {
+		this.onProteinChange(this);
+	}
 };
 synthbio.Signal.prototype.setFrom = function(from) {
 	this.from = from;
@@ -374,13 +377,75 @@ synthbio.Circuit.prototype.removeGate = function(gate) {
  * @param index Index in the array.
  */
 synthbio.Circuit.prototype.getGate = function(index) {
-	this.checkGateExists(index);
+	index = this.checkGateExists(index);
 	return this.gates[index];
+};
+
+/**
+ * Returns a list of used proteins.
+ * @return Object {protein1: true, protein2: true, ..}
+ */
+synthbio.Circuit.prototype.getUsedProteins = function() {
+	var res = {};
+	$.each(this.getSignals(), function(idx, signal){
+		res[signal.getProtein()] = true;
+	});
+	return res;
+};
+
+/**
+ * Try to determine a protein for a signal based on the from-gate.
+ * @param from Gate index.
+ * @param endpoint Optional endpoint index.
+ * @return Empty string on failure, else the protein.
+ */
+synthbio.Circuit.prototype.determineProtein = function(from, endpoint) {
+	var signals = this.getSignals();
+
+	var i;
+	for(i = 0; i < signals.length; i++) {
+		var s = signals[i];
+		if (
+			s.getProtein() &&
+			from === s.getFrom() &&
+			((endpoint === undefined) || (s.fromEndpoint === endpoint))
+		) {
+			return s.getProtein();
+		}
+	}
+
+	return "";
+};
+
+/**
+ * Update signals origining from the same gate.
+ * @param signal Signal to determine protein and gate.
+ * @return List of changed synthbio.Signal.
+ */
+synthbio.Circuit.prototype.updateSignals = function(signal) {
+	var from = signal.getFrom();
+	var ep = signal.fromEndpoint;
+	var prot = signal.getProtein() /*|| this.determineProtein(from, ep)*/;
+
+	var res = [];
+	$.each(this.getSignals(), function(idx, s){
+		if (
+			s.getProtein() !== prot &&
+			s.getFrom() === from && 
+			(ep === undefined || s.fromEndpoint === ep)
+		) {
+			s.setProtein(prot);
+			res.push(s);
+		}
+	});
+
+	return res;
 };
 
 /**
  * Sort of a setter for signals.
  * @param signal An instance of synthbio.Signal
+ * @return Added synthbio.Signal
  */
 synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, toEndpoint) {
 	if (!(signal instanceof synthbio.Signal) && from !== undefined && to !== undefined){
@@ -396,10 +461,18 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 	}
 	
 	//If signal is an input signal, initialize to low.
-	if (signal.isInput() && signal.protein !== "") {
-		this.inputs.values[signal.protein] = "L";
+	var prot = signal.getProtein();
+	if (prot !== "") {
+		this.updateSignals(signal);
+		if (signal.isInput() && !this.inputs.values[prot]) {
+			this.inputs.values[prot] = "L";
+		}
 	}
 
+	var self = this;
+	signal.onProteinChange = function(s) {
+		self.updateSignals(s);
+	};
 	return signal;
 };
 
