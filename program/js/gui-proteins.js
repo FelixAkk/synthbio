@@ -103,12 +103,18 @@ synthbio.gui.fillProteins = function(response) {
  * Should be done when selecting a new wire or clicking outside of a dropdown
  */
 synthbio.gui.closeProteinDropdowns = function(){
+	var change = false;
+
 	$.each($('.protein-selector'), function(i, menu){
 		$('.protein-selector').parent().parent().css('z-index', "1");
-		//Change this wires currentProtein to Choose protein and set the old protein value to false in synthbio.proteins
 		$('.protein-selector').parent().html("Choose protein");
-		jsPlumb.repaintEverything();
+		change = true;
 	});
+	
+	if(change) {
+		synthbio.gui.updateConnections();
+		jsPlumb.repaintEverything();
+	}
 };
 
 /**
