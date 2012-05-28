@@ -91,7 +91,7 @@ synthbio.gui.pingServer = (function () {
 					$('#connection-modal').modal();
 				}
 			})
-			//.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
+			.always(function() { setTimeout(synthbio.gui.pingServer, frequency); });
 	};
 }());
 
@@ -148,7 +148,7 @@ $(document).ready(function() {
 
 			// Convert the new content into a DataTable; clear the variable if it was used before
 			if (lpTable) { lpTable.fnClearTable(false); }
-			lpTable = $('#list-proteins table').dataTable(dtOptions);
+			lpTable = $('#list-proteins table').dataTable(synthbio.gui.dataTableOptions);
 			// Hook up custom search/filter input box for this table. Only the `keyup` event seems give a good result
 			$("#list-proteins .modal-footer input").bind("keyup", function(event) {
 				lpTable.fnFilter($(this).val());

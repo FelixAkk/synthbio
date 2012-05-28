@@ -95,7 +95,7 @@ synthbio.changeWire = function(wire, wireID, currentProtein, signal) {
 	//Update which proteins are used
 	if(!(synthbio.proteins[selectedProtein])) {
 		synthbio.proteins[selectedProtein] = true;
-		if(currentProtein != "Choose protein") {
+		if(currentProtein !== "Choose protein") {
 			synthbio.proteins[currentProtein] = false;
 		}
 		currentProtein = selectedProtein;
