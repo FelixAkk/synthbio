@@ -7,3 +7,6 @@
 [submodule "scrum3"]
 	path = scrum3
 	url = git://github.com/FelixAkk/synthbio.git
+[submodule "scrum4"]
+	path = scrum4
+	url = git://github.com/FelixAkk/synthbio.git
