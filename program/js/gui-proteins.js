@@ -203,9 +203,9 @@ synthbio.gui.updateConnections = function() {
 $(document).ready(function() {
 
 	//Make sure dropdowns close when user clicks outside of menu
-	$('body').on("click", function(event){
+	/*$('body').on("click", function(event){
 		if(!$($(event.srcElement).children()[0]).hasClass("protein-selector")){
 			synthbio.gui.closeProteinDropdowns();
 		}
-	});
+	});*/
 });
