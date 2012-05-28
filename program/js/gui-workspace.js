@@ -10,8 +10,9 @@
  *
  * https://github.com/FelixAkk/synthbio
  *
- * @author Felix Akkermans & Jan-Pieter Waagmeester & Niels Doekemeijer
- * GUI JavaScript Document, concerns all GUI matters except those about the modeling grid.
+ * @author Felix Akkermans & Niels Doekemeijer
+ *
+ * GUI JavaScript Document, concerns all workspace matters (circuit visualization & modelling).
  */
 
 /*jslint devel: true, browser: true, forin: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */

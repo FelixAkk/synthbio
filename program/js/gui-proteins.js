@@ -9,18 +9,14 @@
  *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
- */
-
-/**
- * Dropdown menus on wires.
- * 
- * @author Felix Akkermans & Thomas van Helden
+ *
+ * @author Felix Akkermans & Thomas van Helden & Niels Doekemeijer
+ *
+ * GUI JavaScript Document, concerns all protein GUI matters (showing & selection).
  */
 
 /*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio, jsPlumb */
-
-//TODO: Click anywhere to make wires dissapear, adjust currentProtein when you do, wires work when proteins not loaded, reset protein after removal of wire
 
 /**
  * syntbio package.
@@ -116,7 +112,7 @@ synthbio.gui.closeProteinDropdowns = function(mtarget){
 		sel.parent().css('z-index', "1");
 		sel.html("Choose protein");
 		change = true;
-	};
+	}
 	
 	if(change) {
 		synthbio.gui.updateConnections();
@@ -206,7 +202,10 @@ synthbio.gui.updateConnections = function() {
 		synthbio.gui.setProteinLabel(obj.signal, obj.connection);
 	});
 };
- 
-$(document).mousedown(function(event) {
-	synthbio.gui.closeProteinDropdowns(event.target);
+
+$(document).ready(function() {
+	//Bind global mousedown function to close protein selection box(es)
+	$(document).mousedown(function(event) {
+		synthbio.gui.closeProteinDropdowns(event.target);
+	});
 });

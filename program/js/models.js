@@ -9,16 +9,14 @@
  *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
+ *
+ * @author Thomas van Helden & Felix Akkermans & Jan-Pieter Waagmeester & Niels Doekemeijer
+ *
+ * JavaScript Document concerning definition of models.
  */
 
 /*jslint devel: true, browser: true, vars: true, plusplus: true, regexp: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio */
-
-/**
- * Definition of models.
- * @author	Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
- *
- */
 
 /**
  * syntbio package.

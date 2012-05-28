@@ -9,16 +9,14 @@
  *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
- */
-
-/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
-/*global $, synthbio */
-
-/**
+ *
  * @author Felix Akkermans & Jan-Pieter Waagmeester
  *
  * Utility functions for global useage.
  */
+
+/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*global $, synthbio */
 
 /**
  * syntbio package.
