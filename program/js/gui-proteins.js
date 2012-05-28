@@ -102,14 +102,21 @@ synthbio.gui.fillProteins = function(response) {
  * Closes all dropdown menus which are still open.
  * Should be done when selecting a new wire or clicking outside of a dropdown
  */
-synthbio.gui.closeProteinDropdowns = function(){
+synthbio.gui.closeProteinDropdowns = function(mtarget){
 	var change = false;
 
-	$.each($('.protein-selector'), function(i, menu){
-		$('.protein-selector').parent().parent().css('z-index', "1");
-		$('.protein-selector').parent().html("Choose protein");
-		change = true;
+	var sel = $('.protein-selector').parent().not(function(){
+		//Filter out points not in mouse
+		var el = $(this);
+		var has = el.has(mtarget);
+		return (mtarget === undefined) || el.is(mtarget) || has.length;
 	});
+
+	if (sel && sel.length) {
+		sel.parent().css('z-index', "1");
+		sel.html("Choose protein");
+		change = true;
+	};
 	
 	if(change) {
 		synthbio.gui.updateConnections();
@@ -200,12 +207,6 @@ synthbio.gui.updateConnections = function() {
 	});
 };
  
-$(document).ready(function() {
-
-	//Make sure dropdowns close when user clicks outside of menu
-	/*$('body').on("click", function(event){
-		if(!$($(event.srcElement).children()[0]).hasClass("protein-selector")){
-			synthbio.gui.closeProteinDropdowns();
-		}
-	});*/
+$(document).mousedown(function(event) {
+	synthbio.gui.closeProteinDropdowns(event.target);
 });
