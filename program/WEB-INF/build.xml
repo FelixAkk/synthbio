@@ -17,6 +17,58 @@
 
 	<property name="js-minified" value="zelula-combined-min.js" />
 	
+	<!-- cobertura -->
+
+	<property name="cobertura.dir" value="lib/cobertura" />
+
+	<path id="cobertura.classpath">
+		<fileset dir="${cobertura.dir}">
+			<include name="cobertura.jar" />
+			<include name="lib/**/*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+	
+	<target name="instrument" depends="compile">
+		<cobertura-instrument todir="instrumented-classes">
+			<fileset dir="classes">
+				<include name="**/*.class"/>
+				<exclude name="**/Test*.class"/>
+			</fileset>
+		</cobertura-instrument>
+	</target>
+	
+	<target name="cover-test" depends="instrument">
+		<junit fork="yes" printsummary="yes" showoutput="yes">
+			<classpath location="lib/cobertura/cobertura.jar"/>
+			<classpath location="instrumented-classes"/>
+			<assertions>
+				<enable/>
+			</assertions>
+			<classpath>
+				<path refid="project-classpath" />
+				<pathelement path="${build}"/>
+			</classpath>
+			
+			<batchtest haltonfailure="no">
+				<formatter type="brief" usefile="false" />
+				<fileset dir="${src}">
+					<exclude name="**/json/tests/*"/>
+					<exclude name="**/servlets/test/*"/>
+					<include name="**/simulator/test/*"/>
+					<include name="**/Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit> 
+	</target>
+	
+	<target name="coverage-report" depends="cover-test">
+		<cobertura-report srcdir="src" destdir="cobertura-report"/>
+	</target>
+	
+	<!-- /cobertura -->
+	
 	<path id="project-classpath">
 		<!--
 			Make sure Hamcrest is included first, to avoid SecurityExceptions from different Hamcrest versions being included.
