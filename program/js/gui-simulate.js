@@ -25,83 +25,162 @@ var synthbio = synthbio || {};
 synthbio.gui = synthbio.gui || {};
 
 /**
+ * The big plot object (Highcharts.StockChart)
+ */
+synthbio.gui.plot = {};
+
+/**
+ * Precision of plotting data
+ */
+synthbio.gui.plotPrecision = 10e5;
+
+/**
+ * Round data to synthbio.gui.plotPrecision
+ */
+synthbio.gui.roundSeries = function(series) {
+	return $.map(series, function(val) { 
+		return val.roundTo(synthbio.gui.plotPrecision); 
+	});
+};
+
+/**
+ * Calculate the sum series of the input
+ * @param series Array of objects with data property
+ */
+synthbio.gui.calculateSumSeries = function(series) {
+	var res = [];
+	$.each(series, function(i, serie) {
+		$.each(serie.data, function(idx, val) {
+			res[idx] = res[idx] + val || val;
+		});
+	});
+	return res;
+};
+
+/**
+ * Update the synthbio.gui.plot sum series (after adding/hiding a series)
+ * @param val Array of values
+ * @param hidden True for hiding values, false for showing 
+ */
+synthbio.gui.updateSumSeries = function(val, hidden) {
+	var sumSeries = synthbio.gui.plot.get("navseries");
+
+	if (sumSeries && sumSeries.yData) {
+		var newData = sumSeries.yData;
+
+		if (hidden) {
+			$.each(val, function(idx, v) {
+				newData[idx] -= v;
+			});
+		} else {
+			$.each(val, function(idx, v) {
+				newData[idx] += v;
+			});	
+		}
+
+		newData = synthbio.gui.roundSeries(newData);
+		sumSeries.setData(newData);
+	}
+};
+
+/**
  * Plot simulation output
  * @param series Array of output points
  */
 synthbio.gui.plotOutput = function(series) {
-	var i;
-	var sumSeries = [];
-	
-	for (i = 0; i < Math.min(series[0].data.length, series[1].data.length); i++) {
-		sumSeries[i] = series[0].data[i] + series[1].data[i];
-	}
-	
-	var xAxis = {
-		minRange: 3,
-		labels: {
-			formatter: function() { return this.value + "s"; }
-		}
-	};
-	
-	synthbio.gui.plot = new Highcharts.StockChart({
-		chart :  {renderTo: 'grid-container'},
-		credits: {enabled: false},
-		title :  {text : 'Simulation output'},
-		xAxis: xAxis, 
-		
-		tooltip : {
-			formatter: function() {
-				var s = '<b>'+ this.x +' seconds</b>';
-
-				$.each(this.points, function(i, point) {
-					s += "<br/>" + point.series.name + ": " + this.point.y;
-				});
-			
-				return s;
-			}
-		},
-		
+	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
-
-		navigator: {     
-			series: {data: sumSeries},
-			xAxis: xAxis
-		},
-        
-		legend: {
-			enabled: true,
-			borderWidth: 0,
-
-			align: 'right',
-			layout: 'vertical',
-			verticalAlign: 'top',
-			y: 75,
-			shadow: true
-		},
-											 
-		rangeSelector: {
-			buttons: [{
-				type: 'millisecond',
-				count: 5,
-				text: '5s'
-			}, {
-				type: 'millisecond',
-				count: 10,
-				text: '10s'
-			}, {
-				type: 'millisecond',
-				count: 20,
-				text: '20s'
-			}, {
-				type: 'all',
-				text: 'All'
-			}],
-											 
-			selected : 3,
-			inputEnabled: false                                                
-		}                                                                                          
+		navigator: {
+			series: { data: synthbio.gui.calculateSumSeries(series) }
+		}
 	});
+	synthbio.gui.plot = new Highcharts.StockChart(options);
+};
 
+/**
+ * Setup options for Highcharts.StockChart 
+ */
+synthbio.chartOptions = {
+	chart :  {renderTo: 'grid-container'},
+	credits: {enabled: false},
+	title :  {text : 'Simulation output'}
+};
+
+//x-axis: Display the x value and add an "s" (data always starts at 0)
+synthbio.chartOptions.xAxis = {
+	minRange: 3,
+	labels: {
+		formatter: function() { return this.value + "s"; }
+	}
+};
+
+//tooltip: Format the output for the tooltip (show time in seconds and all values)
+synthbio.chartOptions.tooltip = {
+	formatter: function() {
+		var s = '<b>'+ this.x +' seconds</b>';
+
+		$.each(this.points, function(i, point) {
+			s += "<br/>" + point.series.name + ": " + this.point.y;
+		});
+	
+		return s;
+	}
+};
+
+//navigator: Make sure the id is "navseries"
+synthbio.chartOptions.navigator = {
+	series: { id: "navseries" },
+	xAxis: synthbio.chartOptions.xAxis,
+	top: 410
+};
+
+//legend: Show legend at the right
+synthbio.chartOptions.legend = {
+	enabled: true,
+	borderWidth: 0,
+
+	align: 'right',
+	layout: 'vertical',
+	verticalAlign: 'top',
+	y: 75,
+	shadow: true
+};
+
+//Update the sumseries in the navigator when a series is hidden or shown
+synthbio.chartOptions.plotOptions = {
+	series: {
+		events: {
+			show: function() {
+				synthbio.gui.updateSumSeries(this.yData, false);
+			},
+			hide: function() {
+				synthbio.gui.updateSumSeries(this.yData, true);
+			}
+		}
+	}
+};
+
+//Setup the range selector (5s, 10s, 20s, all)
+synthbio.chartOptions.rangeSelector = {
+	buttons: [{
+		type: 'millisecond',
+		count: 5,
+		text: '5s'
+	}, {
+		type: 'millisecond',
+		count: 10,
+		text: '10s'
+	}, {
+		type: 'millisecond',
+		count: 20,
+		text: '20s'
+	}, {
+		type: 'all',
+		text: 'All'
+	}],
+
+	selected : 3,
+	inputEnabled: false                                                
 };
 
 $(document).ready(function() {
@@ -164,7 +243,7 @@ $(document).ready(function() {
 					var series = response.data.names.map(function(val) {
 						return {
 							name: val,
-							data: response.data.data[val]
+							data: synthbio.gui.roundSeries(response.data.data[val])
 						};
 					});
 					synthbio.gui.plotOutput(series);

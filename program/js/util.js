@@ -19,6 +19,13 @@
 /*global $, synthbio */
 
 /**
+ * Add roundTo method to numbers, rounds with precision
+ */
+Number.prototype.roundTo = function(to) {
+	return Math.round(this * to) / to;
+};
+
+/**
  * syntbio package.
  */
 var synthbio = synthbio || {};
