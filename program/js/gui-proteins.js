@@ -110,7 +110,6 @@ synthbio.gui.closeProteinDropdowns = function(mtarget){
 
 	if (sel && sel.length) {
 		sel.parent().css('z-index', "1");
-		sel.html("Choose protein");
 		change = true;
 	}
 	
@@ -190,11 +189,11 @@ synthbio.gui.setProteinLabel = function(signal, connection) {
 		
 		wire.on("change", function(event) {
 			synthbio.gui.selectProtein(wire, connection.id, signal);
-			overlay.setLocation(overlay.getLocation()); //Workaround for proper location
 		});
 	}
 
 	wire.html(signal.getProtein() || "Choose protein");
+	overlay.setLocation(overlay.getLocation()); //Workaround for proper location
 };
 
 synthbio.gui.updateConnections = function() {

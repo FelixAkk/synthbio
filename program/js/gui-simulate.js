@@ -43,7 +43,7 @@ synthbio.gui.plotOutput = function(series) {
 		}
 	};
 	
-	var c = new Highcharts.StockChart({
+	synthbio.gui.plot = new Highcharts.StockChart({
 		chart :  {renderTo: 'grid-container'},
 		credits: {enabled: false},
 		title :  {text : 'Simulation output'},
@@ -62,10 +62,21 @@ synthbio.gui.plotOutput = function(series) {
 		},
 		
 		series : series,
-		
+
 		navigator: {     
 			series: {data: sumSeries},
 			xAxis: xAxis
+		},
+        
+		legend: {
+			enabled: true,
+			borderWidth: 0,
+
+			align: 'right',
+			layout: 'vertical',
+			verticalAlign: 'top',
+			y: 75,
+			shadow: true
 		},
 											 
 		rangeSelector: {
