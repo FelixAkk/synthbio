@@ -84,10 +84,10 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 };
 
 /**
- * Plot simulation output
- * @param series Array of output points
+ * Plot an array of series
+ * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
  */
-synthbio.gui.plotOutput = function(series) {
+synthbio.gui.plotSeries = function(series) {
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
 		navigator: {
@@ -95,6 +95,20 @@ synthbio.gui.plotOutput = function(series) {
 		}
 	});
 	synthbio.gui.plot = new Highcharts.StockChart(options);
+};
+
+/**
+ * Plot simulation output
+ * @param response Data object from synthbio.requests.simulate
+ */
+synthbio.gui.plotOutput = function(response) {
+	var series = response.names.map(function(val) {
+		return {
+			name: val,
+			data: synthbio.gui.roundSeries(response.data[val])
+		};
+	});
+	synthbio.gui.plotSeries(series);
 };
 
 /**
@@ -193,7 +207,6 @@ $(document).ready(function() {
 				if(response.message !== '') {
 					$('#validate-alert p').html(response.message);
 					if(!response.success){
-						
 						$('#validate-alert').addClass("invalid");
 					}
 					$('#validate-alert').modal();
@@ -238,15 +251,7 @@ $(document).ready(function() {
 					console.log(synthbio.model);
 					$('#validate-alert').modal();
 				}else{
-					//@todo: implement output visualisation here.
-					console.log(response.data);
-					var series = response.data.names.map(function(val) {
-						return {
-							name: val,
-							data: synthbio.gui.roundSeries(response.data.data[val])
-						};
-					});
-					synthbio.gui.plotOutput(series);
+					synthbio.gui.plotOutput(response.data);
 				}
 			}
 		);
