@@ -89,9 +89,9 @@
 -webkit-touch-callout: none;
   -webkit-user-select: none;
    -khtml-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none; /* Introduced in IE 10. See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/ */
-          user-select: none;
+	 -moz-user-select: none;
+	  -ms-user-select: none; /* Introduced in IE 10. See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/ */
+		  user-select: none;
 }
 .transition(@cssProperty, @time) {
 -webkit-transition: @cssProperty @time ease-in-out;
@@ -103,7 +103,7 @@
 
 .gateBorder() {
   -webkit-box-shadow: 0px 0px 4px 0px #ffffff; /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-          box-shadow: 0px 0px 4px 0px #ffffff; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+		  box-shadow: 0px 0px 4px 0px #ffffff; /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
 }
 .innerShadow(@horizontalOffset, @verticalOffset, @blur, @spread, @color) {
 -webkit-box-shadow: inset @horizontalOffset @verticalOffset @blur @spread @color;
@@ -139,7 +139,7 @@ body {
 }
 
 .navbar, .status, .summary {
-    .gradient(@grStart, @grStop);
+	.gradient(@grStart, @grStop);
 }
 
 .nav {
@@ -158,9 +158,9 @@ body {
 	}
 }
 #simulation-tab .nav-tabs > li > a {
-    &.tab-utilities {
-        float: right;
-    }
+	&.tab-utilities {
+		float: right;
+	}
 	font-size: 14px;
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	border-width: 1px 1px 0px 1px;
@@ -172,14 +172,16 @@ body {
 	margin-left: 4px;
 	margin-right: 4px;
 
-	.innerShadow(0, 4px, 2px, -4px, rgba(0, 0, 0, 0.3));
-    .gradient(lighten(@grStart, 10%), lighten(@grStop, 5%));
+	.innerShadow(0px, 1px, 5px, -1px, rgba(0, 0, 0, 0.5));
+	.gradient(lighten(@grStart, 10%), lighten(@grStop, 5%));
+	
+	&:hover {
+		.gradient(lighten(@grStart, 15%), lighten(@grStop, 10%));
+	}
 }
-#simulation-tab .nav-tabs > li > a:hover {
-    .gradient(lighten(@grStart, 15%), lighten(@grStop, 10%));
-}
-#simulation-tab .nav-tabs > .active > a {
-    .gradient(@grStart, darken(@grStart, 5%));
+
+#simulation-tab .nav-tabs > li.active > a {
+	.gradient(@grStart, darken(@grStart, 5%));
 	color: #FFFFFF;
 }
 
@@ -188,7 +190,7 @@ body {
 }
 
 #simulation-tab .tab-utilities {
-    z-index: 110;
+	z-index: 110;
 	position: absolute;
 	top: 5px;
 	right: 5px;
@@ -237,7 +239,7 @@ body {
 .typeahead-group {
 	display: inline-block;
 
-    input {
+	input {
 		margin-right: 0;
 	  -webkit-border-bottom-right-radius: 0; /* Saf 3-4, iOS 1-3.2, Android ≤1.6 */
 		 -moz-border-bottom-right-radius: 0; /* FF 1-3.6 */
@@ -245,8 +247,8 @@ body {
 	  -webkit-border-top-right-radius: 0; /* Saf 3-4, iOS 1-3.2, Android ≤1.6 */
 		 -moz-border-top-right-radius: 0; /* FF 1-3.6 */
 			  border-top-right-radius: 0;
-    }
-    /* only apply to the button that directly succeeds an input element, further buttons will be left untouched */
+	}
+	/* only apply to the button that directly succeeds an input element, further buttons will be left untouched */
 	input + button[type="submit"].btn {
 		margin-left: -5px;
 	  -webkit-border-bottom-left-radius: 0; /* Saf 3-4, iOS 1-3.2, Android ≤1.6 */
@@ -255,6 +257,21 @@ body {
 	  -webkit-border-top-left-radius: 0; /* Saf 3-4, iOS 1-3.2, Android ≤1.6 */
 		 -moz-border-top-left-radius: 0; /* FF 1-3.6 */
 			  border-top-left-radius: 0;
+	}
+}
+
+/* Copy defautl btn style from bootstrap (i.e. stuff like round corners, default btn-inverse style (i.e. stuff like
+ * bright text, bright top shine, and override the gradient color ourselfs along with some subtle tweaks.
+ */
+.btn.btn-inverse.btn-synthbio {
+	color: @textColorFaded;
+
+	.borderDown(@baseColor, @contrast, @borderHeight);
+
+	.gradient(lighten(@grStart, 10%), lighten(@grStop, 5%));
+
+	&:hover {
+		.gradient(lighten(@grStart, 15%), lighten(@grStop, 10%));
 	}
 }
 /** Section:
@@ -304,11 +321,21 @@ body {
 }
 
 #circuit-details {
-	background-color: @grStart;
-	.borderDown(@baseColor, @contrast, @borderHeight);
-	border-width: 1px 0px 0px 0px; /* Right border only */
-	width: @tabWidth;
-	top: auto;
+	display: inline-block;
+	height: @iconSize * @menuHeight;
+	float: right;
+	color: @textColorFaded;
+
+	#circuit-filename {
+		color: fade(@textColorFaded, 50%);
+	}
+
+	button, input {
+		margin: 7px;
+	}
+	input {
+	    height: 16px;
+	}
 }
 
 .gates {
@@ -321,7 +348,7 @@ body {
 }
 
 .gate  {
-    .unselectable();
+	.unselectable();
 	.cornerRadius(@cornerRadius);
 	text-align: right;
 	padding: @gatesPadding;
@@ -349,7 +376,7 @@ body {
  * Some gate markup special for special cases
  */
 #gates-transport .gate {
-    margin-top: -50px;
+	margin-top: -50px;
 
 	h4 {
 		display: none;
@@ -385,7 +412,7 @@ body {
 }
 
 #grid-container {
-     /* Keep some distance for the status bar and gates-tab (+1 pixel for the border) */
+	 /* Keep some distance for the status bar and gates-tab (+1 pixel for the border) */
 	left: @tabWidth + 1;
 	bottom: @statusHeight + 1;
 	top: @iconSize * 1.75;
@@ -398,7 +425,7 @@ body {
 
 	/**
 	 * Only little extension to the general gate class is neeeded.
-     */
+	 */
 	.gate {
 		.gateBorder();
 		position: absolute;
@@ -408,17 +435,17 @@ body {
 	 * Order of this declaration being after .gate is important! These must overwrite gate!
 	 */
 	.input, .output {
-	    width: auto;
+		width: auto;
 		top: 35%;
-	    min-height: 140px;
-	    padding: 0;
-	    .cornerRadius(0);
+		min-height: 140px;
+		padding: 0;
+		.cornerRadius(0);
 		.borderDown(@baseColor, @contrast, @borderHeight);
 		 -webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0, 0.5); /* Saf3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
-		         box-shadow: 0px 0px 8px 0px rgba(0,0,0, 0.5); /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
+				 box-shadow: 0px 0px 8px 0px rgba(0,0,0, 0.5); /* Opera 10.5, IE9, FF4+, Chrome 6+, iOS 5 */
 
 		.handle {
-		    display: block;
+			display: block;
 			color: @textColorFaded;
 			text-shadow: 1px -1px 2px rgba(0, 0, 0, 0.5);
 			text-align: center;
@@ -440,8 +467,8 @@ body {
 		.handle {
 			.gradient(darken(spin(@baseColor, -15), 10), spin(@baseColor, -15));
 		}
-	    background-color: spin(@baseColor, -15);
-	    &:hover {
+		background-color: spin(@baseColor, -15);
+		&:hover {
 			background-color: spin(@baseColor, -15);
 		}
 	}
@@ -452,8 +479,8 @@ body {
 		.handle {
 			.gradient(darken(spin(@baseColor, 15), 10), spin(@baseColor, 15));
 		}
-	    background-color: spin(@baseColor, 15);
-	    &:hover {
+		background-color: spin(@baseColor, 15);
+		&:hover {
 			background-color: spin(@baseColor, 15);
 		}
 	}
@@ -461,14 +488,14 @@ body {
 
 
 ._jsPlumb_overlay.popover-inner {
-    width: auto;
+	width: auto;
 	.unselectable();
 	overflow: visible;
 	z-index: 20;
 
 	/* always dispaly as block */
 	.popover-content {
-        padding: 7px;
+		padding: 7px;
 		display: block;
 
 		select {
@@ -479,7 +506,7 @@ body {
 	 * because if there is a title is should not be rounded at the top so it connects with the title block like normal
 	 */
 	& > .popover-content {
-	    .cornerRadius(3px);
+		.cornerRadius(3px);
 	}
 }
 
@@ -488,8 +515,8 @@ body {
 }
 
 #simulation-tab {
-    top: auto;
-    /* Keep some distance for the status bar and gates tab (+1 pixel for the border) */
+	top: auto;
+	/* Keep some distance for the status bar and gates tab (+1 pixel for the border) */
 	left: @tabWidth + 1;
 	bottom: @statusHeight + 1;
 	height: 150px;
@@ -501,7 +528,7 @@ body {
 	z-index: 30;
 
 	.handle {
-	    display: block;
+		display: block;
 		color: @textColorFaded;
 		text-shadow: 1px -1px 2px rgba(0, 0, 0, 0.5);
 		.gradient(lighten(@grStart, 20%), @grStart);
@@ -634,7 +661,7 @@ body {
  */
 
 .modal-alert-fader {
-    overflow: hidden;
-    height: 0px;
+	overflow: hidden;
+	height: 0px;
 	.transition(height, 0.2s);
 }

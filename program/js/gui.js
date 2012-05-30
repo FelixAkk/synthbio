@@ -45,14 +45,17 @@ synthbio.gui.resetTooltip = function() {
 };
 
 /**
- * Function for animating in an alert at the bottom of a modal.
+ * Function for animating in an alert at the bottom of a modal. Don't forget to hide it again at some point! See
+ * synthbio.gui.hideAdModelAlert to hide a specific alert manually or use the optional timer parameter to hide it
+ * automatically after a given numer of milliseconds.
  *
  * @param modal the ID of the modal in the HTML, without the hash character
  * @param alertClass One of the Bootstrap alert classes, like "alert-error" or "alert-success".
  * See http://twitter.github.com/bootstrap/components.html#alerts
  * @param innerHTML The HTML for inside the alert div
+ * @param autoHideMs Optional; automatically hide the alert again after a hiven number of milliseconds.
  */
-synthbio.gui.showAdModalAlert = function(modal, alertClass, innerHTML) {
+synthbio.gui.showAdModalAlert = function(modal, alertClass, innerHTML, autoHideMs) {
 	var fader = $("#"+modal+" .modal-alert-fader");
 	// Place content in the footer
 	$(".modal-footer", fader).html('<div class="alert ' + alertClass +
@@ -61,7 +64,44 @@ synthbio.gui.showAdModalAlert = function(modal, alertClass, innerHTML) {
 	// Get the real/actual/computed height of what the fader whould be if we let it set it's own hieght (height: auto;).
 	// This is a bit of non-semantic jiggery-pokery because animating from height: 0-auto; is not supported in browsers.
 	fader.css("height", $(".modal-footer", fader).outerHeight() + "px");
+
+	// Optionally; auto hide using a timer
+	if(autoHideMs !== undefined) {
+		window.setTimeout(function() {
+			fader.css("height", "0px");
+		}, autoHideMs);
+	}
 };
+
+/**
+ * Hide a specific ad-modal alert manually.
+ *
+ * @param modal the ID of the modal in the HTML, without the hash character
+ */
+synthbio.gui.hideAdModalAlert = function(modal) {
+	$("#"+modal+" .modal-alert-fader").css("height", "0px");
+}
+
+/**
+ * Start or stop editing the circuit title/description in the main GUI. This mainly concerns replacing DOM elements.
+ * Declared as a closure so it can store the original DOM state locally.
+ */
+synthbio.gui.editCircuitDetails = (function() {
+	var details = $("#circuit-details");
+
+	// Save how the circuit details display thingy was first. Easier than reconstructing it.
+	var original = details.clone();
+
+	// This will be the actual function that is going to be called on click events
+	return function(event) {
+		// Check in which state the circuit details display thingy is (i.e. editting or displaying)
+		if($("button", details).html() === "Edit") {
+			details.html('<input class="span2" type="text" placeholder="circuit filename">' +
+				'<input class="span4" type="text" placeholder="circuit description">');
+			details.append($(":last-child", original));
+		}
+	};
+})();
 
 /**
  * Ping server to check for connection 'vitals'. Shown a warning if things go really bad. Declared as a closure to keep
@@ -127,5 +167,8 @@ $(document).ready(function() {
 	synthbio.gui.setTooltip($("#grid-container"),   "Hold Ctrl and drag a marquee to select a group of gates. " +
 		"Alternatively hold Ctrl and click on gates to toggle them as selected.");
 	synthbio.gui.setTooltip($("#gate-input"),       "Drag from here to define an input signal for a gate.");
-	synthbio.gui.setTooltip($("#gate-output"),      "Drop a signal endpoint in here to output the signal values.");	
+	synthbio.gui.setTooltip($("#gate-output"),      "Drop a signal endpoint in here to output the signal values.");
+
+	// Hook click listener for editing the circuit details
+	$("#circuit-details button").on("click", synthbio.gui.editCircuitDetails);
 });
