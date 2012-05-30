@@ -40,7 +40,7 @@
 					<li><a href="#list-proteins" data-toggle="modal">Show proteins</a></li>
 					<li class="divider"></li>
 					<li><a href="#define-inputs" data-toggle="modal">Define inputs</a></li>
-					<li><a href="javascript: void(0);">Show output graph</a></li>
+					<li><a href="#show-output" data-toggle="modal">Show output graph</a></li>
 					<li class="divider"></li>
 					<li><a href="javascript: void(0)" id="simulate">Run solver</a></li>
 				</ul>
@@ -87,16 +87,6 @@
 	<style>
 		.dragActive { border:2px dotted orange; }
 		.dragHover { border:2px dotted red; }
-		.arrowLabel {
-			background-color:white; 
-			padding:0.4em; 
-			font:12px sans-serif; 
-			color:#444;
-			z-index:21;
-			border:1px dotted gray;
-			opacity:0.8;
-			filter:alpha(opacity=80);
-		}
 	</style>
 
 	<!-- Le grid (smack in the middle, hm hm) -->
@@ -203,6 +193,20 @@
 		</div>
 		<div class="modal-footer">
 			<div id="save-inputs" class="btn btn-primary" data-dismiss="modal">Save input</div>
+		</div>
+	</div>
+
+	<!--
+	Modal to display output graph.
+	@author Niels
+	-->
+	<div class="modal hide fade in" id="show-output" data-keyboard="true">
+		<div class="modal-body">
+			<div id="output-chart">
+			</div>
+		</div>
+		<div class="modal-footer">
+			<a href="javascript: void(0);" class="btn btn-primary" data-dismiss="modal">Close</a>
 		</div>
 	</div>
 

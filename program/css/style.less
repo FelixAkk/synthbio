@@ -311,6 +311,11 @@ body {
 	top: auto;
 }
 
+#output-chart {
+	width: 530px;
+	height: 400px;
+}
+
 .gates {
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	.cornerRadius(@cornerRadius);
@@ -460,8 +465,27 @@ body {
 }
 
 
-.arrowLabel {
+._jsPlumb_overlay.popover-inner {
+    width: auto;
 	.unselectable();
+	overflow: visible;
+	z-index: 20;
+
+	/* always dispaly as block */
+	.popover-content {
+        padding: 7px;
+		display: block;
+
+		select {
+			width: auto;
+		}
+	}
+	/* but only round on all sides (bottom only is default) if it's the direct child (not preceded by a .popover-title)
+	 * because if there is a title is should not be rounded at the top so it connects with the title block like normal
+	 */
+	& > .popover-content {
+	    .cornerRadius(3px);
+	}
 }
 
 

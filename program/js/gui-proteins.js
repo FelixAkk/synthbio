@@ -25,6 +25,12 @@ var synthbio = synthbio || {};
 synthbio.gui = synthbio.gui || {};
 
 /**
+ * String to signify that a signal/wire has no protein assigned to it. Check for equality against this to see if the
+ * signal is clear/empty/had no protein assigned.
+ */
+synthbio.gui.noProtein = "none";
+
+/**
  * Returns the available proteins (loads them from the server at the start of the program)
  * @return Object {protein1: true (used), protein2: false (not used), ..}
  */
@@ -120,11 +126,15 @@ synthbio.gui.closeProteinDropdowns = function(mtarget){
 };
 
 /**
- * Defines what should happen when a wire is clicked
- * Required the DOM element of the wire, the id of that wire and the currentProtein selected on that wire
+ * Defines what should happen when a overlay that shows which protein is assigned is clicked. This will show a dropdown
+ * for selecting a protein, with all available proteins
+ *
+ * @param label The DOM element in the overlay, containing the selected protein string or selection dropdown.
+ * @param connection The jsPlumb connection overlay object from it's model.
+ * @param oldProtein The previously assigned protein string.
  */
-synthbio.gui.openProteinDropdown = function(wire, wireID, currentProtein) {
-	
+synthbio.gui.openProteinDropdown = function(label, connection, oldProtein) {
+	// I'll close all other protein selection dropdowns so you don't have to bother.
 	synthbio.gui.closeProteinDropdowns();
 
 	// Provide all available proteins + the currently selected one
@@ -132,34 +142,37 @@ synthbio.gui.openProteinDropdown = function(wire, wireID, currentProtein) {
 	$.each(synthbio.getUnusedProteins(), function(i, protein) {
 		prots += '<option ' +
 			'val="' + protein + '"' + 
-			((currentProtein === protein) ? ' selected ' : '') + '>' + 
+			((oldProtein === protein) ? ' selected ' : '') + '>' +
 			protein + 
 			'</option>';
 	});
-	
-	//Draw dropdown list on the wire
-	wire.html('<select class="protein-selector" id="protein-select-' + wireID +'">' +
-	'<option value="none">Choose protein</option>' +
-	prots + 
-	'</select>');
-	
-	//Open them by default
-	$('#protein-select-' + wireID).attr('size', ($(prots).size()+1));
-	$('#protein-select-' + wireID).width("auto");
-	
-	//Bring selected wire to the front
-	wire.parent().css('z-index', 99);
+
+	// Draw dropdown list on the wire. Opened by default by setting the size attribute.
+	label.html(
+		'<select class="protein-selector" id="protein-select-' + connection.id +'" size="' + ($(prots).size()+1) + '">' +
+		'<option value="' + synthbio.gui.noProtein + '">' + synthbio.gui.noProtein +'</option>' + prots + '</select>'
+	);
+
+	// Bring overlay to the front so options can't get occluded by other GUI elements
+	label.parent().css('z-index', 99);
+
+	// Reinitialize menu location in the model so it gets centered vertically properly
+	connection.getOverlay("label").setLocation(connection.getOverlay("label").getLocation());
 };
 
 /**
  * Defines what should happen when a wires' select changes value
- * Required the DOM element of the wire, the connectionCount of that wire and the connection signal
+ *
+ * @param label The DOM element in the overlay, containing the selected protein string or selection dropdown.
+ * @param connection The jsPlumb connection overlay object from it's model.
+ * @param signal The signal object from the synthbio.model
  */
-synthbio.gui.selectProtein = function(wire, wireID, signal) {
-
+synthbio.gui.selectProtein = function(label, connection, signal) {
+	var previousProtein = signal.getProtein();
 	//Get the selected value
-	var selectedProtein = $('#protein-select-' + wireID).val();
-	if (!synthbio.validProtein(selectedProtein)) {
+	var selectedProtein = $('#protein-select-' + connection.id).val();
+	// If the selected protein is non-existent
+	if(!synthbio.validProtein(selectedProtein)) {
 		selectedProtein = "";
 	}
 
@@ -168,31 +181,30 @@ synthbio.gui.selectProtein = function(wire, wireID, signal) {
 	synthbio.gui.updateConnections();
 
 	//Reset the z-Index of wire
-	wire.parent().css('z-index', "1");
+	label.parent().css('z-index', "1");
 };
 
 synthbio.gui.setProteinLabel = function(signal, connection) {
 	var overlay = connection.getOverlay("label");
-	var wire = $('#lbl_' + connection.id, 0);
+	var label = $('#lbl_' + connection.id, 0);
 
-	if (!wire || !wire.length) {
-		overlay.setLabel('<a id="lbl_' + connection.id + '" href=#></a>');
-		wire = $('#lbl_' + connection.id, 0);
+	if (!label || !label.length) {
+		overlay.setLabel('<a id="lbl_' + connection.id + '" href="javascript: void(0);" class="popover-content"></a>');
+		label = $('#lbl_' + connection.id, 0);
 
-		wire.on("click", function(event) {
+		label.on("click", function(event) {
 			var oldProtein = signal.getProtein();
 			signal.setProtein("");
 
-			synthbio.gui.openProteinDropdown(wire, connection.id, oldProtein);
-			overlay.setLocation(overlay.getLocation()); //Workaround for proper location
+			synthbio.gui.openProteinDropdown(label, connection, oldProtein);
 		});
 		
-		wire.on("change", function(event) {
-			synthbio.gui.selectProtein(wire, connection.id, signal);
+		label.on("change", function(event) {
+			synthbio.gui.selectProtein(label, connection, signal);
 		});
 	}
 
-	wire.html(signal.getProtein() || "Choose protein");
+	label.html(signal.getProtein() || "Choose protein");
 	overlay.setLocation(overlay.getLocation()); //Workaround for proper location
 };
 

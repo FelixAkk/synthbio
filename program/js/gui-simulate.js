@@ -115,9 +115,11 @@ synthbio.gui.plotOutput = function(response) {
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
-	chart :  {renderTo: 'grid-container'},
+	chart:   {renderTo: 'output-chart'},
 	credits: {enabled: false},
-	title :  {text : 'Simulation output'}
+	title:   {text: 'Simulation output'},
+	loading: {style: { backgroundColor: 'silver' }},
+	series:  [{}]
 };
 
 //x-axis: Display the x value and add an "s" (data always starts at 0)
@@ -145,7 +147,7 @@ synthbio.chartOptions.tooltip = {
 synthbio.chartOptions.navigator = {
 	series: { id: "navseries" },
 	xAxis: synthbio.chartOptions.xAxis,
-	top: 410
+	top: 340
 };
 
 //legend: Show legend at the right
@@ -198,6 +200,9 @@ synthbio.chartOptions.rangeSelector = {
 };
 
 $(document).ready(function() {
+	synthbio.gui.plot = new Highcharts.StockChart(synthbio.chartOptions);
+	synthbio.gui.plot.showLoading();
+
 	// Validate
 	$('#validate').on('click', function(){
 		console.log('Started validating circuit...');
@@ -236,6 +241,7 @@ $(document).ready(function() {
 	 */
 	$('#simulate').on('click', function() {
 		console.log('Simulate initiated.');
+		synthbio.gui.plot.showLoading();
 	
 		synthbio.requests.simulate(
 			synthbio.model,
@@ -251,6 +257,7 @@ $(document).ready(function() {
 					console.log(synthbio.model);
 					$('#validate-alert').modal();
 				}else{
+					$('#show-output').modal();
 					synthbio.gui.plotOutput(response.data);
 				}
 			}
