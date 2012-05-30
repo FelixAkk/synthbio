@@ -92,17 +92,17 @@ synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints)
 	};
 
 	for (i = 0; i <= inputEndpoints; i++) {
-		var inputUUID = toId + "::input::" + i;
+		var inputUUID = toId + ":: input:: " + i;
 		res.inputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.inputEndpoint, { 
 			anchor:[0, placement(i, inputEndpoints), -1, 0], 
-			uuid:inputUUID 
+			uuid: inputUUID 
 		}));
 	}
 	for (i = 0; i <= outputEndpoints; i++) {
-		var outputUUID = toId + "::output::" + i;
+		var outputUUID = toId + ":: output:: " + i;
 		res.outputEndpoints.push(jsPlumb.addEndpoint(toId, synthbio.gui.outputEndpoint, { 
 			anchor:[1, placement(i, outputEndpoints), 1, 0], 
-			uuid:outputUUID 
+			uuid: outputUUID 
 		}));
 	}
 
@@ -141,7 +141,7 @@ synthbio.gui.getEndpointIndex = function(endpoint) {
 		return undefined;
 	}
 	
-	var idx = parseInt(endpoint.split("::").pop(), 10);
+	var idx = parseInt(endpoint.split(":: ").pop(), 10);
 	return (isNaN(idx)) ? undefined : idx;
 };
 
@@ -155,7 +155,7 @@ synthbio.gui.newInputEndpoint = (function() {
 	var inputCounter = 0;
 
 	return function(index) {
-		var UUID = "gate-input::output::";
+		var UUID = "gate-input:: output:: ";
 		if (index === undefined) {
 			UUID += inputCounter++;
 		} else {
@@ -166,7 +166,7 @@ synthbio.gui.newInputEndpoint = (function() {
 		return jsPlumb.addEndpoint(
 			"gate-input",
 			synthbio.gui.outputEndpoint, 
-			{ anchor: "Continuous", uuid:UUID }
+			{ anchor: "Continuous", uuid: UUID }
 		);
 	};
 }());
@@ -186,7 +186,7 @@ synthbio.gui.getFreeEndpoint = function(id, input, index) {
 
 	if (!ep) {
 		// If gate has no tracked endpoints, try to get endpoint by UUID
-		ep = jsPlumb.getEndpoint(id + "::" + ((input) ? "input" : "output") + "::" + index);
+		ep = jsPlumb.getEndpoint(id + ":: " + ((input) ? "input" : "output") + ":: " + index);
 
 		// If endpoint does not exist for gate-input, create it
 		if (!ep && !input && id === "gate-input") {
@@ -456,44 +456,44 @@ jsPlumb.ready(function() {
 	jsPlumb.Defaults.Container = $("#grid-container");
 
 	jsPlumb.importDefaults({
-		DragOptions : { cursor: 'pointer', zIndex:2000 },
+		DragOptions : { cursor: 'pointer', zIndex: 2000 },
 
 		//Overlays for wires
 		ConnectionOverlays : [
 			//Arrow overlay
-			[ "Arrow", { location:0.9 } ],
+			[ "Arrow", { location: 1 } ],
 
 			//Text overlay
-			[ "Label", { 
-				location:0.5,
-				id:"label",
-				cssClass:"arrowLabel"
+			[ "Label", {
+				location: 0.5,
+				id: "label",
+				cssClass: "popover-inner"
 			}]
 		]
 	});			
 
 	// This is the paint style for the connecting lines..
 	var pointHoverStyle = {
-		lineWidth:3,
-		strokeStyle:"purple"
+		lineWidth: 3,
+		strokeStyle: "purple"
 	},
 	connectorPaintStyle = {
-		lineWidth:3,
-		strokeStyle:"#deea18",
-		joinstyle:"round"
+		lineWidth: 3,
+		strokeStyle: "#deea18",
+		joinstyle: "round"
 	},
 	// .. and this is the hover style. 
 	connectorHoverStyle = {
-		lineWidth:5,
-		strokeStyle:"#2e2aF8"
+		lineWidth: 5,
+		strokeStyle: "#2e2aF8"
 	};
 
 	// The definition of input endpoints
 	synthbio.gui.inputEndpoint = {
-		endpoint:"Rectangle",					
-		paintStyle:{ fillStyle:"#558822",width:11,height:11 },
-		hoverPaintStyle:pointHoverStyle,
-		isTarget:true,
+		endpoint: "Rectangle",					
+		paintStyle:{ fillStyle: "#558822",width: 11,height: 11 },
+		hoverPaintStyle: pointHoverStyle,
+		isTarget: true,
 		dropOptions: {
 			activeClass:'dragActive',
 			hoverClass:'dragHover'
@@ -521,8 +521,8 @@ jsPlumb.ready(function() {
 	// The definition of target endpoints
 	synthbio.gui.outputEndpoint = {
 		endpoint: "Dot",
-		paintStyle:{ fillStyle:"#225588",radius:7 },
-		connector: ["Bezier", { curviness:50 } ],
+		paintStyle:{ fillStyle: "#225588",radius: 7 },
+		connector: ["Bezier", { curviness: 50 } ],
 		connectorStyle: connectorPaintStyle,
 		hoverPaintStyle: pointHoverStyle,
 		connectorHoverStyle: connectorHoverStyle,
@@ -570,11 +570,11 @@ jsPlumb.ready(function() {
 	jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
 
 	var oep = $.extend(true, {
-		anchor:"Continuous",
+		anchor: "Continuous",
 		deleteEndpointsOnDetach: false
 	}, synthbio.gui.outputEndpoint);
 	var iep = $.extend(true, {
-		anchor:"Continuous",
+		anchor: "Continuous",
 		deleteEndpointsOnDetach: false
 	}, synthbio.gui.inputEndpoint);
 
