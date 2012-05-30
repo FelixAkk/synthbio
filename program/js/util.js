@@ -9,16 +9,21 @@
  *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
+ *
+ * @author Felix Akkermans & Jan-Pieter Waagmeester
+ *
+ * Utility functions for global useage.
  */
 
 /*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio */
 
 /**
- * @author Felix Akkermans & Jan-Pieter Waagmeester
- *
- * Utility functions for global useage.
+ * Add roundTo method to numbers, rounds with precision
  */
+Number.prototype.roundTo = function(to) {
+	return Math.round(this * to) / to;
+};
 
 /**
  * syntbio package.

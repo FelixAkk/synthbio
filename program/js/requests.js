@@ -9,16 +9,14 @@
  *  Albert ten Napel, Jan Pieter Waagmeester
  *
  * https://github.com/FelixAkk/synthbio
+ * 
+ * @author Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
+ *
+ * Put all the requests to the server in one place...
  */
 
 /*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio */
-
-/**
- * Put all the requests to the server in one place...
- * 
- * @author Thomas van Helden, Jan Pieter Waagmeester, Felix Akkermans, Niels Doekemeijer
- */
 
 /**
  * syntbio package.
