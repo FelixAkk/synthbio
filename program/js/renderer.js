@@ -28,48 +28,48 @@ $(document).ready(function() {
 		jsPlumb.Defaults.Container = $("#grid-container");
 
 		jsPlumb.importDefaults({
-			DragOptions : { cursor: 'pointer', zIndex:2000 },
+			DragOptions : { cursor: 'pointer', zIndex: 2000 },
 
 			//Overlays for wires
 			ConnectionOverlays : [
 				//Arrow overlay
-				[ "Arrow", { location:0.9 } ],
+				[ "Arrow", { location: 1 } ],
 
 				//Text overlay
 				[ "Label", { 
-					location:0.5,
-					id:"label",
-					cssClass:"arrowLabel"
+					location: 0.5,
+					id: "label",
+					cssClass: "popover-inner"
 				}]
 			]
 		});			
 
 		// This is the paint style for the connecting lines..
 		var pointHoverStyle = {
-			lineWidth:3,
-			strokeStyle:"purple"
+			lineWidth: 3,
+			strokeStyle: "purple"
 		},
 		connectorPaintStyle = {
-			lineWidth:3,
-			strokeStyle:"#deea18",
-			joinstyle:"round"
+			lineWidth: 3,
+			strokeStyle: "#deea18",
+			joinstyle: "round"
 		},
 		// .. and this is the hover style. 
 		connectorHoverStyle = {
-			lineWidth:5,
-			strokeStyle:"#2e2aF8"
+			lineWidth: 5,
+			strokeStyle: "#2e2aF8"
 		};
 
 		var inputCounter = 0;
 		// The definition of input endpoints
 		synthbio.gui.inputEndpoint = {
-			endpoint:"Rectangle",					
-			paintStyle:{ fillStyle:"#558822",width:11,height:11 },
-			hoverPaintStyle:pointHoverStyle,
-			isTarget:true,
+			endpoint: "Rectangle",					
+			paintStyle:{ fillStyle: "#558822",width: 11,height: 11 },
+			hoverPaintStyle: pointHoverStyle,
+			isTarget: true,
 			dropOptions: {
-				activeClass:'dragActive',
-				hoverClass:'dragHover'
+				activeClass: 'dragActive',
+				hoverClass: 'dragHover'
 			},
 			beforeDrop: function(opt) {
 				if (!opt.connection || 
@@ -94,8 +94,8 @@ $(document).ready(function() {
 		// The definition of target endpoints
 		synthbio.gui.outputEndpoint = {
 			endpoint: "Dot",
-			paintStyle:{ fillStyle:"#225588",radius:7 },
-			connector: ["Bezier", { curviness:50 } ],
+			paintStyle:{ fillStyle: "#225588",radius: 7 },
+			connector: ["Bezier", { curviness: 50 } ],
 			connectorStyle: connectorPaintStyle,
 			hoverPaintStyle: pointHoverStyle,
 			connectorHoverStyle: connectorHoverStyle,
@@ -113,33 +113,28 @@ $(document).ready(function() {
 			signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
 			
 			connCount++;
-			// Instantiate the connection count variable because `connCount` will be incremented later
+			// Instantiate the connection count variable because `connCount` will be incremented later. We need to keep
+			// the value as it is now.
 			var wireID = connCount;
-			var connectionOverlay = connInfo.connection.getOverlay("label");
-			var label = '<a id="conn' + connCount + '" href=#>';
+			var jsPlumbConnectionOverlay = connInfo.connection.getOverlay("label");
+			var label = '<a id="conn' + connCount + '" href="#" class="popover-content">';
 			label += signal.getProtein() || "Choose protein";
 			label += '</a>';
-			connectionOverlay.setLabel(label);
-			
-			var currentProtein = "";
+			jsPlumbConnectionOverlay.setLabel(label);
+
 			var wire = $('#conn' + connCount, 0);
 			
 			//If it's one char it succesfully selected a protein from the start.
 			if(signal.getProtein().length === 1) {
 				synthbio.proteins[signal.getProtein()] = true;
-				currentProtein = signal.getProtein();
 			}
-			
+
 			wire.on("click", function(event) {
-				synthbio.clickWire(wire, wireID);
-				//Set proper menu location
-				connectionOverlay.setLocation(connectionOverlay.getLocation());
+				synthbio.gui.clickWire(event, jsPlumbConnectionOverlay);
 			});
 			
 			wire.on("change", function(event) {
-				currentProtein = synthbio.changeWire(wire, wireID, currentProtein, signal);
-				//Set proper label location
-				connectionOverlay.setLocation(connectionOverlay.getLocation());
+				synthbio.gui.changeWire(event, signal, jsPlumbConnectionOverlay);
 			});
 		});
 
@@ -166,11 +161,11 @@ $(document).ready(function() {
 		jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
 
 		var oep = $.extend(true, {
-			anchor:"Continuous",
+			anchor: "Continuous",
 			deleteEndpointsOnDetach: false
 		}, synthbio.gui.outputEndpoint);
 		var iep = $.extend(true, {
-			anchor:"Continuous",
+			anchor: "bContinuous",
 			deleteEndpointsOnDetach: false
 		}, synthbio.gui.inputEndpoint);
 

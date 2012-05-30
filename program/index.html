@@ -24,7 +24,7 @@
 		<aside class="nav" id="title"><div id="icon"></div>Zelula</aside>
 		<ul class="nav">
 			<li class="dropdown">
-				<a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown" onClick="synthbio.closeProteinDropdown()">File<b class="caret"></b></a>
+				<a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown">File<b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li><a href="#files" data-toggle="modal" id="open">Open</a></li>
 					<li><a href="javascript: void(0);" id="save">Save</a></li>
@@ -34,7 +34,7 @@
 				</ul>
 			</li>
 			<li class="dropdown">
-				<a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown" onClick="synthbio.closeProteinDropdown()">Simulate<b class="caret"></b></a>
+				<a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown">Simulate<b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li><a href="javascript:void(0)" id="validate">Validate circuit</a></li>
 					<li><a href="#list-proteins" data-toggle="modal">Show proteins</a></li>
@@ -45,8 +45,8 @@
 					<li><a href="javascript: void(0)" id="simulate">Run solver</a></li>
 				</ul>
 			</li>
-			<li><a href="#about" data-toggle="modal"  onClick="synthbio.closeProteinDropdown()">About</a></li>
-			<li><a href="javascript:void(0)" id="dump-circuit" onClick="synthbio.closeProteinDropdown()">Dump circuit</a></li>
+			<li><a href="#about" data-toggle="modal">About</a></li>
+			<li><a href="javascript:void(0)" id="dump-circuit">Dump circuit</a></li>
 		</ul>
 	</nav>
 
@@ -87,16 +87,6 @@
 	<style>
 		.dragActive { border:2px dotted orange; }
 		.dragHover { border:2px dotted red; }
-		.arrowLabel {
-			background-color:white; 
-			padding:0.4em; 
-			font:12px sans-serif; 
-			color:#444;
-			z-index:21;
-			border:1px dotted gray;
-			opacity:0.8;
-			filter:alpha(opacity=80);
-		}
 	</style>
 
 	<!-- Le grid (smack in the middle, hm hm) -->
