@@ -154,7 +154,7 @@ synthbio.gui.openProteinDropdown = function(label, connection, oldProtein) {
 	);
 
 	// Bring overlay to the front so options can't get occluded by other GUI elements
-	label.parent().css('z-index', 99)
+	label.parent().css('z-index', 99);
 
 	// Reinitialize menu location in the model so it gets centered vertically properly
 	connection.getOverlay("label").setLocation(connection.getOverlay("label").getLocation());
@@ -181,7 +181,7 @@ synthbio.gui.selectProtein = function(label, connection, signal) {
 	synthbio.gui.updateConnections();
 
 	//Reset the z-Index of wire
-	wire.parent().css('z-index', "1");
+	label.parent().css('z-index', "1");
 };
 
 synthbio.gui.setProteinLabel = function(signal, connection) {
