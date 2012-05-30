@@ -40,7 +40,7 @@
 					<li><a href="#list-proteins" data-toggle="modal">Show proteins</a></li>
 					<li class="divider"></li>
 					<li><a href="#define-inputs" data-toggle="modal">Define inputs</a></li>
-					<li><a href="javascript: void(0);">Show output graph</a></li>
+					<li><a href="#show-output" data-toggle="modal">Show output graph</a></li>
 					<li class="divider"></li>
 					<li><a href="javascript: void(0)" id="simulate">Run solver</a></li>
 				</ul>
@@ -193,6 +193,20 @@
 		</div>
 		<div class="modal-footer">
 			<div id="save-inputs" class="btn btn-primary" data-dismiss="modal">Save input</div>
+		</div>
+	</div>
+
+	<!--
+	Modal to display output graph.
+	@author Niels
+	-->
+	<div class="modal hide fade in" id="show-output" data-keyboard="true">
+		<div class="modal-body">
+			<div id="output-chart">
+			</div>
+		</div>
+		<div class="modal-footer">
+			<a href="javascript: void(0);" class="btn btn-primary" data-dismiss="modal">Close</a>
 		</div>
 	</div>
 
