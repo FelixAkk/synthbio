@@ -21,8 +21,9 @@
  * @author Thomas van Helden & Jan Pieter Waagmeester & Felix Akkermans
  */
  
+
 /**
- * Testable objects
+ * Testable objects model
  */
 var point = new synthbio.Point(10, 20);
 var gate = new synthbio.Gate("and", point);
