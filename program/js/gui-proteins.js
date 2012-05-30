@@ -105,7 +105,6 @@ synthbio.gui.fillProteins = function(response) {
  * Should be done when selecting a new wire or clicking outside of a dropdown
  */
 synthbio.gui.closeProteinDropdowns = function(mtarget){
-	console.log(mtarget);
 	var change = false;
 
 	var sel = $('.protein-selector').parent().not(function(){
