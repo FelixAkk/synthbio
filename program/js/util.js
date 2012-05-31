@@ -17,7 +17,6 @@
 
 /*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
 /*global $, synthbio */
-
 /**
  * Add roundTo method to numbers, rounds with precision
  */

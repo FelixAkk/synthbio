@@ -29,6 +29,11 @@ var synthbio = synthbio || {};
 synthbio.gui = synthbio.gui || {};
 
 /**
+ * Max. length of the description when on display. Tell after how many characters to crop and suffic with ...
+ */
+synthbio.gui.descDisplayCropLength = 100;
+
+/**
  * Statusbar info tooltip function
  *
  * @param element jQuery extended DOM element.
@@ -86,23 +91,55 @@ synthbio.gui.hideAdModalAlert = function(modal) {
  * Start or stop editing the circuit title/description in the main GUI. This mainly concerns replacing DOM elements.
  * Declared as a closure so it can store the original DOM state locally.
  */
-synthbio.gui.editCircuitDetails = (function() {
+synthbio.gui.editCircuitDetails = function(event) {
 	var details = $("#circuit-details");
+	var button = $(event.srcElement);
+	// Check in which state the circuit details display thingy is (i.e. editting or displaying)
+	if(button.html() === "Edit") {
+		// Set new content
+		details.html(
+			'<input class="span2" type="text" id="circuit-filename" placeholder="filename">' +
+			'<input class="span4" type="text" id="circuit-description" placeholder="circuit description">');
+		// And the old button with a new label
+		details.append(button);
+		button.on("click", synthbio.gui.editCircuitDetails);
+		button.html("Save");
+	} else if(button.html() === "Save") {
+		// If we were in editing and save was clicked, get the shizzle for ma nizzle.
+		var filename = $("#circuit-filename", details).val();
+		filename = synthbio.gui.filenameExtension(filename);
+		var description = $("#circuit-description", details).val().trim();
+		// Save them
+		console.log(filename);
+		console.log(description);
 
-	// Save how the circuit details display thingy was first. Easier than reconstructing it.
-	var original = details.clone();
-
-	// This will be the actual function that is going to be called on click events
-	return function(event) {
-		// Check in which state the circuit details display thingy is (i.e. editting or displaying)
-		if($("button", details).html() === "Edit") {
-			details.html('<input class="span2" type="text" placeholder="circuit filename">' +
-				'<input class="span4" type="text" placeholder="circuit description">');
-			details.append($(":last-child", original));
+		// Now we can play with the variables
+		if(filename.length === 0) {
+			// Set default value to show the it hasn't been set
+			filename = "circuit filename"
 		}
-	};
-})();
-
+		if(description.length === 0) {
+			// Set default value to show the it hasn't been set
+			description = "circuit description"
+		}
+		// And set the original content again
+		details.html(
+			'<i id="circuit-filename">' + filename + '</i>' +
+			'<strong id="circuit-description">"' +
+			// Crop the display string if needed
+			(description.length < synthbio.gui.descDisplayCropLength) ?
+				description : (description.substring(0, synthbio.gui.descDisplayCropLength) + " ...") +
+			'"</strong>'
+		);
+		// And the old button with a new label
+		details.append(button);
+		button.on("click", synthbio.gui.editCircuitDetails);
+		button.html("Edit");
+	} else {
+		console.error("Circuit details element (top right) entered an invalid state." +
+			"Should be either the editting or displaying. Is checked by comparing the button inner HTML.");
+	}
+};
 /**
  * Ping server to check for connection 'vitals'. Shown a warning if things go really bad. Declared as a closure to keep
  * variables local.
