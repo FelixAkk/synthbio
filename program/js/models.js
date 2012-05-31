@@ -187,7 +187,13 @@ synthbio.Signal.prototype.setProtein = function(protein) {
 };
 
 synthbio.Signal.prototype.toJSON = function() {
-	return $.extend({}, {protein: this.protein}, {from: this.from}, {to: this.to});
+	return {
+		"protein": this.getProtein(),
+		"from": this.getFrom(),
+		"to": this.getTo(),
+		"fromEndpoint": this.fromEndpoint,
+		"toEndpoint": this.toEndpoint
+	};
 };
 synthbio.Signal.prototype.setFrom = function(from) {
 	this.from = from;
