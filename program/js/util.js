@@ -21,7 +21,8 @@
  * Add roundTo method to numbers, rounds with precision
  */
 Number.prototype.roundTo = function(to) {
-	return Math.round(this*Math.pow(10,to-1))/Math.pow(10,to-1);;
+	var p = Math.pow(10,to);
+	return Math.round(this*p)/p;
 };
 
 /**

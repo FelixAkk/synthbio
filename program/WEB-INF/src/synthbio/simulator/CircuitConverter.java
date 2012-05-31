@@ -138,17 +138,20 @@ public class CircuitConverter {
 		int length = circuit.getSimulationLength();
 		// setup time points
 		double[] timePoints = new double[length];
-		for(int i = 0; i < length; i += ticks)
-			timePoints[i] = i;
+		for(int i = 0; i < length; i++)
+			timePoints[i] = i*ticks;
 		// setup names
 		String[] names = circuit.getInputs().toArray(new String[circuit.getInputs().size()]);
 		// setup data
 		double[][] data = new double[length][names.length];
-		for(int time = 0; time < length; time++) {
-			for(int name = 0; name < names.length; name++) {
-				String val = circuit.getSimulationInput(names[name]);
-				char cur = (val.length() > time? val.charAt(time): val.charAt(val.length()-1));
-				data[time][name] = (cur == 'L'? lowLevel: highLevel);
+		for(int iName = 0; iName < names.length; iName++) {
+			// get inputs
+			String val = circuit.getSimulationInput(names[iName]);
+			for(int iTime = 0; iTime < length; iTime++) {
+				// current char (H or L)
+				char cur = (val.length() > iTime? val.charAt(iTime): val.charAt(val.length()-1));
+				// set low or high
+				data[iTime][iName] = (cur == 'L'? lowLevel: highLevel);
 			}
 		}
 		return new MultiTable(timePoints, data, names);

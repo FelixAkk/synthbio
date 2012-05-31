@@ -128,6 +128,7 @@ public class TestSolver {
 		MultiTable solution = solveSyn(circ1);
 		double c = solution.getColumn("C").getValue(39);
 		double d = solution.getColumn("D").getValue(39);
+		//showMultiTable(solution);
 		assertTrue(c < d);
 	}
 

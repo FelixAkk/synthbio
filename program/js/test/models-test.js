@@ -40,6 +40,8 @@ var circuitName="testCircuit";
 var circuitDescription="testDescription";
 var circuit;
 
+var simulation = new synthbio.SimulationInputs([], []);
+
 /**
  * Function called before each test for setup
  */
@@ -201,7 +203,8 @@ $(document).ready(function() {
 		 * Adding of gates
 		 */
 		test("Circuits should add and store gates through a method call", function() {
-			circuit.addGate(notgate); // add gate on index [2].
+			circuit.addGate(notgate, [1,2]); // add gate on index [2].
+			raises(function() {circuit.addGate(notGate);} , "Position is not defined");
 			deepEqual(circuit.getGates(), [gate, gate, notgate]);
 		});
 	
@@ -293,6 +296,11 @@ $(document).ready(function() {
 		 */
 		test("Needs to be able to parse JSON and convert to CDS", function() {
 			deepEqual(synthbio.CDS.fromJSON("{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}"), cds1, "parsing JSON object of CDS");
+		});
+	
+	module("SimulationInputs");
+		test("Simulation Inputs should have all base", function(){
+			ok("");
 		});
 	
 	module('HTTP Requests');

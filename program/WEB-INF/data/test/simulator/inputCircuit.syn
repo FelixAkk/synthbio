@@ -16,6 +16,9 @@
   ],
   "inputs": { 
     "length": 40,
+		"tickWidth": 1,
+		"lowLevel" : 0,
+		"highLevel": 600,
     "values": {
       "A": "H",
       "B": "LLLLLLLLLL LLLLLLLLLL H"
