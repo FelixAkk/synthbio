@@ -32,7 +32,7 @@ synthbio.gui.plot = {};
 /**
  * Precision of plotting data
  */
-synthbio.gui.plotPrecision = 10e5;
+synthbio.gui.plotPrecision = 6;
 
 /**
  * Round data to synthbio.gui.plotPrecision
@@ -105,9 +105,10 @@ synthbio.gui.plotOutput = function(response) {
 	var series = response.names.map(function(val) {
 		return {
 			name: val,
-			data: synthbio.gui.roundSeries(response.data[val])
+			data: response.data[val]
 		};
 	});
+	console.log(series);
 	synthbio.gui.plotSeries(series);
 };
 
