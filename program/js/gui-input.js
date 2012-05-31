@@ -70,30 +70,51 @@ synthbio.gui.inputEditor = function(){
 	});
 	
 	//click listener for each .levels div containing ticks.
-	//~ $('.levels').on('click', function(event) {
-		//~ if($(event.target).hasClass('tick')){
-			//~ $(event.target).toggleClass('low').toggleClass('high');
-//~ 
-		//~ }
-	//~ });
-	
 	var selectionStart={};
-	$('.levels').on('mousedown', function(event){
-		var tick=$(event.target);
-		if(tick.hasClass('tick')){
-			var tickid=$(event.target).attr('id');
-			var protein=tickid.split('_')[0].substring(4,5);
+	$('.levels').on({
+		'mousedown': function(event){
+			var tick=$(event.target);
+			if(tick.hasClass('tick')){
+				var tickid=$(event.target).attr('id');
+				var protein=tickid.split('_')[0].substring(4,5);
+				
+				selectionStart[protein]=tickid.split('_')[1];
+			}
 			
-			selectionStart[protein]=tickid.split('_')[1];
-		}
-		
-		//return false to prevent dragging shizzle.
-		return false;
-	});
+			//return false to prevent dragging shizzle.
+			return false;
+		},
+		'mousemove': function(event){
+			var tick=$(event.target);
+			if(!tick.hasClass('tick')){
+				return;
+			}
+			
+			var tickid=$(event.target).attr('id');
+			
+			var protein = tickid.split('_')[0].substring(4, 5);
+			if(!selectionStart[protein]){
+				return;
+			}
+			var selectionEnd = tickid.split('_')[1];
 
-	$('.levels').on('mouseup', function(event){
-		var tick=$(event.target);
-		if(tick.hasClass('tick')){
+			var start = selectionStart[protein];
+			var ticks=$(this).parent().find('.tick').slice(start, selectionEnd);
+
+			$('.tick').removeClass('changing');
+			ticks.addClass('changing');
+			
+		},
+		'mouseup': function(event){
+			var tick=$(event.target);
+
+			//remove changing classes to clear 
+			$('.tick').removeClass('changing');
+			
+			if(!tick.hasClass('tick')){
+				selectionStart={};
+				return;
+			}
 			var tickid=$(event.target).attr('id');
 			
 			var protein = tickid.split('_')[0].substring(4, 5);
@@ -128,6 +149,8 @@ synthbio.gui.inputEditor = function(){
 			if(ticks){
 				ticks.addClass('changed', 300).delay(600).removeClass('changed', 400);
 			}
+
+			
 			
 			//clear saved selection start.
 			selectionStart={};
