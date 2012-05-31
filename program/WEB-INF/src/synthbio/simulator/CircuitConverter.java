@@ -138,7 +138,7 @@ public class CircuitConverter {
 		int length = circuit.getSimulationLength();
 		// setup time points
 		double[] timePoints = new double[length];
-		for(int i = 0; i < length; i += ticks)
+		for(int i = 0; i < ticks*length; i += ticks)
 			timePoints[i] = i;
 		// setup names
 		String[] names = circuit.getInputs().toArray(new String[circuit.getInputs().size()]);
