@@ -272,6 +272,12 @@ synthbio.Circuit.prototype.getName = function() {
 synthbio.Circuit.prototype.getDescription = function() {
 	return this.description;
 };
+synthbio.Circuit.prototype.setName = function(name) {
+	this.name = name;
+};
+synthbio.Circuit.prototype.setDescription = function(description) {
+	this.description = description;
+};
 synthbio.Circuit.prototype.getGates = function() {
 	return this.gates;
 };

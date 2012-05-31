@@ -36,11 +36,14 @@ synthbio.gui.recentFilesList = [];
  */
 synthbio.gui.filenameExtension = function(filename) {
 	filename = filename.trim();
+	synthbio.util.assert(filename.length > 0, "Provided filename is empty/has no length. When extending a filename, " +
+		"one should be provided at least.");
 	if (filename.substring(filename.length - 4) !== ".syn") {
 		filename = filename + ".syn";
 	}
 	return filename;
-}
+};
+
 synthbio.gui.saveFile = function() {
 	$("#files .modal-header h3").html("Save As…");
 	$("#files .modal-footer .btn-primary").html("Save As…");
@@ -186,8 +189,9 @@ synthbio.gui.prepareFileDialog = function(event) {
 	});
 };
 
+var fTable; // Datatables object for Files dialog
+
 $(document).ready(function() {
-	var fTable; // Datatables object for Files dialog
 
 	/**
 	 * Setup/rig file operation dialog when the `Save As` menu item is clicked.
