@@ -175,7 +175,7 @@ $(document).ready(function() {
 		 * From Signal to JSON
 		 */
 		test("Signal should be able to be constructed from JSON", function() {
-			equal(JSON.stringify(signal), signalJSON, "Signals can be translated to JSON");
+			equal(JSON.stringify(signal.toJSON()), signalJSON, "Signals can be translated to JSON");
 		});
 		
 		/**
@@ -208,7 +208,10 @@ $(document).ready(function() {
 			deepEqual(circuit.getGates(), [gate, gate, notgate]);
 		});
 	
-		test("Circuits should add and store gates through a method call", function() {
+		/**
+		 * Get gates
+		 */
+		test("Circuits should add and get gates through a method call", function() {
 			circuit.addGate(notgate); // add gate on index [2].
 			deepEqual(circuit.getGate(2), notgate);
 			raises(function() { circuit.getGate(3); }, "Empty index is given.");
@@ -302,26 +305,4 @@ $(document).ready(function() {
 		test("Simulation Inputs should have all base", function(){
 			ok("");
 		});
-	
-	module('HTTP Requests');
-		/**
-		 * Get CDS from server
-		 */
-		//~ test("testing getCDS function", function() {
-			//~ ok(false, "needs testing");
-		//~ });
-		//~
-				/**
-		 * Get Signal from server
-		 */
-		//~ test("Request Signal from server and converting it to Signal object", function() {
-			//~ ok(false, "needs testing");
-		//~ });
-				/**
-		 * Get Gate from server
-		 */
-		//~ test("Request Gate from server and converting it to Gate object", function() {
-			//~ ok(false, "needs testing");
-		//~ });
-		//~
 });

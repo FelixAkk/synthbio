@@ -135,7 +135,9 @@ $(document).ready(function() {
 		synthbio.gui.inputEditor();
 
 		// attach action to save button.
-		$('#save-inputs').on('click', synthbio.gui.saveInputs());
+		$('#save-inputs').on('click', function(){
+			synthbio.gui.saveInputs();
+		});
 		$('#save-inputs-and-simulate').on('click', function() {
 			synthbio.gui.saveInputs();
 			//trigger click on simulation button to start simuation

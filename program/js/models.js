@@ -185,6 +185,10 @@ synthbio.Signal.prototype.setProtein = function(protein) {
 		this.onProteinChange(this);
 	}
 };
+
+synthbio.Signal.prototype.toJSON = function() {
+	return $.extend({}, {protein: this.protein}, {from: this.from}, {to: this.to});
+};
 synthbio.Signal.prototype.setFrom = function(from) {
 	this.from = from;
 };
