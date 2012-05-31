@@ -31,7 +31,7 @@ synthbio.gui = synthbio.gui || {};
 /**
  * Max. length of the description when on display. Tell after how many characters to crop and suffic with ...
  */
-synthbio.gui.descDisplayCropLength = 100;
+synthbio.gui.descrDisplayCropLength = 100;
 
 /**
  * Statusbar info tooltip function
@@ -98,8 +98,8 @@ synthbio.gui.editCircuitDetails = function(event) {
 	if(button.html() === "Edit") {
 		// Set new content
 		details.html(
-			'<input class="span2" type="text" id="circuit-filename" placeholder="filename">' +
-			'<input class="span4" type="text" id="circuit-description" placeholder="circuit description">');
+			'<input class="span2" type="text" id="circuit-filename" placeholder="filename" value="' + synthbio.model.getName() + '">' +
+			'<input class="span4" type="text" id="circuit-description" placeholder="circuit description" value="' + synthbio.model.getDescription() + '">');
 		// And the old button with a new label
 		details.append(button);
 		button.on("click", synthbio.gui.editCircuitDetails);
@@ -107,29 +107,31 @@ synthbio.gui.editCircuitDetails = function(event) {
 	} else if(button.html() === "Save") {
 		// If we were in editing and save was clicked, get the shizzle for ma nizzle.
 		var filename = $("#circuit-filename", details).val();
-		filename = synthbio.gui.filenameExtension(filename);
+		// If a filename was provided, extend it with ".syn"
+		if(filename.length > 0) {
+			filename = synthbio.gui.filenameExtension(filename);
+		}
 		var description = $("#circuit-description", details).val().trim();
 		// Save them
-		console.log(filename);
-		console.log(description);
+		synthbio.model.setName(filename);
+		synthbio.model.setDescription(description);
 
 		// Now we can play with the variables
 		if(filename.length === 0) {
-			// Set default value to show the it hasn't been set
-			filename = "circuit filename"
+			// Set default value to show the it wasn't set
+			filename = "circuit filename";
 		}
 		if(description.length === 0) {
-			// Set default value to show the it hasn't been set
-			description = "circuit description"
+			// Set default value to show the it wasn't set
+			description = "circuit description";
+		} else if(description.length > synthbio.gui.descrDisplayCropLength) {
+			// Crop the display string if needed
+			description = description.substring(0, synthbio.gui.descrDisplayCropLength) + " ...";
 		}
 		// And set the original content again
 		details.html(
 			'<i id="circuit-filename">' + filename + '</i>' +
-			'<strong id="circuit-description">"' +
-			// Crop the display string if needed
-			(description.length < synthbio.gui.descDisplayCropLength) ?
-				description : (description.substring(0, synthbio.gui.descDisplayCropLength) + " ...") +
-			'"</strong>'
+			'<strong id="circuit-description">"' + description + '"</strong>'
 		);
 		// And the old button with a new label
 		details.append(button);
