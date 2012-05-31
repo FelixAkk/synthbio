@@ -136,19 +136,18 @@ public class CircuitConverter {
 		double highLevel = circuit.getSimulationHighLevel();
 		int ticks = circuit.getSimulationTickWidth();
 		int length = circuit.getSimulationLength();
-		int size = ticks*length;
 		// setup time points
-		double[] timePoints = new double[size];
-		for(int i = 0; i < size; i++)
+		double[] timePoints = new double[length];
+		for(int i = 0; i < length; i++)
 			timePoints[i] = i*ticks;
 		// setup names
 		String[] names = circuit.getInputs().toArray(new String[circuit.getInputs().size()]);
 		// setup data
-		double[][] data = new double[size][names.length];
+		double[][] data = new double[length][names.length];
 		for(int iName = 0; iName < names.length; iName++) {
 			// get inputs
 			String val = circuit.getSimulationInput(names[iName]);
-			for(int iTime = 0; iTime < size; iTime++) {
+			for(int iTime = 0; iTime < length; iTime++) {
 				// current char (H or L)
 				char cur = (val.length() > iTime? val.charAt(iTime): val.charAt(val.length()-1));
 				// set low or high
