@@ -86,13 +86,31 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 /**
  * Plot an array of series
  * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
+ * @param timestep Timestep in seconds (defaults to 1).
  */
-synthbio.gui.plotSeries = function(series) {
+synthbio.gui.plotSeries = function(series, timestep) {
+	timestep = timestep || 1;
+
+	var rangeButtons = $.map(synthbio.chartOptions.rangeSelector.buttons, function(val) {
+		//Make a copy of the button object
+		val = $.extend({}, val);
+
+		if (val.count > 0) {
+			val.count *= timestep;
+			val.text = val.count + 's';
+		}
+		
+		return val;
+	});
+
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
 		navigator: {
 			series: { data: synthbio.gui.calculateSumSeries(series) }
-		}
+		},
+		rangeSelector: {
+			buttons: rangeButtons
+		},
 	});
 	synthbio.gui.plot = new Highcharts.StockChart(options);
 };
@@ -112,7 +130,7 @@ synthbio.gui.plotOutput = function(response) {
 		};
 	});
 
-	synthbio.gui.plotSeries(series, response.step);
+	synthbio.gui.plotSeries(series, timestep);
 };
 
 /**
