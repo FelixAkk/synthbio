@@ -123,7 +123,7 @@ synthbio.chartOptions = {
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
-	series:  [{}]
+	series:  [{data: [0, 0, 0, 0, 0]}]
 };
 
 //x-axis: Display the x value and add an "s" (data always starts at 0)
@@ -149,7 +149,7 @@ synthbio.chartOptions.tooltip = {
 
 //navigator: Make sure the id is "navseries"
 synthbio.chartOptions.navigator = {
-	series: { id: "navseries" },
+	series: { id: "navseries", data: [0, 0, 0, 0, 0] },
 	xAxis: synthbio.chartOptions.xAxis,
 	top: 340
 };
