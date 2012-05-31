@@ -595,7 +595,9 @@ synthbio.SimulationInputs.prototype.bindCircuit = function(circuit){
 	this.circuit=circuit;
 	this.updateInputs();
 };
-
+synthbio.SimulationInputs.prototype.getCircuit = function() {
+	return this.circuit;
+};
 
 synthbio.SimulationInputs.prototype.setValue = function(protein, value) {
 	this.updateInputs();
@@ -694,5 +696,5 @@ synthbio.SimulationInputs.prototype.toJSON = function() {
  * @todo: implement
  */
 synthbio.SimulationInputs.prototype.toString = function() {
-	return ' length: '+this.getLength();
+	return 'Simulation bound to ' + this.getCircuit().getName()+ ' has options { length: '+this.getLength()+' , tick width: '+this.getTickWidth()+' , low level: '+this.getLowLevel()+' , high level: '+this.getHighLevel()+'}';
 };
