@@ -119,7 +119,7 @@ public final class Util {
 	public static JSONObject multiTableToJSON(MultiTable m) throws JSONException {
 		double[] timePoints = m.getTimePoints();
 		double timeLength = timePoints.length;
-		double step = 1;
+		double step = timePoints[1] - timePoints[0];
 		
 		// get all names
 		int cc = m.getColumnCount() - 3; // - 3 because gene, cell and empty are unused.
