@@ -24,11 +24,12 @@
  /**
  * Testable objects
  */
- var roundableNum1 = 0.636;
- var roundableNum2 = 3.492;
+var roundableNum1 = 0.636;
+var roundableNum2 = 3.492;
 
- 
- var circuit = new synthbio.Circuit("Name", "Dexc", [], [], []);
+var point = new synthbio.Point(10, 20);
+var gate = new synthbio.Gate("and", point);
+var circuit = new synthbio.Circuit("Name", "Desc", [gate], [], []);
  /**
   * Tests
   */
@@ -46,6 +47,8 @@
 		});
 	
 		test('form2Object method', function(){
-			deepEqual(synthbio.util.form2object(circuit, [{ selector: '#testableOption', setter: 'length' }]), {}, "Can alter target Object with form data");
+			synthbio.util.form2object(circuit.getSimulationInputs(), [{ selector: '#testableOption', setter: 'setLength' }]);
+			
+			equal(circuit.getSimulationInputs().getLength() , "20", "Can use form data to alter Object methods");
 		});
  });
