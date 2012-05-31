@@ -1,6 +1,6 @@
 {
   "name": "example.syn",
-  "description": "Logic for this circuit: D = ~(A^B). A will be always high, B will start low and becomes high after 20s.",
+  "description": "Logic for this circuit: D = ~A -> B. A will be Low -> High -> Low",
   "gates": [
     { "kind": "not", "position": {"x": 2,"y": 4}}
   ],
