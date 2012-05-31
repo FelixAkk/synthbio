@@ -33,10 +33,7 @@ synthbio.gui.inputEditor = function(){
 	//clear input signals container.
 	$('#input-signals').html('');
 
-	
 	var inputs=synthbio.model.getSimulationInputs();
-
-	//@todo check if all inputs are defined.
 
 	//fill advanced settings form fields
 	$('#simulate-length').val(inputs.getLength());
@@ -66,20 +63,22 @@ synthbio.gui.inputEditor = function(){
 	);
 	
 	//attach click listener to the high/low button.
-	$('.toggle-highlow').click(function(){
+	$('.toggle-highlow').on('click', function() {
 		var self=$(this);
 		self.toggleClass('high').toggleClass('low');
 		self.parent().find('.levels div').toggleClass('high').toggleClass('low');
 	});
 	
 	//click listener for each .levels div containing ticks.
-	$('.levels').click(function(event){
+	$('.levels').on('click', function(event) {
 		if($(event.target).hasClass('tick')){
 			$(event.target).toggleClass('low').toggleClass('high');
 			$(this).find('toggle-highlow').removeClass('low').removeClass('high');
 		}
 	});
 
+	//attach changed listener to simulation length
+	$('#simulate-length').on('change keyup', synthbio.gui.updateInputEditor);
 };
 
 /**
@@ -117,7 +116,14 @@ synthbio.gui.saveInputs = function(circuit) {
 		var protein=$(this).attr('id').substr(-1);
 		simulationInput.setValue(protein, signal);
 	});
-	
+};
+
+/**
+ * Update the editor according to the new settings for simulation length.
+ */
+synthbio.gui.updateInputEditor = function() {
+	synthbio.gui.saveInputs();
+	synthbio.gui.inputEditor();
 };
 
 $(document).ready(function() {
@@ -129,9 +135,15 @@ $(document).ready(function() {
 		synthbio.gui.inputEditor();
 
 		// attach action to save button.
-		$('#save-inputs').click(function(){
+		$('#save-inputs').on('click', function(){
 			synthbio.gui.saveInputs();
 		});
+		$('#save-inputs-and-simulate').on('click', function() {
+			synthbio.gui.saveInputs();
+			//trigger click on simulation button to start simuation
+			$('#simulate').click();
+		});
+		
 		
 		//attach 'advanced' toggle.
 		$('#simulation-advanced-toggle').on('click', function(){
