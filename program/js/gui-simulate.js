@@ -86,18 +86,31 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 /**
  * Plot an array of series
  * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
- * @param interval Interval between points in seconds (defaults to 1)
+ * @param timestep Timestep in seconds (defaults to 1).
  */
-synthbio.gui.plotSeries = function(series, interval) {
-	interval = interval || 1;
+synthbio.gui.plotSeries = function(series, timestep) {
+	timestep = timestep || 1;
+
+	var rangeButtons = $.map(synthbio.chartOptions.rangeSelector.buttons, function(val) {
+		//Make a copy of the button object
+		val = $.extend({}, val);
+
+		if (val.count > 0) {
+			val.count *= timestep;
+			val.text = val.count + 's';
+		}
+		
+		return val;
+	});
+
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
 		navigator: {
 			series: { data: synthbio.gui.calculateSumSeries(series) }
 		},
-		plotOptions: {
-			series: { pointInterval: interval }
-		}
+		rangeSelector: {
+			buttons: rangeButtons
+		},
 	});
 	synthbio.gui.plot = new Highcharts.StockChart(options);
 };
@@ -107,14 +120,17 @@ synthbio.gui.plotSeries = function(series, interval) {
  * @param response Data object from synthbio.requests.simulate
  */
 synthbio.gui.plotOutput = function(response) {
+	var timestep = response.step || 1;
 	var series = response.names.map(function(val) {
 		return {
+			type: 'spline',
 			name: val,
+			pointInterval: timestep,
 			data: synthbio.gui.roundSeries(response.data[val])
 		};
 	});
 
-	synthbio.gui.plotSeries(series, response.step);
+	synthbio.gui.plotSeries(series, timestep);
 };
 
 /**
@@ -125,7 +141,7 @@ synthbio.chartOptions = {
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
-	series:  [{}]
+	series:  [{data: [0, 0, 0, 0, 0]}]
 };
 
 //x-axis: Display the x value and add an "s" (data always starts at 0)
@@ -151,7 +167,7 @@ synthbio.chartOptions.tooltip = {
 
 //navigator: Make sure the id is "navseries"
 synthbio.chartOptions.navigator = {
-	series: { id: "navseries" },
+	series: { id: "navseries", data: [0, 0, 0, 0, 0] },
 	xAxis: synthbio.chartOptions.xAxis,
 	top: 340
 };
