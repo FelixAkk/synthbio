@@ -40,14 +40,16 @@ var circuitName="testCircuit";
 var circuitDescription="testDescription";
 var circuit;
 
-var	simulation = new synthbio.SimulationInputs("testValue", 20);
-
+var	simulation;
+var simulationJSON = '{"length":40,"tickWidth":1,"lowLevel":0,"highLevel":600,"testValue":20,"values":{}}';
 /**
  * Function called before each test for setup
  */
 QUnit.testStart = function(testBatchName) {
 	// ensure a clean circuit slate every test
 	circuit = new synthbio.Circuit(circuitName, circuitDescription, [gate, gate], [signal, signal], []);
+	
+	simulation = new synthbio.SimulationInputs({"testValue":20});
 };
 
 var circuitJSON=
@@ -236,17 +238,6 @@ $(document).ready(function() {
 		});
 		
 		/**
-		 * JSON to Circuit
-		 */
-		test("Circuits should be able to be generated from JSON", function() {
-			deepEqual(
-				synthbio.Circuit.fromJSON(circuitJSON),
-				circuit,
-				"JSON can be converted to Circuits"
-			);
-		});
-
-		/**
 		 * Circuit.getInputs()
 		 */
 		test("Circuit.getInputs() should yield the circuit's inputs", function() {
@@ -303,19 +294,28 @@ $(document).ready(function() {
 	
 	module("SimulationInputs");
 		test("Simulation Inputs should have all base, testing all getters", function(){
+			equal(simulation.options.testValue, 20, "TestValue is set");
 			equal(simulation.getLength(), 40, "getLength works");
 			equal(simulation.getTickWidth(), 1, "getTickWidth works");
 			equal(simulation.getLowLevel(), 0, "getLowLevel works");
 			equal(simulation.getHighLevel(), 600, "getHighLevel works");
-			equal(simulation.getCircuit(), undefined, "bound circuit should start as undefined");
+			equal(simulation.getCircuit(), undefined, "bound circuit should start as undefined");	
+			raises(function(){simulation.getValues();} , "Can only get values after circuit is bound to simulation");
 		});
 		
 		test("Simulations should be able to bind to a circuit", function(){
 			simulation.bindCircuit(circuit);
 			deepEqual(simulation.getCircuit(), circuit, "is able to bind to a circuit");
+			deepEqual(simulation.getValues(), {}, "Can get values after circuit is bound to simulation");
 		});
 		
 		test("Simulations have a toString method", function(){
+			simulation.bindCircuit(circuit);
 			equal(simulation.toString(), "Simulation bound to testCircuit has options { length: 40 , tick width: 1 , low level: 0 , high level: 600}");
+		});
+		
+		test("Simulations should be able to convert to JSON", function(){
+			simulation.bindCircuit(circuit);
+			equal(JSON.stringify(simulation.toJSON()), simulationJSON, "Converting to JSON works");
 		});
 });

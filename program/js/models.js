@@ -677,6 +677,7 @@ synthbio.SimulationInputs.prototype.updateInputs = function(){
  * Get a <protein, values> map for each input signal
  */
 synthbio.SimulationInputs.prototype.getValues = function() {
+	synthbio.util.assert(this.getCircuit != undefined, "Can only get values after circuit is bound to simulation");
 	this.updateInputs();
 	return this.values;
 };
