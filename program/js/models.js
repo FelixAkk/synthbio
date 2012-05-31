@@ -281,8 +281,13 @@ synthbio.Circuit.prototype.getGroups = function() {
 synthbio.Circuit.prototype.getSimulationInputs = function(){
 	return this.inputs;
 };
-synthbio.Circuit.prototype.setSimulationInput = function(map){
-	this.inputs=new synthbio.SimulationInputs(map);
+synthbio.Circuit.prototype.setSimulationInput = function(inputs){
+	if(inputs instanceof synthbio.SimulationInputs){
+		this.inputs=inputs;
+	}else{
+		this.inputs=new synthbio.SimulationInputs(inputs);
+	}
+	this.inputs.bindCircuit(this);
 };
 
 /**
@@ -609,7 +614,7 @@ synthbio.SimulationInputs.prototype.setTickWidth = function(width) {
 synthbio.SimulationInputs.prototype.setLowLevel = function(level) {
 	this.options.lowLevel = level;
 };
-synthbio.SimulationInputs.prototype.setHighThreshold = function(level) {
+synthbio.SimulationInputs.prototype.setHighLevel = function(level) {
 	this.options.highLevel = level;
 };
 

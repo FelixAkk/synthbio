@@ -32,7 +32,7 @@ synthbio.gui.plot = {};
 /**
  * Precision of plotting data
  */
-synthbio.gui.plotPrecision = 6;
+synthbio.gui.plotPrecision = 2;
 
 /**
  * Round data to synthbio.gui.plotPrecision
@@ -86,12 +86,17 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 /**
  * Plot an array of series
  * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
+ * @param interval Interval between points in seconds (defaults to 1)
  */
-synthbio.gui.plotSeries = function(series) {
+synthbio.gui.plotSeries = function(series, interval) {
+	interval = interval || 1;
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
 		navigator: {
 			series: { data: synthbio.gui.calculateSumSeries(series) }
+		},
+		plotOptions: {
+			series: { pointInterval: interval }
 		}
 	});
 	synthbio.gui.plot = new Highcharts.StockChart(options);
@@ -105,11 +110,11 @@ synthbio.gui.plotOutput = function(response) {
 	var series = response.names.map(function(val) {
 		return {
 			name: val,
-			data: response.data[val]
+			data: synthbio.gui.roundSeries(response.data[val])
 		};
 	});
-	console.log(series);
-	synthbio.gui.plotSeries(series);
+
+	synthbio.gui.plotSeries(series, response.step);
 };
 
 /**

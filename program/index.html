@@ -143,8 +143,10 @@
 		</div>
 		<div class="modal-body">
 			<p>
-				Billy Mays here with another fantastic project.
-				<iframe width="420" height="315" src="http://www.youtube.com/embed/iOmvdeNa67E" frameborder="0" allowfullscreen></iframe>
+				Project Zelula is a modelling and simulation package to simulate the protein <em>logic</em> in a cell. With a provided set of BioBricks representing AND- and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuit can be simulated using an ODE-solver.
+			</p>
+			<p>
+				Project Zelula is a <em>Contextproject</em> at TU Delft, university of technology. 
 			</p>
 			<p>
 				For more information, visit: <a href="https://github.com/FelixAkk/synthbio/">our GitHub page</a>
@@ -165,7 +167,7 @@
 			<h3>Define input signals</h3>
 		</div>
 		<div class="modal-body">
-			<div onclick="$('#simulation-advanced').toggle(500)" class="btn btn-small">Advanced</div>
+			<div id="simulation-advanced-toggle" class="btn btn-small">Advanced</div>
 			<div id="simulation-advanced" class="hide">
 				<form class="form-horizontal">
 					<div class="control-group">
@@ -174,6 +176,17 @@
 							<div class="input-append">
 								<input type="text" id="simulate-tick-width" class="input-mini" /><span class="add-on">s</span>
 							</div>
+							<p class="help-block">Duration of each tick in seconds.</p>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="simulate-length">Length</label>
+						<div class="controls">
+							<div class="input-append">
+								<input type="text" id="simulate-length" class="input-mini" />
+								<span class="add-on">ticks</span>
+							</div>
+							<p class="help-block">Number of ticks to be simulated.</p>
 						</div>
 					</div>
 					<div class="control-group">
@@ -186,6 +199,7 @@
 							<div class="input-prepend input-append">
 								 <span class="add-on">high</span><input type="text" id="simulate-high-level" class="input-mini" /><span class="add-on" title="micromole/L">&micro;M</span>
 							</div>
+							<p class="help-block">Concentrations for input levels.</p>
 						</div>
 					</div>
 				</form>

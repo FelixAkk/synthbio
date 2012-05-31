@@ -93,7 +93,7 @@ synthbio.gui.saveInputs = function(circuit) {
 	var simulationInput=circuit.getSimulationInputs();
 	
 	//copy the options from the form to the object.
-	/*synthbio.util.form2object(
+	synthbio.util.form2object(
 		simulationInput,
 		[
 			{ selector: '#simulate-tick-width', setter: 'setTickWidth' },
@@ -101,7 +101,7 @@ synthbio.gui.saveInputs = function(circuit) {
 			{ selector: '#simulate-low-level', setter: 'setLowLevel' },
 			{ selector: '#simulate-high-level', setter: 'setHighLevel' }
 		]
-	);*/
+	);
 
 	//copy the values for each input signal 
 	$('.signal').each(function(index, elem) {
@@ -131,6 +131,11 @@ $(document).ready(function() {
 		// attach action to save button.
 		$('#save-inputs').click(function(){
 			synthbio.gui.saveInputs();
+		});
+		
+		//attach 'advanced' toggle.
+		$('#simulation-advanced-toggle').on('click', function(){
+			$('#simulation-advanced').toggle(500);
 		});
 	});
 });
