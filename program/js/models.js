@@ -336,7 +336,8 @@ synthbio.Circuit.prototype.checkGateExists = function(gate) {
  * @param gate An instance of synthbio.Gate
  */
 synthbio.Circuit.prototype.addGate = function(gate, position) {
-	if (!(gate instanceof synthbio.Gate) && position) {
+	if (!(gate instanceof synthbio.Gate)) {
+		synthbio.util.assert(position, "Position is not defined");
 		gate = new synthbio.Gate(gate, position);
 	}
 	

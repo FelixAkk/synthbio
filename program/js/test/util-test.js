@@ -24,9 +24,11 @@
  /**
  * Testable objects
  */
- var roundableNum1 = 0.6;
- var roundableNum2 = 3.4;
+ var roundableNum1 = 0.636;
+ var roundableNum2 = 3.492;
 
+ 
+ var circuit = new synthbio.Circuit("Name", "Dexc", [], [], []);
  /**
   * Tests
   */
@@ -36,11 +38,14 @@
 		 * Rounding numbers
 		 */
 		test('Round numbers', function() {
-			equal(roundableNum1.roundTo(1), 1, 'Rounded up to 1');
-			equal(roundableNum1.roundTo(2), 0.6, 'Rounded up to 1');
-			equal(roundableNum1.roundTo(3), 0.60, 'Rounded up to 3');
-			equal(roundableNum2.roundTo(1), 3, 'Rounded down to 1');
-			equal(roundableNum2.roundTo(2), 3.4, 'Rounded down to 2');
+			equal(roundableNum1.roundTo(1), 0.6, 'Rounded up to 1');
+			equal(roundableNum1.roundTo(2), 0.64, 'Rounded up to 1');
+			equal(roundableNum1.roundTo(3), 0.636, 'Rounded up to 3');
+			equal(roundableNum2.roundTo(1), 3.5, 'Rounded down to 1');
+			equal(roundableNum2.roundTo(2), 3.49, 'Rounded down to 2');
 		});
-		
+	
+		test('form2Object method', function(){
+			deepEqual(synthbio.util.form2object(circuit, [{ selector: '#testableOption', setter: 'length' }]), {}, "Can alter target Object with form data");
+		});
  });

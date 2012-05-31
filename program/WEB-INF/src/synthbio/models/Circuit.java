@@ -473,10 +473,6 @@ public class Circuit implements JSONString {
 					throw new CircuitException("Output "+output+" of Gate "+g.toString()+" is not connected");
 				}
 			}
-			//check if gate has a signal from an output to an input.
-			if(g.hasInput(g.getOutput())){
-				throw new CircuitException("Gate "+g.toString()+" has an output which is connected to one of its inputs");
-			}
 		}
 
 		//check if all outputs come from a gate.
