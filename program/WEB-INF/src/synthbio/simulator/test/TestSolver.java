@@ -28,6 +28,7 @@ import org.apache.commons.math.ode.DerivativeException;
 
 import org.simulator.math.odes.MultiTable;
 import synthbio.simulator.Solver;
+import synthbio.simulator.CircuitConverter;
 
 import java.awt.Dimension;
 import java.util.Arrays;
@@ -58,7 +59,11 @@ public class TestSolver {
 	private final String tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
 
 	private final String circ1 = "data/test/simulator/inputCircuit.syn";
+	private final String de1 = "data/test/simulator/de1.syn";
 
+	public static String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
+		return CircuitConverter.convert((new CircuitFactory()).fromJSON(Util.fileToString(filename)));
+	}
 	/**
  	 * Solve a Syn file
  	 */	
@@ -101,9 +106,11 @@ public class TestSolver {
 	/**
 	 * Testing a SBML-file containing a not-gate (A -> not -> B, where A is high).
 	 */
+	@Ignore
 	@Test
 	public void testSBMLnot() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = solveSBML(not, 0.1, 100);
+		MultiTable solution = solveSBML(not, 10, 1000);
+		//showMultiTable(solution);
 		double a = solution.getColumn("a").getValue(99);
 		double b = solution.getColumn("b").getValue(99);
 		assertTrue(a > b);
@@ -128,8 +135,21 @@ public class TestSolver {
 		MultiTable solution = solveSyn(circ1);
 		double c = solution.getColumn("C").getValue(39);
 		double d = solution.getColumn("D").getValue(39);
-		//showMultiTable(solution);
 		assertTrue(c < d);
+	}
+
+	/**
+ 	 * Testing the solving of a Syn file, testing if the degradation works.
+ 	 */	
+	@Ignore
+	@Test
+	public void testCircuit2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
+		//System.out.println(convertFromFile(de1));
+		MultiTable solution = solveSyn(de1);
+		//showMultiTable(solution);
+		double b = solution.getColumn("B").getValue(90);
+		double b2 = solution.getColumn("B").getValue(110);
+		assertTrue(b2 < b);
 	}
 
 	/**

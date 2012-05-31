@@ -54,7 +54,7 @@ public class TestCircuitConverter {
 	@Test
 	public void testNotCircuit() throws CircuitException, JSONException, IOException {
 		String sbmlResult = convertFromFile(notCircuit);
-		
+		//System.out.println(sbmlResult);	
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));
 		assertTrue(sbmlResult.contains("<species id=\"mB\""));

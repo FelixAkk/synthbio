@@ -187,7 +187,13 @@ synthbio.Signal.prototype.setProtein = function(protein) {
 };
 
 synthbio.Signal.prototype.toJSON = function() {
-	return $.extend({}, {protein: this.protein}, {from: this.from}, {to: this.to});
+	return {
+		"protein": this.getProtein(),
+		"from": this.getFrom(),
+		"to": this.getTo(),
+		"fromEndpoint": this.fromEndpoint,
+		"toEndpoint": this.toEndpoint
+	};
 };
 synthbio.Signal.prototype.setFrom = function(from) {
 	this.from = from;
@@ -589,7 +595,9 @@ synthbio.SimulationInputs.prototype.bindCircuit = function(circuit){
 	this.circuit=circuit;
 	this.updateInputs();
 };
-
+synthbio.SimulationInputs.prototype.getCircuit = function() {
+	return this.circuit;
+};
 
 synthbio.SimulationInputs.prototype.setValue = function(protein, value) {
 	this.updateInputs();
@@ -688,5 +696,5 @@ synthbio.SimulationInputs.prototype.toJSON = function() {
  * @todo: implement
  */
 synthbio.SimulationInputs.prototype.toString = function() {
-	return ' length: '+this.getLength();
+	return 'Simulation bound to ' + this.getCircuit().getName()+ ' has options { length: '+this.getLength()+' , tick width: '+this.getTickWidth()+' , low level: '+this.getLowLevel()+' , high level: '+this.getHighLevel()+'}';
 };

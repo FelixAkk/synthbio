@@ -40,7 +40,7 @@ var circuitName="testCircuit";
 var circuitDescription="testDescription";
 var circuit;
 
-var simulation = new synthbio.SimulationInputs([], []);
+var	simulation = new synthbio.SimulationInputs("testValue", 20);
 
 /**
  * Function called before each test for setup
@@ -302,7 +302,20 @@ $(document).ready(function() {
 		});
 	
 	module("SimulationInputs");
-		test("Simulation Inputs should have all base", function(){
-			ok("");
+		test("Simulation Inputs should have all base, testing all getters", function(){
+			equal(simulation.getLength(), 40, "getLength works");
+			equal(simulation.getTickWidth(), 1, "getTickWidth works");
+			equal(simulation.getLowLevel(), 0, "getLowLevel works");
+			equal(simulation.getHighLevel(), 600, "getHighLevel works");
+			equal(simulation.getCircuit(), undefined, "bound circuit should start as undefined");
+		});
+		
+		test("Simulations should be able to bind to a circuit", function(){
+			simulation.bindCircuit(circuit);
+			deepEqual(simulation.getCircuit(), circuit, "is able to bind to a circuit");
+		});
+		
+		test("Simulations have a toString method", function(){
+			equal(simulation.toString(), "Simulation bound to testCircuit has options { length: 40 , tick width: 1 , low level: 0 , high level: 600}");
 		});
 });
