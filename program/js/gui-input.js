@@ -125,7 +125,9 @@ synthbio.gui.inputEditor = function(){
 			}
 
 			//highlight the range with a color for some time.
-			ticks.addClass('changed', 300).delay(600).removeClass('changed', 400);
+			if(ticks){
+				ticks.addClass('changed', 300).delay(600).removeClass('changed', 400);
+			}
 			
 			//clear saved selection start.
 			selectionStart={};

@@ -635,12 +635,14 @@ body {
 		display: inline-block;
 		white-space: nowrap;
 		cursor: default;
+		height: 20px;
+		vertical-align: middle;
 		
 		.tick{
 			display: inline-block;
 			background-color: #eee;
 			width: 12px;
-			height: 16px;
+			height: 20px;
 			cursor: pointer;
 		}
 		.tick:hover{
@@ -649,8 +651,8 @@ body {
 		.tick.changed{
 			background-color: #f2dede;
 		}
-		.low{ border-bottom: 2px solid black; }
-		.high{ border-top: 2px solid black; }
+		.low{ border-bottom: 1.5px solid black; }
+		.high{ border-top: 1.5px solid black; }
 
 		.low + .high{
 			border-left: 1px solid black;
