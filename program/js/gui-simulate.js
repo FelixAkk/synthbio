@@ -91,6 +91,7 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 synthbio.gui.plotSeries = function(series, timestep) {
 	timestep = timestep || 1;
 
+	//Update the top-left range buttons to show better ranges
 	var rangeButtons = $.map(synthbio.chartOptions.rangeSelector.buttons, function(val) {
 		//Make a copy of the button object
 		val = $.extend({}, val);
@@ -103,6 +104,7 @@ synthbio.gui.plotSeries = function(series, timestep) {
 		return val;
 	});
 
+	//Extend the default options with the series
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
 		navigator: {
@@ -110,8 +112,10 @@ synthbio.gui.plotSeries = function(series, timestep) {
 		},
 		rangeSelector: {
 			buttons: rangeButtons
-		},
+		}
 	});
+
+	//Plot!
 	synthbio.gui.plot = new Highcharts.StockChart(options);
 };
 
@@ -121,6 +125,8 @@ synthbio.gui.plotSeries = function(series, timestep) {
  */
 synthbio.gui.plotOutput = function(response) {
 	var timestep = response.step || 1;
+
+	//Map the series from the synthbio.requests.simulate output to Highcharts.Stockchart data
 	var series = response.names.map(function(val) {
 		return {
 			type: 'spline',
@@ -155,10 +161,13 @@ synthbio.chartOptions.xAxis = {
 //tooltip: Format the output for the tooltip (show time in seconds and all values)
 synthbio.chartOptions.tooltip = {
 	formatter: function() {
+		//Current time
 		var s = '<b>'+ this.x +' seconds</b>';
 
+		//Protein values
 		$.each(this.points, function(i, point) {
-			s += "<br/>" + point.series.name + ": " + this.point.y;
+			s += "<br/>" + point.series.name;
+			s += ": " + this.point.y.roundTo(synthbio.gui.plotPrecision);
 		});
 	
 		return s;
@@ -222,6 +231,7 @@ synthbio.chartOptions.rangeSelector = {
 };
 
 $(document).ready(function() {
+	//Create an initial chart (in a loading state) as a stub
 	synthbio.gui.plot = new Highcharts.StockChart(synthbio.chartOptions);
 	synthbio.gui.plot.showLoading();
 
