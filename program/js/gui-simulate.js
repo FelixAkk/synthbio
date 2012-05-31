@@ -86,12 +86,17 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 /**
  * Plot an array of series
  * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
+ * @param interval Interval between points in seconds (defaults to 1)
  */
-synthbio.gui.plotSeries = function(series) {
+synthbio.gui.plotSeries = function(series, interval) {
+	interval = interval || 1;
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
 		navigator: {
 			series: { data: synthbio.gui.calculateSumSeries(series) }
+		},
+		plotOptions: {
+			series: { pointInterval: interval }
 		}
 	});
 	synthbio.gui.plot = new Highcharts.StockChart(options);
@@ -109,7 +114,7 @@ synthbio.gui.plotOutput = function(response) {
 		};
 	});
 
-	synthbio.gui.plotSeries(series);
+	synthbio.gui.plotSeries(series, response.step);
 };
 
 /**
