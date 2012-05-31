@@ -1,4 +1,4 @@
-/**
+ /**
  * Project Zelula
  *
  * Contextproject TI2800
@@ -16,9 +16,9 @@
 
 /**
  * This document contains tests for the JavaScript clientside
- * The JSON coming from the Java server will be translated to circuits and UnitTested here
+ * These tests are designed for models.js
  * 
- * @author Thomas van Helden & Jan Pieter Waagmeester & Felix Akkermans
+  * @author Thomas van Helden & Jan Pieter Waagmeester & Felix Akkermans
  */
  
 
@@ -53,8 +53,7 @@ var circuitJSON=
 	'"description":"'+circuitDescription+'",'+
 	'"gates":['+gateJSON+','+gateJSON+'],'+
 	'"signals":['+signalJSON+','+signalJSON+'],'+
-	'"groups":[],'+
-	'"inputs":{"length":40,"values":{}}'+
+	'"groups":[],'+	'"inputs":{"length":40,\"tickWidth\":1,\"lowLevel\":0,\"highLevel\":600,\"values":{}}'+
 	'}';
 
 var exampleJSON='{ '+
@@ -82,7 +81,7 @@ var exampleJSON='{ '+
 
 	
 /**
- * The actual tests
+ * Tests
  */
 $(document).ready(function() {
 	module("Points");
