@@ -187,7 +187,13 @@ synthbio.Signal.prototype.setProtein = function(protein) {
 };
 
 synthbio.Signal.prototype.toJSON = function() {
-	return $.extend({}, {protein: this.protein}, {from: this.from}, {to: this.to});
+	return {
+		"protein": this.getProtein(),
+		"from": this.getFrom(),
+		"to": this.getTo(),
+		"fromEndpoint": this.fromEndpoint,
+		"toEndpoint": this.toEndpoint
+	};
 };
 synthbio.Signal.prototype.setFrom = function(from) {
 	this.from = from;
@@ -271,6 +277,12 @@ synthbio.Circuit.prototype.getName = function() {
 };
 synthbio.Circuit.prototype.getDescription = function() {
 	return this.description;
+};
+synthbio.Circuit.prototype.setName = function(name) {
+	this.name = name;
+};
+synthbio.Circuit.prototype.setDescription = function(description) {
+	this.description = description;
 };
 synthbio.Circuit.prototype.getGates = function() {
 	return this.gates;
