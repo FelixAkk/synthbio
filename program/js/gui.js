@@ -80,7 +80,7 @@ synthbio.gui.showAdModalAlert = function(modal, alertClass, innerHTML, autoHideM
  */
 synthbio.gui.hideAdModalAlert = function(modal) {
 	$("#"+modal+" .modal-alert-fader").css("height", "0px");
-}
+};
 
 /**
  * Start or stop editing the circuit title/description in the main GUI. This mainly concerns replacing DOM elements.
@@ -101,7 +101,7 @@ synthbio.gui.editCircuitDetails = (function() {
 			details.append($(":last-child", original));
 		}
 	};
-})();
+}());
 
 /**
  * Ping server to check for connection 'vitals'. Shown a warning if things go really bad. Declared as a closure to keep
