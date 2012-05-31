@@ -634,13 +634,20 @@ body {
 	.levels{
 		display: inline-block;
 		white-space: nowrap;
-
+		cursor: default;
+		
 		.tick{
 			display: inline-block;
 			background-color: #eee;
 			width: 12px;
 			height: 16px;
 			cursor: pointer;
+		}
+		.tick:hover{
+			background-color: lighten(#eee, 2);
+		}
+		.tick.changed{
+			background-color: #f2dede;
 		}
 		.low{ border-bottom: 2px solid black; }
 		.high{ border-top: 2px solid black; }

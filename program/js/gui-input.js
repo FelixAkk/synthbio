@@ -53,7 +53,7 @@ synthbio.gui.inputEditor = function(){
 				if(i < ticks.length){
 					currentLevel=ticks.charAt(i);
 				}
-				levels+='<div class="tick '+(currentLevel==="H" ? 'high': 'low')+'"></div>';
+				levels+='<div class="tick '+(currentLevel==="H" ? 'high': 'low')+'" id="tick'+name+'_'+i+ '"></div>';
 			}
 			levels+='</div>';
 					
@@ -70,12 +70,68 @@ synthbio.gui.inputEditor = function(){
 	});
 	
 	//click listener for each .levels div containing ticks.
-	$('.levels').on('click', function(event) {
-		if($(event.target).hasClass('tick')){
-			$(event.target).toggleClass('low').toggleClass('high');
-			$(this).find('toggle-highlow').removeClass('low').removeClass('high');
+	//~ $('.levels').on('click', function(event) {
+		//~ if($(event.target).hasClass('tick')){
+			//~ $(event.target).toggleClass('low').toggleClass('high');
+//~ 
+		//~ }
+	//~ });
+	
+	var selectionStart={};
+	$('.levels').on('mousedown', function(event){
+		var tick=$(event.target);
+		if(tick.hasClass('tick')){
+			var tickid=$(event.target).attr('id');
+			var protein=tickid.split('_')[0].substring(4,5);
+			
+			selectionStart[protein]=tickid.split('_')[1];
+		}
+		
+		//return false to prevent dragging shizzle.
+		return false;
+	});
+
+	$('.levels').on('mouseup', function(event){
+		var tick=$(event.target);
+		if(tick.hasClass('tick')){
+			var tickid=$(event.target).attr('id');
+			
+			var protein = tickid.split('_')[0].substring(4, 5);
+			var selectionEnd = tickid.split('_')[1];
+
+			var ticks;
+			if(selectionStart[protein] && selectionStart[protein] !== selectionEnd){
+				//toggle a range of ticks according to the value of the first one.
+				var newState, oldState;
+				if($('#tick'+protein + '_' + selectionStart[protein]).hasClass('high')){
+					newState='low';
+					oldState='high';
+				}else{
+					newState='high';
+					oldState='low';
+				}
+				
+				var start = selectionStart[protein];
+
+				//slice wants a range from a smaller to a bigger number.
+				if(selectionEnd > start){
+					ticks=$(this).parent().find('.tick').slice(start, selectionEnd);
+					ticks.addClass(newState).removeClass(oldState);
+				}
+			}else{
+				//just toggle one tick.
+				ticks=tick;
+				ticks.toggleClass('low').toggleClass('high');
+			}
+
+			//highlight the range with a color for some time.
+			ticks.addClass('changed', 300).delay(600).removeClass('changed', 400);
+			
+			//clear saved selection start.
+			selectionStart={};
 		}
 	});
+	
 
 	//attach changed listener to simulation length
 	$('#simulate-length').on('change keyup', synthbio.gui.updateInputEditor);
