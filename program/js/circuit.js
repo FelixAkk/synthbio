@@ -33,7 +33,7 @@ var synthbio = synthbio || {};
 synthbio.model = {};
 
 /**
- * Cleans the current workspace and loads the provided circuit.
+ * Cleans the current workspace and loads the provided circuit. Also updates the GUI.
  *
  * @param circuit An instance of synthbio.Circuit
  */
@@ -58,5 +58,5 @@ synthbio.loadCircuit = function(circuit) {
  * Cleans the current workspace and loads an empty circuit.
  */
 synthbio.newCircuit = function() {
-	synthbio.loadCircuit(new synthbio.Circuit("Untitled", "Description"));
+	synthbio.loadCircuit(new synthbio.Circuit("", ""));
 }

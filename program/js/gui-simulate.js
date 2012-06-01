@@ -104,6 +104,10 @@ synthbio.gui.plotSeries = function(series, timestep) {
 		return val;
 	});
 
+	if (!series || series.length < 1) {
+		series = [{name: "Empty", data: [0, 0, 0, 0, 0], visible: false}];
+	}
+
 	//Extend the default options with the series
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
@@ -147,7 +151,7 @@ synthbio.chartOptions = {
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
-	series:  [{data: [0, 0, 0, 0, 0]}]
+	series:  [{name: "Empty", data: [0, 0, 0, 0, 0]}]
 };
 
 //x-axis: Display the x value and add an "s" (data always starts at 0)
