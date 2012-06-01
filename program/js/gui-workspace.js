@@ -529,7 +529,7 @@ jsPlumb.ready(function() {
 		//Overlays for wires
 		ConnectionOverlays : [
 			//Arrow overlay
-			[ "Arrow", { location: 1 } ],
+			[ "Arrow", { location: 0.92 } ],
 
 			//Text overlay
 			[ "Label", {
