@@ -28,10 +28,6 @@ var synthbio = synthbio || {};
  */
 synthbio.gui = synthbio.gui || {};
 
-/**
- * Max. length of the description when on display. Tell after how many characters to crop and suffic with ...
- */
-synthbio.gui.descrDisplayCropLength = 100;
 
 /**
  * Statusbar info tooltip function
@@ -87,61 +83,6 @@ synthbio.gui.hideAdModalAlert = function(modal) {
 	$("#"+modal+" .modal-alert-fader").css("height", "0px");
 };
 
-/**
- * Start or stop editing the circuit title/description in the main GUI. This mainly concerns replacing DOM elements.
- * Declared as a closure so it can store the original DOM state locally.
- */
-synthbio.gui.editCircuitDetails = function(event) {
-	var details = $("#circuit-details");
-	var button = $(event.srcElement);
-	// Check in which state the circuit details display thingy is (i.e. editting or displaying)
-	if(button.html() === "Edit") {
-		// Set new content
-		details.html(
-			'<input class="span2" type="text" id="circuit-filename" placeholder="filename" value="' + synthbio.model.getName() + '">' +
-			'<input class="span4" type="text" id="circuit-description" placeholder="circuit description" value="' + synthbio.model.getDescription() + '">');
-		// And the old button with a new label
-		details.append(button);
-		button.on("click", synthbio.gui.editCircuitDetails);
-		button.html("Save");
-	} else if(button.html() === "Save") {
-		// If we were in editing and save was clicked, get the shizzle for ma nizzle.
-		var filename = $("#circuit-filename", details).val();
-		// If a filename was provided, extend it with ".syn"
-		if(filename.length > 0) {
-			filename = synthbio.gui.filenameExtension(filename);
-		}
-		var description = $("#circuit-description", details).val().trim();
-		// Save them
-		synthbio.model.setName(filename);
-		synthbio.model.setDescription(description);
-
-		// Now we can play with the variables
-		if(filename.length === 0) {
-			// Set default value to show the it wasn't set
-			filename = "circuit filename";
-		}
-		if(description.length === 0) {
-			// Set default value to show the it wasn't set
-			description = "circuit description";
-		} else if(description.length > synthbio.gui.descrDisplayCropLength) {
-			// Crop the display string if needed
-			description = description.substring(0, synthbio.gui.descrDisplayCropLength) + " ...";
-		}
-		// And set the original content again
-		details.html(
-			'<i id="circuit-filename">' + filename + '</i>' +
-			'<strong id="circuit-description">"' + description + '"</strong>'
-		);
-		// And the old button with a new label
-		details.append(button);
-		button.on("click", synthbio.gui.editCircuitDetails);
-		button.html("Edit");
-	} else {
-		console.error("Circuit details element (top right) entered an invalid state." +
-			"Should be either the editting or displaying. Is checked by comparing the button inner HTML.");
-	}
-};
 /**
  * Ping server to check for connection 'vitals'. Shown a warning if things go really bad. Declared as a closure to keep
  * variables local.
@@ -210,4 +151,23 @@ $(document).ready(function() {
 
 	// Hook click listener for editing the circuit details
 	$("#circuit-details button").on("click", synthbio.gui.editCircuitDetails);
+
+	// Allow resizing of the simulation tabs
+	var startDragPosition = {x: undefined, y: undefined};
+	$("#simulation-tab .navbar").draggable({
+		axis: "y",
+		distance: 10,
+		start: function(event, ui) {
+
+			console.log(ui);
+		},
+		drag: function(event) {
+			var block = $(this).parent();
+
+			console.log("event: " + event.pageY, ", height: " + block.css("height"));
+		},
+		stop: function() {
+			console.log("end drag");
+		}
+	})
 });

@@ -71,40 +71,52 @@ synthbio.gui.inputEditor = function(){
 	
 	//click listener for each .levels div containing ticks.
 	var selectionStart={};
+	var getProtein = function(tick) {
+		return tick.attr('id').split('_')[0].substring(4,5);
+	};
+	var getTickId = function(tick) {
+		return parseInt(tick.attr('id').split('_')[1], 10);
+	};
 	$('.levels').on({
+		/* At mousedown, save the tick it occured on.
+		 */
 		'mousedown': function(event){
 			var tick=$(event.target);
 			if(tick.hasClass('tick')){
-				var tickid=$(event.target).attr('id');
-				var protein=tickid.split('_')[0].substring(4,5);
-				
-				selectionStart[protein]=tickid.split('_')[1];
+				selectionStart[getProtein(tick)]=getTickId(tick);
 			}
 			
 			//return false to prevent dragging shizzle.
 			return false;
 		},
+		/* The mousemove event takes care of highlighting the selected
+		 * range of ticks before the mouse button is released.
+		 *
+		 */ 
 		'mousemove': function(event){
 			var tick=$(event.target);
 			if(!tick.hasClass('tick')){
 				return;
 			}
-			
-			var tickid=$(event.target).attr('id');
-			
-			var protein = tickid.split('_')[0].substring(4, 5);
+
+			//check if a mousedown for this protein occured.
+			var protein = getProtein(tick);
 			if(!selectionStart[protein]){
 				return;
 			}
-			var selectionEnd = tickid.split('_')[1];
 
-			var start = selectionStart[protein];
-			var ticks=$(this).parent().find('.tick').slice(start, selectionEnd);
-
+			//retrieve the range of ticks from the previously recorded start
+			//to the current tick.
+			var ticks=$(this).parent().find('.tick')
+				.slice(selectionStart[protein], getTickId(tick));
+				
+			//and highlight the selected part.
 			$('.tick').removeClass('changing');
 			ticks.addClass('changing');
 			
 		},
+		/* When the mouse button is released above a tick, toggle the range.
+		 */
 		'mouseup': function(event){
 			var tick=$(event.target);
 
@@ -115,10 +127,9 @@ synthbio.gui.inputEditor = function(){
 				selectionStart={};
 				return;
 			}
-			var tickid=$(event.target).attr('id');
-			
-			var protein = tickid.split('_')[0].substring(4, 5);
-			var selectionEnd = tickid.split('_')[1];
+
+			var protein = getProtein(tick);
+			var selectionEnd = getTickId(tick);
 
 			var ticks;
 			if(selectionStart[protein] && selectionStart[protein] !== selectionEnd){
@@ -131,14 +142,18 @@ synthbio.gui.inputEditor = function(){
 					newState='high';
 					oldState='low';
 				}
-				
 				var start = selectionStart[protein];
 
 				//slice wants a range from a smaller to a bigger number.
+				ticks = $(this).parent().find('.tick');
 				if(selectionEnd > start){
-					ticks=$(this).parent().find('.tick').slice(start, selectionEnd);
-					ticks.addClass(newState).removeClass(oldState);
+					ticks = ticks.slice(start, selectionEnd);
+				}else{
+					ticks = ticks.slice(selectionEnd, start);
 				}
+				
+				//the actual toggling.
+				ticks.addClass(newState).removeClass(oldState);
 			}else{
 				//just toggle one tick.
 				ticks=tick;
@@ -150,8 +165,6 @@ synthbio.gui.inputEditor = function(){
 				ticks.addClass('changed', 300).delay(600).removeClass('changed', 400);
 			}
 
-			
-			
 			//clear saved selection start.
 			selectionStart={};
 		}

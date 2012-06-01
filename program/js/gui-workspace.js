@@ -25,6 +25,11 @@ var synthbio = synthbio || {};
 synthbio.gui = synthbio.gui || {};
 
 /**
+ * Max. length of the description when on display. Tell after how many characters to crop and suffix with ...
+ */
+synthbio.gui.descrDisplayCropLength = 100;
+
+/**
  * Width of the <aside> element with all the gates in pixels.
  */
 synthbio.gui.gatesTabWidth = $('#gates-tab').width();
@@ -67,6 +72,13 @@ synthbio.gui.resetWorkspace = function() {
 
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
+
+	// Clear the model with a new slate
+	synthbio.loadCircuit(new synthbio.Circuit("", ""));
+	// And update this in the GUI
+	$("#circuit-filename").html("circuit filename");
+	$("#circuit-description").html("circuit description");
+
 };
 
 /**
@@ -450,6 +462,62 @@ synthbio.gui.removeDisplaySignal = function(id) {
 	return obj;
 };
 
+/**
+ * Start or stop editing the circuit title/description in the main GUI. This mainly concerns replacing DOM elements.
+ * Declared as a closure so it can store the original DOM state locally.
+ */
+synthbio.gui.editCircuitDetails = function(event) {
+	var details = $("#circuit-details");
+	var button = $(event.srcElement);
+	// Check in which state the circuit details display thingy is (i.e. editting or displaying)
+	if(button.html() === "Edit") {
+		// Set new content
+		details.html(
+			'<input class="span2" type="text" id="circuit-filename" placeholder="filename" value="' + synthbio.model.getName() + '">' +
+				'<input class="span4" type="text" id="circuit-description" placeholder="circuit description" value="' + synthbio.model.getDescription() + '">');
+		// And the old button with a new label
+		details.append(button);
+		button.on("click", synthbio.gui.editCircuitDetails);
+		button.html("Save");
+	} else if(button.html() === "Save") {
+		// If we were in editing and save was clicked, get the shizzle for ma nizzle.
+		var filename = $("#circuit-filename", details).val();
+		// If a filename was provided, extend it with ".syn"
+		if(filename.length > 0) {
+			filename = synthbio.gui.filenameExtension(filename);
+		}
+		var description = $("#circuit-description", details).val().trim();
+		// Save them
+		synthbio.model.setName(filename);
+		synthbio.model.setDescription(description);
+
+		// Now we can play with the variables
+		if(filename.length === 0) {
+			// Set default value to show the it wasn't set
+			filename = "circuit filename";
+		}
+		if(description.length === 0) {
+			// Set default value to show the it wasn't set
+			description = "circuit description";
+		} else if(description.length > synthbio.gui.descrDisplayCropLength) {
+			// Crop the display string if needed
+			description = description.substring(0, synthbio.gui.descrDisplayCropLength) + " ...";
+		}
+		// And set the original content again
+		details.html(
+			'<i id="circuit-filename">' + filename + '</i>' +
+				'<strong id="circuit-description">"' + description + '"</strong>'
+		);
+		// And the old button with a new label
+		details.append(button);
+		button.on("click", synthbio.gui.editCircuitDetails);
+		button.html("Edit");
+	} else {
+		console.error("Circuit details element (top right) entered an invalid state." +
+			"Should be either the editting or displaying. Is checked by comparing the button inner HTML.");
+	}
+};
+
 jsPlumb.ready(function() {
 	
 	jsPlumb.setRenderMode(jsPlumb.SVG);
@@ -510,7 +578,7 @@ jsPlumb.ready(function() {
 			var src = synthbio.gui.getFreeEndpoint(opt.connection.sourceId, false);
 			jsPlumb.connect({
 				source: src,
-				target: opt.target
+				target: opt.dropEndpoint || opt.targetId
 			});
 
 			// Disallow the old connection
@@ -583,7 +651,7 @@ jsPlumb.ready(function() {
 });
 
 $(document).ready(function() {
-	// Initialize gate-dragging
+	// Initialize new gate-dragging
 	$('#gates-tab .gate').draggable({ 
 		appendTo: "#gates-transport",
 		containment: 'window',
@@ -623,41 +691,7 @@ $(document).ready(function() {
 		}
 	});
 
-	//synthbio.gui.resetWorkspace();
-	//synthbio.loadCircuit(new synthbio.Circuit("", ""));
-
-	var map = {
-		"name": "example.syn",
-		"description": "Logic for this circuit: D = ~(A^B)",
-		"gates": [
-			{ "kind": "not", "position": {"x": 250,"y": 223}},
-			{ "kind": "not", "position": {"x": 340,"y": 431}}
-		],
-		"signals": [
-			{ "from": "input", "to": 0, "protein": "A", "fromEndpoint": 1, "toEndpoint": 1},
-			//{ "from": "input", "to": 0, "protein": "B", "fromEndpoint": 0, "toEndpoint": 0},
-			{ "from": 0, "to": 1, "protein": "C"},
-			{ "from": 1, "to": "output", "protein": "D"}
-		],
-		"grouping": [
-
-		]
-	};
-	var gates=[], signals=[], groups=[];
-
-	$.each(map.gates, function(i, elem) {
-		gates[i]=synthbio.Gate.fromMap(elem);
-	});
-
-	$.each(map.signals, function(i, elem) {
-		signals[i]=synthbio.Signal.fromMap(elem);
-	});
-	var cir = new synthbio.Circuit(map.name, map.description, gates, signals, groups);
-	setTimeout(function() {
-		synthbio.loadCircuit(cir);
-		//display the define-inputs modal for quicker development.
-		//$('#define-inputs').modal();
-	}, 500);
+	synthbio.gui.resetWorkspace();
 
 });
 

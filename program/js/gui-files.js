@@ -94,6 +94,7 @@ synthbio.gui.saveFile = function() {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not saved.</strong> ' + response.message + '</div>');
 				console.error(response.message);
+				return false;
 			}
 			// We're done; hide
 			$("#files").modal("hide");
@@ -193,11 +194,32 @@ var fTable; // Datatables object for Files dialog
 
 $(document).ready(function() {
 
+	//new button
+	$('#new').on('click', function(){
+		if(confirm("Caution: this will delete unsaved work!")){
+			synthbio.newCircuit();
+		}
+	});
 	/**
 	 * Setup/rig file operation dialog when the `Save As` menu item is clicked.
 	 */
 	$("#save-as").on("click", synthbio.gui.saveFile);
 
+	/**
+	 * Save file if it already has a filename, else prompt the user with the file dialog
+	 */
+	$("#save").on("click", function() {
+		if(synthbio.model.getName() !== "") {
+			synthbio.requests.putFile(synthbio.model.getName(), synthbio.model, function(response) {
+				if(response.success === false) {
+					console.error(response.message);
+					return false;
+				}
+			});
+		} else {
+			synthbio.gui.saveFile();
+		}
+	});
 	/**
 	 * Setup/rig file operation dialog when the `Open` menu item is clicked.
 	 */
