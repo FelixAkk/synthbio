@@ -16,59 +16,12 @@
 	<property name="build" value="classes"/>
 
 	<property name="js-minified" value="zelula-combined-min.js" />
-	
-	<!-- cobertura -->
 
 	<property name="cobertura.dir" value="lib/cobertura" />
+	<property name="cobertura" value="cobertura" />
+	<property name="cobertura-build" value="${cobertura}/instrumenten-classes" />
+	<property name="cobertura-report" value="${cobertura}/report" />
 
-	<path id="cobertura.classpath">
-		<fileset dir="${cobertura.dir}">
-			<include name="cobertura.jar" />
-			<include name="lib/**/*.jar" />
-		</fileset>
-	</path>
-
-	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
-	
-	<target name="instrument" depends="compile">
-		<cobertura-instrument todir="instrumented-classes">
-			<fileset dir="classes">
-				<include name="**/*.class"/>
-				<exclude name="**/Test*.class"/>
-			</fileset>
-		</cobertura-instrument>
-	</target>
-	
-	<target name="cover-test" depends="instrument">
-		<junit fork="yes" printsummary="yes" showoutput="yes">
-			<classpath location="lib/cobertura/cobertura.jar"/>
-			<classpath location="instrumented-classes"/>
-			<assertions>
-				<enable/>
-			</assertions>
-			<classpath>
-				<path refid="project-classpath" />
-				<pathelement path="${build}"/>
-			</classpath>
-			
-			<batchtest haltonfailure="no">
-				<formatter type="brief" usefile="false" />
-				<fileset dir="${src}">
-					<exclude name="**/json/tests/*"/>
-					<exclude name="**/servlets/test/*"/>
-					<include name="**/simulator/test/*"/>
-					<include name="**/Test*.java" />
-				</fileset>
-			</batchtest>
-		</junit> 
-	</target>
-	
-	<target name="coverage-report" depends="cover-test">
-		<cobertura-report srcdir="src" destdir="cobertura-report"/>
-	</target>
-	
-	<!-- /cobertura -->
-	
 	<path id="project-classpath">
 		<!--
 			Make sure Hamcrest is included first, to avoid SecurityExceptions from different Hamcrest versions being included.
@@ -78,7 +31,7 @@
 		<fileset dir="lib" includes="*.jar" excludes="ant-jshint*" />
 		<fileset dir="lib/htmlunit" includes="*.jar" />
 	</path>
-
+	
 	<target name="init">
 		<mkdir dir="${build}"/> 
 	</target>
@@ -190,6 +143,61 @@
 		</junit>
 	</target>
 
+
+	<!--
+		Cobertura coverage assesment.
+	-->
+	<path id="cobertura.classpath">
+		<fileset dir="${cobertura.dir}">
+			<include name="cobertura.jar" />
+			<include name="lib/**/*.jar" />
+		</fileset>
+	</path>
+
+	<taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+	
+	<target name="instrument" depends="compile">
+		<cobertura-instrument todir="${cobertura-build}" datafile="${cobertura}/cobertura.ser">
+			<fileset dir="classes">
+				<include name="**/*.class"/>
+				<exclude name="**/Test*.class"/>
+			</fileset>
+		</cobertura-instrument>
+	</target>
+	
+	<target name="cover-test" depends="instrument">
+		<junit fork="yes" printsummary="yes" showoutput="yes">
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura}/cobertura.ser" />
+
+			<classpath location="lib/cobertura/cobertura.jar"/>
+			<classpath location="${cobertura-build}"/>
+			<assertions>
+				<enable/>
+			</assertions>
+			<classpath>
+				<path refid="project-classpath" />
+				<pathelement path="${build}"/>
+			</classpath>
+			
+			<batchtest haltonfailure="no">
+				<formatter type="brief" usefile="false" />
+				<fileset dir="${src}">
+					<exclude name="**/json/tests/*"/>
+					<exclude name="**/servlets/test/*"/>
+					<include name="**/simulator/test/*"/>
+					<include name="**/Test*.java" />
+				</fileset>
+			</batchtest>
+		</junit> 
+	</target>
+	
+	<target name="coverage-report" depends="cover-test">
+		<cobertura-report srcdir="src" destdir="${cobertura-report}" datafile="${cobertura}/cobertura.ser" />
+	</target>
+	
+	<!-- /cobertura -->
+	
+
 	<!--
 		Create javadoc documentation.
 
@@ -240,15 +248,6 @@
 
 	</target>
 	
-	<!--
-		Clean the compiled stuff
-	-->
-	<target name="clean">
-		<delete dir="${build}" />
-		<delete dir="../js/min/" />
-		<delete file="../${js-minified}" />
-	</target>
-
 	<!--
 		Try to implement automated jslint checking
 		http://docs.jslint4java.googlecode.com/git/2.0.1/ant.html
@@ -305,5 +304,16 @@
 		</concat>
 
 		<echo>Minified all javascript files in ../js/** and combined them in ../${js-minified}</echo>
+	</target>
+
+	<!--
+		Clean the compiled stuff
+	-->
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${cobertura}" />
+		<delete dir="../js/min/" />
+		<delete file="../${js-minified}" />
+		<delete file="jsbml.log" />
 	</target>
 </project>
