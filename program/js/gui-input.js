@@ -222,7 +222,7 @@ synthbio.gui.updateInputEditor = function() {
 
 $(document).ready(function() {
 	/**
-	 *  Build the input editor.
+	 * Rebuild the editor on every show of the modal.
 	 */
 	$('#define-inputs').on('show', function() {
 		// build the editor
@@ -240,7 +240,7 @@ $(document).ready(function() {
 	});
 	
 	//attach 'advanced' toggle.
-	$('#simulation-advanced-toggle').on('click', function(event){
+	$('#simulation-advanced-toggle').on('click', function(event) {
 		$('#simulation-advanced').toggle(500);
 	});
 });
