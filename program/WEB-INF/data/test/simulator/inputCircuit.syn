@@ -20,8 +20,8 @@
 		"lowLevel" : 0,
 		"highLevel": 600,
     "values": {
-      "A": "LLLLLLLLLL LLLLLLLLLL H", 
-      "B": "H"
+      "A": "H", 
+      "B": "LLLLLLLLLL LLLLLLLLLL H"
     }
   }
 }
