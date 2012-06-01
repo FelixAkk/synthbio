@@ -81,7 +81,6 @@ public class Solver {
  	 * solves a Model with specific inputs
  	 * @param		model 		the Model-object to simulate.
 	 * @param		inputs		a MultiTable containing the inputs of the model (see CircuitConverter/getInputs)
-	 * @param		timeEnd 	the endtime of the simulation 
 	 * @return 						A MultiTable-object containing the solution
  	 */
 	public static MultiTable solve(Model model, MultiTable inputs)

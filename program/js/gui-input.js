@@ -53,7 +53,7 @@ synthbio.gui.inputEditor = function(){
 				if(i < ticks.length){
 					currentLevel=ticks.charAt(i);
 				}
-				levels+='<div class="tick '+(currentLevel==="H" ? 'high': 'low')+'"></div>';
+				levels+='<div class="tick '+(currentLevel==="H" ? 'high': 'low')+'" id="tick'+name+'_'+i+ '"></div>';
 			}
 			levels+='</div>';
 					
@@ -70,12 +70,106 @@ synthbio.gui.inputEditor = function(){
 	});
 	
 	//click listener for each .levels div containing ticks.
-	$('.levels').on('click', function(event) {
-		if($(event.target).hasClass('tick')){
-			$(event.target).toggleClass('low').toggleClass('high');
-			$(this).find('toggle-highlow').removeClass('low').removeClass('high');
+	var selectionStart={};
+	var getProtein = function(tick) {
+		return tick.attr('id').split('_')[0].substring(4,5);
+	};
+	var getTickId = function(tick) {
+		return parseInt(tick.attr('id').split('_')[1], 10);
+	};
+	$('.levels').on({
+		/* At mousedown, save the tick it occured on.
+		 */
+		'mousedown': function(event){
+			var tick=$(event.target);
+			if(tick.hasClass('tick')){
+				selectionStart[getProtein(tick)]=getTickId(tick);
+			}
+			
+			//return false to prevent dragging shizzle.
+			return false;
+		},
+		/* The mousemove event takes care of highlighting the selected
+		 * range of ticks before the mouse button is released.
+		 *
+		 */ 
+		'mousemove': function(event){
+			var tick=$(event.target);
+			if(!tick.hasClass('tick')){
+				return;
+			}
+
+			//check if a mousedown for this protein occured.
+			var protein = getProtein(tick);
+			if(!selectionStart[protein]){
+				return;
+			}
+
+			//retrieve the range of ticks from the previously recorded start
+			//to the current tick.
+			var ticks=$(this).parent().find('.tick')
+				.slice(selectionStart[protein], getTickId(tick));
+				
+			//and highlight the selected part.
+			$('.tick').removeClass('changing');
+			ticks.addClass('changing');
+			
+		},
+		/* When the mouse button is released above a tick, toggle the range.
+		 */
+		'mouseup': function(event){
+			var tick=$(event.target);
+
+			//remove changing classes to clear 
+			$('.tick').removeClass('changing');
+			
+			if(!tick.hasClass('tick')){
+				selectionStart={};
+				return;
+			}
+
+			var protein = getProtein(tick);
+			var selectionEnd = getTickId(tick);
+
+			var ticks;
+			if(selectionStart[protein] && selectionStart[protein] !== selectionEnd){
+				//toggle a range of ticks according to the value of the first one.
+				var newState, oldState;
+				if($('#tick'+protein + '_' + selectionStart[protein]).hasClass('high')){
+					newState='low';
+					oldState='high';
+				}else{
+					newState='high';
+					oldState='low';
+				}
+				var start = selectionStart[protein];
+
+				//slice wants a range from a smaller to a bigger number.
+				ticks = $(this).parent().find('.tick');
+				if(selectionEnd > start){
+					ticks = ticks.slice(start, selectionEnd);
+				}else{
+					ticks = ticks.slice(selectionEnd, start);
+				}
+				
+				//the actual toggling.
+				ticks.addClass(newState).removeClass(oldState);
+			}else{
+				//just toggle one tick.
+				ticks=tick;
+				ticks.toggleClass('low').toggleClass('high');
+			}
+
+			//highlight the range with a color for some time.
+			if(ticks){
+				ticks.addClass('changed', 300).delay(600).removeClass('changed', 400);
+			}
+
+			//clear saved selection start.
+			selectionStart={};
 		}
 	});
+	
 
 	//attach changed listener to simulation length
 	$('#simulate-length').on('change keyup', synthbio.gui.updateInputEditor);

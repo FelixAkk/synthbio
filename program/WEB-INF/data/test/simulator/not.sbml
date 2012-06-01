@@ -24,7 +24,7 @@
 			<species id="e" compartment="cell" initialAmount="0"/>
 		
 			<species id="a" compartment="cell" initialAmount="500" substanceUnits="substance"/>
-			<species id="b" compartment="cell" initialAmount="0" substanceUnits="substance"/>
+			<species id="b" compartment="cell" initialAmount="500" substanceUnits="substance"/>
 			
 			<species id="mb" compartment="cell" initialAmount="0" substanceUnits="substance"/>
 		</listOfSpecies>
@@ -32,10 +32,10 @@
 		<listOfParameters>
 			<parameter id="km" value="224.0227" units="substance"/>
 			<parameter id="k1" value="4.7313" units="substance"/>
-			<parameter id="k2" value="4.6337" units="substance"/>
+			<parameter id="k2" value="4.6122" units="substance"/>
 			<parameter id="n" value="1" units="substance"/>
-			<parameter id="d1" value="0.0240" units="substance"/>
-			<parameter id="d2" value="0.8466" units="substance"/>
+			<parameter id="d1" value="0.0205" units="substance"/>
+			<parameter id="d2" value="0.8627" units="substance"/>
 		</listOfParameters>
 		
 		<listOfReactions>

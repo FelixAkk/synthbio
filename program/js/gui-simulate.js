@@ -86,19 +86,36 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 /**
  * Plot an array of series
  * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
- * @param interval Interval between points in seconds (defaults to 1)
+ * @param timestep Timestep in seconds (defaults to 1).
  */
-synthbio.gui.plotSeries = function(series, interval) {
-	interval = interval || 1;
+synthbio.gui.plotSeries = function(series, timestep) {
+	timestep = timestep || 1;
+
+	//Update the top-left range buttons to show better ranges
+	var rangeButtons = $.map(synthbio.chartOptions.rangeSelector.buttons, function(val) {
+		//Make a copy of the button object
+		val = $.extend({}, val);
+
+		if (val.count > 0) {
+			val.count *= timestep;
+			val.text = val.count + 's';
+		}
+		
+		return val;
+	});
+
+	//Extend the default options with the series
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
 		navigator: {
 			series: { data: synthbio.gui.calculateSumSeries(series) }
 		},
-		plotOptions: {
-			series: { pointInterval: interval }
+		rangeSelector: {
+			buttons: rangeButtons
 		}
 	});
+
+	//Plot!
 	synthbio.gui.plot = new Highcharts.StockChart(options);
 };
 
@@ -107,14 +124,19 @@ synthbio.gui.plotSeries = function(series, interval) {
  * @param response Data object from synthbio.requests.simulate
  */
 synthbio.gui.plotOutput = function(response) {
+	var timestep = response.step || 1;
+
+	//Map the series from the synthbio.requests.simulate output to Highcharts.Stockchart data
 	var series = response.names.map(function(val) {
 		return {
+			type: 'spline',
 			name: val,
+			pointInterval: timestep,
 			data: synthbio.gui.roundSeries(response.data[val])
 		};
 	});
 
-	synthbio.gui.plotSeries(series, response.step);
+	synthbio.gui.plotSeries(series, timestep);
 };
 
 /**
@@ -125,7 +147,7 @@ synthbio.chartOptions = {
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
-	series:  [{}]
+	series:  [{data: [0, 0, 0, 0, 0]}]
 };
 
 //x-axis: Display the x value and add an "s" (data always starts at 0)
@@ -139,10 +161,13 @@ synthbio.chartOptions.xAxis = {
 //tooltip: Format the output for the tooltip (show time in seconds and all values)
 synthbio.chartOptions.tooltip = {
 	formatter: function() {
+		//Current time
 		var s = '<b>'+ this.x +' seconds</b>';
 
+		//Protein values
 		$.each(this.points, function(i, point) {
-			s += "<br/>" + point.series.name + ": " + this.point.y;
+			s += "<br/>" + point.series.name;
+			s += ": " + this.point.y.roundTo(synthbio.gui.plotPrecision);
 		});
 	
 		return s;
@@ -151,7 +176,7 @@ synthbio.chartOptions.tooltip = {
 
 //navigator: Make sure the id is "navseries"
 synthbio.chartOptions.navigator = {
-	series: { id: "navseries" },
+	series: { id: "navseries", data: [0, 0, 0, 0, 0] },
 	xAxis: synthbio.chartOptions.xAxis,
 	top: 340
 };
@@ -206,6 +231,7 @@ synthbio.chartOptions.rangeSelector = {
 };
 
 $(document).ready(function() {
+	//Create an initial chart (in a loading state) as a stub
 	synthbio.gui.plot = new Highcharts.StockChart(synthbio.chartOptions);
 	synthbio.gui.plot.showLoading();
 
@@ -232,14 +258,6 @@ $(document).ready(function() {
 	$("#validate-alert").bind('closed', function(){
 		$(this).find("p").html('');
 		$('#validate-alert').addClass("invalid");
-	});
-	
-	/**
-	 * Dump the circuit to console.
-	 */
-	$('#dump-circuit').on('click', function() {
-		console.log(synthbio.model);
-		console.log(JSON.stringify(synthbio.model));
 	});
 
 	/**

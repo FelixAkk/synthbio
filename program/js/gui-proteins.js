@@ -28,7 +28,7 @@ synthbio.gui = synthbio.gui || {};
  * String to signify that a signal/wire has no protein assigned to it. Check for equality against this to see if the
  * signal is clear/empty/had no protein assigned.
  */
-synthbio.gui.noProtein = "none";
+synthbio.gui.noProtein = "None";
 
 /**
  * Returns the available proteins (loads them from the server at the start of the program)
@@ -39,14 +39,17 @@ synthbio.getProteins = (function() {
 	synthbio.requests.getCDSs(function(response) {
 		synthbio.util.assert(response.length, "Loading proteins failed");
 
+		//Walk through response and fill the result object
 		$.each(response, function(i, cds) {
 			proteins[cds.name] = false; 
 		});
 
+		//Fill the proteins modal
 		synthbio.gui.fillProteins(response);
 	});
 
 	return function() {
+		//Get used proteins from model and merge with object of all available proteins
 		return $.extend({}, proteins, synthbio.model.getUsedProteins());
 	};
 }());
@@ -92,6 +95,7 @@ synthbio.gui.fillProteins = function(response) {
 
 	$('#list-proteins tbody').html(html);
 
+	// Initialize the DataTable (for sorting/searching)
 	var lpTable = $('#list-proteins table').dataTable(synthbio.gui.dataTableOptions);
 	
 	// Hook up custom search/filter input box for this table. Only the `keyup` event seems give a good result
@@ -103,6 +107,7 @@ synthbio.gui.fillProteins = function(response) {
 /**
  * Closes all dropdown menus which are still open.
  * Should be done when selecting a new wire or clicking outside of a dropdown
+ * @param mtarget Element on which the mouse has clicked (optional)
  */
 synthbio.gui.closeProteinDropdowns = function(mtarget){
 	var change = false;
@@ -114,11 +119,13 @@ synthbio.gui.closeProteinDropdowns = function(mtarget){
 		return (mtarget === undefined) || el.is(mtarget) || has.length;
 	});
 
+	//Check if the selector had a result (if so, there are still dropdowns open)
 	if (sel && sel.length) {
 		sel.parent().css('z-index', "1");
 		change = true;
 	}
 	
+	//If dropdowns were closed, update the labels and do a repaint
 	if(change) {
 		synthbio.gui.updateConnections();
 		jsPlumb.repaintEverything();
@@ -176,7 +183,7 @@ synthbio.gui.selectProtein = function(label, connection, signal) {
 		selectedProtein = "";
 	}
 
-	//Update signal in model.
+	//Update signal in model and update all connections (as there might have occured side effects)
 	signal.setProtein(selectedProtein);
 	synthbio.gui.updateConnections();
 
@@ -184,6 +191,12 @@ synthbio.gui.selectProtein = function(label, connection, signal) {
 	label.parent().css('z-index', "1");
 };
 
+/**
+ * Updates a label for a specific connection according to signal. Creates a label if none is defined.
+ *
+ * @param signal synthbio.Signal object with information for connection
+ * @param connection The jsPlumb connection object that needs its label updated.
+ */
 synthbio.gui.setProteinLabel = function(signal, connection) {
 	var overlay = connection.getOverlay("label");
 	var label = $('#lbl_' + connection.id, 0);
@@ -208,6 +221,9 @@ synthbio.gui.setProteinLabel = function(signal, connection) {
 	overlay.setLocation(overlay.getLocation()); //Workaround for proper location
 };
 
+/**
+ * Updates all the connection labels according to the information in synthbio.model
+ */
 synthbio.gui.updateConnections = function() {
 	$.each(synthbio.gui.displaySignalIdMap, function(conn, obj) {
 		synthbio.gui.setProteinLabel(obj.signal, obj.connection);

@@ -1,15 +1,12 @@
 {
   "name": "example.syn",
-  "description": "Logic for this circuit: D = ~(A^B). A will be always high, B will start low and becomes high after 20s.",
+  "description": "Logic for this circuit: D = ~A -> B. A will be Low -> High -> Low",
   "gates": [
-    { "kind": "and", "position": {"x": 2,"y": 2}},
     { "kind": "not", "position": {"x": 2,"y": 4}}
   ],
   "signals": [
     { "from": "input", "to": 0, "protein": "A"},
-    { "from": "input", "to": 0, "protein": "B"},
-    { "from": 0, "to": 1, "protein": "C"},
-    { "from": 1, "to": 'output', "protein": "D"}
+    { "from": 0, "to": "output", "protein": "B"},
   ],
   "grouping": [
 
@@ -20,8 +17,7 @@
 		"lowLevel" : 0,
 		"highLevel": 600,
     "values": {
-      "A": "LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL",
-      "B": "LLLLLLLLLL LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH LLLLLLLLLL LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL"
+      "A": "LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL" 
     }
   }
 }

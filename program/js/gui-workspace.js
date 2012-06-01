@@ -578,7 +578,7 @@ jsPlumb.ready(function() {
 			var src = synthbio.gui.getFreeEndpoint(opt.connection.sourceId, false);
 			jsPlumb.connect({
 				source: src,
-				target: opt.target
+				target: opt.dropEndpoint || opt.targetId
 			});
 
 			// Disallow the old connection

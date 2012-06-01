@@ -193,6 +193,13 @@ synthbio.gui.prepareFileDialog = function(event) {
 var fTable; // Datatables object for Files dialog
 
 $(document).ready(function() {
+
+	//new button
+	$('#new').on('click', function(){
+		if(confirm("Caution: this will delete unsaved work!")){
+			synthbio.newCircuit();
+		}
+	});
 	/**
 	 * Setup/rig file operation dialog when the `Save As` menu item is clicked.
 	 */
