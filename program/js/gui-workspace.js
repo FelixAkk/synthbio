@@ -456,7 +456,7 @@ synthbio.gui.removeDisplaySignal = function(id) {
 			jsPlumb.detach(obj.connection);
 		}
 		if (obj.signal) {
-			synthbio.model.removeSignal(obj.signal);
+			synthbio.model.removeSignal(obj.signal, undefined, true);
 		}
 		delete synthbio.gui.displaySignalIdMap[id];
 	}
