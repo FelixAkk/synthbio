@@ -85,8 +85,8 @@ synthbio.gui.saveFile = function() {
 			return false;
 		}
 
-		// If all is good (we end up here), and we check if the filename was suffixed by ".syn"
-		input = this.filenameExtension(input);
+		// If all is good (we end up here), and we check if the filename was suffixed by ".syn" and do so if needed.
+		input = synthbio.gui.filenameExtension(input);
 
 		// Save the file, let's see if it works
 		synthbio.requests.putFile(input, synthbio.model, function(response) {
