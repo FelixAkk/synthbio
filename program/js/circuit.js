@@ -53,6 +53,10 @@ synthbio.loadCircuit = function(circuit) {
 	//TODO; implement grouping.
 };
 
+
+/**
+ * Cleans the current workspace and loads an empty circuit.
+ */
 synthbio.newCircuit = function() {
 	synthbio.loadCircuit(new synthbio.Circuit("Untitled", "Description"));
 }
