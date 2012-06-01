@@ -73,10 +73,10 @@ synthbio.gui.inputEditor = function(){
 	var selectionStart={};
 	var getProtein = function(tick) {
 		return tick.attr('id').split('_')[0].substring(4,5);
-	}
+	};
 	var getTickId = function(tick) {
 		return parseInt(tick.attr('id').split('_')[1], 10);
-	}
+	};
 	$('.levels').on({
 		/* At mousedown, save the tick it occured on.
 		 */
@@ -127,8 +127,7 @@ synthbio.gui.inputEditor = function(){
 				selectionStart={};
 				return;
 			}
-			var tickid=$(event.target).attr('id');
-			
+
 			var protein = getProtein(tick);
 			var selectionEnd = getTickId(tick);
 
@@ -143,16 +142,18 @@ synthbio.gui.inputEditor = function(){
 					newState='high';
 					oldState='low';
 				}
-				console.log('new, old: ', newState, oldState);
 				var start = selectionStart[protein];
 
 				//slice wants a range from a smaller to a bigger number.
+				ticks = $(this).parent().find('.tick');
 				if(selectionEnd > start){
-					ticks=$(this).parent().find('.tick').slice(start, selectionEnd);
-					ticks.addClass(newState).removeClass(oldState);
+					ticks = ticks.slice(start, selectionEnd);
 				}else{
-					console.log('start is bigger than end');
+					ticks = ticks.slice(selectionEnd, start);
 				}
+				
+				//the actual toggling.
+				ticks.addClass(newState).removeClass(oldState);
 			}else{
 				//just toggle one tick.
 				ticks=tick;
