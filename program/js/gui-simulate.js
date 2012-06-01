@@ -39,7 +39,7 @@ synthbio.gui.plotPrecision = 2;
  */
 synthbio.gui.roundSeries = function(series) {
 	return $.map(series, function(val) { 
-		return val.roundTo(synthbio.gui.plotPrecision); 
+		return val.roundTo(synthbio.gui.plotPrecision);
 	});
 };
 
