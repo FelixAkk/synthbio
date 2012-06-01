@@ -39,7 +39,7 @@ synthbio.gui.plotPrecision = 2;
  */
 synthbio.gui.roundSeries = function(series) {
 	return $.map(series, function(val) { 
-		return val.roundTo(synthbio.gui.plotPrecision); 
+		return val.roundTo(synthbio.gui.plotPrecision); a
 	});
 };
 
@@ -258,14 +258,6 @@ $(document).ready(function() {
 	$("#validate-alert").bind('closed', function(){
 		$(this).find("p").html('');
 		$('#validate-alert').addClass("invalid");
-	});
-	
-	/**
-	 * Dump the circuit to console.
-	 */
-	$('#dump-circuit').on('click', function() {
-		console.log(synthbio.model);
-		console.log(JSON.stringify(synthbio.model));
 	});
 
 	/**
