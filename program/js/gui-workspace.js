@@ -29,6 +29,8 @@ synthbio.gui = synthbio.gui || {};
  */
 synthbio.gui.descrDisplayCropLength = 100;
 
+synthbio.gui.defaultFilenameString = "circuit filename";
+synthbio.gui.defaultDescriptionString = '"Circuit description."';
 /**
  * Width of the <aside> element with all the gates in pixels.
  */
@@ -57,7 +59,8 @@ synthbio.gui.gateDimensions = (function () {
 }());
 
 /**
- * Create a fresh workspace
+ * Clear the workspace GUI. If called the model is not cleared! Should always be called as part of a circuit loading,
+ * reloading of the GUI, or clearing of the model.
  */
 synthbio.gui.resetWorkspace = function() {
 	jsPlumb.removeEveryEndpoint();
@@ -73,11 +76,9 @@ synthbio.gui.resetWorkspace = function() {
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
 
-	// Clear the model with a new slate
-	synthbio.loadCircuit(new synthbio.Circuit("", ""));
 	// And update this in the GUI
-	$("#circuit-filename").html("circuit filename");
-	$("#circuit-description").html("circuit description");
+	$("#circuit-filename").html("untitled circuit");
+	$("#circuit-description").html('"Circuit description."');
 
 };
 
@@ -691,7 +692,7 @@ $(document).ready(function() {
 		}
 	});
 
-	synthbio.gui.resetWorkspace();
-
+	// Prepare default/empty workspace
+	synthbio.newCircuit();
 });
 
