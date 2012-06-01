@@ -259,14 +259,6 @@ $(document).ready(function() {
 		$(this).find("p").html('');
 		$('#validate-alert').addClass("invalid");
 	});
-	
-	/**
-	 * Dump the circuit to console.
-	 */
-	$('#dump-circuit').on('click', function() {
-		console.log(synthbio.model);
-		console.log(JSON.stringify(synthbio.model));
-	});
 
 	/**
 	 * Run simulation
