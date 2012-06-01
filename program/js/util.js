@@ -64,6 +64,31 @@ synthbio.util.assert = function(exp, message) {
 	}
 };
 
+
+/**
+ * Round data to synthbio.gui.plotPrecision
+ */
+synthbio.util.roundSeries = function(series) {
+	return $.map(series, function(val) { 
+		return val.roundTo(synthbio.gui.plotPrecision);
+	});
+};
+
+/**
+ * Calculate the sum series of the input
+ * @param series Array of objects with data property
+ */
+synthbio.util.calculateSumSeries = function(series) {
+	var res = [];
+	$.each(series, function(i, serie) {
+		$.each(serie.data, function(idx, val) {
+			res[idx] = res[idx] + val || val;
+		});
+	});
+	return res;
+};
+
+
 /**
  * Copy the value of form fields to an object.
  * 

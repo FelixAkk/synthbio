@@ -46,6 +46,19 @@ var circuit = new synthbio.Circuit("Name", "Desc", [gate], [], []);
 			equal(roundableNum2.roundTo(2), 3.49, 'Rounded down to 2');
 		});
 	
+		test("Round series", function(){
+			deepEqual(synthbio.gui.roundSeries([1,2]), [0.64, 3.49, 5.94], "Series can be rounded correctly by plot precision");
+		});
+		
+		test("Sum of series", function(){
+			equal(calculateSumSeries([1,2,3]), 6, "[1, 2, 3] becomes 6");
+			equal(calculateSumSeries([1.5,2,3]), 6.5, "[1.5, 2, 3] becomes 6.5");
+			equal(calculateSumSeries([0,1,0]), 1, "[0, 1, 0] becomes 1");
+			equal(calculateSumSeries([0,0,0]), 0, "[0, 0, 0] becomes 0");
+			equal(calculateSumSeries([]), 0, "[] becomes 0");
+			equal(calculateSumSeries([1,5,7,3,-12]), 4, "[1, 5, 7, 3, -12] becomes 4");
+		});
+		
 		test('form2Object method', function(){
 			synthbio.util.form2object(circuit.getSimulationInputs(), [{ selector: '#testableOption', setter: 'setLength' }]);
 			
