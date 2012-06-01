@@ -227,21 +227,20 @@ $(document).ready(function() {
 	$('#define-inputs').on('show', function() {
 		// build the editor
 		synthbio.gui.inputEditor();
-
-		// attach action to save button.
-		$('#save-inputs').on('click', function(){
-			synthbio.gui.saveInputs();
-		});
-		$('#save-inputs-and-simulate').on('click', function() {
-			synthbio.gui.saveInputs();
-			//trigger click on simulation button to start simuation
-			$('#simulate').click();
-		});
-		
-		
-		//attach 'advanced' toggle.
-		$('#simulation-advanced-toggle').on('click', function(){
-			$('#simulation-advanced').toggle(500);
-		});
+	});
+	
+	// attach action to save button.
+	$('#save-inputs').on('click', function(){
+		synthbio.gui.saveInputs();
+	});
+	$('#save-inputs-and-simulate').on('click', function() {
+		synthbio.gui.saveInputs();
+		//trigger click on simulation button to start simuation
+		$('#simulate').click();
+	});
+	
+	//attach 'advanced' toggle.
+	$('#simulation-advanced-toggle').on('click', function(event){
+		$('#simulation-advanced').toggle(500);
 	});
 });
