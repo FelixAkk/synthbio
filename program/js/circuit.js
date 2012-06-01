@@ -52,3 +52,7 @@ synthbio.loadCircuit = function(circuit) {
 	});
 	//TODO; implement grouping.
 };
+
+synthbio.newCircuit = function() {
+	synthbio.loadCircuit(new synthbio.Circuit("Untitled", "Description"));
+}
