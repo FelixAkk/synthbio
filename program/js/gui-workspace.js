@@ -29,8 +29,11 @@ synthbio.gui = synthbio.gui || {};
  */
 synthbio.gui.descrDisplayCropLength = 100;
 
+/**
+ * Strings that display when no circuit filename and/or description is provided.
+ */
 synthbio.gui.defaultFilenameString = "circuit filename";
-synthbio.gui.defaultDescriptionString = '"Circuit description."';
+synthbio.gui.defaultDescriptionString = "Circuit description.";
 /**
  * Width of the <aside> element with all the gates in pixels.
  */
@@ -77,8 +80,8 @@ synthbio.gui.resetWorkspace = function() {
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
 
 	// And update this in the GUI
-	$("#circuit-filename").html("untitled circuit");
-	$("#circuit-description").html('"Circuit description."');
+	$("#circuit-filename").html(synthbio.gui.defaultFilenameString);
+	$("#circuit-description").html('"' + synthbio.gui.defaultDescriptionString + '"');
 
 };
 
@@ -456,7 +459,7 @@ synthbio.gui.removeDisplaySignal = function(id) {
 			jsPlumb.detach(obj.connection);
 		}
 		if (obj.signal) {
-			synthbio.model.removeSignal(obj.signal);
+			synthbio.model.removeSignal(obj.signal, undefined, true);
 		}
 		delete synthbio.gui.displaySignalIdMap[id];
 	}
@@ -495,11 +498,11 @@ synthbio.gui.editCircuitDetails = function(event) {
 		// Now we can play with the variables
 		if(filename.length === 0) {
 			// Set default value to show the it wasn't set
-			filename = "circuit filename";
+			filename = synthbio.gui.defaultFilenameString;
 		}
 		if(description.length === 0) {
 			// Set default value to show the it wasn't set
-			description = "circuit description";
+			description = synthbio.gui.defaultDescriptionString;
 		} else if(description.length > synthbio.gui.descrDisplayCropLength) {
 			// Crop the display string if needed
 			description = description.substring(0, synthbio.gui.descrDisplayCropLength) + " ...";
