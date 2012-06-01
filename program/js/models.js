@@ -502,15 +502,20 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
  * 
  * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
  * @param destination Destination integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.
+ * @param fullMatch If fullmatch is true, origin and destination must match exactly (undefined is not alllowed).
  * @return array Returns array of removed signals.
  */
-synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
+synthbio.Circuit.prototype.removeSignal = function(origin, destination, fullMatch) {
 	if (origin instanceof synthbio.Signal) {
 		var idx = this.signals.indexOf(origin);
 		if (idx >= 0) {
 			return [this.signals.splice(idx, 1)];
 		}
 		
+		if (fullMatch) {
+			return [];
+		}
+
 		destination = origin.getTo();
 		origin = origin.getFrom();
 	}
@@ -518,8 +523,8 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination) {
 	var removed = [];
 	var i;
 	for(i = 0; i < this.signals.length; i++) {
-		if (((origin      === undefined) || (this.signals[i].getFrom() === origin)) &&
-		    ((destination === undefined) || (this.signals[i].getTo() === destination))) 
+		if (((!fullMatch && origin      === undefined) || (this.signals[i].getFrom() === origin)) &&
+		    ((!fullMatch && destination === undefined) || (this.signals[i].getTo() === destination))) 
 		{
 			removed.push(this.signals.splice(i, 1));
 			i--;

@@ -88,8 +88,8 @@ public class CircuitFactory{
 	 * @param json The JSONObject containing the circuit information.
 	 * @return The Circuit.
 	 */
-	public Circuit fromJSON(JSONObject json) throws CircuitException, JSONException{
-		if(!(json.has("name") && json.has("description"))){
+	public Circuit fromJSON(JSONObject json) throws CircuitException, JSONException {
+		if(!(json.has("name") && json.has("description"))) {
 			throw new CircuitException("JSON should have a name and a description");
 		}
 		Circuit circuit=new Circuit(
@@ -102,8 +102,11 @@ public class CircuitFactory{
 		 */
 		JSONArray JSONGates=json.getJSONArray("gates");
 		
-		//If no gates present, don't bother about the Signals, just return.
+		//If no gates present, 
 		if(JSONGates.length()<=0){
+			if(json.getJSONArray("signals").length() != 0) {
+				throw new CircuitException("Circuit has no gates present, but contains signals.");
+			}
 			return circuit;
 		}
 		
