@@ -176,7 +176,7 @@ $(document).ready(function() {
 		/**
 		 * From Signal to JSON
 		 */
-		test("Signal should be able to be constructed from JSON", function() {
+		test("Signal should be able to be converted to JSON", function() {
 			equal(JSON.stringify(signal.toJSON()), signalJSON, "Signals can be translated to JSON");
 		});
 		

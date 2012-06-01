@@ -94,6 +94,7 @@ synthbio.gui.saveFile = function() {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not saved.</strong> ' + response.message + '</div>');
 				console.error(response.message);
+				return false;
 			}
 			// We're done; hide
 			$("#files").modal("hide");
@@ -204,6 +205,21 @@ $(document).ready(function() {
 	 */
 	$("#save-as").on("click", synthbio.gui.saveFile);
 
+	/**
+	 * Save file if it already has a filename, else prompt the user with the file dialog
+	 */
+	$("#save").on("click", function() {
+		if(synthbio.model.getName() !== "") {
+			synthbio.requests.putFile(synthbio.model.getName(), synthbio.model, function(response) {
+				if(response.success === false) {
+					console.error(response.message);
+					return false;
+				}
+			});
+		} else {
+			synthbio.gui.saveFile();
+		}
+	});
 	/**
 	 * Setup/rig file operation dialog when the `Open` menu item is clicked.
 	 */

@@ -125,6 +125,7 @@
  */
 body {
 	background-color: @baseColor;
+	overflow: hidden;
 }
 
 .navbar {
@@ -525,26 +526,17 @@ body {
 	/* Keep some distance for the status bar and gates tab (+1 pixel for the border) */
 	left: @tabWidth + 1;
 	bottom: @statusHeight + 1;
-	height: 150px;
+	min-height: 150px;
 	background-color: @baseColor;
 	.borderUp(@baseColor, @contrast, @borderHeight);
 	border-width: 1px 0px 0px 0px; /* Top border only */
 	.innerShadow(2px, 0, 10px, 0, rgba(0, 0, 0, 0.25));
 	color: @textColorFaded;
 	z-index: 30;
+	.transition(bottom, 0.3s);
 
-	.handle {
-		display: block;
-		color: @textColorFaded;
-		text-shadow: 1px -1px 2px rgba(0, 0, 0, 0.5);
-		.gradient(lighten(@grStart, 20%), @grStart);
-
-		.icon-grip {
-			background-image: url("../img/grip.png");
-			background-position: 3px 5px;
-			opacity: 0.5;
-			margin: 0 5px;
-		}
+	.navbar {
+	    cursor: n-resize;
 	}
 }
 
@@ -571,7 +563,7 @@ body {
 	line-height: 24px;
 	position: absolute;
 	width: 100%;
-	z-index: 20;
+	z-index: 40;
 	
 	#info-icon {
 		height: @statusHeight - 8;
