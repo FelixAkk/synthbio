@@ -239,13 +239,13 @@ public class CircuitFactory{
 
 			//tickWidth, lowLevel and highLevel are optional.
 			if(inputs.has("tickWidth")) {
-				circuit.setSimulationTickWidth(inputs.getInt("tickWidth"));
+				circuit.setSimulationTickWidth(inputs.getDouble("tickWidth"));
 			}
 			if(inputs.has("lowLevel")) {
-				circuit.setSimulationLowLevel(inputs.getInt("lowLevel"));
+				circuit.setSimulationLowLevel(inputs.getDouble("lowLevel"));
 			}
 			if(inputs.has("highLevel")) {
-				circuit.setSimulationHighLevel(inputs.getInt("highLevel"));
+				circuit.setSimulationHighLevel(inputs.getDouble("highLevel"));
 			}
 			
 			//store the simulation values for each protein

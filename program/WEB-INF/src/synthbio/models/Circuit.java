@@ -71,18 +71,18 @@ public class Circuit implements JSONString {
 	/**
 	 * The length in seconds for each tick.
 	 */
-	private int simulationTickWidth = 1;
+	private double simulationTickWidth = 1;
 	
 	/**
 	 * Simulation low value.
 	 * in micromole/L
 	 */
-	private int simulationLowLevel = 0;
+	private double simulationLowLevel = 0;
 	/**
 	 * Simulation high value.
 	 * in micromole/L
 	 */
-	private int simulationHighLevel=600;
+	private double simulationHighLevel = 600;
 
 	/**
 	 * For each input protein, define a String of High/Low (H/L) for
@@ -187,7 +187,7 @@ public class Circuit implements JSONString {
 	/**
 	 * Get the width of a tick in seconds.
 	 */
-	public int getSimulationTickWidth() {
+	public double getSimulationTickWidth() {
 		return this.simulationTickWidth;
 	}
 
@@ -195,7 +195,7 @@ public class Circuit implements JSONString {
 	 * Simulation low value
 	 * Concentration in micromole/liter inputted as the low level.
 	 */
-	public int getSimulationLowLevel() {
+	public double getSimulationLowLevel() {
 		return this.simulationLowLevel;
 	}
 
@@ -203,7 +203,7 @@ public class Circuit implements JSONString {
 	 * Simulation high value
 	 * Concentration in micromole/liter inputted as the high level.
 	 */
-	public int getSimulationHighLevel() {
+	public double getSimulationHighLevel() {
 		return this.simulationHighLevel;
 	}
 	
@@ -290,7 +290,7 @@ public class Circuit implements JSONString {
 	 *
 	 * @param width Width in seconds of one tick.
 	 */
-	public void setSimulationTickWidth(int width) {
+	public void setSimulationTickWidth(double width) {
 		assert width >= 1 : "Tick width should be greater than 0.";
 		this.simulationTickWidth = width;
 	}
@@ -300,7 +300,7 @@ public class Circuit implements JSONString {
 	 *
 	 * @param level Concentration used in simulation as logic low level.
 	 */
-	public void setSimulationLowLevel(int level) {
+	public void setSimulationLowLevel(double level) {
 		assert level >= 0 : "Low level concentration should be positive.";
 		this.simulationLowLevel = level;
 	}
@@ -310,7 +310,7 @@ public class Circuit implements JSONString {
 	 *
 	 * @param level Concentration used in simulation as logic high level.
 	 */
-	public void setSimulationHighLevel(int level) {
+	public void setSimulationHighLevel(double level) {
 		assert level >= 0 : "High level concentration should be positive.";
 		this.simulationHighLevel = level;
 	}

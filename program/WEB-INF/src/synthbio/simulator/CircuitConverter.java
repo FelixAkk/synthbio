@@ -134,7 +134,7 @@ public class CircuitConverter {
 	public static MultiTable getInputs(Circuit circuit) {
 		double lowLevel = circuit.getSimulationLowLevel();
 		double highLevel = circuit.getSimulationHighLevel();
-		int ticks = circuit.getSimulationTickWidth();
+		double ticks = circuit.getSimulationTickWidth();
 		int length = circuit.getSimulationLength();
 		// setup time points
 		double[] timePoints = new double[length];
