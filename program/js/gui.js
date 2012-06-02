@@ -169,5 +169,5 @@ $(document).ready(function() {
 		stop: function() {
 			console.log("end drag");
 		}
-	})
+	});
 });

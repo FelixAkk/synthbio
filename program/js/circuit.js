@@ -59,4 +59,4 @@ synthbio.loadCircuit = function(circuit) {
  */
 synthbio.newCircuit = function() {
 	synthbio.loadCircuit(new synthbio.Circuit("", ""));
-}
+};
