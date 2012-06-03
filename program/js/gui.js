@@ -16,7 +16,7 @@
  */
 
 /*jslint devel: true, browser: true, forin: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
-/*global $, synthbio, jsPlumb */
+/*global $, synthbio, jsPlumb, self */
 
 /**
  * syntbio package.
@@ -151,6 +151,21 @@ $(document).ready(function() {
 
 	// Hook click listener for editing the circuit details
 	$("#circuit-details button").on("click", synthbio.gui.editCircuitDetails);
+
+	// Set behaviour for application exit
+	$("#exit").on("click", function() {
+		//Try self.close (for Chrome application mode)
+		self.close();
+
+		//Try window.open followed by window.close
+		window.open('', '_self', ''); 
+		window.close(); 
+
+		//Alert if browser does not support closing
+		if (!self.closed && !window.closed) {
+			alert("Your browser does not allow this application to close itself, please close the screen yourself.");
+		}
+	});
 
 	// Allow resizing of the simulation tabs
 	var startDragPosition = {x: undefined, y: undefined};
