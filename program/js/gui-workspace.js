@@ -450,12 +450,13 @@ synthbio.gui.displayConnection = function(connection) {
  * Removes a signal from circuit based on GUI id.
  *
  * @param id String
+ * @param allowReconnect Falsy to force deletion of the jsPlumb connection
  * @return Object Deleted object.
  */
-synthbio.gui.removeDisplaySignal = function(id) {
+synthbio.gui.removeDisplaySignal = function(id, allowReconnect) {
 	var obj = synthbio.gui.displaySignalIdMap[id];
 	if (obj) {
-		if (obj.connection) {
+		if (obj.connection && !allowReconnect) {
 			jsPlumb.detach(obj.connection);
 		}
 		if (obj.signal) {
@@ -628,7 +629,7 @@ jsPlumb.ready(function() {
 			jsPlumb.deleteEndpoint(connInfo.targetEndpoint);
 		}
 
-		synthbio.gui.removeDisplaySignal(connInfo.connection.id);
+		synthbio.gui.removeDisplaySignal(connInfo.connection.id, true);
 	});
 
 	// Remove connection on double click	
