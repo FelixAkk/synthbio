@@ -154,13 +154,6 @@ $(document).ready(function() {
 
 	// Set behaviour for application exit
 	$("#exit").on("click", function() {
-		if (!confirm("Caution: this will close the application. Unsaved work will be lost!")) {
-			return;
-		}
-
-		//Try self.close (for Chrome application mode)
-		self.close();
-
 		//Try window.open followed by window.close
 		window.open('', '_self', ''); 
 		window.close(); 
@@ -170,6 +163,11 @@ $(document).ready(function() {
 			alert("Your browser does not allow this application to close itself, please close the screen yourself.");
 		}
 	});
+
+	//Ask the user for confirmation if the application is closed
+	//$(window).bind("beforeunload", function(event) {
+	//	return "Caution: this will close the application. Unsaved work will be lost!";
+	//});
 
 	// Allow resizing of the simulation tabs
 	var startDragPosition = {x: undefined, y: undefined};
