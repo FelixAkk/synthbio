@@ -524,9 +524,14 @@ synthbio.gui.editCircuitDetails = function(event) {
 };
 
 jsPlumb.ready(function() {
-	
+
 	jsPlumb.setRenderMode(jsPlumb.SVG);
 	jsPlumb.Defaults.Container = $("#grid-container");
+
+	//Repaint everything after a window resize
+	$(window).resize(function() {
+		jsPlumb.repaintEverything();
+	});
 
 	jsPlumb.importDefaults({
 		DragOptions : { cursor: 'pointer', zIndex: 2000 },
