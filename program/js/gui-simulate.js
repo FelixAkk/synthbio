@@ -35,29 +35,6 @@ synthbio.gui.plot = {};
 synthbio.gui.plotPrecision = 2;
 
 /**
- * Round data to synthbio.gui.plotPrecision
- */
-synthbio.gui.roundSeries = function(series) {
-	return $.map(series, function(val) { 
-		return val.roundTo(synthbio.gui.plotPrecision);
-	});
-};
-
-/**
- * Calculate the sum series of the input
- * @param series Array of objects with data property
- */
-synthbio.gui.calculateSumSeries = function(series) {
-	var res = [];
-	$.each(series, function(i, serie) {
-		$.each(serie.data, function(idx, val) {
-			res[idx] = res[idx] + val || val;
-		});
-	});
-	return res;
-};
-
-/**
  * Update the synthbio.gui.plot sum series (after adding/hiding a series)
  * @param val Array of values
  * @param hidden True for hiding values, false for showing 
@@ -78,7 +55,7 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 			});	
 		}
 
-		newData = synthbio.gui.roundSeries(newData);
+		newData = synthbio.util.roundSeries(newData);
 		sumSeries.setData(newData);
 	}
 };
@@ -112,7 +89,7 @@ synthbio.gui.plotSeries = function(series, timestep) {
 	var options = $.extend(true, {}, synthbio.chartOptions, {
 		series : series,
 		navigator: {
-			series: { data: synthbio.gui.calculateSumSeries(series) }
+			series: { data: synthbio.util.calculateSumSeries(series) }
 		},
 		rangeSelector: {
 			buttons: rangeButtons
@@ -136,7 +113,7 @@ synthbio.gui.plotOutput = function(response) {
 			type: 'spline',
 			name: val,
 			pointInterval: timestep,
-			data: synthbio.gui.roundSeries(response.data[val])
+			data: synthbio.util.roundSeries(response.data[val])
 		};
 	});
 
