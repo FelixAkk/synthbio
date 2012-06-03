@@ -578,8 +578,15 @@ jsPlumb.ready(function() {
 			hoverClass:'dragHover'
 		},
 		beforeDrop: function(opt) {
-			if (!opt.connection || 
-				opt.connection.sourceId !== "gate-input" || 
+			if (!opt.connection) {
+				return true;
+			}
+
+			//Remove from model
+			synthbio.gui.removeDisplaySignal(opt.connection.id, true);
+
+			//Only continue for gate-input
+			if (opt.connection.sourceId !== "gate-input" || 
 				opt.connection.endpoints[0].getUuid())
 			{
 				return true;
@@ -609,12 +616,13 @@ jsPlumb.ready(function() {
 		maxConnections: -1
 	};
 
-	var connCount = 0;
-	// Listen for new connections; initialise them the same way we initialise the connections at startup.
+	// Listen for new jsPlumb connections
 	jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
+		// Get the signal object corresponding with the one in synthbio.model
 		var signal = connInfo.connection.getParameter("signal");
 		signal = signal || synthbio.gui.displayConnection(connInfo.connection).signal;
 
+		// Get endpoint indices
 		signal.fromEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[0]);
 		signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
 
