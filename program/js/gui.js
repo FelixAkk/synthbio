@@ -154,6 +154,10 @@ $(document).ready(function() {
 
 	// Set behaviour for application exit
 	$("#exit").on("click", function() {
+		if (!confirm("Caution: this will close the application. Unsaved work will be lost!")) {
+			return;
+		}
+
 		//Try self.close (for Chrome application mode)
 		self.close();
 
