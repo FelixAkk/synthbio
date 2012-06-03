@@ -330,6 +330,7 @@ synthbio.gui.displayGate = function(gateModel) {
 				parseFloat(element.css("left")), 
 				parseFloat(element.css("top"))
 			]);
+			jsPlumb.repaintEverything();
 		}
 	});
 
@@ -599,7 +600,7 @@ jsPlumb.ready(function() {
 	// The definition of target endpoints
 	synthbio.gui.outputEndpoint = {
 		endpoint: "Dot",
-		paintStyle:{ fillStyle: "#225588",radius: 7 },
+		paintStyle:{ fillStyle: "#225588", radius: 7 },
 		connector: ["Bezier", { curviness: 50 } ],
 		connectorStyle: connectorPaintStyle,
 		hoverPaintStyle: pointHoverStyle,
@@ -611,17 +612,30 @@ jsPlumb.ready(function() {
 	var connCount = 0;
 	// Listen for new connections; initialise them the same way we initialise the connections at startup.
 	jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
-		var signal = connInfo.connection.getParameters().signal;
+		var signal = connInfo.connection.getParameter("signal");
 		signal = signal || synthbio.gui.displayConnection(connInfo.connection).signal;
 
 		signal.fromEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[0]);
 		signal.toEndpoint = synthbio.gui.getEndpointIndex(connInfo.connection.endpoints[1]);
 
+		// Try to determine the protein for this connection
 		if (!signal.getProtein()) {
-			var prot = synthbio.model.determineProtein(signal.getFrom(), signal.fromEndpoint);
+			// Is this a reconnection?
+			var oldsignal = connInfo.connection.getParameter("oldsignal");
+			var prot = (oldsignal && oldsignal.getProtein) ? oldsignal.getProtein() : "";
+		
+			// If not, try to determine from model
+			prot = prot || synthbio.model.determineProtein(signal.getFrom(), signal.fromEndpoint);
+
+			// Update protein
 			signal.setProtein(prot);
 		}
 
+		// Set signal/oldsignal parameter for this connection
+		connInfo.connection.setParameter("signal", undefined);
+		connInfo.connection.setParameter("oldsignal", signal);
+
+		// Create a label
 		synthbio.gui.setProteinLabel(signal, connInfo.connection);
 	});
 
