@@ -61,7 +61,7 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 };
 
 /**
- * Plot an array of series
+ * Plot an array of series in the group chart
  * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
  * @param timestep Timestep in seconds (defaults to 1).
  */
@@ -87,7 +87,7 @@ synthbio.gui.plotSeries = function(series, timestep) {
 
 	//Extend the default options with the series
 	var options = $.extend(true, {}, synthbio.chartOptions, {
-		series : series,
+		series: series,
 		navigator: {
 			series: { data: synthbio.util.calculateSumSeries(series) }
 		},
@@ -96,9 +96,72 @@ synthbio.gui.plotSeries = function(series, timestep) {
 		}
 	});
 
+	//Destroy old chart if present
+	if (synthbio.gui.plot && synthbio.gui.plot.destroy) {
+		synthbio.gui.plot.destroy();
+	}
+
 	//Plot!
 	synthbio.gui.plot = new Highcharts.StockChart(options);
 };
+
+/**
+ * Plot an array of series separately
+ * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
+ */
+synthbio.gui.plotSeriesSeparate = (function() {
+	//Keep track of old charts to destroy before overriding
+	var charts = [];
+
+	return function(series) {
+		//Adjust the default options
+		var chartOptions = $.extend(true, {}, synthbio.chartOptions, {
+			chart: {
+				zoomType: 'x',
+				height: 100,
+				width: 510,
+				marginLeft: 25,
+				marginRight: 0,
+				marginBottom: 15
+			},
+			title: {text: null},
+
+			legend:        { enabled: false },
+			navigator:     { enabled: false },
+			rangeSelector: { enabled: false },
+			scrollbar:     { enabled: false },
+			exporting:     { enabled: false }
+		});
+
+		//Delete previous charts
+		$.each(charts, function(idx, chart) {
+			chart.destroy();
+		});
+		charts = [];
+
+		//Get container and clear
+		var container = $("#chart-separate");
+		container.empty();
+
+		//Plot new series
+		$.each(series, function(idx, data) {
+			//Create div for chart and append to container
+			var el = $('<div class="chart">'+data.name+': </div>');
+			container.append(el);
+
+			//Add series to options
+			var options = $.extend(true, {}, chartOptions, {
+				chart: {renderTo: el[0]},
+				yAxis: {title: {text: data.name}},
+				series: [data]
+			});
+
+			//Plot chart and add to chart array
+			var chart = new Highcharts.StockChart(options);
+			charts.push(chart);
+		});
+	};
+}());
 
 /**
  * Plot simulation output
@@ -118,17 +181,19 @@ synthbio.gui.plotOutput = function(response) {
 	});
 
 	synthbio.gui.plotSeries(series, timestep);
+	synthbio.gui.plotSeriesSeparate(series);
 };
 
 /**
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
-	chart:   {renderTo: 'output-chart'},
+	chart:   {renderTo: 'chart-group'},
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
-	series:  [{name: "Empty", data: [0, 0, 0, 0, 0]}]
+	series:  [{name: "Empty", data: [0, 0, 0, 0, 0]}],
+	yAxis:   {min: 0, showFirstLabel: false}
 };
 
 //x-axis: Display the x value and add an "s" (data always starts at 0)
@@ -213,7 +278,8 @@ synthbio.chartOptions.rangeSelector = {
 
 $(document).ready(function() {
 	//Create an initial chart (in a loading state) as a stub
-	synthbio.gui.plot = new Highcharts.StockChart(synthbio.chartOptions);
+	var options = $.extend(true, {}, synthbio.chartOptions);
+	synthbio.gui.plot = new Highcharts.StockChart(options);
 	synthbio.gui.plot.showLoading();
 
 	// Validate
@@ -268,5 +334,24 @@ $(document).ready(function() {
 			}
 		);
 		
+	});
+
+	/**
+	 * Toggle group/separate chart view (default: group)
+	 */
+	$("#toggle-charttype").on("click", function() {
+		
+		$("#chart-separate").toggle(0, function() {
+			if ($(this).is(":visible")) {
+				//Separate charts
+				$("#chart-group").hide();
+				$("#toggle-charttype").text("Group chart");
+			} else {
+				//Group chart
+				$("#chart-group").show();
+				$("#toggle-charttype").text("Separate charts");
+			}
+		});
+
 	});
 });

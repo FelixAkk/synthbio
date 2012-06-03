@@ -340,9 +340,22 @@ body {
 	}
 }
 
-#output-chart {
+#chart-group {
 	width: 530px;
 	height: 400px;
+}
+
+#chart-separate { 
+	.chart {
+		width: 515px;
+		height: 110px;
+	}
+
+	.chart + .chart {
+		margin-top: 10px;
+		padding-top: 10px;
+		border-top: 2px solid #808080;
+	}
 }
 
 .gates {
