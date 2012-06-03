@@ -160,6 +160,11 @@ synthbio.gui.plotSeriesSeparate = (function() {
 			var chart = new Highcharts.StockChart(options);
 			charts.push(chart);
 		});
+
+		//Default text if there are no results
+		if (charts.length < 1) {
+			container.html("Please simulate first.");
+		}
 	};
 }());
 
