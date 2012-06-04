@@ -34,7 +34,14 @@ var circuit = new synthbio.Circuit("Name", "Desc", [gate], [], []);
 synthbio.gui = synthbio.gui || {};
 synthbio.gui.plotPrecision = synthbio.gui.plotPrecision || 1;
 
-var series = {data: [1,5,7,3,-12]}
+var array1 = {data: [1,5,7,3,0]};
+var array2 = {data: [1,1,1,2,1]};
+var array3 = {data: [2,4,-2,1,-2]};
+var array4 = {data: [0,0,0,0,0,0,0]};
+var duoSeries = [array1, array2];
+var multiSeries = [array1, array2, array3];
+var diffSizeSeries = [array1,array4];
+
  /**
   * Tests
   */
@@ -51,22 +58,30 @@ var series = {data: [1,5,7,3,-12]}
 			equal(roundableNum2.roundTo(2), 3.49, 'Rounded down to 2');
 		});
 	
+		/**
+		 * Round series
+		 */
 		test("Round series", function() {
 			deepEqual(synthbio.util.roundSeries([0.64, 3.49, 5.94]), [0.6, 3.5, 5.9], "Series can be rounded correctly by plot precision");
 		});
 		
+		/**
+		 * Calculating the sums of different series
+		 * Returns one array with the index value of arrays added up -> [1,2] + [1,1] = [2,3]
+		 */
 		test("Sum of series", function() {
-			/*equal(synthbio.util.calculateSumSeries([1,2,3]), 6, "[1, 2, 3] becomes 6");
-			equal(synthbio.util.calculateSumSeries([1.5,2,3]), 6.5, "[1.5, 2, 3] becomes 6.5");
-			equal(synthbio.util.calculateSumSeries([0,1,0]), 1, "[0, 1, 0] becomes 1");
-			equal(synthbio.util.calculateSumSeries([0,0,0]), 0, "[0, 0, 0] becomes 0");
-			equal(synthbio.util.calculateSumSeries([]), 0, "[] becomes 0");*/
-			equal(synthbio.util.calculateSumSeries(series), 4, "[1, 5, 7, 3, -12] becomes 4");
+			deepEqual(synthbio.util.calculateSumSeries(duoSeries), [2,6,8,5,1], "Can add 2 series");
+			deepEqual(synthbio.util.calculateSumSeries(multiSeries), [4,10,6,6,-1], "Can add more than 2 series, including zero and negative values");
+			deepEqual(synthbio.util.calculateSumSeries(diffSizeSeries), [1,5,7,3,0,0,0], "Can add series of different sizes");
 		});
 		
+		/**
+		 * form2object
+		 * Allows you to alter an object by reading selectors and setters from text fields.
+		 */
 		test('form2Object method', function() {
 			synthbio.util.form2object(circuit.getSimulationInputs(), [{ selector: '#testableOption', setter: 'setLength' }]);
-			
+
 			equal(circuit.getSimulationInputs().getLength() , "20", "Can use form data to alter Object methods");
 		});
  });
