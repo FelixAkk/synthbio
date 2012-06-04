@@ -315,7 +315,6 @@ synthbio.gui.displayGate = function(gateModel) {
 	// Create new display element
 	var element = $('<div class="gate ' + gateModel.getKind() + '">'
 		+ gateModel.getImage(true)
-		+ '<div class="mask"></div>'
 		+ "</div>");
 
 	// Place new element in grid
