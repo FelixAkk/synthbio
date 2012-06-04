@@ -62,7 +62,7 @@ synthbio.requests.listFiles = function(callback){
 		return ("callback function for listFiles is not a function");
 	}
 	synthbio.requests.baseXHR({
-		url: "/Circuit?action=list",
+		url: "/ListCircuits",
 		success: function(response){
 			if(!response.success){
 				return console.log(response.message);
@@ -87,7 +87,7 @@ synthbio.requests.listFiles = function(callback){
 synthbio.requests.getFile = function(name, callback){
 
 	synthbio.requests.baseXHR({
-		url: "/Circuit?action=load",
+		url: "/LoadCircuit",
 		data: {
 			"filename": name
 		},
@@ -111,7 +111,7 @@ synthbio.requests.getFile = function(name, callback){
  */
 synthbio.requests.putFile = function(fileName, circ, callback) {
 	synthbio.requests.baseXHR({
-		url: "/Circuit?action=save",
+		url: "/SaveCircuit",
 		type: "GET",
 		data: {
 			"filename": fileName,
@@ -171,7 +171,7 @@ synthbio.requests.getCDSs = function(callback){
 synthbio.requests.circuitToSBML = function(callback, name, circ){
 	
 	synthbio.requests.baseXHR({
-		url: "/Circuit?action=exportSBML",
+		url: "/ExportCircuit",
 		type: "POST",
 		data: {
 			"filename": name,
@@ -201,7 +201,7 @@ synthbio.requests.circuitToSBML = function(callback, name, circ){
 synthbio.requests.validate = function(circuit, callback){
 	
 	synthbio.requests.baseXHR({
-		url: "/Circuit?action=validate",
+		url: "/ValidateCircuit",
 		data: { 'circuit': JSON.stringify(circuit) },
 		success: function(response){
 			callback(response);

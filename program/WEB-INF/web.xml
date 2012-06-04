@@ -45,12 +45,36 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>Circuit</servlet-name>
-		<servlet-class>synthbio.servlets.CircuitServlet</servlet-class>
+		<servlet-name>ListCircuits</servlet-name>
+		<servlet-class>synthbio.servlets.ListCircuitsServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Circuit</servlet-name>
-		<url-pattern>/Circuit</url-pattern>
+		<servlet-name>ListCircuits</servlet-name>
+		<url-pattern>/ListCircuits</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>LoadCircuit</servlet-name>
+		<servlet-class>synthbio.servlets.LoadCircuitServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoadCircuit</servlet-name>
+		<url-pattern>/LoadCircuit</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>SaveCircuit</servlet-name>
+		<servlet-class>synthbio.servlets.SaveCircuitServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SaveCircuit</servlet-name>
+		<url-pattern>/SaveCircuit</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ValidateCircuit</servlet-name>
+		<servlet-class>synthbio.servlets.ValidateCircuitServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ValidateCircuit</servlet-name>
+		<url-pattern>/ValidateCircuit</url-pattern>
 	</servlet-mapping>
 
 </web-app>
