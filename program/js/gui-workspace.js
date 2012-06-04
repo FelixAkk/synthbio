@@ -311,7 +311,7 @@ synthbio.gui.getGateIdByIndex = function(idx, noException) {
  */
 synthbio.gui.displayGate = function(gateModel) {
 	synthbio.util.assert(gateModel instanceof synthbio.Gate, "Provided gate object must be an instance of 'synthbio.Gate'");
-	
+
 	// Create new display element
 	var element = $('<div class="gate ' + gateModel.getKind() + '">'
 		+ gateModel.getImage(true)
@@ -684,7 +684,7 @@ jsPlumb.ready(function() {
 
 $(document).ready(function() {
 	// Initialize new gate-dragging
-	$('#gates-tab .gate').draggable({ 
+	$('#gates-basic .gate').draggable({ 
 		appendTo: "#gates-transport",
 		containment: 'window',
 		scroll: false,
@@ -715,6 +715,48 @@ $(document).ready(function() {
 
 				// Display gate in grid
 				synthbio.gui.displayGate(newGate);
+			}
+
+			// Clean up transport layer
+			$("#gates-transport .gate").remove();
+			$("#gates-transport").css('display', 'none');
+		}
+	});
+
+	// Initialize new gate-dragging
+	$('#gates-compound .gate').draggable({ 
+		appendTo: "#gates-transport",
+		containment: 'window',
+		scroll: false,
+		helper: 'clone',
+		start: function(event) {
+			// Prepare transport layer
+			$("#gates-transport").css('display', 'block');
+		},
+		drag: function(event, ui) {
+			// Manually set the position of the helper (the thing you see dragged). Works out much nicer!
+			ui.position.left = event.pageX - synthbio.gui.gateDimensions.width/2;
+			ui.position.top  = event.pageY - synthbio.gui.gateDimensions.height/2;
+
+			// Display gate border if dragging in grid (and gate can be dropped)
+			var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
+			$(ui.helper).toggleClass("gate-border", dragInGrid);
+		},
+		stop: function(event, ui) {
+			// If dragged into the grid
+			if(event.pageX > synthbio.gui.gatesTabWidth) {
+				// Add new gate to circuit
+				var x = event.pageX - (synthbio.gui.gatesTabWidth + synthbio.gui.gateDimensions.width/2);
+				var y = event.pageY - (synthbio.gui.navbarHeight + synthbio.gui.gateDimensions.height/2);
+
+				var model = new synthbio.Circuit("", "");
+				model.addGate("not", [50, 50]);
+				model.addGate("and", [100, 100]);
+				model.addSignal("A", "input", 0);
+				model.addSignal("B", 0, 1);
+				model.addSignal("C", 1, "output");
+
+				synthbio.loadCompoundCircuit(model, [100, 100]);
 			}
 
 			// Clean up transport layer
