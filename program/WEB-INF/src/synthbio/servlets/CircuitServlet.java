@@ -15,11 +15,13 @@ package synthbio.servlets;
  
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -131,7 +133,19 @@ public class CircuitServlet extends SynthbioServlet {
 	 * Action: List the files contained in the syn store.
 	 */
 	public void doList(){
-		this.json.data=this.synRepository.getFileList();
+		ArrayList<JSONObject> files = new ArrayList<JSONObject>();
+		for(String filename: this.synRepository.getFileList()) {
+			try{
+				JSONObject file=new JSONObject();
+				file.put("filename", filename);
+				file.put("modified", this.synRepository.lastModified(filename));
+				files.add(file);
+			}catch(JSONException e){
+				this.json.fail("JSON conversion error: "+e.getMessage());
+			}
+		}
+		
+		this.json.data=files;
 		this.json.success=true;
 	}
 

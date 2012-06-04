@@ -89,6 +89,16 @@ public class TestSynRepository{
 		
 	}
 
+	/**
+	 * Check if the synstore returns a last modified timestamp.
+	 */
+	@Test
+	public void testLastModified() throws Exception{
+		String filename="example.syn";
+		File file=new File("data/synstore/"+filename);
+		assertThat(synrep.lastModified(filename), is(equalTo(file.lastModified())));
+	}
+
 	@After
 	public void deleteFiles() throws Exception{
 		new File("data/synstore/"+this.testFilename).delete();

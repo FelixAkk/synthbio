@@ -84,7 +84,7 @@ public class TestCircuitServlet{
 
 		//check that each file name ends with .syn.
 		for(int i=0; i<data.length(); i++){
-			assertThat(data.getString(i), endsWith(".syn"));
+			assertThat(data.getJSONObject(i).getString("filename"), endsWith(".syn"));
 		}
 
 		//check that the file list contains 'example.syn'

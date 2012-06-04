@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
+import java.util.HashMap;
 
 import synthbio.Util;
 
@@ -37,6 +38,8 @@ public class SynRepository{
 	 * Collection of .syn files.
 	 */
 	private Collection<String> files=new ArrayList<String>();
+
+	private HashMap<String, Long> modified=new HashMap<String, Long>();
 
 	public SynRepository() throws Exception{
 		this("data/synstore/");
@@ -62,6 +65,7 @@ public class SynRepository{
 		for(File file: folder.listFiles()){
 			if(file.isFile() && file.getName().endsWith(".syn")){
 				this.files.add(file.getName());
+				this.modified.put(file.getName(), file.lastModified());
 			}
 		}
 	}
@@ -102,5 +106,10 @@ public class SynRepository{
 		Util.stringToFile(this.path+filename, content);
 
 		this.files.add(filename);
+	}
+	public Long lastModified(String filename){
+		assert this.hasFile(filename) : "No such file: "+filename;
+
+		return this.modified.get(filename);
 	}
 }
