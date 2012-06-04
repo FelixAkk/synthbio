@@ -81,6 +81,7 @@ synthbio.util.roundSeries = function(series) {
 synthbio.util.calculateSumSeries = function(series) {
 	var res = [];
 	$.each(series, function(i, serie) {
+		console.log(series + "  ---  " + serie);
 		$.each(serie.data, function(idx, val) {
 			res[idx] = res[idx] + val || val;
 		});
