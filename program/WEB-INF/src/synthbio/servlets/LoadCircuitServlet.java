@@ -15,28 +15,21 @@ package synthbio.servlets;
  
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import synthbio.files.BioBrickRepository;
 import synthbio.files.SynRepository;
-import synthbio.models.Circuit;
-import synthbio.models.CircuitException;
-import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
-import synthbio.simulator.Solver;
 
 import synthbio.Util;
 
 /**
- * Servlet ListCircuitServlets serves a list of circuit files.
+ * Servlet LoadCircuitServlet returns a circuit in JSON representation.
  *
  * API functions documented at:
  * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
@@ -47,7 +40,7 @@ import synthbio.Util;
 public class LoadCircuitServlet extends CircuitServlet {
 	
 	/**
-	 * Get requests
+	 * Get request
 	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
