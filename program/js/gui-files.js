@@ -31,6 +31,12 @@ synthbio.gui = synthbio.gui || {};
 synthbio.gui.recentFilesList = [];
 
 /**
+ * The variable that will hold the DataTables (library (for fancy sorting, searching, pagebreaking features et al)
+ * object for the table in the files dialog.
+ */
+synthbio.gui.fTable = undefined;
+
+/**
  * Extend the filename with our ".syn" filename extension if it wasn't yet. Also trim spaces of it first.
  * @param filename
  */
@@ -174,9 +180,12 @@ synthbio.gui.prepareFileDialog = function(event) {
 
 		$('#files tbody').html(html);
 
-		// convert the new content into a DataTable; clear the variable if it was used before
-		if (fTable) { fTable.fnClearTable(false); }
-		fTable = $('#files table').dataTable(synthbio.gui.dataTableOptions);
+		// Initialize DataTable.
+		if(synthbio.gui.fTable !== undefined) {
+			// If we run this for the second time and fTable is defined, clear the old table
+			synthbio.gui.fTable.fnClearTable();
+		}
+		synthbio.gui.fTable = $('#files table').dataTable(synthbio.gui.dataTableOptions);
 
 		// Make each row respond to selection
 		$("#files tbody tr").each(function(index, element) {
@@ -189,8 +198,6 @@ synthbio.gui.prepareFileDialog = function(event) {
 		});
 	});
 };
-
-var fTable; // Datatables object for Files dialog
 
 $(document).ready(function() {
 
