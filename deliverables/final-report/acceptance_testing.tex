@@ -4,6 +4,8 @@
 \usepackage[dutch]{babel}
 \usepackage{tabularx}
 \usepackage{fullpage}
+\usepackage{booktabs}
+\usepackage{longtable}
 \begin{document}
 
 %+Title
@@ -18,35 +20,53 @@
 \section{Acceptance testing}
 This section describes the acceptance testing we perform after each SCRUM iteration. The acceptance tests are test if the system meets the requirements made. In particular we test these using the user interface to see if the system can perform the required tasks without problems. With these test we also manually test the user interface to see if there any display artifacts or bugs. Because these acceptance test call all the functionality throughout the whole system from the interface, they also serve as an important part of the integration testing.
 
-Each of the following given scenarios can be performed as a test by checking if the results correspond. The tester can take liberties to deviate from the scenario and play around with the application to gain a opinion about the usability and user friendliness of the application.
+For actual testing, the following table can be copied to fill in the last column with feedback. Each of the following given scenarios can be performed step by step as a test by checking if the results correspond and the actions can be performed. The tester can take liberties to deviate from the scenario and play around with the application to gain a opinion about the usability and user friendliness of the application.
 
 \begin{center}
-\begin{tabularx}{\textwidth}{r p{15cm}}
-& \textbf{Scenario} \\\hline
-1 & \textbf{Basic startup and workspace initialisation:} Start the application by going to the URL in the browser. The browser should load the application within few seconds. On the right of the status bar the server connection status should be resolved within a second. The input and output gates should show by default and be able to move around by the handle bars. The circuit filename and description should display (top right) the default string that makes it clear that they have not been specified yet. Click on the edit button in the circuit details field (top right), and the fields should be empty and only show their placeholder string. Entering values and clicking save should set the new values on display (top right). In the status bar at the left a descriptive tooltip info string should change when hovering over different elements of the GUI. \\
+\begin{longtable}{r r  p{11,5cm} l } \toprule
+\textbf{Scenario} & \textbf{Item} & & \textbf{Pass} \\\midrule
+\endfirsthead
+\toprule
+\textbf{Scenario} & \textbf{Item} & & \textbf{Pass} \\\midrule
+\endhead
+1 && \textbf{Basic startup and workspace initialisation:}\\
+&1& Start the application by going to the URL in the browser.\\
+&2& The browser should load the application within few seconds.\\
+&3& On the right of the status bar the server connection status should be resolved within a second. \\
+&4& The input and output gates should show by default and be able to move around by the handle bars. \\
+&5& The circuit filename and description should display (top right) the default string that makes it clear that they have not been specified yet. Click on the edit button in the circuit details field (top right), and the fields should be empty and only show their placeholder string. Entering values and clicking save should set the new values on display (top right).\\
+&6& In the status bar at the left a descriptive tooltip info string should change when hovering over different elements of the GUI. & \\ \midrule
 
-2 & \textbf{File opening (extends scen. 1):} Click on the file menu item, which should drop down a sub-menu with highlighting menu items when hovering over with the mouse. In the menu click on the open item. The screen should darken and a modal dialog should slide in. Here some files should be listed. Click open, a warning that no filename is provided should show. On clicking a file the circuit should load and the modal slide out.\\
+2 && \textbf{File opening (extends scen. 1):}\\
+&1& Click on the file menu item, which should drop down a sub-menu with highlighting menu items when hovering over with the mouse. \\
+&2& In the menu click on the open item. The screen should darken and a modal dialog should slide in. Here some files should be listed.\\
+&3& Click open, a warning that no filename is provided should show. On clicking a file the circuit should load and the modal slide out.\\\midrule
 
-3 & \textbf{File saving (extends scen. 2):} Click the Save As item in the File menu,  a modal dialog should slide in. Check that the filename of the loaded circuit is already displaying in the input field. Click on an existing file, and a confirmation prompt should show.
-On a second click on the file is should save and close the dialog. When saving again, but entering a unique filename it should save immediately and close the dialog.\\
-4 & \textbf{Create simple circuit (extends scen. 1, 3):} Drag two NOT-gates into the workspace, connect these to the inputs of an AND-gate and connect everything tot he inputs and outputs. Assign random proteins to the signals. Check that the circuit validates by clicking on the Simulate menu and selecting the Validate Circuit item. A modal dialog should appear showing in green that the circuit is valid. Check that no single protein can be assigned twice. Check that no two signals can be connected to a single gate input. Click on File and then Save. Check that it should now prompts with the Save As dialog to enter a filename. Save the file and check that the provided filename now shows in the circuit details (top right).\\
-5 & \textbf{Create and simulate a 2-to-1 multiplexer (extends scen. 1):} Drag gates into the workspace and connect them to form a 2-to-1 multiplexer. Connect the inputs and the outputs, and assign random proteins to all signals. Open the Simulate menu and click Define Inputs. A modal dialog should appear showing graphs of each protein. Click and drag in these graphs to define when the concentration of the proteins is high. Define inputs so one input is selected and high at one point in time, and some later the other input is selected and high. Run the simulation and ensure that the correct output is given. \\
+3 & & \textbf{File saving (extends scen. 2):}\\
+&1& Click the Save As item in the File menu, a modal dialog should slide in. Check that the filename of the loaded circuit is already displaying in the input field.\\
+&2& Click on an existing file, and a confirmation prompt should show.
+On a second click on the file is should save and close the dialog.\\
+&3& When saving again, but entering a unique filename it should save immediately and close the dialog.\\
+&4& When saving again, but without entering a filename or entering just spaces, a warning should appear that the filename is incorrect.\\
+&5& Clear the circuit details if set. Click on File and then Save. Check that it should now prompts with the Save As dialog to enter a filename. Save the file and check that the provided filename now shows in the circuit details (top right).\\ \midrule
+4 & & \textbf{Create simple circuit (extends scen. 1, 3):}\\
+&1& Drag two NOT-gates into the workspace, connect these to the inputs of an AND-gate and connect everything to the inputs and outputs.\\
+&2& Click on the ``Choose protein'' overlay on a signal. A dropdown should appear listing all proteins and a none option.\\
+&3& Assign random proteins to the signals. Check that the already assigned proteins are not available anymore after selecting. Check that when none is selected, the previously assigned protein is made available again for selection elsewhere.\\
+&4& Check that the circuit validates by clicking on the Simulate menu and selecting the Validate Circuit item. A modal dialog should appear showing in green that the circuit is valid.\\
+&5& Check that no two signals can be connected to a single gate input.\\
+&6& Check that one output signal can be assigned to different inputs.\\
+&7& Check that when a protein is assigned to such a forking signal, the overlay for both changes to show the same protein.\\ \midrule
+5 & & \textbf{Create and simulate a 2-to-1 multiplexer (extends scen. 1):}\\
+&1& Drag gates into the workspace and connect them to form a 2-to-1 multiplexer. Connect the inputs and the outputs, and assign random proteins to all signals.\\
+&2& Open the Simulate menu and click Define Inputs. A modal dialog should appear showing graphs of each protein.\\
+&3& Click and drag in these graphs to define when the concentration of the proteins is high.\\
+&4& Define inputs so one input is selected and high at one point in time, and some later the other input is selected and high. Run the simulation and ensure that the correct output is given. \\
 
-\end{tabularx}
+\end{longtable}
 \end{center}
 
 \newpage
-
-\begin{center}
-\begin{tabularx}{\textwidth}{r p{8cm} | l | l}
-& \textbf{Scenario} & Malfunctions/errors & Remarks \\\hline
-& 
-& & \\
-4 & 
-& & \\
-5 & & & \\
-\end{tabularx}
-\end{center}
 
 \end{document}
 
