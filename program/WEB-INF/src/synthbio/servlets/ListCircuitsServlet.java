@@ -25,18 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import synthbio.files.BioBrickRepository;
 import synthbio.files.SynRepository;
-import synthbio.models.Circuit;
-import synthbio.models.CircuitException;
-import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
-import synthbio.simulator.Solver;
 
 import synthbio.Util;
 
 /**
- * Servlet ListCircuitServlets serves a list of circuit files.
+ * Servlet ListCircuitServlet serves a list of circuit files.
  *
  * API functions documented at:
  * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
@@ -47,7 +42,7 @@ import synthbio.Util;
 public class ListCircuitsServlet extends CircuitServlet {
 	
 	/**
-	 * Get requests
+	 * Get request
 	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
@@ -64,6 +59,8 @@ public class ListCircuitsServlet extends CircuitServlet {
 			this.synRepository=this.getSynRepository();
 		}catch(Exception e){
 			json.fail("Could not load .syn files: "+e.getMessage());
+			out.println(json.toJSONString());
+			return;
 		}
 		
 		try{

@@ -15,18 +15,14 @@ package synthbio.servlets;
  
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import synthbio.files.BioBrickRepository;
-import synthbio.files.SynRepository;
 import synthbio.models.Circuit;
 import synthbio.models.CircuitException;
 import synthbio.models.CircuitFactory;
@@ -62,17 +58,23 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			this.biobrickRepository=this.getBioBrickRepository();
 		}catch(Exception e){
 			json.fail("Could not load BioBrick repostiory: "+e.getMessage());
+			out.println(json.toJSONString());
+			return;
 		}
 		
 		try{
 			this.circuitFactory=new CircuitFactory(this.biobrickRepository);
 		}catch(Exception e){
 			json.fail("Could not load Circuit factory: "+e.getMessage());
+			out.println(json.toJSONString());
+			return;
 		}
 
 		String circuit=request.getParameter("circuit");
 		if(circuit==null){
 			json.fail("Parameter 'circuit' not set");
+			out.println(json.toJSONString());
+			return;
 		}
 
 		Circuit c;
@@ -80,6 +82,7 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			c = this.circuitFactory.fromJSON(circuit);
 		} catch(Exception e) {
 			json.fail("Circuit does not validate, please use validate to correct errors.");
+			out.println(json.toJSONString());
 			return;
 		}
 
