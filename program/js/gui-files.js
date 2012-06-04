@@ -168,7 +168,9 @@ synthbio.gui.prepareFileDialog = function(event) {
 		});
 		var html='';
 		$.each(response, function(i, file) {
-			html+='<tr><td>'+file+'</td><td>x</td><td>x</td></tr>';
+			var date=new Date(file.modified);
+			var datetime=date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes();
+			html+='<tr><td>'+file.filename+'</td><td>x</td><td>'+datetime+'</td></tr>';
 		});
 
 
