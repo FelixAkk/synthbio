@@ -16,7 +16,7 @@
  */
 
 /*jslint devel: true, browser: true, vars: true, plusplus: true, regexp: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
-/*global $, synthbio */
+/*global $, jsPlumb, synthbio */
 
 /**
  * syntbio package.

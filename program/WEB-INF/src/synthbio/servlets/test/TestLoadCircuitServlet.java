@@ -26,9 +26,9 @@ import org.junit.Test;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import synthbio.Util;
-
 import com.gargoylesoftware.htmlunit.WebClient;
+
+import synthbio.Util;
 
 /**
  * Testing the Load Circuits Servlet

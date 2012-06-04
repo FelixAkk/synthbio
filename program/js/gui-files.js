@@ -50,6 +50,16 @@ synthbio.gui.filenameExtension = function(filename) {
 	return filename;
 };
 
+synthbio.gui.hasRecentFile = function(filename) {
+	var ret=false;
+	$.each(synthbio.gui.recentFilesList, function(index, element) {
+		if(element.filename === filename || element.filename === filename + '.syn'){
+			ret=true;
+		}
+	});
+	return ret;
+};
+
 synthbio.gui.saveFile = function() {
 	$("#files .modal-header h3").html("Save As…");
 	$("#files .modal-footer .btn-primary").html("Save As…");
@@ -65,18 +75,15 @@ synthbio.gui.saveFile = function() {
 		event.preventDefault();
 		// get the filename
 		var input = $("input", this)[0].value.trim();
+		console.log('selected input: ', input);
+		
 		// Allow prompting for confirmation again if a different filename has been entered this time.
 		if(input !== previousInput) {
 			confirmation = false;
 			previousInput = input;
 		}
 		// Check if the user is about to overwrite an existing file and hasn't confirmed yet
-		if(
-			(
-				$.inArray(input, synthbio.gui.recentFilesList) >= 0 ||
-					$.inArray(input+".syn", synthbio.gui.recentFilesList) >= 0
-				)
-				&& !confirmation) {
+		if(synthbio.gui.hasRecentFile(input) && !confirmation) {
 			synthbio.gui.showAdModalAlert('files', 'alert-error',
 				"<strong>Overwrite file?</strong> Press enter again to confirm");
 			confirmation = true;
@@ -193,7 +200,7 @@ synthbio.gui.prepareFileDialog = function(event) {
 		$("#files tbody tr").each(function(index, element) {
 			element = $(element); // extend to provide the .on() function
 			element.on("click", function() {
-				$("#files .modal-footer input").val(synthbio.gui.recentFilesList[index]);
+				$("#files .modal-footer input").val(synthbio.gui.recentFilesList[index].filename);
 				// Trigger submit
 				$("#files form").submit();
 			});
