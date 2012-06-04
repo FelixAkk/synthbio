@@ -41,7 +41,7 @@ import synthbio.simulator.CircuitConverter;
  * 
  * @author jieter
  */
-public class Circuit implements JSONString {
+public class Circuit {
 
 	/**
 	 * The filename.
@@ -494,33 +494,6 @@ public class Circuit implements JSONString {
 		//if we arrive here, the protein assignments are valid.
 	}
 
-	/**
-	 * Convert the current object state to JSON.
-	 *
-	 * Not yet used or tested anywhere.
-	 * 
-	 * @return Serialized JSON string representation of the Circuit.
-	 */
-	public String toJSONString(){
-		JSONObject ret=new JSONObject();
-
-		try{
-			ret.put("name", this.getName());
-			ret.put("description", this.getDescription());
-			ret.put("gates", this.getGates());
-			//@todo: include signals...
-			//ret.put("signals", <signals>);
-
-			JSONObject inputs=new JSONObject();
-			inputs.put("length", this.getSimulationLength());
-			inputs.put("values", this.getSimulationInput());
-			ret.put("inputs", inputs);
-		}catch(Exception e){
-			return "{\"error\":\"JSONException:"+e.getMessage()+"\"}";
-		}
-		return ret.toString();
-	}
-	
 	/**
 	 * Convert the circuit to a SBML document.
 	 *
