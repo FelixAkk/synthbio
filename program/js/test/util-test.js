@@ -30,6 +30,11 @@ var roundableNum2 = 3.492;
 var point = new synthbio.Point(10, 20);
 var gate = new synthbio.Gate("and", point);
 var circuit = new synthbio.Circuit("Name", "Desc", [gate], [], []);
+
+synthbio.gui = synthbio.gui || {};
+synthbio.gui.plotPrecision = synthbio.gui.plotPrecision || 1;
+
+var series = {data: [1,5,7,3,-12]}
  /**
   * Tests
   */
@@ -47,16 +52,16 @@ var circuit = new synthbio.Circuit("Name", "Desc", [gate], [], []);
 		});
 	
 		test("Round series", function(){
-			deepEqual(synthbio.util.roundSeries([1,2]), [0.64, 3.49, 5.94], "Series can be rounded correctly by plot precision");
+			deepEqual(synthbio.util.roundSeries([0.64, 3.49, 5.94]), [0.6, 3.5, 5.9], "Series can be rounded correctly by plot precision");
 		});
 		
 		test("Sum of series", function(){
-			equal(synthbio.util.calculateSumSeries([1,2,3]), 6, "[1, 2, 3] becomes 6");
+			/*equal(synthbio.util.calculateSumSeries([1,2,3]), 6, "[1, 2, 3] becomes 6");
 			equal(synthbio.util.calculateSumSeries([1.5,2,3]), 6.5, "[1.5, 2, 3] becomes 6.5");
 			equal(synthbio.util.calculateSumSeries([0,1,0]), 1, "[0, 1, 0] becomes 1");
 			equal(synthbio.util.calculateSumSeries([0,0,0]), 0, "[0, 0, 0] becomes 0");
-			equal(synthbio.util.calculateSumSeries([]), 0, "[] becomes 0");
-			equal(synthbio.util.calculateSumSeries([1,5,7,3,-12]), 4, "[1, 5, 7, 3, -12] becomes 4");
+			equal(synthbio.util.calculateSumSeries([]), 0, "[] becomes 0");*/
+			equal(synthbio.util.calculateSumSeries(series), 4, "[1, 5, 7, 3, -12] becomes 4");
 		});
 		
 		test('form2Object method', function(){
