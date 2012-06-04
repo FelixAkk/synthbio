@@ -51,6 +51,8 @@ synthbio.loadCircuit = function(circuit) {
 		synthbio.gui.displaySignal(element);
 	});
 	//TODO; implement grouping.
+
+	jsPlumb.repaintEverything();
 };
 
 
