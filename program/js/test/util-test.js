@@ -51,11 +51,11 @@ var series = {data: [1,5,7,3,-12]}
 			equal(roundableNum2.roundTo(2), 3.49, 'Rounded down to 2');
 		});
 	
-		test("Round series", function(){
+		test("Round series", function() {
 			deepEqual(synthbio.util.roundSeries([0.64, 3.49, 5.94]), [0.6, 3.5, 5.9], "Series can be rounded correctly by plot precision");
 		});
 		
-		test("Sum of series", function(){
+		test("Sum of series", function() {
 			/*equal(synthbio.util.calculateSumSeries([1,2,3]), 6, "[1, 2, 3] becomes 6");
 			equal(synthbio.util.calculateSumSeries([1.5,2,3]), 6.5, "[1.5, 2, 3] becomes 6.5");
 			equal(synthbio.util.calculateSumSeries([0,1,0]), 1, "[0, 1, 0] becomes 1");
@@ -64,7 +64,7 @@ var series = {data: [1,5,7,3,-12]}
 			equal(synthbio.util.calculateSumSeries(series), 4, "[1, 5, 7, 3, -12] becomes 4");
 		});
 		
-		test('form2Object method', function(){
+		test('form2Object method', function() {
 			synthbio.util.form2object(circuit.getSimulationInputs(), [{ selector: '#testableOption', setter: 'setLength' }]);
 			
 			equal(circuit.getSimulationInputs().getLength() , "20", "Can use form data to alter Object methods");
