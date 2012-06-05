@@ -50,12 +50,22 @@ synthbio.gui.filenameExtension = function(filename) {
 	return filename;
 };
 
+/**
+ * Check if we have a file with 'filename' in the list of recent files.
+ */
 synthbio.gui.hasRecentFile = function(filename) {
 	var ret=false;
 	$.each(synthbio.gui.recentFilesList, function(index, element) {
 		if(element.filename === filename || element.filename === filename + '.syn'){
 			ret=true;
 		}
+	});
+	return ret;
+};
+synthbio.gui.getRecentFilesList = function() {
+	var ret=new Array();
+	$.each(synthbio.gui.recentFilesList, function(index, element){
+		ret[index]=element.filename;
 	});
 	return ret;
 };
@@ -115,6 +125,10 @@ synthbio.gui.saveFile = function() {
 		return false; // would prevent the form from making us go anywhere if .preventDefault() fails
 	});
 };
+
+/**
+ * Opens a file from the server.
+ */
 synthbio.gui.openFile = function() {
 	$("#files .modal-header h3").html("Open…");
 	$("#files .modal-footer .btn-primary").html("Open…");
@@ -162,6 +176,7 @@ synthbio.gui.resetFileDialog = function() {
 	});
 	$("#files .modal-alert-fader").height("0px");
 };
+
 synthbio.gui.prepareFileDialog = function(event) {
 	// Request stuff from server and define what happens next
 	synthbio.requests.listFiles(function(response) {
@@ -177,13 +192,15 @@ synthbio.gui.prepareFileDialog = function(event) {
 		// Setup the text input box for entering the filename operate on
 		$("#files .modal-footer input").typeahead({
 			// The possible auto completions, the same as the files listed
-			source: response
+			source: synthbio.gui.getRecentFilesList()
 		});
 		var html='';
 		$.each(response, function(i, file) {
-			var date=new Date(file.modified);
-			var datetime=date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes();
-			html+='<tr><td>'+file.filename+'</td><td>x</td><td>'+datetime+'</td></tr>';
+			var date = new Date(file.modified);
+			var datetime =
+				date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() +
+				' ' + date.getHours() + ':' + date.getMinutes();
+			html+='<tr><td class="filename">'+file.filename+'</td><td>x</td><td>'+datetime+'</td></tr>';
 		});
 
 
@@ -200,7 +217,7 @@ synthbio.gui.prepareFileDialog = function(event) {
 		$("#files tbody tr").each(function(index, element) {
 			element = $(element); // extend to provide the .on() function
 			element.on("click", function() {
-				$("#files .modal-footer input").val(synthbio.gui.recentFilesList[index].filename);
+				$("#files .modal-footer input").val($(this).find("td.filename").html());
 				// Trigger submit
 				$("#files form").submit();
 			});
