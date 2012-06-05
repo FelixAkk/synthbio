@@ -108,7 +108,7 @@ synthbio.gui.proteinColor = (function() {
 	var colorMap = {};
 	
 	return function(protein) {
-		if (!protein) {
+		if (!synthbio.validProtein(protein)) {
 			return "#deea18";
 		}
 		if (!colorMap[protein]) {
