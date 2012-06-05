@@ -54,16 +54,15 @@ synthbio.gui.filenameExtension = function(filename) {
  * Check if we have a file with 'filename' in the list of recent files.
  */
 synthbio.gui.hasRecentFile = function(filename) {
-	var ret=false;
-	$.each(synthbio.gui.recentFilesList, function(index, element) {
-		if(element.filename === filename || element.filename === filename + '.syn'){
-			ret=true;
-		}
-	});
-	return ret;
+	return $.inArray(filename, synthbio.gui.getRecentFilesList())
+		|| $.inArray(filename + ".syn", synthbio.gui.getRecentFilesList());
 };
+
+/**
+ * return a list of recent file names.
+ */
 synthbio.gui.getRecentFilesList = function() {
-	var ret=new Array();
+	var ret=[];
 	$.each(synthbio.gui.recentFilesList, function(index, element){
 		ret[index]=element.filename;
 	});
@@ -164,6 +163,8 @@ synthbio.gui.openFile = function() {
 	});
 };
 synthbio.gui.resetFileDialog = function() {
+	console.log("resetFileDialog called");
+	console.log(synthbio.gui.getRecentFilesList());
 	$("#files tbody").html('<tr><td>Loading ...</td></tr>');
 	// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
 	$("#files form").off("submit");
@@ -195,25 +196,27 @@ synthbio.gui.prepareFileDialog = function(event) {
 			source: synthbio.gui.getRecentFilesList()
 		});
 		var html='';
-		$.each(response, function(i, file) {
+		$.each(synthbio.gui.recentFilesList, function(i, file) {
+			console.log(file);
 			var date = new Date(file.modified);
 			var datetime =
-				date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() +
-				' ' + date.getHours() + ':' + date.getMinutes();
+				date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + ' ' +
+				date.getHours() + ':' + date.getMinutes();
 			html+='<tr><td class="filename">'+file.filename+'</td><td>x</td><td>'+datetime+'</td></tr>';
 		});
 
-
-		$('#files tbody').html(html);
-
-		// Initialize DataTable.
+		// Initialize DataTable, before adding rows to it.
 		if(synthbio.gui.fTable !== undefined) {
 			// If we run this for the second time and fTable is defined, clear the old table
 			synthbio.gui.fTable.fnClearTable();
 		}
+		$('#files tbody').html(html);
+
 		synthbio.gui.fTable = $('#files table').dataTable(synthbio.gui.dataTableOptions);
 
 		// Make each row respond to selection
+		// (Jieter) @FelixAkk: could be done more concice with one onclick handler
+		// using the event object passed to the callback to determine the target. 
 		$("#files tbody tr").each(function(index, element) {
 			element = $(element); // extend to provide the .on() function
 			element.on("click", function() {
