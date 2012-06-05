@@ -79,6 +79,46 @@ synthbio.validProtein = function(protein) {
 };
 
 /**
+ * Get a color matching to the protein (this color will be the same throughout the program)
+ * @param protein Protein name
+ * @return String color
+ */
+synthbio.gui.proteinColor = (function() {
+
+	//Counter for the random color cycle
+	var counter = 0;
+
+	//Based on http://krazydad.com/tutorials/makecolors.php
+	var randomColor = function() {
+		var byte2Hex = function(n) {
+			var nybHexString = "0123456789ABCDEF";
+			return "" +
+				nybHexString.substr((n >> 4) & 0x0F, 1) +
+				nybHexString.substr(n & 0x0F, 1);
+		}
+		
+		counter++;
+		return '#' +
+			byte2Hex(Math.sin(/*2.4 * counter + 0*/ 1.666 * counter) * 127 + 128) +
+			byte2Hex(Math.sin(/*2.4 * counter + 2*/ 2.666 * counter) * 127 + 128) +
+			byte2Hex(Math.sin(/*2.4 * counter + 4*/ 3.666 * counter) * 127 + 128);
+	}
+
+	//Map of protein -> color
+	var colorMap = {};
+	
+	return function(protein) {
+		if (!protein) {
+			return "#deea18";
+		}
+		if (!colorMap[protein]) {
+			colorMap[protein] = randomColor();
+		}
+		return colorMap[protein];
+	}
+}());
+
+/**
  * Fill the "show proteins" modal with proteins
  * @param response Reponse object for the synthbio.requests.getCDSs
  */
@@ -121,7 +161,7 @@ synthbio.gui.closeProteinDropdowns = function(mtarget){
 
 	//Check if the selector had a result (if so, there are still dropdowns open)
 	if (sel && sel.length) {
-		sel.parent().css('z-index', "1");
+		sel.parent().css('z-index', "15");
 		change = true;
 	}
 	
@@ -188,7 +228,7 @@ synthbio.gui.selectProtein = function(label, connection, signal) {
 	synthbio.gui.updateConnections();
 
 	//Reset the z-Index of wire
-	label.parent().css('z-index', "1");
+	label.parent().css('z-index', "15");
 };
 
 /**
@@ -217,8 +257,12 @@ synthbio.gui.setProteinLabel = function(signal, connection) {
 		});
 	}
 
-	label.html(signal.getProtein() || "Choose protein");
-	overlay.setLocation(overlay.getLocation()); //Workaround for proper location
+	var prot = signal.getProtein();
+	label.html(prot || "Choose protein");
+	
+	//Paint connection and reset location
+	connection.setPaintStyle({strokeStyle: synthbio.gui.proteinColor(prot)});
+	overlay.setLocation(overlay.getLocation());
 };
 
 /**
