@@ -15,7 +15,7 @@
  * GUI JavaScript Document, concerns all protein GUI matters (showing & selection).
  */
 
-/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
+/*jslint devel: true, browser: true, vars: true, plusplus: true, sloppy: true, white: true, maxerr: 50, indent: 4, bitwise: true */
 /*global $, synthbio, jsPlumb */
 
 /**
@@ -39,9 +39,10 @@ synthbio.getProteins = (function() {
 	synthbio.requests.getCDSs(function(response) {
 		synthbio.util.assert(response.length, "Loading proteins failed");
 
-		//Walk through response and fill the result object
+		//Walk through response, fill the result object and initialize a color
 		$.each(response, function(i, cds) {
-			proteins[cds.name] = false; 
+			proteins[cds.name] = false;
+			synthbio.gui.proteinColor(cds.name, true);
 		});
 
 		//Fill the proteins modal
@@ -81,6 +82,7 @@ synthbio.validProtein = function(protein) {
 /**
  * Get a color matching to the protein (this color will be the same throughout the program)
  * @param protein Protein name
+ * @param isValid True to skip the check if protein is valid
  * @return String color
  */
 synthbio.gui.proteinColor = (function() {
@@ -92,30 +94,31 @@ synthbio.gui.proteinColor = (function() {
 	var randomColor = function() {
 		var byte2Hex = function(n) {
 			var nybHexString = "0123456789ABCDEF";
-			return "" +
-				nybHexString.substr((n >> 4) & 0x0F, 1) +
-				nybHexString.substr(n & 0x0F, 1);
-		}
+			return (
+				String(nybHexString.substr((n >> 4) & 0x0F, 1)) +
+				String(nybHexString.substr(n & 0x0F, 1))
+			);
+		};
 		
 		counter++;
 		return '#' +
 			byte2Hex(Math.sin(/*2.4 * counter + 0*/ 1.666 * counter) * 127 + 128) +
 			byte2Hex(Math.sin(/*2.4 * counter + 2*/ 2.666 * counter) * 127 + 128) +
 			byte2Hex(Math.sin(/*2.4 * counter + 4*/ 3.666 * counter) * 127 + 128);
-	}
+	};
 
 	//Map of protein -> color
 	var colorMap = {};
 	
-	return function(protein) {
-		if (!synthbio.validProtein(protein)) {
+	return function(protein, isValid) {
+		if (!isValid && !synthbio.validProtein(protein)) {
 			return "#deea18";
 		}
 		if (!colorMap[protein]) {
 			colorMap[protein] = randomColor();
 		}
 		return colorMap[protein];
-	}
+	};
 }());
 
 /**
