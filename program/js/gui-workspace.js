@@ -644,7 +644,7 @@ jsPlumb.ready(function() {
 	synthbio.gui.outputEndpoint = {
 		endpoint: "Dot",
 		paintStyle:{ fillStyle: "#225588", radius: 7 },
-		connector: ["Bezier", { curviness: 50 } ],
+		connector: ["Bezier", { curviness: 85 } ],
 		connectorStyle: connectorPaintStyle,
 		hoverPaintStyle: pointHoverStyle,
 		connectorHoverStyle: connectorHoverStyle,
