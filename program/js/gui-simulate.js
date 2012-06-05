@@ -180,6 +180,7 @@ synthbio.gui.plotOutput = function(response) {
 		return {
 			type: 'spline',
 			name: val,
+			color: (synthbio.validProtein(val) ? synthbio.gui.proteinColor(val) : ""),
 			pointInterval: timestep,
 			data: synthbio.util.roundSeries(response.data[val])
 		};
