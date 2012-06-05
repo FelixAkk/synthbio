@@ -1,0 +1,26 @@
+{
+	"data": {
+		"description": "Logic for this circuit: D = ~(A^B)",
+		"gates": [
+			{"kind": "and", "position": {"x": 250, "y": 50}},
+			{"kind": "not", "position": {"x": 700, "y": 50}}
+		],
+		"grouping": [],
+		"inputs": {
+			"length": 40,
+			"values": {
+				"A": "H",
+				"B": "LLLLLLLLLL LLLLLLLLLLH"
+			}
+		},
+		"name": "example.syn",
+		"signals": [
+			{"from": "input", "protein": "A","to": 0},
+			{"from": "input", "protein": "B","to": 0},
+			{"from": 0, "protein": "C", "to": 1},
+			{"from": 1, "protein": "D", "to": "output"}
+		]
+	},
+	"message": "",
+	"success": true
+}
