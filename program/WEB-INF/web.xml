@@ -76,5 +76,21 @@
 		<servlet-name>ValidateCircuit</servlet-name>
 		<url-pattern>/ValidateCircuit</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>SimulateCircuit</servlet-name>
+		<servlet-class>synthbio.servlets.SimulateCircuitServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SimulateCircuit</servlet-name>
+		<url-pattern>/SimulateCircuit</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ExportCircuit</servlet-name>
+		<servlet-class>synthbio.servlets.ExportCircuitServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportCircuit</servlet-name>
+		<url-pattern>/ExportCircuit</url-pattern>
+	</servlet-mapping>
 
 </web-app>
