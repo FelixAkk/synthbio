@@ -792,7 +792,7 @@ $(document).ready(function() {
 				model.addSignal("B", 0, 1);
 				model.addSignal("C", 1, "output");
 
-				synthbio.loadCompoundCircuit(model, [100, 100]);
+				synthbio.loadCompoundCircuit(model, [x, y]);
 			}
 
 			// Clean up transport layer
