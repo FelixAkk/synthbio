@@ -261,7 +261,9 @@ synthbio.gui.setProteinLabel = function(signal, connection) {
 	label.html(prot || "Choose protein");
 	
 	//Paint connection and reset location
-	connection.setPaintStyle({strokeStyle: synthbio.gui.proteinColor(prot)});
+	connection.setPaintStyle($.extend({}, connection.getPaintStyle(), {
+		strokeStyle: synthbio.gui.proteinColor(prot)
+	}));
 	overlay.setLocation(overlay.getLocation());
 };
 
