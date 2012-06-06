@@ -106,4 +106,15 @@ public class TestJieterSolver {
 		
 	}
 	
+	@Test
+	public void testToJSON() throws Exception {
+		Circuit c = this.getNotCircuit();
+
+		JieterSolver js=new JieterSolver(c);
+
+		js.solve();
+
+		System.out.println(js.toJSON());
+		
+	}
 }

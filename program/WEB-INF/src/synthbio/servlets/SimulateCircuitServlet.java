@@ -33,7 +33,8 @@ import synthbio.simulator.JieterSolver;
 import synthbio.Util;
 
 /**
- * Servlet ListCircuitServlets serves a list of circuit files.
+ * Servlet SimulateCircuitServlet serves a simulation for a provided
+ * circuit..
  *
  * API functions documented at:
  * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
@@ -44,7 +45,7 @@ import synthbio.Util;
 public class SimulateCircuitServlet extends CircuitServlet {
 	
 	/**
-	 * Get requests
+	 * Get request
 	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
@@ -94,7 +95,6 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			out.println(json.toJSONString());
 			return;
 		}
-
 
 		if(solver.equals("jieter")) {
 			//use Jieter's Solver.

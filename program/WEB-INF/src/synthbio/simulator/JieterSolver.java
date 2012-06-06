@@ -127,7 +127,7 @@ public class JieterSolver {
 		System.out.println("---------------");
 	}
 	//number of steps per tick.
-	public int stepsize=10;
+	public int stepsize=100;
 	
 	public double getInputLevelAt(String specie, int t){
 		t = (int)Math.floor(t/this.stepsize);
@@ -265,8 +265,14 @@ public class JieterSolver {
 		JSONObject ret = new JSONObject();
 		ret.put("names", species);
 		ret.put("length", circuit.getSimulationLength());
-		ret.put("step", 1/this.stepsize);
+		ret.put("step", (double)1/this.stepsize);
 
+		ArrayList<Double> time=new ArrayList<Double>();
+		for(int t=0; t<this.steps; t++){
+			time.add((double)t/this.stepsize);
+		}
+		//ret.put("time", time);
+		
 		JSONObject data=new JSONObject();
 		for(String sp: species){
 			data.put(sp, get(sp));
