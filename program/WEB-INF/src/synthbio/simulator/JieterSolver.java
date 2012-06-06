@@ -169,7 +169,6 @@ public class JieterSolver {
 					
 					//d[protein] / dt = k2 * [mRNA] - d2 * [Protein]
 					double delta_protein = k2 * con_mRNA - d2 * con_protein;
-					System.out.println(k2 + " * " + con_mRNA + " - " + d2 +" * "+ con_protein + " = " + delta_protein);
 					set(
 						r.getToProtein(),
 						t,
