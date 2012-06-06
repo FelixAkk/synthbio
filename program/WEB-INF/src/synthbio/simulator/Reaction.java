@@ -136,27 +136,6 @@ class Reaction {
 	private String kineticLaw() {
 		String r = tabs(4)+"<kineticLaw>\n";
 		
-		// the parameters
-		// transcription has:
-		//		k1, Km and n of the input
-		//		d1 of output
-		// translation has:
-		//		k2 of input
-		//		d2 of output
-		r += tabs(5)+"<listOfParameters>\n";
-		if(type == ReactionType.Transcription) {
-			r +=
-				tabs(6)+"<parameter id=\"k1\" value=\"" + parameters[0] + "\" units=\"substance\"/>\n"+
-				tabs(6)+"<parameter id=\"km\" value=\"" + parameters[1] + "\" units=\"substance\"/>\n"+
-				tabs(6)+"<parameter id=\"n\" value=\"" + parameters[2] + "\" units=\"substance\"/>\n"+
-				tabs(6)+"<parameter id=\"d1\" value=\"" + parameters[3] + "\" units=\"substance\"/>\n";
-		} else {
-			r +=
-				tabs(6)+"<parameter id=\"k2\" value=\"" + parameters[0] + "\" units=\"substance\"/>\n"+
-				tabs(6)+"<parameter id=\"d2\" value=\"" + parameters[1] + "\" units=\"substance\"/>\n";
-		}
-		r += tabs(5)+"</listOfParameters>\n";
-		
 		// the math
 		r += tabs(5)+"<math xmlns=\"http://www.w3.org/1998/Math/MathML\">\n";
 		
@@ -262,6 +241,27 @@ class Reaction {
 		}
 		
 		r += tabs(5)+"</math>\n";
+
+		// the parameters
+		// transcription has:
+		//		k1, Km and n of the input
+		//		d1 of output
+		// translation has:
+		//		k2 of input
+		//		d2 of output
+		r += tabs(5)+"<listOfParameters>\n";
+		if(type == ReactionType.Transcription) {
+			r +=
+				tabs(6)+"<parameter id=\"k1\" value=\"" + parameters[0] + "\" units=\"substance\"/>\n"+
+				tabs(6)+"<parameter id=\"km\" value=\"" + parameters[1] + "\" units=\"substance\"/>\n"+
+				tabs(6)+"<parameter id=\"n\" value=\"" + parameters[2] + "\" units=\"substance\"/>\n"+
+				tabs(6)+"<parameter id=\"d1\" value=\"" + parameters[3] + "\" units=\"substance\"/>\n";
+		} else {
+			r +=
+				tabs(6)+"<parameter id=\"k2\" value=\"" + parameters[0] + "\" units=\"substance\"/>\n"+
+				tabs(6)+"<parameter id=\"d2\" value=\"" + parameters[1] + "\" units=\"substance\"/>\n";
+		}
+		r += tabs(5)+"</listOfParameters>\n";
 		
 		return r + tabs(4)+"</kineticLaw>\n";
 	}

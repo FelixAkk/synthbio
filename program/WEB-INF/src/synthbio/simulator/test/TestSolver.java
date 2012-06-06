@@ -141,7 +141,7 @@ public class TestSolver {
 	/**
  	 * Testing the solving of a Syn file, testing if the degradation works.
  	 */	
-	@Ignore
+	@Ignore	
 	@Test
 	public void testCircuit2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
 		//System.out.println(convertFromFile(de1));
