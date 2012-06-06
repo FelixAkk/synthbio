@@ -99,8 +99,9 @@ public class CircuitConverter {
 			reactions.add(translation);
 			
 			// Add new species to the set (if there are any)
-			for(String s: inputs)
+			for(String s: inputs) {
 				species.add(s);
+			}
 			species.add(output);
 			species.add("m"+output);
 		}

@@ -1,0 +1,1 @@
+{"name":"","description":"","gates":[{"kind":"not","position":{"x":244,"y":335}}],"signals":[{"protein":"A","from":"input","to":0,"fromEndpoint":0,"toEndpoint":0},{"protein":"B","from":0,"to":"output","fromEndpoint":0}],"groups":[],"inputs":{"length":40,"tickWidth":1,"lowLevel":0,"highLevel":600,"values":{"A":"L"}}}

@@ -28,6 +28,7 @@ import synthbio.models.CircuitException;
 import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
 import synthbio.simulator.Solver;
+import synthbio.simulator.JieterSolver;
 
 import synthbio.Util;
 
@@ -86,11 +87,25 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		try {
-			json.data = Util.multiTableToJSON(Solver.solve(c));
-			json.success = true;
-		} catch(Exception e) {
-			json.fail("Failed solving: "+e.getMessage());
+		if(request.getParameter("solver") != null && request.getParameter("solver").equals("jieter")){
+			//use Jieter's Solver.
+			try {
+				JieterSolver js=new JieterSolver(c);
+				js.solve();
+				
+				json.data = js.toJSON();
+				json.success = true;
+			} catch(Exception e) {
+				json.fail("Failed solving: "+e.getMessage());
+			}
+		}else{
+			//use JSBML's Solver.
+			try {
+				json.data = Util.multiTableToJSON(Solver.solve(c));
+				json.success = true;
+			} catch(Exception e) {
+				json.fail("Failed solving: "+e.getMessage());
+			}
 		}
 		
 		out.println(json.toJSONString());

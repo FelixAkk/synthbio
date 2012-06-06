@@ -341,6 +341,20 @@ $(document).ready(function() {
 		);
 		
 	});
+	$('#rerun-simulation').on("click", function() {
+		synthbio.gui.plot.showLoading();
+	
+		synthbio.requests.simulate(
+			synthbio.model,
+			function(response){
+				if(response.message !== '') {
+					//care
+				}else{
+					synthbio.gui.plotOutput(response.data);
+				}
+			}
+		);
+	});
 
 	/**
 	 * Toggle group/separate chart view (default: group)

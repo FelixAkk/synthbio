@@ -228,7 +228,7 @@ synthbio.requests.validate = function(circuit, callback){
 synthbio.requests.simulate = function(circuit, callback){
 	
 	synthbio.requests.baseXHR({
-		url: "/Circuit?action=simulate",
+		url: "/SimulateCircuit?solver=jieter",
 		data: { 'circuit': JSON.stringify(circuit) },
 		success: function(response){
 			callback(response);

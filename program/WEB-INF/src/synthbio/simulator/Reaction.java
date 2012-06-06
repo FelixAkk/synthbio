@@ -32,7 +32,7 @@ class Reaction {
 	// parameters contains the paramters for this reaction
 	// for transcription these are [k1, km, n and d1]
 	// for translation these are [k2, d2]
-	private double[] parameters;
+	public double[] parameters;
 	
 	// multiple input constructor
 	public Reaction(String gate, List<String> fromProteins, String toProtein) {
@@ -56,6 +56,21 @@ class Reaction {
 	
 	public void setTypeToTranslation() {
 		type = ReactionType.Translation;
+	}
+	public boolean isTranslation(){
+		return type == ReactionType.Translation;
+	}
+	public String getToProtein(){
+		return this.toProtein;
+	}
+	public String getFromProtein(){
+		return this.getFromProtein(0);
+	}
+	public String getFromProtein(int i){
+		return this.fromProteins.get(i);
+	}
+	public String getGate(){
+		return this.gate;
 	}
 	
 	// setParameters for transcription: k1, Km, n and d1

@@ -238,13 +238,20 @@ public class Circuit {
 		assert tick <= this.getSimulationLength() : "Tick should not exceed simulation length.";
 
 		String input=this.getSimulationInput(p);
-		if (tick>input.length()) {
+		if (tick>=input.length()) {
 			//return last defined tick if requested tick exceeds the
 			//defined input length.
 			return input.substring(input.length() - 1);
 		} else {
 			//return the character at position tick.
 			return input.substring(tick, tick + 1);
+		}
+	}
+	public Double getSimulationLevelAt(String p, int tick) {
+		if(this.getSimulationInputAt(p, tick).equals("H")){
+			return this.getSimulationHighLevel();
+		}else{
+			return this.getSimulationLowLevel();
 		}
 	}
 	
