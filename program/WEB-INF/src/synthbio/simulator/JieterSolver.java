@@ -104,7 +104,7 @@ public class JieterSolver {
 		sheet.get(specie).add(t, value);
 	}
 
-	public void printSpeciesAt(int t  ){
+	public void printSpeciesAt(int t){
 		Integer[] times={t};
 		printSpeciesAt(times);
 	}
@@ -126,15 +126,22 @@ public class JieterSolver {
 		}
 		System.out.println("---------------");
 	}
+	//number of steps per tick.
+	public int stepsize=10;
 	
-
+	public double getInputLevelAt(String specie, int t){
+		t = (int)Math.floor(t/this.stepsize);
+		return circuit.getSimulationLevelAt(specie, t);
+	}
 	public void solve() throws Exception{
 		System.out.println("about to solve: "+circuit);
 		System.out.println("reactions: "+reactions);
 		System.out.println("species: "+species);
 		System.out.println();
 		System.out.println();
-		this.steps=circuit.getSimulationLength();
+		
+		this.steps=circuit.getSimulationLength()*stepsize;
+
 		
 		sheet=new HashMap<String, ArrayList<Double>>();
 
@@ -144,7 +151,7 @@ public class JieterSolver {
 			
 			if(circuit.hasInput(specie)){
 				//set input species to their defined levels.
-				set(specie, 0, circuit.getSimulationLevelAt(specie, 0));
+				set(specie, 0, getInputLevelAt(specie, 0));
 			}else{
 				//set all non-input species to 0.0
 				set(specie, 0, 0.0);
@@ -155,7 +162,7 @@ public class JieterSolver {
 		for(int t=1; t<steps; t++) {
 			//insert inputs for this step.
 			for(String input: circuit.getInputs()) {
-				set(input, t, circuit.getSimulationLevelAt(input, t));
+				set(input, t, getInputLevelAt(input, t));
 			}
 			
 			for(Reaction r :reactions) {
@@ -258,7 +265,7 @@ public class JieterSolver {
 		JSONObject ret = new JSONObject();
 		ret.put("names", species);
 		ret.put("length", circuit.getSimulationLength());
-		ret.put("step", 1);
+		ret.put("step", 1/this.stepsize);
 
 		JSONObject data=new JSONObject();
 		for(String sp: species){

@@ -71,6 +71,14 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
+		// which solver to use?
+		String solver="jsbml";
+		if(request.getParameter("solver") != null) {
+			if(request.getParameter("solver").equals("jieter")) {
+				solver="jieter";
+			}
+		}
+
 		String circuit=request.getParameter("circuit");
 		if(circuit==null){
 			json.fail("Parameter 'circuit' not set");
@@ -87,7 +95,8 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		if(request.getParameter("solver") != null && request.getParameter("solver").equals("jieter")){
+
+		if(solver.equals("jieter")) {
 			//use Jieter's Solver.
 			try {
 				JieterSolver js=new JieterSolver(c);

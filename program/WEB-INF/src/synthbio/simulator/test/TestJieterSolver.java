@@ -26,6 +26,7 @@ import synthbio.models.*;
  * Testing Solver.
  */
 public class TestJieterSolver {
+	public double delta=0.01;
 
 	public Circuit getAndCircuit(){
 		Circuit c=new Circuit("AND test circuit");
@@ -58,6 +59,41 @@ public class TestJieterSolver {
 		c.setSimulationLength(40);
 		return c;
 	}
+
+	/**
+	 * Check if getSimulationLevelAt() returns correct values
+	 * with different stepsizes.
+	 */
+	@Test
+	public void testSimulationLevelAt(){
+		Circuit c = this.getNotCircuit();
+
+		JieterSolver js=new JieterSolver(c);
+		js.stepsize=10;
+
+		double low=c.getSimulationLowLevel();
+		double high=c.getSimulationHighLevel();
+		
+		assertEquals(low, js.getInputLevelAt("A", 0), delta);
+		assertEquals(low, js.getInputLevelAt("A", 1), delta);
+		assertEquals(low, js.getInputLevelAt("A", 2), delta);
+		assertEquals(low, js.getInputLevelAt("A", 30), delta);
+		assertEquals(low, js.getInputLevelAt("A", 39), delta);
+		
+		assertEquals(high, js.getInputLevelAt("A", 40), delta);
+		assertEquals(high, js.getInputLevelAt("A", 49), delta);
+	}
+
+	
+	@Test
+	public void testNotCircuit() throws Exception {
+		Circuit c = this.getNotCircuit();
+
+		JieterSolver js=new JieterSolver(c);
+
+		js.solve();
+		
+	}
 	
 	@Ignore
 	@Test
@@ -69,13 +105,5 @@ public class TestJieterSolver {
 		js.solve();
 		
 	}
-	@Test
-	public void testNotCircuit() throws Exception {
-		Circuit c = this.getNotCircuit();
-
-		JieterSolver js=new JieterSolver(c);
-
-		js.solve();
-		
-	}
+	
 }
