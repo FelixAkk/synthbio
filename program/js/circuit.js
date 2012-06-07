@@ -16,7 +16,7 @@
  */
 
 /*jslint devel: true, browser: true, vars: true, plusplus: true, regexp: true, sloppy: true, white: true, maxerr: 50, indent: 4 */
-/*global $, synthbio */
+/*global $, jsPlumb, synthbio */
 
 /**
  * syntbio package.
@@ -50,7 +50,65 @@ synthbio.loadCircuit = function(circuit) {
 	$.each(synthbio.model.getSignals(), function(index, element){
 		synthbio.gui.displaySignal(element);
 	});
-	//TODO; implement grouping.
+};
+
+/**
+ * Adds compound circuit to current circuit at given position.
+ *
+ * @param circuit An instance of synthbio.Circuit
+ * @param position Position to drop compound circuit
+ */
+synthbio.loadCompoundCircuit = function(circuit, position) {
+	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
+	if(!(position instanceof synthbio.Point)) {
+		position = new synthbio.Point(position || [0, 0]);
+	}
+
+	//This is the number needed for adjusting the new signals
+	var gateCount = synthbio.model.getGates().length;
+
+	//Calculate top left position for adjustment for other gates
+	var gates = circuit.getGates();
+	var origin = [Infinity, Infinity];
+	$.each(gates, function(index, element) {
+		origin[0] = Math.min(origin[0], element.getX());
+		origin[1] = Math.min(origin[1], element.getX());
+	});
+	origin[0] = position.getX() - origin[0];
+	origin[1] = position.getY() - origin[1];
+	
+	//Add gates
+	$.each(gates, function(index, element) {
+		//Adjust position
+		var x = element.getX() + origin[0];
+		var y = element.getY() + origin[1];
+		element.setPosition([x, y]);
+
+		//Add gate to model and display
+		synthbio.model.addGate(element);
+		synthbio.gui.displayGate(element);
+	});
+
+	//Add signals (not the ones connected to input/output)
+	$.each(circuit.getSignals(), function(index, element){
+		if (!element.isInput() && !element.isOutput()) {
+			//Adjust from/to to make sure they are correct in the new model
+			element.setFrom(element.getFrom() + gateCount);
+			element.setTo(element.getTo() + gateCount);
+
+			//Check if protein is used, reset if it is
+			var prot = element.getProtein();
+			if (!synthbio.validProtein(prot) ||	synthbio.model.isProteinUsed(prot)) {
+				element.setProtein("");
+			}
+
+			//Add signal to model and display it
+			synthbio.model.addSignal(element);
+			synthbio.gui.displaySignal(element);
+		}
+	});
+
+	jsPlumb.repaintEverything();
 };
 
 

@@ -414,6 +414,16 @@ synthbio.Circuit.prototype.getUsedProteins = function() {
 };
 
 /**
+ * Checks if a protein is used in this circuit.
+ * @param protein String
+ * @return boolean
+ */
+synthbio.Circuit.prototype.isProteinUsed = function(protein) {
+	var proteins = this.getUsedProteins();
+	return proteins && proteins[protein];
+};
+
+/**
  * Try to determine a protein for a signal based on the from-gate.
  * @param from Gate index.
  * @param endpoint Optional endpoint index.

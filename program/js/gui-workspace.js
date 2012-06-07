@@ -189,6 +189,32 @@ synthbio.gui.newInputEndpoint = (function() {
 }());
 
 /**
+ * Adds a new input endpoint to the output "gate"
+ *
+ * @param index Number to use for UUID, if undefined it will use a counter
+ * @return jsPlumb.Endpoint
+ */
+synthbio.gui.newOutputEndpoint = (function() {
+	var outputCounter = 0;
+
+	return function(index) {
+		var UUID = "gate-output:: input:: ";
+		if (index === undefined) {
+			UUID += outputCounter++;
+		} else {
+			UUID += index;
+			outputCounter = Math.max(outputCounter, index + 1);
+		}
+
+		return jsPlumb.addEndpoint(
+			"gate-output",
+			synthbio.gui.inputEndpoint, 
+			{ anchor: "Continuous", uuid: UUID }
+		);
+	};
+}());
+
+/**
  * Finds a free input or output endpoint for a gate.
  *
  * @param id GUI id for the gate
@@ -208,6 +234,10 @@ synthbio.gui.getFreeEndpoint = function(id, input, index) {
 		// If endpoint does not exist for gate-input, create it
 		if (!ep && !input && id === "gate-input") {
 			ep = synthbio.gui.newInputEndpoint(index);
+		}
+		// If endpoint does not exist for gate-output, create it
+		if (!ep && input && id === "gate-output") {
+			ep = synthbio.gui.newOutputEndpoint(index);
 		}
 		
 		// Return endpoint if found, else the GUI id
@@ -312,11 +342,10 @@ synthbio.gui.getGateIdByIndex = function(idx, noException) {
  */
 synthbio.gui.displayGate = function(gateModel) {
 	synthbio.util.assert(gateModel instanceof synthbio.Gate, "Provided gate object must be an instance of 'synthbio.Gate'");
-	
+
 	// Create new display element
 	var element = $('<div class="gate ' + gateModel.getKind() + '">'
 		+ gateModel.getImage(true)
-		+ '<div class="mask"></div>'
 		+ "</div>");
 
 	// Place new element in grid
@@ -593,24 +622,31 @@ jsPlumb.ready(function() {
 				return true;
 			}
 
-			//Remove from model
-			synthbio.gui.removeDisplaySignal(opt.connection.id, true);
+			var src = opt.connection.endpoints[0] || opt.sourceId;
+			var dst = opt.dropEndpoint || opt.targetId;
+			var reconnect = false;
 
-			//Only continue for gate-input
-			if (opt.connection.sourceId !== "gate-input" || 
-				opt.connection.endpoints[0].getUuid())
-			{
+			if (opt.sourceId === "gate-input" && !opt.connection.endpoints[0].getUuid()) {
+				// Get a free endpoint for "gate-input"
+				src = synthbio.gui.getFreeEndpoint(opt.sourceId, false);
+				reconnect = true;
+			}
+			if (opt.targetId === "gate-output" && !opt.connection.endpoints[1].getUuid()) {
+				// Get a free endpoint for "gate-output"
+				dst = synthbio.gui.getFreeEndpoint(opt.targetId, true);
+				reconnect = true;
+			} 
+			
+			if (!reconnect) {
 				return true;
 			}
 
-			// Get a free endpoint for "gate-input" and reconnect
-			var src = synthbio.gui.getFreeEndpoint(opt.connection.sourceId, false);
+			// Reconnect and disallow the old connection
 			jsPlumb.connect({
 				source: src,
-				target: opt.dropEndpoint || opt.targetId
+				target: dst
 			});
 
-			// Disallow the old connection
 			return false;
 		}
 	};
@@ -619,13 +655,28 @@ jsPlumb.ready(function() {
 	synthbio.gui.outputEndpoint = {
 		endpoint: "Dot",
 		paintStyle:{ fillStyle: "#225588", radius: 7 },
-		connector: ["Bezier", { curviness: 50 } ],
+		connector: ["Bezier", { curviness: 85 } ],
 		connectorStyle: connectorPaintStyle,
 		hoverPaintStyle: pointHoverStyle,
 		connectorHoverStyle: connectorHoverStyle,
 		isSource: true,
 		maxConnections: -1
 	};
+	
+	jsPlumb.draggable("gate-input", {handle: "h4"});
+	jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
+
+	var oep = $.extend(true, {
+		anchor: "Continuous",
+		deleteEndpointsOnDetach: false
+	}, synthbio.gui.outputEndpoint);
+	var iep = $.extend(true, {
+		anchor: "Continuous",
+		deleteEndpointsOnDetach: false
+	}, synthbio.gui.inputEndpoint);
+
+	jsPlumb.makeSource("gate-input", oep);
+	jsPlumb.makeTarget("gate-output", iep);
 
 	// Listen for new jsPlumb connections
 	jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
@@ -676,26 +727,11 @@ jsPlumb.ready(function() {
 			synthbio.gui.removeDisplaySignal(conn.id);
 		}
 	});
-
-	jsPlumb.draggable("gate-input", {handle: "h4"});
-	jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
-
-	var oep = $.extend(true, {
-		anchor: "Continuous",
-		deleteEndpointsOnDetach: false
-	}, synthbio.gui.outputEndpoint);
-	var iep = $.extend(true, {
-		anchor: "Continuous",
-		deleteEndpointsOnDetach: false
-	}, synthbio.gui.inputEndpoint);
-
-	jsPlumb.makeSource("gate-input", oep);
-	jsPlumb.makeTarget("gate-output", iep);
 });
 
 $(document).ready(function() {
 	// Initialize new gate-dragging
-	$('#gates-tab .gate').draggable({ 
+	$('#gates-basic .gate').draggable({ 
 		appendTo: "#gates-transport",
 		containment: 'window',
 		scroll: false,
@@ -726,6 +762,48 @@ $(document).ready(function() {
 
 				// Display gate in grid
 				synthbio.gui.displayGate(newGate);
+			}
+
+			// Clean up transport layer
+			$("#gates-transport .gate").remove();
+			$("#gates-transport").css('display', 'none');
+		}
+	});
+
+	// Initialize new gate-dragging
+	$('#gates-compound .gate').draggable({ 
+		appendTo: "#gates-transport",
+		containment: 'window',
+		scroll: false,
+		helper: 'clone',
+		start: function(event) {
+			// Prepare transport layer
+			$("#gates-transport").css('display', 'block');
+		},
+		drag: function(event, ui) {
+			// Manually set the position of the helper (the thing you see dragged). Works out much nicer!
+			ui.position.left = event.pageX - synthbio.gui.gateDimensions.width/2;
+			ui.position.top  = event.pageY - synthbio.gui.gateDimensions.height/2;
+
+			// Display gate border if dragging in grid (and gate can be dropped)
+			var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
+			$(ui.helper).toggleClass("gate-border", dragInGrid);
+		},
+		stop: function(event, ui) {
+			// If dragged into the grid
+			if(event.pageX > synthbio.gui.gatesTabWidth) {
+				// Add new gate to circuit
+				var x = event.pageX - (synthbio.gui.gatesTabWidth + synthbio.gui.gateDimensions.width/2);
+				var y = event.pageY - (synthbio.gui.navbarHeight + synthbio.gui.gateDimensions.height/2);
+
+				var model = new synthbio.Circuit("", "");
+				model.addGate("not", [50, 50]);
+				model.addGate("and", [100, 100]);
+				model.addSignal("A", "input", 0);
+				model.addSignal("B", 0, 1);
+				model.addSignal("C", 1, "output");
+
+				synthbio.loadCompoundCircuit(model, [x, y]);
 			}
 
 			// Clean up transport layer

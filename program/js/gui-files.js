@@ -50,6 +50,25 @@ synthbio.gui.filenameExtension = function(filename) {
 	return filename;
 };
 
+/**
+ * Check if we have a file with 'filename' in the list of recent files.
+ */
+synthbio.gui.hasRecentFile = function(filename) {
+	return $.inArray(filename, synthbio.gui.getRecentFilesList())
+		|| $.inArray(filename + ".syn", synthbio.gui.getRecentFilesList());
+};
+
+/**
+ * return a list of recent file names.
+ */
+synthbio.gui.getRecentFilesList = function() {
+	var ret=[];
+	$.each(synthbio.gui.recentFilesList, function(index, element){
+		ret[index]=element.filename;
+	});
+	return ret;
+};
+
 synthbio.gui.saveFile = function() {
 	$("#files .modal-header h3").html("Save As…");
 	$("#files .modal-footer .btn-primary").html("Save As…");
@@ -65,18 +84,15 @@ synthbio.gui.saveFile = function() {
 		event.preventDefault();
 		// get the filename
 		var input = $("input", this)[0].value.trim();
+		console.log('selected input: ', input);
+		
 		// Allow prompting for confirmation again if a different filename has been entered this time.
 		if(input !== previousInput) {
 			confirmation = false;
 			previousInput = input;
 		}
 		// Check if the user is about to overwrite an existing file and hasn't confirmed yet
-		if(
-			(
-				$.inArray(input, synthbio.gui.recentFilesList) >= 0 ||
-					$.inArray(input+".syn", synthbio.gui.recentFilesList) >= 0
-				)
-				&& !confirmation) {
+		if(synthbio.gui.hasRecentFile(input) && !confirmation) {
 			synthbio.gui.showAdModalAlert('files', 'alert-error',
 				"<strong>Overwrite file?</strong> Press enter again to confirm");
 			confirmation = true;
@@ -108,6 +124,10 @@ synthbio.gui.saveFile = function() {
 		return false; // would prevent the form from making us go anywhere if .preventDefault() fails
 	});
 };
+
+/**
+ * Opens a file from the server.
+ */
 synthbio.gui.openFile = function() {
 	$("#files .modal-header h3").html("Open…");
 	$("#files .modal-footer .btn-primary").html("Open…");
@@ -143,6 +163,8 @@ synthbio.gui.openFile = function() {
 	});
 };
 synthbio.gui.resetFileDialog = function() {
+	console.log("resetFileDialog called");
+	console.log(synthbio.gui.getRecentFilesList());
 	$("#files tbody").html('<tr><td>Loading ...</td></tr>');
 	// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
 	$("#files form").off("submit");
@@ -155,6 +177,7 @@ synthbio.gui.resetFileDialog = function() {
 	});
 	$("#files .modal-alert-fader").height("0px");
 };
+
 synthbio.gui.prepareFileDialog = function(event) {
 	// Request stuff from server and define what happens next
 	synthbio.requests.listFiles(function(response) {
@@ -170,28 +193,34 @@ synthbio.gui.prepareFileDialog = function(event) {
 		// Setup the text input box for entering the filename operate on
 		$("#files .modal-footer input").typeahead({
 			// The possible auto completions, the same as the files listed
-			source: response
+			source: synthbio.gui.getRecentFilesList()
 		});
 		var html='';
-		$.each(response, function(i, file) {
-			html+='<tr><td>'+file+'</td><td>x</td><td>x</td></tr>';
+		$.each(synthbio.gui.recentFilesList, function(i, file) {
+			console.log(file);
+			var date = new Date(file.modified);
+			var datetime =
+				date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + ' ' +
+				date.getHours() + ':' + date.getMinutes();
+			html+='<tr><td class="filename">'+file.filename+'</td><td>x</td><td>'+datetime+'</td></tr>';
 		});
 
-
-		$('#files tbody').html(html);
-
-		// Initialize DataTable.
+		// Initialize DataTable, before adding rows to it.
 		if(synthbio.gui.fTable !== undefined) {
 			// If we run this for the second time and fTable is defined, clear the old table
 			synthbio.gui.fTable.fnClearTable();
 		}
+		$('#files tbody').html(html);
+
 		synthbio.gui.fTable = $('#files table').dataTable(synthbio.gui.dataTableOptions);
 
 		// Make each row respond to selection
+		// (Jieter) @FelixAkk: could be done more concice with one onclick handler
+		// using the event object passed to the callback to determine the target. 
 		$("#files tbody tr").each(function(index, element) {
 			element = $(element); // extend to provide the .on() function
 			element.on("click", function() {
-				$("#files .modal-footer input").val(synthbio.gui.recentFilesList[index]);
+				$("#files .modal-footer input").val($(this).find("td.filename").html());
 				// Trigger submit
 				$("#files form").submit();
 			});
