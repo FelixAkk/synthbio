@@ -54,8 +54,8 @@ synthbio.gui.filenameExtension = function(filename) {
  * Check if we have a file with 'filename' in the list of recent files.
  */
 synthbio.gui.hasRecentFile = function(filename) {
-	return $.inArray(filename, synthbio.gui.getRecentFilesList())
-		|| $.inArray(filename + ".syn", synthbio.gui.getRecentFilesList());
+	return $.inArray(filename, synthbio.gui.getRecentFilesList()) !== -1
+		|| $.inArray(filename + ".syn", synthbio.gui.getRecentFilesList()) !== -1;
 };
 
 /**
@@ -76,7 +76,7 @@ synthbio.gui.saveFile = function() {
 
 	// (Re)set to false. Represents whether we have prompted the user for confirmation once before
 	var confirmation = false;
-	// Used for comparing to the recently submitted input, to detect selection of a different file
+	// Used for comparing to the recently submitted input, to detect selection of a different file to overwrite
 	var previousInput = "";
 	$("#files form").on("submit", function(event) {
 		// Surpress default redirection due to <form action="destination.html"> action
