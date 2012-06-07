@@ -36,21 +36,18 @@ import synthbio.Util;
  * API functions documented at:
  * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
  * 
- * @author jieter 
+ * @author Thomas 
  */
 @SuppressWarnings("serial")
 public class ListCompoundsServlet extends ListCircuitsServlet {
-	
-	@Override
+
 	private JSONArray getFiles() throws JSONException{
 		ArrayList<JSONObject> files = new ArrayList<JSONObject>();
-		for(String filename: this.synRepository.getFileList()) {
-			if(filename.startsWith("compound/")) {
-				JSONObject file=new JSONObject();
-				file.put("filename", filename);
-				file.put("modified", this.synRepository.lastModified(filename));
-				files.add(file);
-			}			
+		for(String filename: this.compoundRepository.getFileList()) {
+			JSONObject file=new JSONObject();
+			file.put("filename", filename);
+			file.put("modified", synRepository.lastModified(filename));
+			files.add(file);
 		}
 		return new JSONArray(files);
 	}

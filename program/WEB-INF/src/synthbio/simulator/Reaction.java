@@ -123,7 +123,7 @@ class Reaction {
 		if(type == ReactionType.Transcription) {
 			r += tabs(4)+"<listOfModifiers>\n";
 			for(String in: fromProteins)
-				r += tabs(5)+"<speciesReference species=\"" + in + "\"/>\n";
+				r += tabs(5)+"<modifierSpeciesReference species=\"" + in + "\"/>\n";
 			r += tabs(4)+"</listOfModifiers>\n";
 		}
 		
@@ -270,7 +270,7 @@ class Reaction {
 	 * Returns the SBML string of this Reaction.
 	 */
 	public String getSBMLString() {
-		String s = tabs(3)+"<reaction id=\"" + getReactionId() + "\" reversible=\"false\" fast=\"false\">\n";
+		String s = tabs(3)+"<reaction id=\"" + getReactionId() + "\" reversible=\"false\">\n";
 		s += listOfInvolved();
 		s += kineticLaw();
 		return s + tabs(3)+"</reaction>\n";

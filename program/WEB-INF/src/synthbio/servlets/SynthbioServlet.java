@@ -64,4 +64,11 @@ public abstract class SynthbioServlet extends HttpServlet {
 	public SynRepository getSynRepository() throws Exception{
 		return new SynRepository(this.getWebroot()+"data/synstore/");
 	}
+	
+	/**
+	 * Return the Compound repository
+	 */
+	public SynRepository getCompoundRepository() throws Exception{
+		return new SynRepository(this.getWebroot()+"data/synstore/compound");
+	}
 }
