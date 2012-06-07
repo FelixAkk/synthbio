@@ -170,6 +170,7 @@ synthbio.gui.openFile = function() {
 };
 synthbio.gui.resetFileDialog = function() {
 	$("#files tbody").html('<tr><td>Loading ...</td></tr>');
+	
 	// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
 	$("#files form").off("submit");
 	var inputfield = $("#files .modal-footer input");

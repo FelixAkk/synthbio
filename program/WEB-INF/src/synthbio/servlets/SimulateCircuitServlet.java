@@ -28,11 +28,13 @@ import synthbio.models.CircuitException;
 import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
 import synthbio.simulator.Solver;
+import synthbio.simulator.JieterSolver;
 
 import synthbio.Util;
 
 /**
- * Servlet ListCircuitServlets serves a list of circuit files.
+ * Servlet SimulateCircuitServlet serves a simulation for a provided
+ * circuit..
  *
  * API functions documented at:
  * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
@@ -43,7 +45,7 @@ import synthbio.Util;
 public class SimulateCircuitServlet extends CircuitServlet {
 	
 	/**
-	 * Get requests
+	 * Get request
 	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
@@ -70,6 +72,14 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
+		// which solver to use?
+		String solver="jsbml";
+		if(request.getParameter("solver") != null) {
+			if(request.getParameter("solver").equals("jieter")) {
+				solver="jieter";
+			}
+		}
+
 		String circuit=request.getParameter("circuit");
 		if(circuit==null){
 			json.fail("Parameter 'circuit' not set");
@@ -86,13 +96,32 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		try {
-			json.data = Util.multiTableToJSON(Solver.solve(c));
-			json.success = true;
-		} catch(Exception e) {
-			json.fail("Failed solving: "+e.getMessage());
+		if(solver.equals("jieter")) {
+			//use Jieter's Solver.
+			try {
+				JieterSolver js=new JieterSolver(c);
+				js.solve();
+				
+				json.data = js.toJSON();
+				json.success = true;
+			} catch(Exception e) {
+				json.fail("Failed solving: "+e.getMessage());
+				this.log(e);
+			}
+		}else{
+			//use JSBML's Solver.
+			try {
+				json.data = Util.multiTableToJSON(Solver.solve(c));
+				json.success = true;
+			} catch(Exception e) {
+				json.fail("Failed solving: "+e.getMessage());
+			}
 		}
-		
-		out.println(json.toJSONString());
+		try{
+			out.println(json.toJSONString());
+		}catch(Throwable e){
+			json.fail("Error serializing to JSON: "+e.getMessage());
+			out.println(json.toJSONString());
+		}
 	}
 }

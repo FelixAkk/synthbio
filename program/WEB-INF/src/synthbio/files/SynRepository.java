@@ -107,6 +107,10 @@ public class SynRepository{
 
 		this.files.add(filename);
 	}
+	
+	/**
+	 * return the last modification time for the file specified.
+	 */
 	public Long lastModified(String filename) {
 		assert this.hasFile(filename) : "No such file: "+filename;
 

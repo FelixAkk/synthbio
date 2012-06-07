@@ -45,6 +45,9 @@ public abstract class SynthbioServlet extends HttpServlet {
 	public void log(String message) {
 		this.getServletContext().log(message);
 	}
+	public void log(Exception e){
+		this.getServletContext().log(e.getMessage(), e);
+	}
 	
 	/**
 	 * Return the BioBrick repository.
@@ -52,7 +55,7 @@ public abstract class SynthbioServlet extends HttpServlet {
 	 * @return A BioBrickReader object.
 	 */
 	public BioBrickRepository getBioBrickRepository() throws Exception{
-		return new BioBrickRepository(this.getWebroot()+"data/biobricks/07-06-12/");
+		return new BioBrickRepository(this.getWebroot()+"data/biobricks/2012-06-07/");
 	}
 
 	/**

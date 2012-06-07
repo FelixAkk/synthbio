@@ -39,7 +39,7 @@ public class BioBrickRepository{
 	private Collection<AndPromotor> andPromotors=new ArrayList<AndPromotor>();
 
 	public BioBrickRepository() throws Exception{
-		this("data/biobricks/default/");
+		this("data/biobricks/2012-06-07/");
 	}
 	
 	/**

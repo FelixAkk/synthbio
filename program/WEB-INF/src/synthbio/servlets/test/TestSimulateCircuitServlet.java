@@ -52,4 +52,5 @@ public class TestSimulateCircuitServlet extends TestCircuitServlet{
 		
 		assertTrue(response.getBoolean("success"));
 	}
+	
 }
