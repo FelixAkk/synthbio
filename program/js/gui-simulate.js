@@ -217,15 +217,20 @@ synthbio.chartOptions.xAxis = {
 synthbio.chartOptions.tooltip = {
 	formatter: function() {
 		//Current time
+		var multipleLines = this.points.length > 1;
 		var s = '<b>'+ this.x +' seconds</b>';
 
 		//Protein values
 		$.each(this.points, function(i, point) {
+			var hover = multipleLines && point.series.state === "hover";
+			var weight = (hover) ? "font-weight:bold;" : "";
+
 			s += "<br/>";
-			s += '<span style="color: ' + point.series.color + '">' + point.series.name + "</span>";
-			s += ": " + this.point.y.roundTo(synthbio.gui.plotPrecision);
+			s += '<span style="'+weight+'color: ' + point.series.color + '";>' + point.series.name + "</span>:";
+			s += (hover) ? "<strong>" : " ";
+			s += this.point.y.roundTo(synthbio.gui.plotPrecision);
+			s += (hover) ? "</strong>" : "";
 		});
-	
 		return s;
 	}
 };
