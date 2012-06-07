@@ -117,7 +117,11 @@ public class SimulateCircuitServlet extends CircuitServlet {
 				json.fail("Failed solving: "+e.getMessage());
 			}
 		}
-		
-		out.println(json.toJSONString());
+		try{
+			out.println(json.toJSONString());
+		}catch(Throwable e){
+			json.fail("Error serializing to JSON: "+e.getMessage());
+			out.println(json.toJSONString());
+		}
 	}
 }

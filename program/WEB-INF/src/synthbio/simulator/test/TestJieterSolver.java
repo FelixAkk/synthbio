@@ -78,7 +78,7 @@ public class TestJieterSolver {
 		Circuit c = this.getNotCircuit();
 
 		JieterSolver js=new JieterSolver(c);
-		js.stepsize=10;
+		js.result_resolution=10;
 
 		double low=c.getSimulationLowLevel();
 		double high=c.getSimulationHighLevel();
@@ -133,7 +133,7 @@ public class TestJieterSolver {
 		//todo: check if all names in js.species exist in names.
 
 		assertEquals(c.getSimulationLength(), json.getInt("length"));
-		assertEquals((double)1/js.stepsize, json.getDouble("step"), delta);
+		assertEquals(1.0/js.result_resolution, json.getDouble("step"), delta);
 		
 		assertTrue(json.has("data"));
 		//todo: check if data has an entry for every name

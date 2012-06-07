@@ -27,7 +27,10 @@ import synthbio.models.*;
 
 import synthbio.simulator.Reaction;
 
-
+/**
+ * Naive implementation to solve the system of ODE's for the BioBricks
+ * provided.
+ */
 public class JieterSolver {
 
 	/**
@@ -35,10 +38,15 @@ public class JieterSolver {
 	 */
 	public Circuit circuit;
 
-
+	/**
+	 * Reactions in the simulation.
+	 */
 	public ArrayList<Reaction> reactions;
-	public HashSet<String> species;
 
+	/**
+	 * Species in the simulation.
+	 */
+	public HashSet<String> species;
 
 	/**
 	 * This is the sheet we work in. For each specie we have an ArrayList
@@ -47,14 +55,26 @@ public class JieterSolver {
 	public HashMap<String, ArrayList<Double>> sheet;
 
 	/**
-	 * calculation steps.
+	 * Store the result for each specie for each calculation in t_minus_one.
 	 */
-	public int steps;
+	public HashMap<String, Double> t_minus_one;
+	
 
 	/**
-	 * Intermediate steps
+	 * Calculation resolution: how many calculations per second.
 	 */
-	public int stepsize=100;
+	public int calculation_resolution=1000;
+
+	/**
+	 * Result resolutuion: how many results per second.
+	 */
+	public int result_resolution=10;
+
+	/**
+	 * Total calculations steps.
+	 */
+	public int calculation_steps;
+
 
 	/**
 	 * Construct the Solver.
@@ -65,7 +85,7 @@ public class JieterSolver {
 		reactions = new ArrayList<Reaction>();
 		species = new HashSet<String>();
 
-		this.steps=circuit.getSimulationLength()*stepsize;
+		this.calculation_steps = circuit.getSimulationLength() * calculation_resolution;
 		
 		this.initReactions();
 	}
@@ -120,30 +140,58 @@ public class JieterSolver {
 	}
 
 	/**
+	 * Values for the previous calculation.
+	 */
+	public Double get_t_minus_one(String specie) {
+		return t_minus_one.get(specie);
+	}
+
+	/**
 	 * Retrieve the time serie for a certain specie
 	 */
 	public ArrayList<Double> get(String specie){
 		return sheet.get(specie);
 	}
 
+	
+
 	/**
 	 * Put a value for a specie on step t.
 	 */
 	public void set(String specie, int t, double value){
-		sheet.get(specie).add(t, value);
+		t_minus_one.put(specie, value);
+		if(t==0 || t % (calculation_resolution/result_resolution) == 0){
+			int result_step = (int) Math.floor(t / (calculation_resolution/result_resolution));
+			sheet.get(specie).add(result_step, value);
+		}
 	}
 
+	/**
+	 * Get the number of steps in the resulting data set.
+	 */
+	public int getResultSteps(){
+		return this.circuit.getSimulationLength() * this.result_resolution;
+	}
+
+	/**
+	 * Get the simulation level for an input at a certian simulation t.
+	 */
 	public double getInputLevelAt(String specie, int t){
-		t = (int)Math.floor(t/this.stepsize);
+		t = (int)Math.floor(t/this.calculation_resolution);
 		return circuit.getSimulationLevelAt(specie, t);
 	}
 
+	/**
+	 * Initialize the return data.
+	 */
 	private void initSheet(){
 		sheet=new HashMap<String, ArrayList<Double>>();
-
-		//initial values.
+		t_minus_one=new HashMap<String, Double>();
+		
+		//Values for t=0.
 		for(String specie: species){
-			sheet.put(specie, new ArrayList<Double>(steps));
+			sheet.put(specie, new ArrayList<Double>(this.getResultSteps()));
+			t_minus_one.put(specie, 0.0);
 			
 			if(circuit.hasInput(specie)){
 				//set input species to their defined levels.
@@ -154,14 +202,14 @@ public class JieterSolver {
 			}
 		}
 	}
+	
 	public void solve() throws Exception {
 		this.initSheet();
 
-
-		double delta_t = (double)1/stepsize;
+		double delta_t = 1.0/calculation_resolution;
 		
 		//time steps for t >= 1.
-		for(int t=1; t<steps; t++) {
+		for(int t=1; t<calculation_steps; t++) {
 			//insert inputs for this step.
 			for(String input: circuit.getInputs()) {
 				set(input, t, getInputLevelAt(input, t));
@@ -173,8 +221,8 @@ public class JieterSolver {
 					double k2 = r.parameters[0];
 					double d2 = r.parameters[1];
 
-					double con_protein = get(r.getToProtein(), t-1);
-					double con_mRNA = get(r.getFromProtein(), t-1);
+					double con_protein = get_t_minus_one(r.getToProtein());
+					double con_mRNA = get_t_minus_one(r.getFromProtein());
 					
 					//d[protein] / dt = k2 * [mRNA] - d2 * [Protein]
 					double delta_protein = k2 * con_mRNA - d2 * con_protein;
@@ -191,18 +239,17 @@ public class JieterSolver {
 					double d1 = r.parameters[3];
 
 					String mRNA = r.getToProtein();
-					double con_mRNA = get(mRNA, t-1);
+					double con_mRNA = get_t_minus_one(mRNA);
 					
 					if(r.getGate().equals("and")){
 						// AND gate
 						String tf1 = r.getFromProtein(0);
 						String tf2 = r.getFromProtein(1);
-						double con_tf1 = get(tf1, t-1);
-						double con_tf2 = get(tf2, t-1);
+						double con_tf1 = get_t_minus_one(tf1);
+						double con_tf2 = get_t_minus_one(tf2);
 
 						// equation for AND gate.
 						// d[mRNA] / dt = k1 ( [TF1] * [TF2] )^n / K_m^n + ([TF1]*[TF2])^n - d1 * [ mRNA]
-
 						
 						double delta_mRNA=
 							(
@@ -220,8 +267,7 @@ public class JieterSolver {
 
 					}else{
 						// NOT gate
-						String tf = r.getFromProtein();
-						double con_tf = get(tf, t-1);
+						double con_tf = get_t_minus_one(r.getFromProtein());
 												
 						// equation for NOT gate
 						// d[mRNA] / dt = (k1*K_m^n) / ( K_m^n + [TF]^n) - d1 * [mRNA]
@@ -242,13 +288,6 @@ public class JieterSolver {
 				
 			}
 		}
-		System.out.println();
-		Integer[] timepoints = {
-			0, 1*stepsize, 2*stepsize, 3*stepsize, 4*stepsize,
-			5*stepsize, 6*stepsize, 7*stepsize, 8*stepsize, 39*stepsize
-		};
-		
-		printSpeciesAt(timepoints);
 	}
 
 	/**
@@ -275,13 +314,14 @@ public class JieterSolver {
 		JSONObject json = new JSONObject();
 		json.put("names", species);
 		json.put("length", circuit.getSimulationLength());
-		json.put("step", (double)1/this.stepsize);
+		json.put("step", 1.0/this.result_resolution);
 		
 		JSONObject data=new JSONObject();
 		for(String sp: species){
 			data.put(sp, get(sp));
 		}
 		json.put("data", data);
+		
 		return json;
 	}
 	
