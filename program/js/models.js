@@ -246,6 +246,18 @@ synthbio.Circuit.fromMap = function(map) {
 		circuit.setSimulationInput(map.inputs);
 	}
 
+	//Copy remaining properties to object, but forget gates/signals/inputs
+	delete map.gates;
+	delete map.signals;
+	delete map.inputs;
+
+	var p;
+	for (p in map) {
+		if (circuit[p] === undefined) {
+			circuit[p] = map[p];
+		}
+	}
+
 	//TODO: implement grouping.
 	//~ $.each(map.groups, function(i, elem){
 	//~		circuit.addGroup(synthbio.Group.fromMap(elem));

@@ -44,6 +44,18 @@ synthbio.loadCircuit = function(circuit) {
 	synthbio.gui.resetWorkspace();
 	synthbio.model = circuit;
 
+	if (circuit.gateInputPos) {
+		var input = $("#gate-input");
+		input.css("left", (circuit.gateInputPos.x || 0) + "px");
+		input.css("top", (circuit.gateInputPos.y || 0) + "px");
+	}
+	if (circuit.gateOutputPos) {
+		var output = $("#gate-output");
+		output.css("right", "auto");
+		output.css("left", (circuit.gateOutputPos.x || 0) + "px");
+		output.css("top", (circuit.gateOutputPos.y || 0) + "px");
+	}
+
 	$.each(synthbio.model.getGates(), function(index, element) {
 		synthbio.gui.displayGate(element);
 	});

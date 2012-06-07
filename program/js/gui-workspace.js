@@ -84,6 +84,10 @@ synthbio.gui.resetWorkspace = function() {
 	$("#circuit-filename").html(synthbio.gui.defaultFilenameString);
 	$("#circuit-description").html('"' + synthbio.gui.defaultDescriptionString + '"');
 
+	$(".input, .output").css("top", "");
+	$(".input, .output").css("left", "");
+	$(".input").css("left", "10px");
+	$(".output").css("right", "10px");
 };
 
 /**
@@ -356,10 +360,7 @@ synthbio.gui.displayGate = function(gateModel) {
 	// Make the gate draggable
 	jsPlumb.draggable(element, {
 		stop: function(event, ui) {
-			gateModel.setPosition([
-				parseFloat(element.css("left")), 
-				parseFloat(element.css("top"))
-			]);
+			gateModel.setPosition([ui.position.left, ui.position.top]);
 			jsPlumb.repaintEverything();
 		}
 	});
@@ -663,20 +664,33 @@ jsPlumb.ready(function() {
 		maxConnections: -1
 	};
 	
-	jsPlumb.draggable("gate-input", {handle: "h4"});
-	jsPlumb.draggable("gate-output", {handle: "h4", start: function() { $(".output").css("right", "auto");}});
+	jsPlumb.draggable("gate-input", {
+		handle: "h4",
+		stop: function(event, ui) {
+			synthbio.model.gateInputPos = {x: ui.position.left, y: ui.position.top};
+		}
+	});
+	jsPlumb.draggable("gate-output", {
+		handle: "h4", 
+		start: function() {
+			$(".output").css("right", "auto");
+		},
+		stop: function(event, ui) {
+			synthbio.model.gateOutputPos = {x: ui.position.left, y: ui.position.top};
+		}
+	});
 
-	var oep = $.extend(true, {
+	var outputEndpoint = $.extend(true, {
 		anchor: "Continuous",
 		deleteEndpointsOnDetach: false
 	}, synthbio.gui.outputEndpoint);
-	var iep = $.extend(true, {
+	var inputEndpoint = $.extend(true, {
 		anchor: "Continuous",
 		deleteEndpointsOnDetach: false
 	}, synthbio.gui.inputEndpoint);
 
-	jsPlumb.makeSource("gate-input", oep);
-	jsPlumb.makeTarget("gate-output", iep);
+	jsPlumb.makeSource("gate-input", outputEndpoint);
+	jsPlumb.makeTarget("gate-output", inputEndpoint);
 
 	// Listen for new jsPlumb connections
 	jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
