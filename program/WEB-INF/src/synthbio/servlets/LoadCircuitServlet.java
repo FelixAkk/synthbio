@@ -55,7 +55,8 @@ public class LoadCircuitServlet extends CircuitServlet {
 		 */
 		try{
 			this.synRepository=this.getSynRepository();
-		}catch(Exception e){
+			this.compoundRepository=this.getCompoundRepository();
+		}catch(Exception e) {
 			json.fail("Could not load .syn files: "+e.getMessage());
 			out.println(json.toJSONString());
 			return;
@@ -68,9 +69,14 @@ public class LoadCircuitServlet extends CircuitServlet {
 			return;
 		}
 		try{
-			json.data=new JSONObject(this.synRepository.getFile(filename));
+			if(filename.startsWith("compound/")) {
+				filename = filename.substring(9);
+				json.data = new JSONObject(this.compoundRepository.getFile(filename));
+			}else {
+				json.data = new JSONObject(this.synRepository.getFile(filename));
+			}
 			json.success=true;
-		}catch(Exception e){
+		}catch(Exception e) {
 			json.fail("Could not load .syn-file: "+filename);
 		}
 

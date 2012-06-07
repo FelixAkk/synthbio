@@ -56,8 +56,9 @@
 
 @gatesPadding: 5px;
 
-/* Minimum width of the entire app */
+/* Minimum width and height of the entire app */
 @minWidth: 1050px;
+@minHeight: 600px;
 
 /** Section:
  * -----------------------------------
@@ -128,6 +129,7 @@
 body {
 	background-color: @baseColor;
 	min-width: @minWidth;
+	min-height: @minHeight;
 }
 
 .navbar {
@@ -563,7 +565,9 @@ body {
 	color: @textColorFaded;
 	border-width: 1px 0px 0px 0px; /* Top border only */
 	bottom: 0;
+	top: auto;
 	height: @statusHeight;
+	min-width: @minWidth;
 	left: 0;
 	line-height: 24px;
 	position: absolute;

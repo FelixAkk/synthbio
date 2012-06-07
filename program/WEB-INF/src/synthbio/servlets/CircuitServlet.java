@@ -33,6 +33,12 @@ public class CircuitServlet extends SynthbioServlet {
 	 */
 	protected SynRepository synRepository;
 
+	
+	/**
+	 * The repository of compound files.
+	 */
+	protected SynRepository compoundRepository;
+	
 	/**
 	 * The BioBrick repository
 	 */

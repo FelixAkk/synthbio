@@ -30,7 +30,7 @@ public abstract class SynthbioServlet extends HttpServlet {
 	/**
 	 * Get the path of the webroot from servletcontext.
 	 */
-	public String getWebroot(){
+	public String getWebroot() {
 		return this.getServletContext().getRealPath("/")+"WEB-INF/";
 	}
 
@@ -42,7 +42,7 @@ public abstract class SynthbioServlet extends HttpServlet {
 	 *
 	 * @param message The message to be logged.
 	 */
-	public void log(String message){
+	public void log(String message) {
 		this.getServletContext().log(message);
 	}
 	
@@ -60,5 +60,12 @@ public abstract class SynthbioServlet extends HttpServlet {
 	 */
 	public SynRepository getSynRepository() throws Exception{
 		return new SynRepository(this.getWebroot()+"data/synstore/");
+	}
+	
+	/**
+	 * Return the Compound repository
+	 */
+	public SynRepository getCompoundRepository() throws Exception{
+		return new SynRepository(this.getWebroot()+"data/synstore/compound");
 	}
 }

@@ -229,7 +229,7 @@ synthbio.Circuit = function(circuitName, desc, gates, signals, groupings, inputs
  * synthbio.Circuit
  */
 synthbio.Circuit.fromMap = function(map) {
-	var circuit=new synthbio.Circuit(map.name, map.description);
+	var circuit = new synthbio.Circuit(map.name, map.description);
 
 	//add the gates
 	$.each(map.gates, function(i, elem) {

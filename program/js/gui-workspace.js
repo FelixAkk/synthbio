@@ -80,10 +80,8 @@ synthbio.gui.resetWorkspace = function() {
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
 
-	// And update this in the GUI
-	$("#circuit-filename").html(synthbio.gui.defaultFilenameString);
-	$("#circuit-description").html('"' + synthbio.gui.defaultDescriptionString + '"');
-
+	// Also reset the circuit details
+	synthbio.gui.setCircuitDetails("","");
 	$(".input, .output").css("top", "");
 	$(".input, .output").css("left", "");
 	$(".input").css("left", "10px");
@@ -500,6 +498,51 @@ synthbio.gui.removeDisplaySignal = function(id, allowReconnect) {
 };
 
 /**
+ * Saves and displays the details on display the circuit title/description in the main GUI.
+ * @param filename String with or without the .syn file extension, may be empty, wil be trimmed.
+ * @param description String with the description, may be empty, wil be trimmed.
+ */
+synthbio.gui.setCircuitDetails = function(filename, description) {
+	filename = filename.trim();
+	description = description.trim();
+	// If a filename was provided, extend it with ".syn"
+	if(filename.length > 0) {
+		filename = synthbio.gui.filenameExtension(filename);
+	}
+	// Save them if a model is present (which is not the case when resetting the workspace for example)
+	if(synthbio.model instanceof synthbio.Circuit) {
+		synthbio.model.setName(filename);
+		synthbio.model.setDescription(description);
+	}
+
+	// Comes down to; allow it to eat space of the description when the description isn't taking up too much
+	var maxlength = synthbio.gui.fileDisplayCropLength +
+		((synthbio.gui.descrDisplayCropLength - description.length <= 0) ? 0 :
+			(synthbio.gui.descrDisplayCropLength - description.length));
+	if(filename.length === 0) {
+		// Set default value to show the it wasn't set
+		filename = synthbio.gui.defaultFilenameString;
+		// Crop the display string if needed. But don't take the file extension into account, so minus ".syn" is -4.
+	} else if(filename.length - 4 > maxlength) {
+		filename = filename.substring(0, maxlength) + "...";
+	}
+	// Vice versa; allow it to eat space of the filename when the description isn't taking up too much
+	maxlength = synthbio.gui.descrDisplayCropLength +
+		((synthbio.gui.fileDisplayCropLength - filename.length <= 0) ? 0 :
+			(synthbio.gui.fileDisplayCropLength - filename.length));
+	if(description.length === 0) {
+		// Set default value to show the it wasn't set
+		description = synthbio.gui.defaultDescriptionString;
+	} else if(description.length > maxlength) {
+		// Crop the display string if needed
+		description = description.substring(0, maxlength) + "...";
+	}
+
+// And update this in the GUI
+	$("#circuit-filename").html(filename);
+	$("#circuit-description").html('"' + description + '"');
+};
+/**
  * Start or stop editing the circuit title/description in the main GUI. This mainly concerns replacing DOM elements.
  * Declared as a closure so it can store the original DOM state locally.
  */
@@ -519,42 +562,14 @@ synthbio.gui.editCircuitDetails = function(event) {
 	} else if(button.html() === "Save") {
 		// If we were in editing and save was clicked, get the shizzle for ma nizzle.
 		var filename = $("#circuit-filename", details).val();
-		// If a filename was provided, extend it with ".syn"
-		if(filename.length > 0) {
-			filename = synthbio.gui.filenameExtension(filename);
-		}
-		var description = $("#circuit-description", details).val().trim();
-		// Save them
-		synthbio.model.setName(filename);
-		synthbio.model.setDescription(description);
-
-		// Comes down to; allow it to eat space of the description when the description isn't taking up too much
-		var maxlength = synthbio.gui.fileDisplayCropLength +
-			((synthbio.gui.descrDisplayCropLength - description.length <= 0) ? 0 :
-			(synthbio.gui.descrDisplayCropLength - description.length));
-		if(filename.length === 0) {
-			// Set default value to show the it wasn't set
-			filename = synthbio.gui.defaultFilenameString;
-			// Crop the display string if needed. But don't take the file extension into account, so minus ".syn" is -4.
-		} else if(filename.length - 4 > maxlength) {
-			filename = filename.substring(0, maxlength) + "...";
-		}
-		// Vice versa; allow it to eat space of the filename when the description isn't taking up too much
-		maxlength = synthbio.gui.descrDisplayCropLength +
-			((synthbio.gui.fileDisplayCropLength - filename.length <= 0) ? 0 :
-			(synthbio.gui.fileDisplayCropLength - filename.length));
-		if(description.length === 0) {
-			// Set default value to show the it wasn't set
-			description = synthbio.gui.defaultDescriptionString;
-		} else if(description.length > maxlength) {
-			// Crop the display string if needed
-			description = description.substring(0, maxlength) + "...";
-		}
+		var description = $("#circuit-description", details).val();
 		// And set the original content again
 		details.html(
-			'<i id="circuit-filename">' + filename + '</i>' +
-				'<strong id="circuit-description">"' + description + '"</strong>'
+			'<i id="circuit-filename"></i>' +
+				'<strong id="circuit-description"></strong>'
 		);
+		// Save and display the details on display in the the just set elements
+		synthbio.gui.setCircuitDetails(filename, description);
 		// And the old button with a new label
 		details.append(button);
 		button.on("click", synthbio.gui.editCircuitDetails);

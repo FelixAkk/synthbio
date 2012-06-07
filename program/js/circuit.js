@@ -40,8 +40,9 @@ synthbio.model = {};
 synthbio.loadCircuit = function(circuit) {
 	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
 
-	// Show the circuit; add all the elements
+	// Clear the GUI
 	synthbio.gui.resetWorkspace();
+
 	synthbio.model = circuit;
 
 	if (circuit.gateInputPos) {
@@ -56,12 +57,15 @@ synthbio.loadCircuit = function(circuit) {
 		output.css("top", (circuit.gateOutputPos.y || 0) + "px");
 	}
 
+	// Show the circuit; add all the elements
 	$.each(synthbio.model.getGates(), function(index, element) {
 		synthbio.gui.displayGate(element);
 	});
 	$.each(synthbio.model.getSignals(), function(index, element){
 		synthbio.gui.displaySignal(element);
 	});
+
+	synthbio.gui.setCircuitDetails(circuit.getName(), circuit.getDescription());
 };
 
 /**
