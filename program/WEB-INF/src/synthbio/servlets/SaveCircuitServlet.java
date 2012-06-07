@@ -55,7 +55,7 @@ public class SaveCircuitServlet extends CircuitServlet {
 		 */
 		try{
 			this.synRepository=this.getSynRepository();
-		}catch(Exception e){
+		}catch(Exception e) {
 			json.fail("Could not load .syn files: "+e.getMessage());
 			out.println(json.toJSONString());
 			return;
@@ -82,7 +82,7 @@ public class SaveCircuitServlet extends CircuitServlet {
 			this.synRepository.putFile(filename, circuit);
 			json.message="Saved succesfully";
 			json.success=true;
-		}catch(Exception e){
+		}catch(Exception e) {
 			json.fail("Could not save .syn-file: "+e.getMessage());
 		}
 		
