@@ -73,6 +73,7 @@ synthbio.gui.saveFile = function() {
 	$("#files .modal-header h3").html("Save As…");
 	$("#files .modal-footer .btn-primary").html("Save As…");
 	$("#files .modal-footer input").attr("placeholder", "Filename...");
+	$("#files .modal-footer input").val(synthbio.model.getName());
 
 	// (Re)set to false. Represents whether we have prompted the user for confirmation once before
 	var confirmation = false;
@@ -84,7 +85,6 @@ synthbio.gui.saveFile = function() {
 		event.preventDefault();
 		// get the filename
 		var input = $("input", this)[0].value.trim();
-		console.log('selected input: ', input);
 		
 		// Allow prompting for confirmation again if a different filename has been entered this time.
 		if(input !== previousInput) {
@@ -93,6 +93,10 @@ synthbio.gui.saveFile = function() {
 		}
 		// Check if the user is about to overwrite an existing file and hasn't confirmed yet
 		if(synthbio.gui.hasRecentFile(input) && !confirmation) {
+			// But exclude the case of overwriting the file that the current circuit is named to
+			if(input === synthbio.model.getName()) {
+				return false;
+			}
 			synthbio.gui.showAdModalAlert('files', 'alert-error',
 				"<strong>Overwrite file?</strong> Press enter again to confirm");
 			confirmation = true;
@@ -115,6 +119,8 @@ synthbio.gui.saveFile = function() {
 			if(response.success === false) {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not saved.</strong> ' + response.message + '</div>');
+				synthbio.gui.showAdModalAlert('files', 'alert-error',
+					"<strong>Server error:</strong> ' + response.error + '.", 10000);
 				console.error(response.message);
 				return false;
 			}
@@ -163,8 +169,6 @@ synthbio.gui.openFile = function() {
 	});
 };
 synthbio.gui.resetFileDialog = function() {
-	console.log("resetFileDialog called");
-	console.log(synthbio.gui.getRecentFilesList());
 	$("#files tbody").html('<tr><td>Loading ...</td></tr>');
 	// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
 	$("#files form").off("submit");
@@ -197,7 +201,6 @@ synthbio.gui.prepareFileDialog = function(event) {
 		});
 		var html='';
 		$.each(synthbio.gui.recentFilesList, function(i, file) {
-			console.log(file);
 			var date = new Date(file.modified);
 			var datetime =
 				date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + ' ' +
