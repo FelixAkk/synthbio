@@ -36,7 +36,7 @@ public class TestJieterSolver {
 
 	@Before
 	public void setUp() throws Exception{
-		bbr = new BioBrickRepository("data/biobricks/new/");
+		bbr = new BioBrickRepository();
 	}
 	
 	public Circuit getAndCircuit(){
