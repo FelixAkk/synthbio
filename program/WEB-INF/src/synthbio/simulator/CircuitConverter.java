@@ -72,9 +72,13 @@ public class CircuitConverter {
 			transcription.setTypeToTranscription();
 			// transcription needs the parameters: k1, km, n, d1
 			Promotor prom = g.getPromotor();
-			transcription.setParameters(prom.getK1(), prom.getKm(), prom.getN(), g.getCDS().getD1());
+			transcription.setParameters(prom.getK1(), prom.getKm(), prom.getN());
 			// add the reaction
 			reactions.add(transcription);
+			// add the degradation reactions
+			Reaction deg = new Reaction('m'+output);
+			deg.setParameters(g.getCDS().getD1());
+			reactions.add(deg);	
 			
 			// Second reaction: translation
 			// From mRNA of output protein to output protein.
@@ -82,10 +86,14 @@ public class CircuitConverter {
 			translation.setTypeToTranslation();
 			// translation needs the parameters: k2, d2
 			CDS c = g.getCDS();
-			translation.setParameters(c.getK2(), c.getD2());
+			translation.setParameters(c.getK2());
 			// add the reaction
 			reactions.add(translation);
-			
+			// add the degradation reactions
+			deg = new Reaction(output);
+			deg.setParameters(c.getD2());
+			reactions.add(deg);
+
 			// Add new species to the set (if there are any)
 			for(String s: inputs) {
 				species.add(s);

@@ -82,7 +82,7 @@ public class Circuit {
 	 * Simulation high value.
 	 * in micromole/L
 	 */
-	private double simulationHighLevel = 600;
+	private double simulationHighLevel = 200;
 
 	/**
 	 * For each input protein, define a String of High/Low (H/L) for
@@ -247,6 +247,10 @@ public class Circuit {
 			return input.substring(tick, tick + 1);
 		}
 	}
+
+	/**
+	 * Return a concentration for protein p at tick
+	 */ 
 	public Double getSimulationLevelAt(String p, int tick) {
 		if(this.getSimulationInputAt(p, tick).equals("H")){
 			return this.getSimulationHighLevel();
