@@ -19,7 +19,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.*;
 
+import org.json.JSONObject;
+
 import synthbio.simulator.JieterSolver;
+import synthbio.files.BioBrickRepository;
 import synthbio.models.*;
 
 /**
@@ -27,13 +30,19 @@ import synthbio.models.*;
  */
 public class TestJieterSolver {
 	public double delta=0.01;
+	BioBrickRepository bbr;
 
+	@Before
+	public void setUp() throws Exception{
+		bbr = new BioBrickRepository("data/biobricks/new/");
+	}
+	
 	public Circuit getAndCircuit(){
 		Circuit c=new Circuit("AND test circuit");
 
 		c.addGate(new Gate(
-			new AndPromotor("A", "B", 4.5272, 238.9569, 3),
-			new CDS("C", 4.1585, 0.0235, 0.8338),
+			bbr.getAndPromotor("A", "B"),
+			bbr.getCDS("C"),
 			new Position()
 		));
 		c.addInput("A");
@@ -48,8 +57,8 @@ public class TestJieterSolver {
 	public Circuit getNotCircuit(){
 		Circuit c=new Circuit("NOT test circuit");
 		c.addGate(new Gate(
-			new NotPromotor("A", 4.7313, 224.0227, 1),
-			new CDS("B", 4.6122, 0.0205, 0.8627),
+			bbr.getNotPromotor("A"),
+			bbr.getCDS("B"),
 			new Position()
 		));
 		c.addInput("A");
@@ -103,9 +112,13 @@ public class TestJieterSolver {
 		JieterSolver js=new JieterSolver(c);
 
 		js.solve();
-		
+
 	}
-	
+
+	/**
+	 * Check if the json returned contains all fields
+	 * and check some consitancy
+	 */
 	@Test
 	public void testToJSON() throws Exception {
 		Circuit c = this.getNotCircuit();
@@ -114,7 +127,17 @@ public class TestJieterSolver {
 
 		js.solve();
 
-		System.out.println(js.toJSON());
+		JSONObject json=js.toJSON();
+
+		assertTrue(json.has("names"));
+		//todo: check if all names in js.species exist in names.
+
+		assertEquals(c.getSimulationLength(), json.getInt("length"));
+		assertEquals((double)1/js.stepsize, json.getDouble("step"), delta);
+		
+		assertTrue(json.has("data"));
+		//todo: check if data has an entry for every name
+		//todo: check if every entry has equal length.
 		
 	}
 }

@@ -157,6 +157,8 @@ public class JieterSolver {
 				set(specie, 0, 0.0);
 			}
 		}
+
+		double delta_t = (double)1/stepsize;
 		
 		//time steps for t >= 1.
 		for(int t=1; t<steps; t++) {
@@ -179,7 +181,7 @@ public class JieterSolver {
 					set(
 						r.getToProtein(),
 						t,
-						Math.abs(delta_protein)
+						delta_protein
 					);
 				}else{
 					// Transcription from one or two proteins to mRNA
@@ -212,7 +214,7 @@ public class JieterSolver {
 						set(
 							mRNA,
 							t,
-							delta_mRNA
+							delta_mRNA 
 						);
 						// end AND gate
 
@@ -232,7 +234,7 @@ public class JieterSolver {
 						set(
 							mRNA,
 							t,
-							delta_mRNA
+							delta_mRNA 
 						);
 						// end of NOT gate.
 					}

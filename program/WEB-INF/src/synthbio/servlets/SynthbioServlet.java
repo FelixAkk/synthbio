@@ -52,7 +52,7 @@ public abstract class SynthbioServlet extends HttpServlet {
 	 * @return A BioBrickReader object.
 	 */
 	public BioBrickRepository getBioBrickRepository() throws Exception{
-		return new BioBrickRepository(this.getWebroot()+"data/biobricks/default/");
+		return new BioBrickRepository(this.getWebroot()+"data/biobricks/new/");
 	}
 
 	/**
