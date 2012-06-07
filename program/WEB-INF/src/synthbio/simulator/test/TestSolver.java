@@ -60,6 +60,7 @@ public class TestSolver {
 
 	private final String circ1 = "data/test/simulator/inputCircuit.syn";
 	private final String de1 = "data/test/simulator/de1.syn";
+	private final String notnot = "data/test/simulator/not-not.syn";
 
 	public static String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
 		return CircuitConverter.convert((new CircuitFactory()).fromJSON(Util.fileToString(filename)));
@@ -144,7 +145,7 @@ public class TestSolver {
  	 */	
 	@Test
 	public void testCircuit2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
-	System.out.println(convertFromFile(de1));
+	//System.out.println(convertFromFile(de1));
 		MultiTable solution = solveSyn(de1);
 		//showMultiTable(solution);
 		double b = solution.getColumn("B").getValue(90);
@@ -152,6 +153,13 @@ public class TestSolver {
 		assertTrue(b2 < b);
 	}
 
+	@Ignore
+	@Test
+	public void testCircuit3() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
+		System.out.println(convertFromFile(notnot));
+		//MultiTable solution = solveSyn(de1);
+		//showMultiTable(solution);
+	}
 	/**
 	 * A visual representation of the data for manual testing purposes
 	 */

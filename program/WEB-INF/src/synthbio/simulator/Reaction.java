@@ -97,32 +97,26 @@ class Reaction {
 		String r = "";
 		
 		// Reactants
-		// with transcription this is gene.
-		// with translation this is mrna of input (translation has only one input).
+		// with transcription and translation this is gene.
+		// with degradation this is the protein.
 		r +=
 			tabs(4)+"<listOfReactants>\n"+
-				tabs(5)+"<speciesReference species=\"";
-		if(type == ReactionType.Transcription)
-			r += "gene";
-		else if(type == ReactionType.Translation)
-			r+= fromProteins.get(0);
-		else
-			r+= toProtein;		
-		r += "\"/>\n"+
+				tabs(5)+"<speciesReference species=\"" + (type == ReactionType.Degradation? toProtein: "gene") + "\"/>\n"+
 			tabs(4)+"</listOfReactants>\n";
 
 		// Products
 		// with transcription this is mrna of output
 		// with translation this is output
+		// with degradation this is gene
 		r +=
 			tabs(4)+"<listOfProducts>\n"+
 				tabs(5)+"<speciesReference species=\"" + (type == ReactionType.Degradation? "gene": toProtein) + "\"/>\n"+
 			tabs(4)+"</listOfProducts>\n";
 
 		// Modifiers
-		// with transcription this is the inputs
-		// with translation this is empty
-		if(type == ReactionType.Transcription) {
+		// with transcription and translation this is the inputs
+		// degradation doesnt have any modifiers.
+		if(type != ReactionType.Degradation) {
 			r += tabs(4)+"<listOfModifiers>\n";
 			for(String in: fromProteins)
 				r += tabs(5)+"<modifierSpeciesReference species=\"" + in + "\"/>\n";
