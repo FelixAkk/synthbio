@@ -1,1 +1,33 @@
-{"name":"","description":"","gates":[{"kind":"and","position":{"x":225,"y":221}}],"signals":[{"protein":"A","from":"input","to":0,"fromEndpoint":0,"toEndpoint":0},{"protein":"B","from":"input","to":0,"fromEndpoint":1,"toEndpoint":1},{"protein":"C","from":0,"to":"output","fromEndpoint":0,"toEndpoint":0}],"groups":[],"inputs":{"length":40,"tickWidth":1,"lowLevel":0,"highLevel":600,"values":{"A":"L","B":"L"}}}
+{
+	"name":"and.syn",
+	"description":"Simple AND gate",
+	"gates":[
+		{"kind":"and","position":{"x":225,"y":221}}
+	],
+	"signals":[
+		{"protein":"A","from":"input","to":0,"fromEndpoint":0,"toEndpoint":0},
+		{"protein":"B","from":"input","to":0,"fromEndpoint":1,"toEndpoint":1},
+		{"protein":"C","from":0,"to":"output","fromEndpoint":0,"toEndpoint":0}
+	],
+	"groups":[],
+	"inputs":{
+		"length":280,
+		"tickWidth":1,
+		"lowLevel":0,
+		"highLevel":200,
+		"values":{
+			"A":"
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			",
+			"B":"
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			"
+		}
+	}
+}
