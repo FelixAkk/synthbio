@@ -161,11 +161,16 @@ synthbio.gui.plotOutput = function(response) {
 
 	//Map the series from the synthbio.requests.simulate output to Highcharts.Stockchart data
 	var series = response.names.map(function(val) {
+		//Check if this is a protein (otherwise it could be mRNA)
 		var valid = synthbio.validProtein(val);
+
+		//Determine color
+		var color = (valid ? synthbio.gui.proteinColor(val, true) : synthbio.gui.proteinColor(val.substring(1), true));
+
 		return {
 			type: 'spline',
 			name: val,
-			color: (valid ? synthbio.gui.proteinColor(val) : ""),
+			color: color,
 			dashStyle: (valid ? 'solid' : 'shortdash'),
 			lineWidth: (valid ? 1.25 : 1),
 			pointInterval: timestep,
