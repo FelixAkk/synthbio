@@ -69,7 +69,7 @@ public class LoadCircuitServlet extends CircuitServlet {
 			return;
 		}
 		try{
-			if(filename.startsWith("compound/") {
+			if(filename.startsWith("compound/")) {
 				filename = filename.substring(9);
 				json.data = new JSONObject(this.compoundRepository.getFile(filename));
 			}else {

@@ -80,7 +80,7 @@ public class SaveCircuitServlet extends CircuitServlet {
 			return;
 		}
 		try{
-			if(filename.startsWith("compound/") {
+			if(filename.startsWith("compound/")) {
 				filename = filename.substring(9);
 				this.compoundRepository.putFile(filename, circuit);
 			}else {

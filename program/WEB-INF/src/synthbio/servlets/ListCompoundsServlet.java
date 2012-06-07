@@ -41,7 +41,6 @@ import synthbio.Util;
 @SuppressWarnings("serial")
 public class ListCompoundsServlet extends ListCircuitsServlet {
 
-	@Override
 	private JSONArray getFiles() throws JSONException{
 		ArrayList<JSONObject> files = new ArrayList<JSONObject>();
 		for(String filename: this.compoundRepository.getFileList()) {
