@@ -27,7 +27,8 @@ synthbio.gui = synthbio.gui || {};
 /**
  * Max. length of the description when on display. Tell after how many characters to crop and suffix with ...
  */
-synthbio.gui.descrDisplayCropLength = 100;
+synthbio.gui.descrDisplayCropLength = 40;
+synthbio.gui.fileDisplayCropLength = 15;
 
 /**
  * Strings that display when no circuit filename and/or description is provided.
@@ -497,17 +498,27 @@ synthbio.gui.editCircuitDetails = function(event) {
 		synthbio.model.setName(filename);
 		synthbio.model.setDescription(description);
 
-		// Now we can play with the variables
+		// Comes down to; allow it to eat space of the description when the description isn't taking up too much
+		var maxlength = synthbio.gui.fileDisplayCropLength +
+			((synthbio.gui.descrDisplayCropLength - description.length <= 0) ? 0 :
+			(synthbio.gui.descrDisplayCropLength - description.length));
 		if(filename.length === 0) {
 			// Set default value to show the it wasn't set
 			filename = synthbio.gui.defaultFilenameString;
+			// Crop the display string if needed. But don't take the file extension into account, so minus ".syn" is -4.
+		} else if(filename.length - 4 > maxlength) {
+			filename = filename.substring(0, maxlength) + "...";
 		}
+		// Vice versa; allow it to eat space of the filename when the description isn't taking up too much
+		maxlength = synthbio.gui.descrDisplayCropLength +
+			((synthbio.gui.fileDisplayCropLength - filename.length <= 0) ? 0 :
+			(synthbio.gui.fileDisplayCropLength - filename.length));
 		if(description.length === 0) {
 			// Set default value to show the it wasn't set
 			description = synthbio.gui.defaultDescriptionString;
-		} else if(description.length > synthbio.gui.descrDisplayCropLength) {
+		} else if(description.length > maxlength) {
 			// Crop the display string if needed
-			description = description.substring(0, synthbio.gui.descrDisplayCropLength) + " ...";
+			description = description.substring(0, maxlength) + "...";
 		}
 		// And set the original content again
 		details.html(
