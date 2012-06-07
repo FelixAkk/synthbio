@@ -132,6 +132,7 @@ public class TestSolver {
  	 */	
 	@Test
 	public void testCircuit() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
+	//	System.out.println(convertFromFile(circ1));
 		MultiTable solution = solveSyn(circ1);
 		double c = solution.getColumn("C").getValue(39);
 		double d = solution.getColumn("D").getValue(39);
@@ -141,10 +142,9 @@ public class TestSolver {
 	/**
  	 * Testing the solving of a Syn file, testing if the degradation works.
  	 */	
-	@Ignore	
 	@Test
 	public void testCircuit2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
-		//System.out.println(convertFromFile(de1));
+	System.out.println(convertFromFile(de1));
 		MultiTable solution = solveSyn(de1);
 		//showMultiTable(solution);
 		double b = solution.getColumn("B").getValue(90);
