@@ -33,7 +33,8 @@ class Reaction {
 	// for transcription these are [k1, km, n and d1]
 	// for translation these are [k2, d2]
 	// for degradation its [d1/d2]
-	private double[] parameters;
+	public double[] parameters;
+
 	
 	// multiple input constructor
 	public Reaction(String gate, List<String> fromProteins, String toProtein) {
@@ -67,8 +68,30 @@ class Reaction {
 		type = ReactionType.Translation;
 	}
 
+	public boolean isTranslation(){
+		return type == ReactionType.Translation;
+	}
+	public String getToProtein(){
+		return this.toProtein;
+	}
+	public String getFromProtein(){
+		return this.getFromProtein(0);
+	}
+	public String getFromProtein(int i){
+		return this.fromProteins.get(i);
+	}
+	public String getGate(){
+		return this.gate;
+	}
+	
+	// setParameters for transcription: k1, Km, n and d1
+	public void setParameters(double k1, double km, double n, double d1) {
+		parameters = new double[] {k1, km, n, d1};
+	}
+
 	public void setTypeToDegradation() {
 		type = ReactionType.Degradation;
+
 	}
 	
 	// setParameters for transcription: k1, Km, n and d1

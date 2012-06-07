@@ -63,8 +63,13 @@ public final class JSONResponse implements JSONString{
 	public Object getData(){
 		return this.data;
 	}
-
+	
+	/**
+	 * Fail with a message.
+	 * Clear data.
+	 */
 	public void fail(String message){
+		this.data=null;
 		this.success=false;
 		this.message=message;
 	}

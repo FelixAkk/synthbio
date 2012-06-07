@@ -591,10 +591,10 @@ synthbio.CDS.prototype.toString = function(){
 synthbio.SimulationInputs = function(options, values) {
 	this.options = $.extend(
 		{
-			"length": 40,				//total ticks.
+			"length": 80,				//total ticks.
 			"tickWidth": 1,			//length in seconds for one tick.
 			"lowLevel": 0,			//concentration regarded as low.
-			"highLevel": 600		//concentration regarded as high.
+			"highLevel": 200		//concentration regarded as high.
 		}, options);
 		
 	/**
