@@ -68,19 +68,6 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 synthbio.gui.plotSeries = function(series, timestep) {
 	timestep = timestep || 1;
 
-	//Update the top-left range buttons to show better ranges
-	var rangeButtons = $.map(synthbio.chartOptions.rangeSelector.buttons, function(val) {
-		//Make a copy of the button object
-		val = $.extend({}, val);
-
-		if (val.count > 0) {
-			val.count *= timestep;
-			val.text = val.count + 's';
-		}
-		
-		return val;
-	});
-
 	if (!series || series.length < 1) {
 		series = [{name: "Empty", data: [0, 0, 0, 0, 0], visible: false}];
 	}
@@ -90,9 +77,6 @@ synthbio.gui.plotSeries = function(series, timestep) {
 		series: series,
 		navigator: {
 			series: { data: synthbio.util.calculateSumSeries(series) }
-		},
-		rangeSelector: {
-			buttons: rangeButtons
 		}
 	});
 
