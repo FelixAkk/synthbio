@@ -177,10 +177,13 @@ synthbio.gui.plotOutput = function(response) {
 
 	//Map the series from the synthbio.requests.simulate output to Highcharts.Stockchart data
 	var series = response.names.map(function(val) {
+		var valid = synthbio.validProtein(val);
 		return {
 			type: 'spline',
 			name: val,
-			color: (synthbio.validProtein(val) ? synthbio.gui.proteinColor(val) : ""),
+			color: (valid ? synthbio.gui.proteinColor(val) : ""),
+			dashStyle: (valid ? 'solid' : 'shortdash'),
+			lineWidth: (valid ? 1.25 : 1),
 			pointInterval: timestep,
 			data: synthbio.util.roundSeries(response.data[val])
 		};
@@ -218,7 +221,8 @@ synthbio.chartOptions.tooltip = {
 
 		//Protein values
 		$.each(this.points, function(i, point) {
-			s += "<br/>" + point.series.name;
+			s += "<br/>";
+			s += '<span style="color: ' + point.series.color + '">' + point.series.name + "</span>";
 			s += ": " + this.point.y.roundTo(synthbio.gui.plotPrecision);
 		});
 	
