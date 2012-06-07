@@ -39,47 +39,18 @@ import synthbio.Util;
  * @author jieter 
  */
 @SuppressWarnings("serial")
-public class ListCircuitsServlet extends CircuitServlet {
+public class ListCompoundsServlet extends ListCircuitsServlet {
 	
-	/**
-	 * Get request
-	 */
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
-		
-		//create new JSONResponse for this request.
-		JSONResponse json=new JSONResponse();
-
-		response.setContentType("application/json");
-		PrintWriter out = response.getWriter();
-
-		/* Load syn repository
-		 */
-		try{
-			this.synRepository=this.getSynRepository();
-		}catch(Exception e) {
-			json.fail("Could not load .syn files: "+e.getMessage());
-			out.println(json.toJSONString());
-			return;
-		}
-		
-		try{
-			json.data=this.getFiles();
-			json.success=true;
-		}catch(JSONException e) {
-			json.fail("JSON conversion error: "+e.getMessage());
-		}
-
-		out.println(json.toJSONString());
-	}
-
 	private JSONArray getFiles() throws JSONException{
 		ArrayList<JSONObject> files = new ArrayList<JSONObject>();
 		for(String filename: this.synRepository.getFileList()) {
-			JSONObject file=new JSONObject();
-			file.put("filename", filename);
-			file.put("modified", this.synRepository.lastModified(filename));
-			files.add(file);
+			if(filename.startsWith("compound/")) {
+				JSONObject file=new JSONObject();
+				file.put("filename", filename);
+				file.put("modified", this.synRepository.lastModified(filename));
+				files.add(file);
+			}			
 		}
 		return new JSONArray(files);
 	}

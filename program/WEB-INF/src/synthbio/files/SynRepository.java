@@ -60,10 +60,10 @@ public class SynRepository{
 	/**
 	 * Load the list of files from this.path.
 	 */
-	public void loadFiles(){
+	public void loadFiles() {
 		File folder = new File(this.path);
-		for(File file: folder.listFiles()){
-			if(file.isFile() && file.getName().endsWith(".syn")){
+		for(File file: folder.listFiles()) {
+			if(file.isFile() && file.getName().endsWith(".syn")) {
 				this.files.add(file.getName());
 				this.modified.put(file.getName(), file.lastModified());
 			}
@@ -73,14 +73,14 @@ public class SynRepository{
 	/**
 	 * Return a list of available files.
 	 */
-	public Collection<String> getFileList(){
+	public Collection<String> getFileList() {
 		return this.files;
 	}
 
 	/**
 	 * Does the .syn store contain the filename?
 	 */
-	public boolean hasFile(String filename){
+	public boolean hasFile(String filename) {
 		return this.files.contains(filename);
 	}
 	
@@ -107,7 +107,7 @@ public class SynRepository{
 
 		this.files.add(filename);
 	}
-	public Long lastModified(String filename){
+	public Long lastModified(String filename) {
 		assert this.hasFile(filename) : "No such file: "+filename;
 
 		return this.modified.get(filename);
