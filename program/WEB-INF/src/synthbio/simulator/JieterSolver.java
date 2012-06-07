@@ -181,7 +181,7 @@ public class JieterSolver {
 					set(
 						r.getToProtein(),
 						t,
-						delta_protein
+						con_protein + delta_protein * delta_t
 					);
 				}else{
 					// Transcription from one or two proteins to mRNA
@@ -214,7 +214,7 @@ public class JieterSolver {
 						set(
 							mRNA,
 							t,
-							delta_mRNA 
+							con_mRNA + delta_mRNA * delta_t
 						);
 						// end AND gate
 
@@ -229,12 +229,12 @@ public class JieterSolver {
 							(
 								k1 * Math.pow(km, n)
 							) / (
-								Math.pow(km, n) + con_tf 
+								Math.pow(km, n) + Math.pow(con_tf, n) 
 							) - d1 * con_mRNA;
 						set(
 							mRNA,
 							t,
-							delta_mRNA 
+							con_mRNA + delta_mRNA * delta_t
 						);
 						// end of NOT gate.
 					}
@@ -243,9 +243,12 @@ public class JieterSolver {
 			}
 		}
 		System.out.println();
-		Integer[] timepoints= {0, 1, 2, 3, 4, 5, 6, 7, 8, 39};
-		printSpeciesAt(timepoints);
+		Integer[] timepoints = {
+			0, 1*stepsize, 2*stepsize, 3*stepsize, 4*stepsize,
+			5*stepsize, 6*stepsize, 7*stepsize, 8*stepsize, 39*stepsize
+		};
 		
+		printSpeciesAt(timepoints);
 	}
 
 	/**
@@ -269,10 +272,10 @@ public class JieterSolver {
 		ret.put("length", circuit.getSimulationLength());
 		ret.put("step", (double)1/this.stepsize);
 
-		ArrayList<Double> time=new ArrayList<Double>();
-		for(int t=0; t<this.steps; t++){
-			time.add((double)t/this.stepsize);
-		}
+		//ArrayList<Double> time=new ArrayList<Double>();
+		//for(int t=0; t<this.steps; t++){
+		//	time.add((double)t/this.stepsize);
+		//}
 		//ret.put("time", time);
 		
 		JSONObject data=new JSONObject();
