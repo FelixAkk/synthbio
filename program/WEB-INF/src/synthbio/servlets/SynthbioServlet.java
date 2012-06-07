@@ -45,6 +45,9 @@ public abstract class SynthbioServlet extends HttpServlet {
 	public void log(String message) {
 		this.getServletContext().log(message);
 	}
+	public void log(Exception e){
+		this.getServletContext().log(e.getMessage(), e);
+	}
 	
 	/**
 	 * Return the BioBrick repository.

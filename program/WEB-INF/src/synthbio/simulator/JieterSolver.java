@@ -30,25 +30,53 @@ import synthbio.simulator.Reaction;
 
 public class JieterSolver {
 
+	/**
+	 * The circuit to be solved.
+	 */
 	public Circuit circuit;
-	
-	public Collection<Gate> gates;
-	public ArrayList<Reaction> reactions;
-	public ArrayList<String> species;
 
+
+	public ArrayList<Reaction> reactions;
+	public HashSet<String> species;
+
+
+	/**
+	 * This is the sheet we work in. For each specie we have an ArrayList
+	 * with doubles, one double for each step in the simulation...
+	 */
+	public HashMap<String, ArrayList<Double>> sheet;
+
+	/**
+	 * calculation steps.
+	 */
+	public int steps;
+
+	/**
+	 * Intermediate steps
+	 */
+	public int stepsize=100;
+
+	/**
+	 * Construct the Solver.
+	 */
 	public JieterSolver(Circuit circuit) {
 		this.circuit=circuit;
 		
-		// First retrieve all gates
-		gates = circuit.getGates();
+		reactions = new ArrayList<Reaction>();
+		species = new HashSet<String>();
+
+		this.steps=circuit.getSimulationLength()*stepsize;
 		
-		// reactions
-		reactions = new ArrayList<Reaction>(gates.size());
-		// set of all the species
-		species = new ArrayList<String>();
-		
+		this.initReactions();
+	}
+
+	/**
+	 * Initilize the reactions.
+	 */
+	private void initReactions(){
+
 		// Create the reactions
-		for(Gate g: gates) {
+		for(Gate g: circuit.getGates()) {
 			String kind = g.getKind();
 			List<String> inputs = g.getInputs();
 			String output = g.getOutput();
@@ -82,13 +110,7 @@ public class JieterSolver {
 		}
 	}
 
-	/**
-	 * This is the sheet we work in. For each specie we have an ArrayList
-	 * with doubles, one double for each step in the simulation...
-	 */
-	public HashMap<String, ArrayList<Double>> sheet;
 
-	public int steps;
 
 	/**
 	 * Retrieve the value for a certain specie on a certain time step.
@@ -96,53 +118,27 @@ public class JieterSolver {
 	public Double get(String specie, int t){
 		return sheet.get(specie).get(t);
 	}
+
+	/**
+	 * Retrieve the time serie for a certain specie
+	 */
 	public ArrayList<Double> get(String specie){
 		return sheet.get(specie);
 	}
+
+	/**
+	 * Put a value for a specie on step t.
+	 */
 	public void set(String specie, int t, double value){
-		
 		sheet.get(specie).add(t, value);
 	}
 
-	public void printSpeciesAt(int t){
-		Integer[] times={t};
-		printSpeciesAt(times);
-	}
-	public void printSpeciesAt(Integer[] times){
-		List<Integer> list = Arrays.asList(times);
-
-		System.out.print("  t =");
-		for(int t: list){
-			System.out.print(String.format("%10d", t));
-		}
-		System.out.println();
-		System.out.println("---------------");
-		for(String sp: species){
-			System.out.print(String.format("%1$#3s = ", sp));
-			for(int t: list){
-				System.out.print(String.format("%10.2f", get(sp, t)));
-			}
-			System.out.println();
-		}
-		System.out.println("---------------");
-	}
-	//number of steps per tick.
-	public int stepsize=100;
-	
 	public double getInputLevelAt(String specie, int t){
 		t = (int)Math.floor(t/this.stepsize);
 		return circuit.getSimulationLevelAt(specie, t);
 	}
-	public void solve() throws Exception{
-		System.out.println("about to solve: "+circuit);
-		System.out.println("reactions: "+reactions);
-		System.out.println("species: "+species);
-		System.out.println();
-		System.out.println();
-		
-		this.steps=circuit.getSimulationLength()*stepsize;
 
-		
+	private void initSheet(){
 		sheet=new HashMap<String, ArrayList<Double>>();
 
 		//initial values.
@@ -157,6 +153,10 @@ public class JieterSolver {
 				set(specie, 0, 0.0);
 			}
 		}
+	}
+	public void solve() throws Exception {
+		this.initSheet();
+
 
 		double delta_t = (double)1/stepsize;
 		
@@ -254,37 +254,64 @@ public class JieterSolver {
 	/**
  	 * Converts a sheet to a JSON-string of the format:
  	 * 	{
- 	 * 		"names": [A, B],
+ 	 * 		"names": ["A", "B"],
  	 * 		"length": 10,
  	 * 		"step": 1,
- 	 *		"time": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
  	 * 		"data": {
  	 *			"A": [0, 0, 0, 0, 0, 600, 600, 600, 600, 600],
  	 *			"B": [...]
  	 * 		}
  	 * 	}
+ 	 *
+ 	 * Where
+ 	 *  - names contains a list of species,
+ 	 *  - length the number of seconds to be displayed
+ 	 *  - step the time step between data points
+ 	 *  - data length*(1/step) data points for each specie.
  	 */
  	public JSONObject toJSON() throws JSONException{
 		assert sheet != null : "Run solver first!";
 		
-		JSONObject ret = new JSONObject();
-		ret.put("names", species);
-		ret.put("length", circuit.getSimulationLength());
-		ret.put("step", (double)1/this.stepsize);
-
-		//ArrayList<Double> time=new ArrayList<Double>();
-		//for(int t=0; t<this.steps; t++){
-		//	time.add((double)t/this.stepsize);
-		//}
-		//ret.put("time", time);
+		JSONObject json = new JSONObject();
+		json.put("names", species);
+		json.put("length", circuit.getSimulationLength());
+		json.put("step", (double)1/this.stepsize);
 		
 		JSONObject data=new JSONObject();
 		for(String sp: species){
 			data.put(sp, get(sp));
 		}
-		ret.put("data", data);
-
-		return ret;
+		json.put("data", data);
+		return json;
+	}
+	
+	/**
+	 * Print all species on a certain t.
+	 */
+	public void printSpeciesAt(int t){
+		Integer[] times={t};
+		printSpeciesAt(times);
 	}
 
+	/**
+	 * Print all species on different t's.
+	 */
+	public void printSpeciesAt(Integer[] times){
+		List<Integer> list = Arrays.asList(times);
+
+		System.out.print("  t =");
+		for(int t: list){
+			System.out.print(String.format("%10d", t));
+		}
+		System.out.println();
+		System.out.println("---------------");
+		for(String sp: species){
+			System.out.print(String.format("%1$#3s = ", sp));
+			for(int t: list){
+				System.out.print(String.format("%10.2f", get(sp, t)));
+			}
+			System.out.println();
+		}
+		System.out.println("---------------");
+	}
 }

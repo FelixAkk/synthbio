@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/insy-prb-alexeygritsenk/!svn/ver/78/context-project-2012/Data/csv2
+END
+xor-input.csv
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/insy-prb-alexeygritsenk/!svn/ver/86/context-project-2012/Data/csv2/xor-input.csv
+END
+cds.csv
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/insy-prb-alexeygritsenk/!svn/ver/84/context-project-2012/Data/csv2/cds.csv
+END
+sr-latch-input.csv
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/insy-prb-alexeygritsenk/!svn/ver/86/context-project-2012/Data/csv2/sr-latch-input.csv
+END
+or-input.csv
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/insy-prb-alexeygritsenk/!svn/ver/86/context-project-2012/Data/csv2/or-input.csv
+END
+not.csv
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/insy-prb-alexeygritsenk/!svn/ver/84/context-project-2012/Data/csv2/not.csv
+END
+and.csv
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/insy-prb-alexeygritsenk/!svn/ver/84/context-project-2012/Data/csv2/and.csv
+END
+1-to-2-multiplexer-input.csv
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/insy-prb-alexeygritsenk/!svn/ver/86/context-project-2012/Data/csv2/1-to-2-multiplexer-input.csv
+END

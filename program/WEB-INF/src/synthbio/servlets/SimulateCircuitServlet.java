@@ -106,6 +106,7 @@ public class SimulateCircuitServlet extends CircuitServlet {
 				json.success = true;
 			} catch(Exception e) {
 				json.fail("Failed solving: "+e.getMessage());
+				this.log(e);
 			}
 		}else{
 			//use JSBML's Solver.
