@@ -76,7 +76,7 @@ synthbio.gui.getRecentFilesList = function() {
  */
 synthbio.gui.saveHandler = function() {
 	if(synthbio.model.getName() !== "") {
-		synthbio.requests.putFile(synthbio.model.getName(), synthbio.model, function(response) {
+		synthbio.requests.putFile(synthbio.model.getName(), "", synthbio.model, function(response) {
 			if(response.success === false) {
 				console.error(response.message);
 				return false;
@@ -107,7 +107,7 @@ synthbio.gui.fileSaveDialog = function() {
 		
 		//Check if circuits should be saved as a compound or not
 		var folderName = "";
-		if(/*compound*/false) {
+		if($("#compoundToggle").is(":checked")) {
 			folderName = "compound/";
 		}
 
