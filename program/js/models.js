@@ -415,12 +415,12 @@ synthbio.Circuit.prototype.getGate = function(index) {
 
 /**
  * Returns a list of used proteins.
- * @return Object {protein1: true, protein2: true, ..}
+ * @return Object {protein1: synthbio.Signal (truthy), protein2: synthbio.Signal, ..}
  */
 synthbio.Circuit.prototype.getUsedProteins = function() {
 	var res = {};
 	$.each(this.getSignals(), function(idx, signal){
-		res[signal.getProtein()] = true;
+		res[signal.getProtein()] = signal;
 	});
 	return res;
 };

@@ -134,6 +134,7 @@ synthbio.gui.plotSeriesSeparate = (function() {
 			container.append(el);
 
 			//Add series to options
+			data.visible = true;
 			var options = $.extend(true, {}, chartOptions, {
 				chart: {renderTo: el[0]},
 				yAxis: {title: {text: data.name}},
@@ -158,11 +159,13 @@ synthbio.gui.plotSeriesSeparate = (function() {
  */
 synthbio.gui.plotOutput = function(response) {
 	var timestep = response.step || 1;
+	var proteins = synthbio.getProteins() || {};
 
 	//Map the series from the synthbio.requests.simulate output to Highcharts.Stockchart data
 	var series = response.names.map(function(val) {
-		//Check if this is a protein (otherwise it could be mRNA)
-		var valid = synthbio.validProtein(val);
+		//Check if this is a protein (otherwise it could be mRNA) and if it should be visible
+		var valid = proteins[val] !== undefined;
+		var show = valid && (proteins[val] !== false) && (proteins[val].isInput() || proteins[val].isOutput());
 
 		//Determine color
 		var color = (valid ? synthbio.gui.proteinColor(val, true) : synthbio.gui.proteinColor(val.substring(1), true));
@@ -174,7 +177,8 @@ synthbio.gui.plotOutput = function(response) {
 			dashStyle: (valid ? 'solid' : 'shortdash'),
 			lineWidth: (valid ? 1.25 : 1),
 			pointInterval: timestep,
-			data: synthbio.util.roundSeries(response.data[val])
+			data: synthbio.util.roundSeries(response.data[val]),
+			visible: show
 		};
 	});
 
