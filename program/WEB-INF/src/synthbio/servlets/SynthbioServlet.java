@@ -51,21 +51,21 @@ public abstract class SynthbioServlet extends HttpServlet {
 	 *
 	 * @return A BioBrickReader object.
 	 */
-	public BioBrickRepository getBioBrickRepository() throws Exception{
+	public BioBrickRepository getBioBrickRepository() throws Exception {
 		return new BioBrickRepository(this.getWebroot()+"data/biobricks/default/");
 	}
 
 	/**
 	 * Return the Syn repository
 	 */
-	public SynRepository getSynRepository() throws Exception{
-		return new SynRepository(this.getWebroot()+"data/synstore/");
+	public SynRepository getSynRepository() throws Exception {
+		return getRepository("");
 	}
 	
 	/**
-	 * Return the Compound repository
+	 * Return a SynRepository with costum folder repository
 	 */
-	public SynRepository getCompoundRepository() throws Exception{
-		return new SynRepository(this.getWebroot()+"data/synstore/compound");
+	public SynRepository getRepository(String folderName) throws Exception {
+		return new SynRepository(this.getWebroot()+"data/synstore/" + folderName);
 	}
 }
