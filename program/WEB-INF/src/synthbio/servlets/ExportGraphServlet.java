@@ -49,6 +49,9 @@ import org.apache.fop.svg.PDFTranscoder;
  *			<zipgroupfileset dir="lib/batik-1.7/lib/" includes="*.jar"/>
  *		</jar>
  *	</target>
+ *
+ * There is another pitfall with JPEGTranscoder when using OpenJDK. Problems disappear
+ * when using Oracle JDK.
  */
 @SuppressWarnings("serial")
 public class ExportGraphServlet extends SynthbioServlet {
@@ -56,7 +59,6 @@ public class ExportGraphServlet extends SynthbioServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		response.setContentType("text/plain");
-		
 
 		String type = request.getParameter("type");
 		String svg = request.getParameter("svg");
@@ -81,9 +83,7 @@ public class ExportGraphServlet extends SynthbioServlet {
 			response.getWriter().println("No extension provided.");
 		}
 
-		this.log(svg);
-		
-		
+		// set content type and file name.
 		response.setHeader("Content-disposition", "attachment; filename=" + filename + "." +extension);
 		response.setHeader("Content-type", type);
 
@@ -91,6 +91,7 @@ public class ExportGraphServlet extends SynthbioServlet {
 		if(extension.equals("svg")){
 			response.getWriter().print(svg);
 		}else{
+			//rig transcoder and input/output streams
 			Transcoder transcoder=null;
 			InputStream svgInputStream = new ByteArrayInputStream(svg.getBytes());
 			TranscoderInput input = new TranscoderInput(svgInputStream);
@@ -100,18 +101,13 @@ public class ExportGraphServlet extends SynthbioServlet {
 				transcoder = new PNGTranscoder();
 			} else if(type.equals("image/jpeg")) {
 				transcoder = new JPEGTranscoder();
-		
 			} else if(type.equals("application/pdf")) {
 				transcoder = new PDFTranscoder();
 			}
-			if(transcoder!=null){
-				try{
-					transcoder.transcode(input, output);
-				}catch(Exception e){
-					this.log(e);
-				}
-			}else{
-				response.getWriter().println("No transcoder available.");
+			try{
+				transcoder.transcode(input, output);
+			}catch(Exception e){
+				this.log(e);
 			}
 		}
 	}
