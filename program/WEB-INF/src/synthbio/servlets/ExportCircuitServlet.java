@@ -76,11 +76,17 @@ public class ExportCircuitServlet extends CircuitServlet {
 		
 		try{
 			Circuit circuit=this.circuitFactory.fromJSON(circuitJSON);
+
+			// Use 'circuit.sbml' if no circuit name is provided in the circuit.
+			String filename="circuit.sbml";
+			if(!circuit.getName().equals("")){
+				filename=circuit.getName()+".sbml"
+			}
 			
 			// correct SBML mime time
 			response.setContentType("application/sbml+xml");
 			// Set a friendly filename.
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + circuit.getName()+".sbml");
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + filename+"\"");
 			
 			out.println(circuit.toSBML());
 			return;
