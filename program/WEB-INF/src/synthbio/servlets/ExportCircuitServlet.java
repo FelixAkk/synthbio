@@ -67,17 +67,22 @@ public class ExportCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		String circuit = request.getParameter("circuit");
-		if(circuit == null) {
+		String circuitJSON = request.getParameter("circuit");
+		if(circuitJSON == null) {
 			json.fail("Parameter 'circuit' not set");
 			out.println(json.toJSONString());
 			return;
 		}
 		
 		try{
+			Circuit circuit=this.circuitFactory.fromJSON(circuitJSON);
+			
+			// correct SBML mime time
 			response.setContentType("application/sbml+xml");
-			out.println(this.circuitFactory.fromJSON(circuit).toSBML());
-
+			// Set a friendly filename.
+			response.setHeader("Content-Disposition", "attachment; filename=\"" + circuit.getName()+".sbml");
+			
+			out.println(circuit.toSBML());
 			return;
 		}catch(Exception e){
 			json.fail("Circuit does not validate, please use validate to correct errors.");
