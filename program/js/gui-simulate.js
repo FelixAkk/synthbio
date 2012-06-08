@@ -194,7 +194,7 @@ synthbio.gui.plotOutput = function(response) {
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
-	chart:   {renderTo: 'outputs'},
+	chart:   {renderTo: 'chart-group'},
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
@@ -236,7 +236,7 @@ synthbio.chartOptions.tooltip = {
 synthbio.chartOptions.navigator = {
 	series: { id: "navseries", data: [0, 0, 0, 0, 0] },
 	xAxis: synthbio.chartOptions.xAxis,
-	top: 340
+	top: 200
 };
 
 //legend: Show legend at the right
@@ -296,27 +296,16 @@ $(document).ready(function() {
 
 	// Validate
 	$('#validate').on('click', function(){
-		console.log('Started validating circuit...');
+		synthbio.gui.displayValidation("Validating..", true);
 		synthbio.requests.validate(
 			synthbio.model,
 			function(response){
-				if(response.message !== '') {
-					$('#validate-alert p').html(response.message);
-					if(!response.success){
-						$('#validate-alert').addClass("invalid");
-					}
-					$('#validate-alert').modal();
-				}else{
-					//call
-					alert('simulation valid, display...');
-				}
+				synthbio.gui.displayValidation(
+					response.message || "No response..", 
+					response.success
+				);
 			}
 		);
-
-	});
-	$("#validate-alert").bind('closed', function(){
-		$(this).find("p").html('');
-		$('#validate-alert').addClass("invalid");
 	});
 
 	/**
@@ -331,53 +320,14 @@ $(document).ready(function() {
 			function(response){
 				console.log("synthbio.request.simulate called response callback");
 				if(response.message !== '') {
-					$('#validate-alert p').html(response.message);
-					if(!response.success){
-						
-						$('#validate-alert').addClass("invalid");
-					}
-					
-					console.log(synthbio.model);
-					$('#validate-alert').modal();
+					synthbio.gui.displayValidation(response.message, false);
 				}else{
-					$('#show-output').modal();
+					synthbio.gui.displayValidation("Circuit validates!", true, true);
+					$('#simulation-tab a[href="#tab-chart"]').tab("show");
 					synthbio.gui.plotOutput(response.data);
 				}
 			}
 		);
 		
-	});
-	$('#rerun-simulation').on("click", function() {
-		synthbio.gui.plot.showLoading();
-	
-		synthbio.requests.simulate(
-			synthbio.model,
-			function(response){
-				if(response.message !== '') {
-					//care
-				}else{
-					synthbio.gui.plotOutput(response.data);
-				}
-			}
-		);
-	});
-
-	/**
-	 * Toggle group/separate chart view (default: group)
-	 */
-	$("#toggle-charttype").on("click", function() {
-		
-		$("#chart-separate").toggle(0, function() {
-			if ($(this).is(":visible")) {
-				//Separate charts
-				$("#chart-group").hide();
-				$("#toggle-charttype").text("Group chart");
-			} else {
-				//Group chart
-				$("#chart-group").show();
-				$("#toggle-charttype").text("Separate charts");
-			}
-		});
-
 	});
 });

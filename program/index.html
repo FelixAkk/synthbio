@@ -110,17 +110,19 @@
 
 	<div id="simulation-tab" class="stretch">
 		<ul class="nav nav-tabs navbar">
-			<li><a href="#inputs" data-toggle="tab">Inputs</a></li>
-			<li><a href="#outputs" data-toggle="tab">Outputs</a></li>
-			<li><a href="#validation" data-toggle="tab">Validation</a></li>
+			<li class="active"><a href="#tab-validate" data-toggle="tab">Validation</a></li>
+			<li><a href="#tab-chart" data-toggle="tab">Outputs</a></li>
 		</ul>
 		<div class="tab-utilities">
 			<a class="close">×</a>
 		</div>
 		<div class="tab-content">
-			<div class="tab-pane active" id="inputs">homebla</div>
-			<div class="tab-pane" id="outputs">profile</div>
-			<div class="tab-pane" id="validation">message</div>
+			<div class="tab-pane active" id="tab-validate">
+				<p>Please simulate first.</p>
+			</div>
+			<div class="tab-pane" id="tab-chart">
+				<div id="chart-group"></div>
+			</div>
 		</div>
 	</div>
 	
@@ -224,12 +226,9 @@
 	-->
 	<div class="modal hide fade in" id="show-output" data-keyboard="true">
 		<div class="modal-body">
-			<div id="chart-group"></div>
-			<div id="chart-separate" class="hide">Please simulate first.</div>
+			<div id="chart-separate">Please simulate first.</div>
 		</div>
 		<div class="modal-footer">
-			<a href="javascript: void(0);" id="rerun-simulation"  class="btn btn-left">Re-run simulation</a>
-			<a href="javascript: void(0);" id="toggle-charttype"  class="btn">Separate charts</a>
 			<a href="javascript: void(0);" class="btn btn-primary" data-dismiss="modal">Close</a>
 		</div>
 	</div>
@@ -315,23 +314,6 @@
 		</div>
 		<div class="modal-footer">
 			<a href="javascript: void(0);" class="btn btn-primary" data-dismiss="modal">Close</a>
-		</div>
-	</div>
-
-	<!--
-	Validation result modal.
-		Must be a better way, but this works and is quick.
-	-->
-	<div class="modal hide fade in" id="validate-alert" data-keyboard="true">
-		<div class="modal-header">
-			<a class="close" data-dismiss="modal">×</a>
-			<h3>Circuit validation result</h3>
-		</div>
-		<div class="modal-body">
-			<p></p>
-		</div>
-		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal">Ok</a>
 		</div>
 	</div>
 	

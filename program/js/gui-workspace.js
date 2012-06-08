@@ -86,6 +86,25 @@ synthbio.gui.resetWorkspace = function() {
 	$(".input, .output").css("left", "");
 	$(".input").css("left", "10px");
 	$(".output").css("right", "10px");
+
+	//Reset tabs
+	synthbio.gui.displayValidation("Please simulate first", true);
+};
+
+/**
+ * Display validation results
+ */
+synthbio.gui.displayValidation = function (message, valid, noTabSwitch) {
+	var element = $('#tab-validate p');
+	element.html(message);
+	if(valid){
+		element.removeClass("invalid");
+	} else {
+		element.addClass("invalid");
+	}
+	if (!noTabSwitch) {
+		$('#simulation-tab a[href="#tab-validate"]').tab("show");
+	}
 };
 
 /**
