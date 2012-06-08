@@ -80,7 +80,7 @@ public class ExportCircuitServlet extends CircuitServlet {
 			// Use 'circuit.sbml' if no circuit name is provided in the circuit.
 			String filename="circuit.sbml";
 			if(!circuit.getName().equals("")){
-				filename=circuit.getName()+".sbml"
+				filename=circuit.getName()+".sbml";
 			}
 			
 			// correct SBML mime time
