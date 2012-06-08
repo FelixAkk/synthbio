@@ -136,7 +136,10 @@ synthbio.gui.plotSeriesSeparate = (function() {
 			//Add series to options
 			data.visible = true;
 			var options = $.extend(true, {}, chartOptions, {
-				chart: {renderTo: el[0]},
+				chart: {
+					renderTo: el[0],
+					reflow: true
+				},
 				yAxis: {title: {text: data.name}},
 				series: [data]
 			});
@@ -191,6 +194,15 @@ synthbio.gui.plotOutput = function(response) {
 };
 
 /**
+ * Resize plot to make use of full space
+ */
+synthbio.gui.plotResize = function(w, h) {
+	w = w || $("#tab-chart").width();
+	h = h || $("#tab-chart").height();
+	synthbio.gui.plot.setSize(w, h)
+}
+
+/**
  * General event handler for when the validate action is called.
  */
 synthbio.gui.validateHandler = function(){
@@ -232,7 +244,7 @@ synthbio.gui.simulateHandler = function() {
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
-	chart:   {renderTo: 'chart-group'},
+	chart:   {renderTo: 'chart-group', reflow: false},
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
@@ -331,6 +343,9 @@ $(document).ready(function() {
 	var options = $.extend(true, {}, synthbio.chartOptions);
 	synthbio.gui.plot = new Highcharts.StockChart(options);
 	synthbio.gui.plot.showLoading();
+
+	//Bind resize handler
+	$('#'+options.chart.renderTo).resize(synthbio.gui.plotResize);
 
 	// Validate
 	$('#validate').on('click', synthbio.gui.validateHandler);
