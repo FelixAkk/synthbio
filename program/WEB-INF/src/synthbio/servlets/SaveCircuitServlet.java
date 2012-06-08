@@ -55,7 +55,6 @@ public class SaveCircuitServlet extends CircuitServlet {
 		 */
 		try{
 			this.synRepository=this.getSynRepository();
-			this.compoundRepository=this.getCompoundRepository();
 		}catch(Exception e) {
 			json.fail("Could not load .syn files: "+e.getMessage());
 			out.println(json.toJSONString());
@@ -71,6 +70,7 @@ public class SaveCircuitServlet extends CircuitServlet {
 		if(!filename.endsWith(".syn")) {
 			json.fail("Filename should end with .syn.");
 			out.println(json.toJSONString());
+			return;
 		}
 		
 		String circuit = request.getParameter("circuit");
@@ -80,12 +80,7 @@ public class SaveCircuitServlet extends CircuitServlet {
 			return;
 		}
 		try{
-			if(filename.startsWith("compound/")) {
-				filename = filename.substring(9);
-				this.compoundRepository.putFile(filename, circuit);
-			}else {
-				this.synRepository.putFile(filename, circuit);
-			}
+			this.synRepository.putFile(filename, circuit);
 			json.message="Saved succesfully";
 			json.success=true;
 		}catch(Exception e) {

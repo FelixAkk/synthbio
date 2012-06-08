@@ -1,0 +1,65 @@
+{
+	"name":"handout-xor.syn",
+	"description":"XOR gate from the handout",
+	"gates": [
+		{"kind":"and","position":{"x":240,"y":114}},
+		{"kind":"and","position":{"x":248,"y":389}},
+		{"kind":"not","position":{"x":152,"y":226}},
+		{"kind":"not","position":{"x":154,"y":294}},
+		{"kind":"not","position":{"x":436,"y":115}},
+		{"kind":"not","position":{"x":407,"y":393}},
+		{"kind":"and","position":{"x":533,"y":277}},
+		{"kind":"not","position":{"x":704,"y":280}}
+	],
+	"signals": [
+		{"protein":"A","from":"input","to":0,"fromEndpoint":0,"toEndpoint":0},
+		{"protein":"A","from":"input","to":2,"fromEndpoint":0,"toEndpoint":0},
+		{"protein":"I","from":3,"to":0,"fromEndpoint":0,"toEndpoint":1},
+		{"protein":"M","from":"input","to":1,"fromEndpoint":1,"toEndpoint":1},
+		{"protein":"M","from":"input","to":3,"fromEndpoint":1,"toEndpoint":0},
+		{"protein":"K","from":2,"to":1,"fromEndpoint":0,"toEndpoint":0},
+		{"protein":"B","from":0,"to":4,"fromEndpoint":0,"toEndpoint":0},
+		{"protein":"G","from":1,"to":5,"fromEndpoint":0,"toEndpoint":0},
+		{"protein":"H","from":6,"to":7,"fromEndpoint":0,"toEndpoint":0},
+		{"protein":"D","from":7,"to":"output","fromEndpoint":0,"toEndpoint":0},
+		{"protein":"J","from":5,"to":6,"fromEndpoint":0,"toEndpoint":1},
+		{"protein":"F","from":4,"to":6,"fromEndpoint":0,"toEndpoint":0}
+	],
+	"groups":[],
+	"inputs":{
+		"length":"560",
+		"tickWidth":"1",
+		"lowLevel":"0",
+		"highLevel":"200",
+		"comment": "Er staat hier ongeveer:
+t,A,B
+0,1,1
+70,0,1
+140,1,0
+210,0,0 ",
+		"values":{
+			"A":"
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			",
+			"M":"
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH HHHHHHHHH
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL LLLLLLLLL
+			"
+		}
+	},
+	"gateInputPos":{"x":2,"y":214},
+	"gateOutputPos":{"x":783,"y":415}
+}

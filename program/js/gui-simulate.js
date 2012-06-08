@@ -68,19 +68,6 @@ synthbio.gui.updateSumSeries = function(val, hidden) {
 synthbio.gui.plotSeries = function(series, timestep) {
 	timestep = timestep || 1;
 
-	//Update the top-left range buttons to show better ranges
-	var rangeButtons = $.map(synthbio.chartOptions.rangeSelector.buttons, function(val) {
-		//Make a copy of the button object
-		val = $.extend({}, val);
-
-		if (val.count > 0) {
-			val.count *= timestep;
-			val.text = val.count + 's';
-		}
-		
-		return val;
-	});
-
 	if (!series || series.length < 1) {
 		series = [{name: "Empty", data: [0, 0, 0, 0, 0], visible: false}];
 	}
@@ -90,9 +77,6 @@ synthbio.gui.plotSeries = function(series, timestep) {
 		series: series,
 		navigator: {
 			series: { data: synthbio.util.calculateSumSeries(series) }
-		},
-		rangeSelector: {
-			buttons: rangeButtons
 		}
 	});
 
@@ -150,6 +134,7 @@ synthbio.gui.plotSeriesSeparate = (function() {
 			container.append(el);
 
 			//Add series to options
+			data.visible = true;
 			var options = $.extend(true, {}, chartOptions, {
 				chart: {renderTo: el[0]},
 				yAxis: {title: {text: data.name}},
@@ -174,18 +159,26 @@ synthbio.gui.plotSeriesSeparate = (function() {
  */
 synthbio.gui.plotOutput = function(response) {
 	var timestep = response.step || 1;
+	var proteins = synthbio.getProteins() || {};
 
 	//Map the series from the synthbio.requests.simulate output to Highcharts.Stockchart data
 	var series = response.names.map(function(val) {
-		var valid = synthbio.validProtein(val);
+		//Check if this is a protein (otherwise it could be mRNA) and if it should be visible
+		var valid = proteins[val] !== undefined;
+		var show = valid && (proteins[val] !== false) && (proteins[val].isInput() || proteins[val].isOutput());
+
+		//Determine color
+		var color = (valid ? synthbio.gui.proteinColor(val, true) : synthbio.gui.proteinColor(val.substring(1), true));
+
 		return {
 			type: 'spline',
 			name: val,
-			color: (valid ? synthbio.gui.proteinColor(val) : ""),
+			color: color,
 			dashStyle: (valid ? 'solid' : 'shortdash'),
 			lineWidth: (valid ? 1.25 : 1),
 			pointInterval: timestep,
-			data: synthbio.util.roundSeries(response.data[val])
+			data: synthbio.util.roundSeries(response.data[val]),
+			visible: show
 		};
 	});
 
@@ -349,6 +342,20 @@ $(document).ready(function() {
 			}
 		);
 		
+	});
+	$('#rerun-simulation').on("click", function() {
+		synthbio.gui.plot.showLoading();
+	
+		synthbio.requests.simulate(
+			synthbio.model,
+			function(response){
+				if(response.message !== '') {
+					//care
+				}else{
+					synthbio.gui.plotOutput(response.data);
+				}
+			}
+		);
 	});
 
 	/**

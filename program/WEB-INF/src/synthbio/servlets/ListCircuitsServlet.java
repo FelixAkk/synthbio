@@ -72,7 +72,7 @@ public class ListCircuitsServlet extends CircuitServlet {
 
 		out.println(json.toJSONString());
 	}
-	
+
 	private JSONArray getFiles() throws JSONException{
 		ArrayList<JSONObject> files = new ArrayList<JSONObject>();
 		for(String filename: this.synRepository.getFileList()) {

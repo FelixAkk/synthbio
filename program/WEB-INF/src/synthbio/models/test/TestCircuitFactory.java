@@ -82,7 +82,7 @@ public class TestCircuitFactory{
 
 		assertEquals("[and(A,B)->E @(2.0,2.0)]", c.gateAt(0).toString());
 		assertEquals("[and(C,D)->F @(2.0,4.0)]", c.gateAt(1).toString());
-		assertEquals("[and(E,F)->G @(4.0,3.0)]", c.gateAt(2).toString());
+		assertEquals("[and(F,E)->G @(4.0,3.0)]", c.gateAt(2).toString());
 
 		//test inputs and outputs
 		assertThat(c.getInputs(), hasItems("A", "B", "C", "D"));

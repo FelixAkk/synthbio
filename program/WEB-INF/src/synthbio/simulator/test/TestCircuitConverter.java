@@ -82,6 +82,7 @@ public class TestCircuitConverter {
 	@Test
 	public void testNandCircuit() throws CircuitException, JSONException, IOException {
 		String sbmlResult = convertFromFile(nandCircuit);
+		//System.out.println(sbmlResult);
 		
 		assertTrue(sbmlResult.contains("<species id=\"A\""));
 		assertTrue(sbmlResult.contains("<species id=\"B\""));

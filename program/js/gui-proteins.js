@@ -32,7 +32,7 @@ synthbio.gui.noProtein = "None";
 
 /**
  * Returns the available proteins (loads them from the server at the start of the program)
- * @return Object {protein1: true (used), protein2: false (not used), ..}
+ * @return Object {protein1: synthbio.Signal (truthy :: used), protein2: false (not used), ..}
  */
 synthbio.getProteins = (function() {
 	var proteins = {};

@@ -53,7 +53,7 @@ synthbio.requests.baseXHR = function(provided){
 
 /**
  * listFiles
- * Returns a list of all files
+ * Returns a list of all files in folderName, "" is default.
  * Callback will be done on the result
  * Other messages will be shown in console.log
  */

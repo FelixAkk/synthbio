@@ -246,6 +246,18 @@ synthbio.Circuit.fromMap = function(map) {
 		circuit.setSimulationInput(map.inputs);
 	}
 
+	//Copy remaining properties to object, but forget gates/signals/inputs
+	delete map.gates;
+	delete map.signals;
+	delete map.inputs;
+
+	var p;
+	for (p in map) {
+		if (circuit[p] === undefined) {
+			circuit[p] = map[p];
+		}
+	}
+
 	//TODO: implement grouping.
 	//~ $.each(map.groups, function(i, elem){
 	//~		circuit.addGroup(synthbio.Group.fromMap(elem));
@@ -403,12 +415,12 @@ synthbio.Circuit.prototype.getGate = function(index) {
 
 /**
  * Returns a list of used proteins.
- * @return Object {protein1: true, protein2: true, ..}
+ * @return Object {protein1: synthbio.Signal (truthy), protein2: synthbio.Signal, ..}
  */
 synthbio.Circuit.prototype.getUsedProteins = function() {
 	var res = {};
 	$.each(this.getSignals(), function(idx, signal){
-		res[signal.getProtein()] = true;
+		res[signal.getProtein()] = signal;
 	});
 	return res;
 };
@@ -579,10 +591,10 @@ synthbio.CDS.prototype.toString = function(){
 synthbio.SimulationInputs = function(options, values) {
 	this.options = $.extend(
 		{
-			"length": 40,				//total ticks.
+			"length": 80,				//total ticks.
 			"tickWidth": 1,			//length in seconds for one tick.
 			"lowLevel": 0,			//concentration regarded as low.
-			"highLevel": 600		//concentration regarded as high.
+			"highLevel": 200		//concentration regarded as high.
 		}, options);
 		
 	/**
