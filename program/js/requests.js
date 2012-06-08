@@ -87,12 +87,13 @@ synthbio.requests.listFiles = function(folderName, callback){
  * Callback function will be applied to the file that is returned
  * Other info is shown in the console.log
  */
-synthbio.requests.getFile = function(name, callback){
+synthbio.requests.getFile = function(name, folderName, callback){
 
 	synthbio.requests.baseXHR({
 		url: "/LoadCircuit",
 		data: {
-			"filename": name
+			"filename": name,
+			"folderName": folderName
 		},
 		success: function(response){
 			callback(response);
@@ -112,13 +113,14 @@ synthbio.requests.getFile = function(name, callback){
  *
  * @param fileName Filename with the .syn extension, trimmed (so no starting/trailing spaces).
  */
-synthbio.requests.putFile = function(fileName, circ, callback) {
+synthbio.requests.putFile = function(fileName, folderName, circ, callback) {
 	synthbio.requests.baseXHR({
 		url: "/SaveCircuit",
 		type: "GET",
 		data: {
 			"filename": fileName,
-			"circuit": JSON.stringify(circ)
+			"circuit": JSON.stringify(circ),
+			"folderName": folderName
 		},
 		success: function(response){
 			if(!response.success){

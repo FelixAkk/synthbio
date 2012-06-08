@@ -36,7 +36,7 @@ import synthbio.Util;
  * API functions documented at:
  * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
  * 
- * @author jieter 
+ * @author Jieter, Thomas 
  */
 @SuppressWarnings("serial")
 public class ListCircuitsServlet extends CircuitServlet {

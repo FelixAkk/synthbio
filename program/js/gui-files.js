@@ -155,7 +155,7 @@ synthbio.gui.openFile = function() {
 		}
 
 		// Load the file, let's see if it works
-		synthbio.requests.getFile(input, function(response) {
+		synthbio.requests.getFile(input, "", function(response) {
 			if(response.success === false) {
 				console.error(response.message);
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
@@ -250,7 +250,7 @@ $(document).ready(function() {
 	 */
 	$("#save").on("click", function() {
 		if(synthbio.model.getName() !== "") {
-			synthbio.requests.putFile(synthbio.model.getName(), synthbio.model, function(response) {
+			synthbio.requests.putFile(synthbio.model.getName(), "" , synthbio.model, function(response) {
 				if(response.success === false) {
 					console.error(response.message);
 					return false;
