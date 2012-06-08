@@ -162,22 +162,26 @@ synthbio.gui.plotOutput = function(response) {
 	var proteins = synthbio.getProteins() || {};
 
 	//Map the series from the synthbio.requests.simulate output to Highcharts.Stockchart data
-	var series = response.names.map(function(val) {
+	var series = $.map(response.data, function(val, name) {
 		//Check if this is a protein (otherwise it could be mRNA) and if it should be visible
-		var valid = proteins[val] !== undefined;
-		var show = valid && (proteins[val] !== false) && (proteins[val].isInput() || proteins[val].isOutput());
+		var valid = proteins[name] !== undefined;
+		var show = valid &&
+			(proteins[name] !== false) &&
+			(proteins[name].isInput() || proteins[name].isOutput());
 
 		//Determine color
-		var color = (valid ? synthbio.gui.proteinColor(val, true) : synthbio.gui.proteinColor(val.substring(1), true));
+		var color = (valid)
+			? synthbio.gui.proteinColor(name, true)
+			: synthbio.gui.proteinColor(name.substring(1), true);
 
 		return {
 			type: 'spline',
-			name: val,
+			name: name,
 			color: color,
 			dashStyle: (valid ? 'solid' : 'shortdash'),
 			lineWidth: (valid ? 1.25 : 1),
 			pointInterval: timestep,
-			data: synthbio.util.roundSeries(response.data[val]),
+			data: synthbio.util.roundSeries(val),
 			visible: show
 		};
 	});
