@@ -53,16 +53,19 @@ synthbio.requests.baseXHR = function(provided){
 
 /**
  * listFiles
- * Returns a list of all files
+ * Returns a list of all files in folderName, "" is default.
  * Callback will be done on the result
  * Other messages will be shown in console.log
  */
-synthbio.requests.listFiles = function(callback){
+synthbio.requests.listFiles = function(folderName, callback){
 	if(!callback instanceof Function){
 		return ("callback function for listFiles is not a function");
 	}
 	synthbio.requests.baseXHR({
 		url: "/ListCircuits",
+		data: {
+			"folderName": folderName
+		},
 		success: function(response){
 			if(!response.success){
 				return console.log(response.message);
@@ -84,12 +87,13 @@ synthbio.requests.listFiles = function(callback){
  * Callback function will be applied to the file that is returned
  * Other info is shown in the console.log
  */
-synthbio.requests.getFile = function(name, callback){
+synthbio.requests.getFile = function(name, folderName, callback){
 
 	synthbio.requests.baseXHR({
 		url: "/LoadCircuit",
 		data: {
-			"filename": name
+			"filename": name,
+			"folderName": folderName
 		},
 		success: function(response){
 			callback(response);
@@ -109,13 +113,14 @@ synthbio.requests.getFile = function(name, callback){
  *
  * @param fileName Filename with the .syn extension, trimmed (so no starting/trailing spaces).
  */
-synthbio.requests.putFile = function(fileName, circ, callback) {
+synthbio.requests.putFile = function(fileName, folderName, circ, callback) {
 	synthbio.requests.baseXHR({
 		url: "/SaveCircuit",
 		type: "GET",
 		data: {
 			"filename": fileName,
-			"circuit": JSON.stringify(circ)
+			"circuit": JSON.stringify(circ),
+			"folderName": folderName
 		},
 		success: function(response){
 			if(!response.success){
@@ -228,7 +233,7 @@ synthbio.requests.validate = function(circuit, callback){
 synthbio.requests.simulate = function(circuit, callback){
 	
 	synthbio.requests.baseXHR({
-		url: "/Circuit?action=simulate",
+		url: "/SimulateCircuit",
 		data: { 'circuit': JSON.stringify(circuit) },
 		success: function(response){
 			callback(response);

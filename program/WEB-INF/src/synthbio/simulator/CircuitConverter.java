@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.simulator.math.odes.MultiTable;
 
@@ -35,24 +36,11 @@ public class CircuitConverter {
 		"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
 		"<sbml xmlns=\"http://www.sbml.org/sbml/level2/version4\" level=\"2\" version=\"4\">\n"+
 			tabs(1)+"<model>\n"+
-				tabs(2)+"<listOfUnitDefinitions>\n"+
-					tabs(3)+"<unitDefinition id=\"substance\">\n"+
-						tabs(4)+"<listOfUnits>\n"+
-							tabs(5)+"<unit kind=\"mole\"/>\n"+
-						tabs(4)+"</listOfUnits>\n"+
-					tabs(3)+"</unitDefinition>\n"+
-					tabs(3)+"<unitDefinition id=\"time\">\n"+
-						tabs(4)+"<listOfUnits>\n"+
-							tabs(5)+"<unit kind=\"second\"/>\n"+
-						tabs(4)+"</listOfUnits>\n"+
-					tabs(3)+"</unitDefinition>\n"+
-				tabs(2)+"</listOfUnitDefinitions>\n"+
 				tabs(2)+"<listOfCompartments>\n"+
 					tabs(3)+"<compartment id=\"cell\" size=\"1\" units=\"volume\"/>\n"+
 				tabs(2)+"</listOfCompartments>\n"+
 				tabs(2)+"<listOfSpecies>\n"+
-					tabs(3)+"<species id=\"gene\" compartment=\"cell\" initialAmount=\"3\" hasOnlySubstanceUnits=\"true\" boundaryCondition=\"true\" constant=\"true\"/>\n"+
-					tabs(3)+"<species id=\"empty\" compartment=\"cell\" initialAmount=\"0\"/>\n";
+					tabs(3)+"<species id=\"gene\" compartment=\"cell\" initialConcentration=\"0\" boundaryCondition=\"true\"/>\n";
 	private static final String trailer =
 			tabs(2)+"</listOfReactions>\n"+
 		tabs(1)+"</model>\n"+
@@ -84,9 +72,13 @@ public class CircuitConverter {
 			transcription.setTypeToTranscription();
 			// transcription needs the parameters: k1, km, n, d1
 			Promotor prom = g.getPromotor();
-			transcription.setParameters(prom.getK1(), prom.getKm(), prom.getN(), g.getCDS().getD1());
+			transcription.setParameters(prom.getK1(), prom.getKm(), prom.getN());
 			// add the reaction
 			reactions.add(transcription);
+			// add the degradation reactions
+			Reaction deg = new Reaction('m'+output);
+			deg.setParameters(g.getCDS().getD1());
+			reactions.add(deg);	
 			
 			// Second reaction: translation
 			// From mRNA of output protein to output protein.
@@ -94,13 +86,18 @@ public class CircuitConverter {
 			translation.setTypeToTranslation();
 			// translation needs the parameters: k2, d2
 			CDS c = g.getCDS();
-			translation.setParameters(c.getK2(), c.getD2());
+			translation.setParameters(c.getK2());
 			// add the reaction
 			reactions.add(translation);
-			
+			// add the degradation reactions
+			deg = new Reaction(output);
+			deg.setParameters(c.getD2());
+			reactions.add(deg);
+
 			// Add new species to the set (if there are any)
-			for(String s: inputs)
+			for(String s: inputs) {
 				species.add(s);
+			}
 			species.add(output);
 			species.add("m"+output);
 		}
@@ -108,8 +105,9 @@ public class CircuitConverter {
 		// time to create the SBML-string
 		String r = header;
 		// add all the species
+		Set<String> circInputs = circuit.getInputs();
 		for(String s: species) {
-			r += tabs(3) + speciesString(s, 0d);
+			r += tabs(3) + speciesString(s, 0d, circInputs.contains(s));
 		}
 		r += tabs(2) + "</listOfSpecies>\n";
 		// add the reactions
@@ -124,8 +122,8 @@ public class CircuitConverter {
 	/**
  	 * Returns a species definition of the given species, as used in SBML.
  	 */ 	
-	private static String speciesString(String species, double amount) {
-		return "<species id=\""+species+"\" compartment=\"cell\" initialAmount=\""+amount+"\" substanceUnits=\"substance\"/>\n";
+	private static String speciesString(String species, double amount, boolean input) {
+		return "<species id=\""+species+"\" compartment=\"cell\" initialConcentration=\""+amount+"\" boundaryCondition=\""+input+"\" constant=\""+input+"\"/>\n";
 	}
 	
 	/**

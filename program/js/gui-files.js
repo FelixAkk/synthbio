@@ -134,7 +134,7 @@ synthbio.gui.fileSaveDialog = function() {
 		input = synthbio.gui.filenameExtension(input);
 
 		// Save the file, let's see if it works
-		synthbio.requests.putFile(input, synthbio.model, function(response) {
+		synthbio.requests.putFile(input, "", synthbio.model, function(response) {
 			if(response.success === false) {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not saved.</strong> ' + response.message + '</div>');
@@ -175,7 +175,7 @@ synthbio.gui.fileOpenDialog = function() {
 		}
 
 		// Load the file, let's see if it works
-		synthbio.requests.getFile(input, function(response) {
+		synthbio.requests.getFile(input, "", function(response) {
 			if(response.success === false) {
 				console.error(response.message);
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
@@ -190,6 +190,7 @@ synthbio.gui.fileOpenDialog = function() {
 };
 synthbio.gui.resetFileDialog = function() {
 	$("#files tbody").html('<tr><td>Loading ...</td></tr>');
+	
 	// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
 	$("#files form").off("submit");
 	var inputfield = $("#files .modal-footer input");
@@ -204,7 +205,7 @@ synthbio.gui.resetFileDialog = function() {
 
 synthbio.gui.prepareFileDialog = function(event) {
 	// Request stuff from server and define what happens next
-	synthbio.requests.listFiles(function(response) {
+	synthbio.requests.listFiles("", function(response) {
 		// problemu technicznego
 		if(response instanceof String) {
 			$('#list-files tbody td').html(response);

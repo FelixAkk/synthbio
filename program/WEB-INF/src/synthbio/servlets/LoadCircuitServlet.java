@@ -34,7 +34,7 @@ import synthbio.Util;
  * API functions documented at:
  * https://github.com/FelixAkk/synthbio/wiki/Zelula-HTTP-API
  * 
- * @author jieter 
+ * @author Jieter, Thomas 
  */
 @SuppressWarnings("serial")
 public class LoadCircuitServlet extends CircuitServlet {
@@ -51,10 +51,10 @@ public class LoadCircuitServlet extends CircuitServlet {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
-		/* Load syn repository
-		 */
+		String foldername =request.getParameter("folderName");
+		/* Load syn repository  */
 		try{
-			this.synRepository=this.getSynRepository();
+			this.synRepository = this.getRepository(folderName);
 		}catch(Exception e) {
 			json.fail("Could not load .syn files: "+e.getMessage());
 			out.println(json.toJSONString());
@@ -68,7 +68,7 @@ public class LoadCircuitServlet extends CircuitServlet {
 			return;
 		}
 		try{
-			json.data=new JSONObject(this.synRepository.getFile(filename));
+			json.data = new JSONObject(this.synRepository.getFile(filename));
 			json.success=true;
 		}catch(Exception e) {
 			json.fail("Could not load .syn-file: "+filename);
