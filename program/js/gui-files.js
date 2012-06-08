@@ -90,8 +90,8 @@ synthbio.gui.saveHandler = function() {
 synthbio.gui.fileSaveDialog = function() {
 	$("#files .modal-header h3").html("Save As…");
 	$("#files .modal-footer .btn-primary").html("Save As…");
-	$("#files .modal-footer input").attr("placeholder", "Filename...");
-	$("#files .modal-footer input").val(synthbio.model.getName());
+	$("#input-filename").attr("placeholder", "Filename...");
+	$("#input-filename").val(synthbio.model.getName());
 	synthbio.gui.prepareFileDialog();
 
 	// (Re)set to false. Represents whether we have prompted the user for confirmation once before
@@ -103,7 +103,7 @@ synthbio.gui.fileSaveDialog = function() {
 		event.stopPropagation();
 		event.preventDefault();
 		// get the filename
-		var input = $("input", this)[0].value.trim();
+		var input = $("#input-filename").val().trim();
 		
 		//Check if circuits should be saved as a compound or not
 		var folderName = "";
@@ -162,7 +162,7 @@ synthbio.gui.fileSaveDialog = function() {
 synthbio.gui.fileOpenDialog = function() {
 	$("#files .modal-header h3").html("Open…");
 	$("#files .modal-footer .btn-primary").html("Open…");
-	$("#files .modal-footer input").attr("placeholder", "Search...");
+	$("#input-filename").attr("placeholder", "Search...");
 	synthbio.gui.prepareFileDialog();
 
 	$("#files form").on("submit", function(event) {
@@ -170,7 +170,7 @@ synthbio.gui.fileOpenDialog = function() {
 		event.stopPropagation();
 		event.preventDefault();
 		// Get the filename
-		var input = $("input", this)[0].value.trim();
+		var input = $("#input-filename").val().trim();
 
 		// Check if filename is empty
 		if(input === "") {
@@ -250,7 +250,7 @@ synthbio.gui.prepareFileDialog = function(event) {
 		$("#files tbody tr").each(function(index, element) {
 			element = $(element); // extend to provide the .on() function
 			element.on("click", function() {
-				$("#files .modal-footer input").val($(this).find("td.filename").html());
+				$("#input-filename").val($(this).find("td.filename").html());
 				// Trigger submit
 				$("#files form").submit();
 			});
