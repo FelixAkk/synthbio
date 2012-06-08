@@ -50,7 +50,7 @@ public class TestLoadCircuitServlet extends TestCircuitServlet{
 		JSONObject response=new JSONObject(page);
 
 		//check success and empty message string.
-		assertTrue(response.getBoolean("success"));
+		assertTrue("Response is not successfull.", response.getBoolean("success"));
 		assertEquals("", response.getString("message"));
 
 		JSONObject data=response.getJSONObject("data");
