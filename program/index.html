@@ -260,10 +260,11 @@
 			<form class="typeahead-group form-search modal-form" onsubmit="return false;">
 				<div class="alert alert-info">
 					<label class="checkbox">
-						<input type="checkbox" id="compoundToggle"> Compound gate
+						<input type="checkbox" id="compound-toggle"> Compound gate
 					</label>
 				</div>
-				<input type="text" class="span3" data-provide="typeahead" data-items="4" placeholder="Filter..." />
+				<input type="text" class="span3" id="input-filename" data-provide="typeahead" data-items="4"
+				       placeholder="Filter..." />
 				<button type="submit" class="btn btn-primary">File action</button>
 			</form>
 			<a href="javascript: void(0);" class="btn" data-dismiss="modal">Close</a>
