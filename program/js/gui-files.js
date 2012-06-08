@@ -115,7 +115,7 @@ synthbio.gui.saveFile = function() {
 		input = synthbio.gui.filenameExtension(input);
 
 		// Save the file, let's see if it works
-		synthbio.requests.putFile(input, synthbio.model, function(response) {
+		synthbio.requests.putFile(input, "", synthbio.model, function(response) {
 			if(response.success === false) {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not saved.</strong> ' + response.message + '</div>');
