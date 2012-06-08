@@ -312,6 +312,7 @@ public class JieterSolver {
 		assert sheet != null : "Run solver first!";
 		
 		JSONObject json = new JSONObject();
+		json.put("solver", "JieterSolver");
 		json.put("names", species);
 		json.put("length", circuit.getSimulationLength());
 		json.put("step", 1.0/this.result_resolution);

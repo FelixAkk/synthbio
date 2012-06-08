@@ -69,11 +69,30 @@ synthbio.gui.getRecentFilesList = function() {
 	return ret;
 };
 
-synthbio.gui.saveFile = function() {
+/**
+ * Handles the "save" action, which is issues through for example clicking save in the GUI, or pressing Ctrl+S. This
+ * tries to save the file straight away if it already has a filename, else it prompts the user with the Save As file
+ * dialog to specify the file further.
+ */
+synthbio.gui.saveHandler = function() {
+	if(synthbio.model.getName() !== "") {
+		synthbio.requests.putFile(synthbio.model.getName(), synthbio.model, function(response) {
+			if(response.success === false) {
+				console.error(response.message);
+				return false;
+			}
+		});
+	} else {
+		synthbio.gui.fileSaveDialog();
+	}
+};
+
+synthbio.gui.fileSaveDialog = function() {
 	$("#files .modal-header h3").html("Save As…");
 	$("#files .modal-footer .btn-primary").html("Save As…");
 	$("#files .modal-footer input").attr("placeholder", "Filename...");
 	$("#files .modal-footer input").val(synthbio.model.getName());
+	synthbio.gui.prepareFileDialog();
 
 	// (Re)set to false. Represents whether we have prompted the user for confirmation once before
 	var confirmation = false;
@@ -134,10 +153,11 @@ synthbio.gui.saveFile = function() {
 /**
  * Opens a file from the server.
  */
-synthbio.gui.openFile = function() {
+synthbio.gui.fileOpenDialog = function() {
 	$("#files .modal-header h3").html("Open…");
 	$("#files .modal-footer .btn-primary").html("Open…");
 	$("#files .modal-footer input").attr("placeholder", "Search...");
+	synthbio.gui.prepareFileDialog();
 
 	$("#files form").on("submit", function(event) {
 		// Surpress default redirection due to <form action="destination.html"> action
@@ -229,7 +249,10 @@ synthbio.gui.prepareFileDialog = function(event) {
 				$("#files form").submit();
 			});
 		});
+		// When all is done we can finally show the modal
+		$("#files").modal("show");
 	});
+
 };
 
 $(document).ready(function() {
@@ -241,29 +264,17 @@ $(document).ready(function() {
 		}
 	});
 	/**
-	 * Setup/rig file operation dialog when the `Save As` menu item is clicked.
-	 */
-	$("#save-as").on("click", synthbio.gui.saveFile);
-
-	/**
 	 * Save file if it already has a filename, else prompt the user with the file dialog
 	 */
-	$("#save").on("click", function() {
-		if(synthbio.model.getName() !== "") {
-			synthbio.requests.putFile(synthbio.model.getName(), "" , synthbio.model, function(response) {
-				if(response.success === false) {
-					console.error(response.message);
-					return false;
-				}
-			});
-		} else {
-			synthbio.gui.saveFile();
-		}
-	});
+	$("#save").on("click", synthbio.gui.saveHandler);
+	/**
+	 * Setup/rig file operation dialog when the `Save As` menu item is clicked.
+	 */
+	$("#save-as").on("click", synthbio.gui.fileSaveDialog);
 	/**
 	 * Setup/rig file operation dialog when the `Open` menu item is clicked.
 	 */
-	$("#open").on("click", synthbio.gui.openFile);
+	$("#open").on("click", synthbio.gui.fileOpenDialog);
 
 	// Cleanup time; prepare the file dialog for another time
 	$('#files').on('hidden', synthbio.gui.resetFileDialog);

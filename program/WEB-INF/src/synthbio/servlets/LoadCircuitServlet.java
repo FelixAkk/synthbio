@@ -51,7 +51,7 @@ public class LoadCircuitServlet extends CircuitServlet {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
-		String foldername =request.getParameter("folderName");
+		String folderName =request.getParameter("folderName");
 		/* Load syn repository  */
 		try{
 			this.synRepository = this.getRepository(folderName);
@@ -61,7 +61,7 @@ public class LoadCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		String filename=request.getParameter("filename");
+		String filename = request.getParameter("filename");
 		if(filename == null) {
 			json.fail("Parameter 'filename' not set");
 			out.println(json.toJSONString());
