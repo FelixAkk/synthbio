@@ -111,12 +111,12 @@ public class TestCircuitConverter {
     //"B": "LLLLLLLLLL LLLLLLLLLL H"
 		double[] times = new double[40];
 		for(int i = 0; i < 40; i++)
-			times[i] = i;
+			times[i] = i*10;
 		String[] names = new String[] { "A", "B" };
 		double[][] data = new double[40][2];
 		for(int time = 0; time < 40; time++) {
-			data[time][0] = 600d;
-			data[time][1] = (time < 20? 0d: 600d);
+			data[time][0] = 200d;
+			data[time][1] = (time < 20? 0d: 200d);
 		}
 		MultiTable exp = new MultiTable(times, data, names);
 			
