@@ -169,36 +169,6 @@ synthbio.requests.getCDSs = function(callback){
 };
 
 /**
- * Circuit to SBML
- * Save a circuit, "circ", as SBML with a "name"
- * Callback will be applied on the return messages
- */
-synthbio.requests.circuitToSBML = function(callback, name, circ){
-	
-	synthbio.requests.baseXHR({
-		url: "/ExportCircuit",
-		type: "POST",
-		data: {
-			"filename": name,
-			"circuit": JSON.stringify(circ)
-		},
-		success: function(response){
-			if(!response.success){
-				callback(response.message);
-			}
-			callback(response);
-		},
-		error: function(){
-			callback("Error has occured. Cannot save circuit");
-		},
-		always: function(){
-			callback("circuitToSBML called");
-		}
-		
-	});
-};
-
-/**
  * Validate
  * Checks if a circuit is ready to be simulated
  * Callback will be applied on the return messages
