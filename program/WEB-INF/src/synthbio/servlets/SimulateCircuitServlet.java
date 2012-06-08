@@ -73,7 +73,7 @@ public class SimulateCircuitServlet extends CircuitServlet {
 		}
 
 		// which solver to use?
-		String solver="jsbml";
+		String solver="SBMLsimulator";
 		if(request.getParameter("solver") != null) {
 			if(request.getParameter("solver").equals("jieter")) {
 				solver="jieter";
@@ -109,7 +109,7 @@ public class SimulateCircuitServlet extends CircuitServlet {
 				this.log(e);
 			}
 		}else{
-			//use JSBML's Solver.
+			//use SBMLsimulator's Solver.
 			try {
 				json.data = Util.multiTableToJSON(Solver.solve(c));
 				json.success = true;
