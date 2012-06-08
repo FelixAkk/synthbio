@@ -151,6 +151,16 @@ body {
 	font-size: 18px;
 	font-weight: bold;
 	margin-bottom: 0px;
+
+	li.dropdown > ul.dropdown-menu > li > a {
+		position: relative;
+		kbd {
+			position: absolute;
+			right: 8px;
+			top: 6px;
+			font-family: monospace;
+		}
+	}
 }
 #simulation-tab .nav-tabs > ul {
 	margin-bottom: 0;
@@ -598,15 +608,6 @@ body {
 		float: right;
 		margin-right: 5px;
 		
-		[class^="icon-"], [class*=" icon-"] {
-			background: no-repeat scroll url('../img/connection-status.png');
-			height: @statusHeight - 8;
-			width: @statusHeight - 8;
-			opacity: 1 - @textFade;
-			vertical-align: middle;
-			margin: 0 6px;
-		}
-		
 		.icon-connecting {
 			background-position: 0 0;
 		}
@@ -615,6 +616,15 @@ body {
 		}
 		.icon-failed {
 			background-position: -32px 0;
+		}
+
+		[class^="icon-"], [class*=" icon-"] {
+			background: no-repeat scroll url('../img/connection-status.png');
+			height: @statusHeight - 8;
+			width: @statusHeight - 8;
+			opacity: 1 - @textFade;
+			vertical-align: middle;
+			margin: 0 6px;
 		}
 	}
 }
