@@ -194,7 +194,7 @@ synthbio.gui.plotOutput = function(response) {
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
-	chart:   {renderTo: 'chart-group'},
+	chart:   {renderTo: 'outputs'},
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
