@@ -14,6 +14,7 @@
 package synthbio.simulator.test;
 
 import org.junit.*;
+import org.junit.rules.ExpectedException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -108,7 +109,24 @@ public class TestJieterSolver {
 		assertEquals(low, js.getInputLevelAt("A", 800), delta);
 	}
 
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
+	/**
+	 * Trying to call toJSON on an unsolved solver should thrown an
+	 * AssertionError
+	 */
+	@Test
+	public void test_notSolved() throws Exception {
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("Run solver first!");
+
+		Circuit c = this.getNotCircuit();
+		JieterSolver js=new JieterSolver(c);
+
+		js.toJSON();
+	}
+	
 	/**
 	 * Test solving a NOT circuit.
 	 *
