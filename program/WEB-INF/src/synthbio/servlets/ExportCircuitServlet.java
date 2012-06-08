@@ -75,11 +75,12 @@ public class ExportCircuitServlet extends CircuitServlet {
 		}
 		
 		try{
-			json.data=this.circuitFactory.fromJSON(circuit).toSBML();
-			json.success=true;
+			response.setContentType("application/sbml+xml");
+			out.println(this.circuitFactory.fromJSON(circuit).toSBML());
+
+			return;
 		}catch(Exception e){
 			json.fail("Circuit does not validate, please use validate to correct errors.");
-			return;
 		}
 		
 		out.println(json.toJSONString());

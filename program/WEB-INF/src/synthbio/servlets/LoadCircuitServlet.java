@@ -61,7 +61,7 @@ public class LoadCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		String filename=request.getParameter("filename");
+		String filename = request.getParameter("filename");
 		if(filename == null) {
 			json.fail("Parameter 'filename' not set");
 			out.println(json.toJSONString());
