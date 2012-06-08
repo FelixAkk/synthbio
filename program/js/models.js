@@ -418,10 +418,22 @@ synthbio.Circuit.prototype.getGate = function(index) {
  * @return Object {protein1: synthbio.Signal (truthy), protein2: synthbio.Signal, ..}
  */
 synthbio.Circuit.prototype.getUsedProteins = function() {
+	//Select the "best" proteins for the result (prefer ones with input/output relations)
 	var res = {};
+	var score = {};
+
 	$.each(this.getSignals(), function(idx, signal){
-		res[signal.getProtein()] = signal;
+		//Get protein and calculate score for this protein
+		var prot = signal.getProtein();
+		var scor = (signal.isInput() ? 1 : 0) + (signal.isOutput() ? 1 : 0);
+
+		//Set protein if not set or this protein has higher score than old one
+		if (prot && (!score[prot] || scor > score[prot])) {
+			score[prot] = scor;
+			res[prot] = signal;
+		}
 	});
+
 	return res;
 };
 

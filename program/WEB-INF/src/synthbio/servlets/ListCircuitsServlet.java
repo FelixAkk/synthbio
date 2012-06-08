@@ -52,11 +52,11 @@ public class ListCircuitsServlet extends CircuitServlet {
 
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
-
-		/* Load syn repository
-		 */
+	
+		String foldername =request.getParameter("folderName");
+		/* Load syn repository  */
 		try{
-			this.synRepository=this.getSynRepository();
+			this.synRepository = this.getRepository(folderName);
 		}catch(Exception e) {
 			json.fail("Could not load .syn files: "+e.getMessage());
 			out.println(json.toJSONString());
@@ -73,7 +73,6 @@ public class ListCircuitsServlet extends CircuitServlet {
 		out.println(json.toJSONString());
 	}
 
-	
 	private JSONArray getFiles() throws JSONException{
 		ArrayList<JSONObject> files = new ArrayList<JSONObject>();
 		for(String filename: this.synRepository.getFileList()) {

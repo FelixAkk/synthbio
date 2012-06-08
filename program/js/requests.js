@@ -53,16 +53,19 @@ synthbio.requests.baseXHR = function(provided){
 
 /**
  * listFiles
- * Returns a list of all files
+ * Returns a list of all files in folderName, "" is default.
  * Callback will be done on the result
  * Other messages will be shown in console.log
  */
-synthbio.requests.listFiles = function(callback){
+synthbio.requests.listFiles = function(folderName, callback){
 	if(!callback instanceof Function){
 		return ("callback function for listFiles is not a function");
 	}
 	synthbio.requests.baseXHR({
 		url: "/ListCircuits",
+		data: {
+			"folderName": folderName
+		},
 		success: function(response){
 			if(!response.success){
 				return console.log(response.message);
