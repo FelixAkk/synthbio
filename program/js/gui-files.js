@@ -185,7 +185,7 @@ synthbio.gui.resetFileDialog = function() {
 
 synthbio.gui.prepareFileDialog = function(event) {
 	// Request stuff from server and define what happens next
-	synthbio.requests.listFiles(function(response) {
+	synthbio.requests.listFiles("", function(response) {
 		// problemu technicznego
 		if(response instanceof String) {
 			$('#list-files tbody td').html(response);
