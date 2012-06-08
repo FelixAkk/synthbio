@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+	<model>
+		<listOfCompartments>
+			<compartment id="cell" size="1" units="volume"/>
+		</listOfCompartments>
+		<listOfSpecies>
+			<species id="gene" compartment="cell" initialConcentration="0" boundaryCondition="true"/>
+			<species id="D" compartment="cell" initialConcentration="0.0" boundaryCondition="false" constant="false"/>
+			<species id="A" compartment="cell" initialConcentration="0.0" boundaryCondition="true" constant="true"/>
+			<species id="B" compartment="cell" initialConcentration="0.0" boundaryCondition="true" constant="true"/>
+			<species id="C" compartment="cell" initialConcentration="0.0" boundaryCondition="false" constant="false"/>
+			<species id="mD" compartment="cell" initialConcentration="0.0" boundaryCondition="false" constant="false"/>
+			<species id="mC" compartment="cell" initialConcentration="0.0" boundaryCondition="false" constant="false"/>
+		</listOfSpecies>
+		<listOfReactions>
+			<reaction id="Transcription_and_A_B__mC" reversible="false">
+				<listOfReactants>
+					<speciesReference species="gene"/>
+				</listOfReactants>
+				<listOfProducts>
+					<speciesReference species="mC"/>
+				</listOfProducts>
+				<listOfModifiers>
+					<modifierSpeciesReference species="A"/>
+					<modifierSpeciesReference species="B"/>
+				</listOfModifiers>
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- (k1(A*B)^n/km^n+(A*B)^n) -->
+						<apply>
+							<divide/>
+							<apply>
+								<times/>
+								<cn>8.6209</cn>
+								<apply>
+									<power/>
+									<apply>
+										<times/>
+										<ci>A</ci>
+										<ci>B</ci>
+									</apply>
+									<cn>4.0</cn>
+								</apply>
+							</apply>
+							<apply>
+								<plus/>
+								<apply>
+									<power/>
+									<cn>4380.9713</cn>
+									<cn>4.0</cn>
+								</apply>
+								<apply>
+									<power/>
+									<apply>
+										<times/>
+										<ci>A</ci>
+										<ci>B</ci>
+									</apply>
+									<cn>4.0</cn>
+								</apply>
+							</apply>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+			<reaction id="Degradation__mC" reversible="false">
+				<listOfReactants>
+					<speciesReference species="mC"/>
+				</listOfReactants>
+				<listOfProducts>
+					<speciesReference species="gene"/>
+				</listOfProducts>
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- d*mC -->
+						<apply>
+							<times/>
+							<cn>0.2458</cn>
+							<ci>mC</ci>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+			<reaction id="Translation_and_mC__C" reversible="false">
+				<listOfReactants>
+					<speciesReference species="gene"/>
+				</listOfReactants>
+				<listOfProducts>
+					<speciesReference species="C"/>
+				</listOfProducts>
+				<listOfModifiers>
+					<modifierSpeciesReference species="mC"/>
+				</listOfModifiers>
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- k2*mC -->
+						<apply>
+							<times/>
+							<cn>3.6835</cn>
+							<ci>mC</ci>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+			<reaction id="Degradation__C" reversible="false">
+				<listOfReactants>
+					<speciesReference species="C"/>
+				</listOfReactants>
+				<listOfProducts>
+					<speciesReference species="gene"/>
+				</listOfProducts>
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- d*C -->
+						<apply>
+							<times/>
+							<cn>0.7032</cn>
+							<ci>C</ci>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+			<reaction id="Transcription_not_C__mD" reversible="false">
+				<listOfReactants>
+					<speciesReference species="gene"/>
+				</listOfReactants>
+				<listOfProducts>
+					<speciesReference species="mD"/>
+				</listOfProducts>
+				<listOfModifiers>
+					<modifierSpeciesReference species="C"/>
+				</listOfModifiers>
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- (k1*km^n/km^n+C^n) -->
+						<apply>
+							<divide/>
+							<apply>
+								<times/>
+								<cn>8.2182</cn>
+								<apply>
+									<power/>
+									<cn>35.1432</cn>
+									<cn>4.0</cn>
+								</apply>
+							</apply>
+							<apply>
+								<plus/>
+								<apply>
+									<power/>
+									<cn>35.1432</cn>
+									<cn>4.0</cn>
+								</apply>
+								<apply>
+									<power/>
+									<ci>C</ci>
+									<cn>4.0</cn>
+								</apply>
+							</apply>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+			<reaction id="Degradation__mD" reversible="false">
+				<listOfReactants>
+					<speciesReference species="mD"/>
+				</listOfReactants>
+				<listOfProducts>
+					<speciesReference species="gene"/>
+				</listOfProducts>
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- d*mD -->
+						<apply>
+							<times/>
+							<cn>0.0934</cn>
+							<ci>mD</ci>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+			<reaction id="Translation_not_mD__D" reversible="false">
+				<listOfReactants>
+					<speciesReference species="gene"/>
+				</listOfReactants>
+				<listOfProducts>
+					<speciesReference species="D"/>
+				</listOfProducts>
+				<listOfModifiers>
+					<modifierSpeciesReference species="mD"/>
+				</listOfModifiers>
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- k2*mD -->
+						<apply>
+							<times/>
+							<cn>4.6688</cn>
+							<ci>mD</ci>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+			<reaction id="Degradation__D" reversible="false">
+				<listOfReactants>
+					<speciesReference species="D"/>
+				</listOfReactants>
+				<listOfProducts>
+					<speciesReference species="gene"/>
+				</listOfProducts>
+				<kineticLaw>
+					<math xmlns="http://www.w3.org/1998/Math/MathML">
+					<!-- d*D -->
+						<apply>
+							<times/>
+							<cn>0.7069</cn>
+							<ci>D</ci>
+						</apply>
+					</math>
+				</kineticLaw>
+			</reaction>
+		</listOfReactions>
+	</model>
+</sbml>

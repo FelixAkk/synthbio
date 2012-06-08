@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="refresh" content="0; url="Export.sbml">
+	<script type="application/javascript" language="javascript">
+		window.location="Export.sbml";
+	</script>
+</head>
+<body>
+	<p>Click <a href="Export.sbml">here</a> if you are not redirected.</p>
+</body>
+</html
