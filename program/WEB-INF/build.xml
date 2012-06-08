@@ -198,15 +198,15 @@
 	<!-- /cobertura -->
 
 
-	<!-- QUnit tests -->	
+	<!-- QUnit tests -->
 	<!-- Define the task -->
 	<taskdef name="jstest" classname="com.philmander.jstest.ant.JsTestRunnerTask" 
-  	classpath="lib/ant-jstestrunner-0.1-deps.jar" />
+		classpath="lib/ant-jstestrunner-0.1-deps.jar" />
 	<target name="runjstest">
 		<!-- Run the tests -->
-		<jstest dir="..\js\test\" includes="index.html"
+		<jstest dir="../js/test/" includes="index.html"
 			phantomWin="lib/phantomjs/win/phantomjs.exe"
-			phantomLinux="lib\phantomjs\linux\bin\phantomjs" />
+			phantomLinux="lib/phantomjs/linux/bin/phantomjs" />
 	</target>
 	<!-- /QUnit -->
 
