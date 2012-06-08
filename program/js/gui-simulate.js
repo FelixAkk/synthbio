@@ -191,6 +191,56 @@ synthbio.gui.plotOutput = function(response) {
 };
 
 /**
+ * General event handler for when the validate action is called.
+ */
+synthbio.gui.validateHandler = function(){
+	console.log('Started validating circuit...');
+	synthbio.requests.validate(
+		synthbio.model,
+		function(response){
+			if(response.message !== '') {
+				$('#validate-alert p').html(response.message);
+				if(!response.success){
+					$('#validate-alert').addClass("invalid");
+				}
+				$('#validate-alert').modal();
+			}else{
+				//call
+				alert('simulation valid, display...');
+			}
+		}
+	);
+};
+
+/**
+ * General event handler for when the simulate action is called.
+ */
+synthbio.gui.simulateHandler = function() {
+	console.log('Simulate initiated.');
+	synthbio.gui.plot.showLoading();
+
+	synthbio.requests.simulate(
+		synthbio.model,
+		function(response){
+			console.log("synthbio.request.simulate called response callback");
+			if(response.message !== '') {
+				$('#validate-alert p').html(response.message);
+				if(!response.success){
+
+					$('#validate-alert').addClass("invalid");
+				}
+
+				console.log(synthbio.model);
+				$('#validate-alert').modal();
+			}else{
+				$('#show-output').modal();
+				synthbio.gui.plotOutput(response.data);
+			}
+		}
+	);
+};
+
+/**
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
@@ -295,25 +345,7 @@ $(document).ready(function() {
 	synthbio.gui.plot.showLoading();
 
 	// Validate
-	$('#validate').on('click', function(){
-		console.log('Started validating circuit...');
-		synthbio.requests.validate(
-			synthbio.model,
-			function(response){
-				if(response.message !== '') {
-					$('#validate-alert p').html(response.message);
-					if(!response.success){
-						$('#validate-alert').addClass("invalid");
-					}
-					$('#validate-alert').modal();
-				}else{
-					//call
-					alert('simulation valid, display...');
-				}
-			}
-		);
-
-	});
+	$('#validate').on('click', synthbio.gui.validateHandler);
 	$("#validate-alert").bind('closed', function(){
 		$(this).find("p").html('');
 		$('#validate-alert').addClass("invalid");
@@ -322,31 +354,7 @@ $(document).ready(function() {
 	/**
 	 * Run simulation
 	 */
-	$('#simulate').on('click', function() {
-		console.log('Simulate initiated.');
-		synthbio.gui.plot.showLoading();
-	
-		synthbio.requests.simulate(
-			synthbio.model,
-			function(response){
-				console.log("synthbio.request.simulate called response callback");
-				if(response.message !== '') {
-					$('#validate-alert p').html(response.message);
-					if(!response.success){
-						
-						$('#validate-alert').addClass("invalid");
-					}
-					
-					console.log(synthbio.model);
-					$('#validate-alert').modal();
-				}else{
-					$('#show-output').modal();
-					synthbio.gui.plotOutput(response.data);
-				}
-			}
-		);
-		
-	});
+	$('#simulate').on('click', synthbio.gui.simulateHandler);
 	$('#rerun-simulation').on("click", function() {
 		synthbio.gui.plot.showLoading();
 	
