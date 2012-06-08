@@ -76,7 +76,7 @@ synthbio.gui.getRecentFilesList = function() {
  */
 synthbio.gui.saveHandler = function() {
 	if(synthbio.model.getName() !== "") {
-		synthbio.requests.putFile(synthbio.model.getName(), synthbio.model, function(response) {
+		synthbio.requests.putFile(synthbio.model.getName(), "", synthbio.model, function(response) {
 			if(response.success === false) {
 				console.error(response.message);
 				return false;
@@ -105,6 +105,12 @@ synthbio.gui.fileSaveDialog = function() {
 		// get the filename
 		var input = $("input", this)[0].value.trim();
 		
+		//Check if circuits should be saved as a compound or not
+		var folderName = "";
+		if($("#compoundToggle").is(":checked")) {
+			folderName = "compound/";
+		}
+
 		// Allow prompting for confirmation again if a different filename has been entered this time.
 		if(input !== previousInput) {
 			confirmation = false;
@@ -134,7 +140,7 @@ synthbio.gui.fileSaveDialog = function() {
 		input = synthbio.gui.filenameExtension(input);
 
 		// Save the file, let's see if it works
-		synthbio.requests.putFile(input, "", synthbio.model, function(response) {
+		synthbio.requests.putFile(input, folderName, synthbio.model, function(response) {
 			if(response.success === false) {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not saved.</strong> ' + response.message + '</div>');

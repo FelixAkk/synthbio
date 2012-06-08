@@ -113,7 +113,7 @@
 	<!--
 		Target test-all runs all known tests after a clean build.
 	-->
-	<target name="test-all" depends="clean,test,test-servlets" />
+	<target name="test-all" depends="clean,test,runjstest,test-servlets" />
 
 	<!--
 		Run a single test with
@@ -196,7 +196,19 @@
 	</target>
 	
 	<!-- /cobertura -->
-	
+
+
+	<!-- QUnit tests -->	
+	<!-- Define the task -->
+	<taskdef name="jstest" classname="com.philmander.jstest.ant.JsTestRunnerTask" 
+  	classpath="lib/ant-jstestrunner-0.1-deps.jar" />
+	<target name="runjstest">
+		<!-- Run the tests -->
+		<jstest dir="..\js\test\" includes="index.html"
+			phantomWin="lib/phantomjs/win/phantomjs.exe"
+			phantomLinux="lib\phantomjs\linux\bin\phantomjs" />
+	</target>
+	<!-- /QUnit -->
 
 	<!--
 		Create javadoc documentation.
