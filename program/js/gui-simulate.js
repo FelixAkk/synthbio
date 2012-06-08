@@ -285,8 +285,7 @@ synthbio.chartOptions.tooltip = {
 //navigator: Make sure the id is "navseries"
 synthbio.chartOptions.navigator = {
 	series: { id: "navseries", data: [0, 0, 0, 0, 0] },
-	xAxis: synthbio.chartOptions.xAxis,
-	top: 200
+	xAxis: synthbio.chartOptions.xAxis
 };
 
 //legend: Show legend at the right
