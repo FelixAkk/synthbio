@@ -42,15 +42,17 @@ public class TestExportCircuitServlet extends TestCircuitServlet{
 	public static final String url="http://localhost:8080/ExportCircuit";
 
 
+	/**
+	 * Test if sbml is returned for a valid circuit
+	 */
 	@Test
 	public void test_withValid() throws Exception {
-		JSONObject circuit=Util.fileToJSONObject("data/synstore/example-with-inputs.syn");
+		JSONObject circuit=Util.fileToJSONObject("data/synstore/handout-xor.syn");
 
 		String page=this.getTestPage(this.url+"?circuit="+circuit.toString());
 
-		JSONObject response=new JSONObject(page);
+		assertThat(page, startsWith("<?xml"));
+		assertThat(page, containsString("sbml"));
 		
-		assertTrue(response.getBoolean("success"));
-		assertThat(response.getString("data"), containsString("sbml"));
 	}
 }
