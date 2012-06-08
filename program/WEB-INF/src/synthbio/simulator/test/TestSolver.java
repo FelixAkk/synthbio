@@ -46,6 +46,9 @@ import synthbio.models.CircuitException;
 import synthbio.models.Circuit;
 import synthbio.models.CircuitFactory;
 import synthbio.Util;
+
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
  
 /**
  * Testing Solver.
@@ -89,7 +92,7 @@ public class TestSolver {
 		MultiTable solution = solveSBML(tc1, 1, 100);
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
-		assertTrue(s2 > s1);
+		assertThat(s2, is(greaterThan(s1)));
 	}
 	
 	/**
@@ -101,6 +104,7 @@ public class TestSolver {
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
 		assertTrue(s2 > s1);
+		assertThat(s2, is(greaterThan(s1)));
 	}
 	
 	/**
@@ -113,7 +117,7 @@ public class TestSolver {
 		showMultiTable(solution);
 		double a = solution.getColumn("a").getValue(99);
 		double b = solution.getColumn("b").getValue(99);
-		assertTrue(b > a);
+		assertThat(b, is(greaterThan(a)));
 	}
 	
 	/**
@@ -124,7 +128,7 @@ public class TestSolver {
 		MultiTable solution = solveSBML(nand, 0.1, 100);
 		double c = solution.getColumn("c").getValue(99);
 		double d = solution.getColumn("d").getValue(99);
-		assertTrue(c > d);
+		assertThat(c, is(greaterThan(d)));
 	}
 
 	/**
@@ -135,7 +139,7 @@ public class TestSolver {
 		MultiTable solution = solveSyn(circ1);
 		double a = solution.getColumn("A").getValue(39);
 		double d = solution.getColumn("D").getValue(39);
-		assertTrue(d < a);
+		assertThat(d, is(lessThan(a)));
 	}
 
 	/**
@@ -150,9 +154,9 @@ public class TestSolver {
 		double out2 = solution.getColumn("B").getValue(70);
 		double in3 = solution.getColumn("A").getValue(110);
 		double out3 = solution.getColumn("B").getValue(110);
-		assertTrue(in1 < out1);
-		assertTrue(in2 > out2);
-		assertTrue(in3 < out3);
+		assertThat(in1, is(lessThan(out1)));
+		assertThat(in2, is(greaterThan(out2)));
+		assertThat(in3, is(lessThan(out3)));
 	}
 
 	/**
