@@ -191,6 +191,44 @@ synthbio.gui.plotOutput = function(response) {
 };
 
 /**
+ * General event handler for when the validate action is called.
+ */
+synthbio.gui.validateHandler = function(){
+	console.log('Started validating circuit...');
+	synthbio.requests.validate(
+		synthbio.model,
+		function(response){
+			synthbio.gui.displayValidation(
+				response.message || "No response..", 
+				response.success
+			);
+		}
+	);
+};
+
+/**
+ * General event handler for when the simulate action is called.
+ */
+synthbio.gui.simulateHandler = function() {
+	console.log('Simulate initiated.');
+	synthbio.gui.plot.showLoading();
+
+	synthbio.requests.simulate(
+		synthbio.model,
+		function(response){
+			console.log("synthbio.request.simulate called response callback");
+			if(response.message !== '') {
+				synthbio.gui.displayValidation(response.message, false);
+			}else{
+				synthbio.gui.displayValidation("Circuit validates!", true, true);
+				$('#simulation-tab a[href="#tab-chart"]').tab("show");
+				synthbio.gui.plotOutput(response.data);
+			}
+		}
+	);
+};
+
+/**
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
@@ -295,39 +333,10 @@ $(document).ready(function() {
 	synthbio.gui.plot.showLoading();
 
 	// Validate
-	$('#validate').on('click', function(){
-		synthbio.gui.displayValidation("Validating..", true);
-		synthbio.requests.validate(
-			synthbio.model,
-			function(response){
-				synthbio.gui.displayValidation(
-					response.message || "No response..", 
-					response.success
-				);
-			}
-		);
-	});
+	$('#validate').on('click', synthbio.gui.validateHandler);
 
 	/**
 	 * Run simulation
 	 */
-	$('#simulate').on('click', function() {
-		console.log('Simulate initiated.');
-		synthbio.gui.plot.showLoading();
-	
-		synthbio.requests.simulate(
-			synthbio.model,
-			function(response){
-				console.log("synthbio.request.simulate called response callback");
-				if(response.message !== '') {
-					synthbio.gui.displayValidation(response.message, false);
-				}else{
-					synthbio.gui.displayValidation("Circuit validates!", true, true);
-					$('#simulation-tab a[href="#tab-chart"]').tab("show");
-					synthbio.gui.plotOutput(response.data);
-				}
-			}
-		);
-		
-	});
+	$('#simulate').on('click', synthbio.gui.simulateHandler);
 });

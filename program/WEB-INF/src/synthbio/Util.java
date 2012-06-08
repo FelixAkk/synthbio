@@ -131,23 +131,25 @@ public final class Util {
 		}
 
 		// creating the JSON object
-		JSONObject r = new JSONObject();
-
-		r.put("names", new JSONArray(names));
-		r.put("length", timeLength);
-		r.put("step", step);
-		r.put("time", Arrays.asList(timePoints));	
+		JSONObject json = new JSONObject();
+		json.put("solver", "SBMLSimulator");
+		json.put("names", new JSONArray(names));
+		json.put("length", timeLength);
+		json.put("step", step);
+		json.put("time", Arrays.asList(timePoints));
+		
 		// for every name, get the data in the column of that name.
 		JSONObject data = new JSONObject();
 		for(String name: names) {
 			ArrayList<Double> cur = new ArrayList<Double>((int)timeLength);
-			for(Double d: m.getColumn(name))
+			for(Double d: m.getColumn(name)) {
 				cur.add(d);
+			}
 			data.put(name, new JSONArray(cur));
 		}
-		r.put("data", data);
+		json.put("data", data);
 
-		return r;	
+		return json;
 	}
 }
 
