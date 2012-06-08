@@ -253,7 +253,7 @@ synthbio.Circuit.fromMap = function(map) {
 
 	var p;
 	for (p in map) {
-		if (circuit[p] === undefined) {
+		if (map.hasOwnProperty(p) && (circuit[p] === undefined)) {
 			circuit[p] = map[p];
 		}
 	}
