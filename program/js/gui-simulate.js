@@ -249,7 +249,11 @@ synthbio.chartOptions = {
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
 	series:  [{name: "Empty", data: [0, 0, 0, 0, 0]}],
-	yAxis:   {min: 0, showFirstLabel: false}
+	yAxis:   {min: 0, showFirstLabel: false},
+	exporting: {
+		enabled: true,
+		url: "/ExportGraph"
+	}
 };
 
 //x-axis: Display the x value and add an "s" (data always starts at 0)

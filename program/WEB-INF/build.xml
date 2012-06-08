@@ -319,6 +319,16 @@
 	</target>
 
 	<!--
+		Combine all batik stuff in one jar.
+	-->
+	<target name="zip-batik">
+		<echo>Expects Batik in WEB-INF/lib/batik-1.7/</echo>
+		<jar id="batik" jarfile="lib/batik-all.jar">
+			<zipgroupfileset dir="lib/batik-1.7/lib/" includes="*.jar"/>
+		</jar>
+	</target>
+
+	<!--
 		Clean the compiled stuff
 	-->
 	<target name="clean">
