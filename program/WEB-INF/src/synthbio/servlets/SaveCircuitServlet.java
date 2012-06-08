@@ -70,6 +70,7 @@ public class SaveCircuitServlet extends CircuitServlet {
 		if(!filename.endsWith(".syn")) {
 			json.fail("Filename should end with .syn.");
 			out.println(json.toJSONString());
+			return;
 		}
 		
 		String circuit = request.getParameter("circuit");

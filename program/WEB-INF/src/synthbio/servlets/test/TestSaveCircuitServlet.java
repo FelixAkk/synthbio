@@ -90,12 +90,16 @@ public class TestSaveCircuitServlet extends TestCircuitServlet{
 	@Test
 	public void testSave_notDotSyn() throws Exception {
 		String content="abracadabra";
+		String filename="data/synstore/test.foo";
 		String page=this.getTestPage(this.url+"?filename=test.foo&circuit="+content);
 
 		JSONObject response=new JSONObject(page);
 
 		assertFalse(response.getBoolean("success"));
 		assertEquals("Filename should end with .syn.", response.getString("message"));
+
+		File file=new File(filename);
+		assertFalse("The test file " + filename + " should not be on the file system.", file.isFile());
 	}
 
 	/**
