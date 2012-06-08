@@ -177,9 +177,9 @@ public final class Util {
 		// the names
 		String[] names = lines[0].split(",");
 		// stepsize in the csv
-		int stepsize = 70;
+		int stepsize = Integer.parseInt(lines[2].split(",")[0]) - Integer.parseInt(lines[1].split(",")[0]);
 		// length = ticks
-		double length = ((lines.length-1)*70)/tickWidth;
+		double length = ((lines.length-1)*stepsize)/tickWidth;
 		// looping through the inputs
 		// gets (for example)
 		// name = [1, 0, 1]
