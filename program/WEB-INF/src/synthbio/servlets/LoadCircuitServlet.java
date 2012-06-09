@@ -56,7 +56,7 @@ public class LoadCircuitServlet extends CircuitServlet {
 		try{
 			this.synRepository = this.getRepository(folderName);
 		}catch(Exception e) {
-			json.fail("Could not load .syn files: "+e.printStackTrace());
+			json.fail("Could not load .syn files: "+e.getMessage());
 			out.println(json.toJSONString());
 			return;
 		}
