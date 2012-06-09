@@ -200,11 +200,14 @@ synthbio.requests.validate = function(circuit, callback){
  * @param callback Function to apply on the response
  * @param circuit Circuit to simulate.
  */
-synthbio.requests.simulate = function(circuit, callback){
+synthbio.requests.simulate = function(circuit, solver, callback){
 	
 	synthbio.requests.baseXHR({
 		url: "/SimulateCircuit",
-		data: { 'circuit': JSON.stringify(circuit) },
+		data: {
+			'solver': solver,
+			'circuit': JSON.stringify(circuit)
+		},
 		success: function(response){
 			callback(response);
 		},

@@ -221,6 +221,7 @@ synthbio.gui.simulateHandler = function() {
 
 	synthbio.requests.simulate(
 		synthbio.model,
+		$('#choose-solver').val(),
 		function(response){
 			console.log("synthbio.request.simulate called response callback");
 			if(response.message !== '') {
@@ -364,6 +365,7 @@ $(document).ready(function() {
 	
 		synthbio.requests.simulate(
 			synthbio.model,
+			$('#choose-solver').val(),
 			function(response){
 				if(response.message !== '') {
 					//care
