@@ -69,6 +69,6 @@ public abstract class SynthbioServlet extends HttpServlet {
 	 * Return a SynRepository with costum folder repository
 	 */
 	public SynRepository getRepository(String folderName) throws Exception {
-		return new SynRepository(this.getWebroot()+"data/synstore/" + folderName);
+		return new SynRepository(this.getWebroot() + "data/synstore/" + folderName);
 	}
 }

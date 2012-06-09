@@ -48,7 +48,7 @@ public class ListCircuitsServlet extends CircuitServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		
 		//create new JSONResponse for this request.
-		JSONResponse json=new JSONResponse();
+		JSONResponse json = new JSONResponse();
 
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
@@ -58,14 +58,14 @@ public class ListCircuitsServlet extends CircuitServlet {
 		try{
 			this.synRepository = this.getRepository(folderName);
 		}catch(Exception e) {
-			json.fail("Could not load .syn files: "+e.getMessage());
+			json.fail("Could not load .syn files: "+e.printStackTrace());
 			out.println(json.toJSONString());
 			return;
 		}
 		
 		try{
-			json.data=this.getFiles();
-			json.success=true;
+			json.data = this.getFiles();
+			json.success = true;
 		}catch(JSONException e) {
 			json.fail("JSON conversion error: "+e.getMessage());
 		}

@@ -107,7 +107,7 @@ synthbio.gui.fileSaveDialog = function() {
 		
 		//Check if circuits should be saved as a compound or not
 		var folderName = "";
-		if($("#compoundToggle").is(":checked")) {
+		if($("#compound-toggle").is(":checked")) {
 			folderName = "compound/";
 		}
 
