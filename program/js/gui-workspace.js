@@ -77,11 +77,17 @@ synthbio.gui.resetWorkspace = function() {
 	synthbio.gui.displayGateIdMap = {};
 	synthbio.gui.displaySignalIdMap = {};
 
+	//Reset plots
+	synthbio.gui.plotSeries([]);
+	synthbio.gui.plotSeriesSeparate([]);
+
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
 
-	// Also reset the circuit details
+	//Reset the circuit details
 	synthbio.gui.setCircuitDetails("","");
+	
+	//Reset input/output gate positions
 	$(".input, .output").css("top", "");
 	$(".input, .output").css("left", "");
 	$(".input").css("left", "10px");
