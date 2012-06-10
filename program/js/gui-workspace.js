@@ -537,7 +537,7 @@ synthbio.gui.draggableOptions = {
 
 		return res;
 	}
-}
+};
 
 /**
  * Adds a compound gate to the list in the gui.

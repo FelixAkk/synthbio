@@ -154,6 +154,12 @@ synthbio.gui.fileSaveDialog = function() {
 				console.error(response.message);
 				return false;
 			}
+
+			// Reload compound gates if saved as a compound
+			if (folderName === synthbio.compoundFolder) {
+				synthbio.gui.loadCompounds();
+			}
+
 			// We're done; hide
 			$("#files").modal("hide");
 		});
