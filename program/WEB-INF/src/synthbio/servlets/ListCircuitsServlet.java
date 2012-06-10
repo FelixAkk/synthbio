@@ -54,6 +54,7 @@ public class ListCircuitsServlet extends CircuitServlet {
 		PrintWriter out = response.getWriter();
 
 		String folderName = request.getParameter("folderName");
+		
 		/* Load syn repository  */
 		try{
 			this.synRepository = this.getRepository(folderName);

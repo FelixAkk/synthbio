@@ -28,6 +28,7 @@ import synthbio.models.CircuitException;
 import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
 import synthbio.simulator.Solver;
+import synthbio.simulator.SBMLSolver;
 import synthbio.simulator.JieterSolver;
 
 import synthbio.Util;
@@ -73,10 +74,10 @@ public class SimulateCircuitServlet extends CircuitServlet {
 		}
 
 		// which solver to use?
-		String solver="SBMLsimulator";
+		String solverType = "SBMLsimulator";
 		if(request.getParameter("solver") != null) {
 			if(request.getParameter("solver").equals("jieter")) {
-				solver="jieter";
+				solverType="jieter";
 			}
 		}
 
@@ -96,28 +97,25 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		if(solver.equals("jieter")) {
-			//use Jieter's Solver.
-			try {
-				JieterSolver js=new JieterSolver(c);
-				js.solve();
-				
-				json.data = js.toJSON();
-				json.success = true;
-			} catch(Exception e) {
-				json.fail("Failed solving: "+e.getMessage());
-				this.log(e);
+		// Fire up the right solver and solve.
+		Solver solver = null;
+		try {
+			if(solverType.equals("jieter")) {
+				solver = new JieterSolver(c);
+			}else{
+				solver = new SBMLSolver(c);
 			}
-		}else{
-			//use SBMLsimulator's Solver.
-			try {
-				json.data = Util.multiTableToJSON(Solver.solve(c));
-				json.success = true;
-			} catch(Exception e) {
-				json.fail("Failed solving: "+e.getMessage());
-			}
+			solver.solve();
+		} catch(Exception e) {
+			json.fail("Failed solving: "+e.getMessage());
+			out.println(json.toJSONString());
+			return;
 		}
+
+		// put results in JSON and output.
 		try{
+			json.data = solver.toJSON();
+			json.success = true;
 			out.println(json.toJSONString());
 		}catch(Throwable e){
 			json.fail("Error serializing to JSON: "+e.getMessage());
