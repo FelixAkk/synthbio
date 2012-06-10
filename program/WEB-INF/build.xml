@@ -198,15 +198,15 @@
 	<!-- /cobertura -->
 
 
-	<!-- QUnit tests -->	
+	<!-- QUnit tests -->
 	<!-- Define the task -->
 	<taskdef name="jstest" classname="com.philmander.jstest.ant.JsTestRunnerTask" 
-  	classpath="lib/ant-jstestrunner-0.1-deps.jar" />
+		classpath="lib/ant-jstestrunner-0.1-deps.jar" />
 	<target name="runjstest">
 		<!-- Run the tests -->
-		<jstest dir="..\js\test\" includes="index.html"
+		<jstest dir="../js/test/" includes="index.html"
 			phantomWin="lib/phantomjs/win/phantomjs.exe"
-			phantomLinux="lib\phantomjs\linux\bin\phantomjs" />
+			phantomLinux="lib/phantomjs/linux/bin/phantomjs" />
 	</target>
 	<!-- /QUnit -->
 
@@ -316,6 +316,16 @@
 		</concat>
 
 		<echo>Minified all javascript files in ../js/** and combined them in ../${js-minified}</echo>
+	</target>
+
+	<!--
+		Combine all batik stuff in one jar.
+	-->
+	<target name="zip-batik">
+		<echo>Expects Batik in WEB-INF/lib/batik-1.7/</echo>
+		<jar id="batik" jarfile="lib/batik-all.jar">
+			<zipgroupfileset dir="lib/batik-1.7/lib/" includes="*.jar"/>
+		</jar>
 	</target>
 
 	<!--

@@ -41,7 +41,8 @@ var circuitDescription="testDescription";
 var circuit;
 
 var	simulation;
-var simulationJSON = '{"length":40,"tickWidth":1,"lowLevel":0,"highLevel":600,"testValue":20,"values":{}}';
+var simulationJSON = '{"length":80,"tickWidth":1,"lowLevel":0,"highLevel":200,"testValue":20,"values":{}}';
+
 /**
  * Function called before each test for setup
  */
@@ -57,7 +58,7 @@ var circuitJSON=
 	'"description":"'+circuitDescription+'",'+
 	'"gates":['+gateJSON+','+gateJSON+'],'+
 	'"signals":['+signalJSON+','+signalJSON+'],'+
-	'"groups":[],'+	'"inputs":{"length":40,\"tickWidth\":1,\"lowLevel\":0,\"highLevel\":600,\"values":{}}'+
+	'"groups":[],'+	'"inputs":{"length":80,\"tickWidth\":1,\"lowLevel\":0,\"highLevel\":200,\"values":{}}'+
 	'}';
 
 var exampleJSON='{ '+
@@ -295,10 +296,10 @@ $(document).ready(function() {
 	module("SimulationInputs");
 		test("Simulation Inputs should have all base, testing all getters", function(){
 			equal(simulation.options.testValue, 20, "TestValue is set");
-			equal(simulation.getLength(), 40, "getLength works");
+			equal(simulation.getLength(), 80, "getLength works");
 			equal(simulation.getTickWidth(), 1, "getTickWidth works");
 			equal(simulation.getLowLevel(), 0, "getLowLevel works");
-			equal(simulation.getHighLevel(), 600, "getHighLevel works");
+			equal(simulation.getHighLevel(), 200, "getHighLevel works");
 			equal(simulation.getCircuit(), undefined, "bound circuit should start as undefined");	
 			raises(function(){simulation.getValues();} , "Can only get values after circuit is bound to simulation");
 		});
@@ -311,7 +312,7 @@ $(document).ready(function() {
 		
 		test("Simulations have a toString method", function(){
 			simulation.bindCircuit(circuit);
-			equal(simulation.toString(), "Simulation bound to testCircuit has options { length: 40 , tick width: 1 , low level: 0 , high level: 600}");
+			equal(simulation.toString(), "Simulation bound to testCircuit has options { length: 80 , tick width: 1 , low level: 0 , high level: 200}");
 		});
 		
 		test("Simulations should be able to convert to JSON", function(){

@@ -59,7 +59,7 @@ public class TestSaveCircuitServlet extends TestCircuitServlet{
 
 		JSONObject response=new JSONObject(page);
 
-		assertTrue(response.getBoolean("success"));
+		assertTrue("Response is not successfull", response.getBoolean("success"));
 		assertEquals("Saved succesfully", response.getString("message"));
 
 		JSONObject actual=Util.fileToJSONObject("data/synstore/example.syn");

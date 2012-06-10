@@ -30,6 +30,7 @@
 					<li><a href="javascript: void(0);" id="open">Open<kbd>^O</kbd></a></li>
 					<li><a href="javascript: void(0);" id="save">Save<kbd>^⇧S</kbd></a></li>
 					<li><a href="javascript: void(0);" id="save-as">Save As…<kbd>^S</kbd></a></li>
+					<li><a href="javascript: void(0);" id="export">Export to SBML</a></li>
 					<li class="divider"></li>
 					<li><a href="javascript: void(0);" id="exit">Exit application</a></li>
 				</ul>
@@ -228,7 +229,14 @@
 			<div id="chart-separate" class="hide">Please simulate first.</div>
 		</div>
 		<div class="modal-footer">
-			<a href="javascript: void(0);" id="rerun-simulation"  class="btn btn-left">Re-run simulation</a>
+			<span class="flushleft">
+				<select id="choose-solver" class="input-medium" title="Choose solver">
+					<option value="jieter">JieterSolver</option>
+					<option value="SBMLsimulator" selected="selected">SBMLsimulator</option>
+				</select>
+				<a href="javascript: void(0);" id="rerun-simulation"  class="btn btn-success" title="Run simulation again, with selected solver">Run</a>
+			</span>
+			
 			<a href="javascript: void(0);" id="toggle-charttype"  class="btn">Separate charts</a>
 			<a href="javascript: void(0);" class="btn btn-primary" data-dismiss="modal">Close</a>
 		</div>

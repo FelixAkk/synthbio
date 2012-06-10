@@ -107,7 +107,7 @@ synthbio.gui.fileSaveDialog = function() {
 		
 		//Check if circuits should be saved as a compound or not
 		var folderName = "";
-		if($("#compoundToggle").is(":checked")) {
+		if($("#compound-toggle").is(":checked")) {
 			folderName = "compound/";
 		}
 
@@ -196,6 +196,7 @@ synthbio.gui.fileOpenDialog = function() {
 };
 synthbio.gui.resetFileDialog = function() {
 	$("#files tbody").html('<tr><td>Loading ...</td></tr>');
+	$("#compound-toggle").attr('checked', false);
 	
 	// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
 	$("#files form").off("submit");
@@ -264,8 +265,8 @@ synthbio.gui.prepareFileDialog = function(event) {
 $(document).ready(function() {
 
 	//new button
-	$('#new').on('click', function(){
-		if(confirm("Caution: this will delete unsaved work!")){
+	$('#new').on('click', function() {
+		if(confirm("Caution: this will delete unsaved work!")) {
 			synthbio.newCircuit();
 		}
 	});
@@ -287,5 +288,22 @@ $(document).ready(function() {
 
 	// List files from server.
 	$('#files').on('show', synthbio.gui.prepareFileDialog);
+
+	/**
+	 * Export circuit to SBML
+	 * Refreshes the page to the exporter.
+	 */
+	$('#export').on('click', function() {
+		synthbio.requests.validate(
+			synthbio.model,
+			function(response){
+				if(response.success){
+					window.location="/ExportCircuit?circuit="+JSON.stringify(synthbio.model);
+				}else{
+					alert("Can only export valid circuits: "+response.message);
+				}
+			}
+		);
+	});
 
 });

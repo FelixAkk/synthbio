@@ -92,5 +92,14 @@
 		<servlet-name>ExportCircuit</servlet-name>
 		<url-pattern>/ExportCircuit</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ExportGraph</servlet-name>
+		<servlet-class>synthbio.servlets.ExportGraphServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportGraph</servlet-name>
+		<url-pattern>/ExportGraph</url-pattern>
+	</servlet-mapping>
 
 </web-app>

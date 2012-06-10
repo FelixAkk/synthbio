@@ -15,7 +15,7 @@
     "length": 120,
 		"tickWidth": 10,
 		"lowLevel" : 0,
-		"highLevel": 600,
+		"highLevel": 200,
     "values": {
       "A": "LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL LLLLLLLLLL" 
     }

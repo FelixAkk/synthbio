@@ -46,6 +46,9 @@ import synthbio.models.CircuitException;
 import synthbio.models.Circuit;
 import synthbio.models.CircuitFactory;
 import synthbio.Util;
+
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
  
 /**
  * Testing Solver.
@@ -60,7 +63,6 @@ public class TestSolver {
 
 	private final String circ1 = "data/test/simulator/inputCircuit.syn";
 	private final String de1 = "data/test/simulator/de1.syn";
-	private final String notnot = "data/test/simulator/not-not.syn";
 
 	public static String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
 		return CircuitConverter.convert((new CircuitFactory()).fromJSON(Util.fileToString(filename)));
@@ -90,7 +92,7 @@ public class TestSolver {
 		MultiTable solution = solveSBML(tc1, 1, 100);
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
-		assertTrue(s2 > s1);
+		assertThat(s2, is(greaterThan(s1)));
 	}
 	
 	/**
@@ -102,6 +104,7 @@ public class TestSolver {
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
 		assertTrue(s2 > s1);
+		assertThat(s2, is(greaterThan(s1)));
 	}
 	
 	/**
@@ -111,10 +114,10 @@ public class TestSolver {
 	@Test
 	public void testSBMLnot() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
 		MultiTable solution = solveSBML(not, 10, 1000);
-		//showMultiTable(solution);
+		showMultiTable(solution);
 		double a = solution.getColumn("a").getValue(99);
 		double b = solution.getColumn("b").getValue(99);
-		assertTrue(a > b);
+		assertThat(b, is(greaterThan(a)));
 	}
 	
 	/**
@@ -125,7 +128,7 @@ public class TestSolver {
 		MultiTable solution = solveSBML(nand, 0.1, 100);
 		double c = solution.getColumn("c").getValue(99);
 		double d = solution.getColumn("d").getValue(99);
-		assertTrue(c > d);
+		assertThat(c, is(greaterThan(d)));
 	}
 
 	/**
@@ -133,11 +136,10 @@ public class TestSolver {
  	 */	
 	@Test
 	public void testCircuit() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
-	//	System.out.println(convertFromFile(circ1));
 		MultiTable solution = solveSyn(circ1);
-		double c = solution.getColumn("C").getValue(39);
+		double a = solution.getColumn("A").getValue(39);
 		double d = solution.getColumn("D").getValue(39);
-		assertTrue(c < d);
+		assertThat(d, is(lessThan(a)));
 	}
 
 	/**
@@ -145,21 +147,18 @@ public class TestSolver {
  	 */	
 	@Test
 	public void testCircuit2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
-	//System.out.println(convertFromFile(de1));
 		MultiTable solution = solveSyn(de1);
-		//showMultiTable(solution);
-		double b = solution.getColumn("B").getValue(90);
-		double b2 = solution.getColumn("B").getValue(110);
-		assertTrue(b2 < b);
+		double in1 = solution.getColumn("A").getValue(30);
+		double out1 = solution.getColumn("B").getValue(30);
+		double in2 = solution.getColumn("A").getValue(70);
+		double out2 = solution.getColumn("B").getValue(70);
+		double in3 = solution.getColumn("A").getValue(110);
+		double out3 = solution.getColumn("B").getValue(110);
+		assertThat(in1, is(lessThan(out1)));
+		assertThat(in2, is(greaterThan(out2)));
+		assertThat(in3, is(lessThan(out3)));
 	}
 
-	@Ignore
-	@Test
-	public void testCircuit3() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
-		System.out.println(convertFromFile(notnot));
-		//MultiTable solution = solveSyn(de1);
-		//showMultiTable(solution);
-	}
 	/**
 	 * A visual representation of the data for manual testing purposes
 	 */
