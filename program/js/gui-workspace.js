@@ -498,6 +498,104 @@ synthbio.gui.removeDisplaySignal = function(id, allowReconnect) {
 };
 
 /**
+ * Base options for jQuery.draggable()
+ *
+ * The stop function should be overriden, it can now be used as a callback
+ * that returns coords if it succeeds (else it returns false).
+ */
+synthbio.gui.draggableOptions = { 
+	appendTo: "#gates-transport",
+	containment: 'window',
+	scroll: false,
+	helper: 'clone',
+	start: function(event) {
+		// Prepare transport layer
+		$("#gates-transport").css('display', 'block');
+	},
+	drag: function(event, ui) {
+		// Manually set the position of the helper (the thing you see dragged). Works out much nicer!
+		ui.position.left = event.pageX - synthbio.gui.gateDimensions.width/2;
+		ui.position.top  = event.pageY - synthbio.gui.gateDimensions.height/2;
+
+		// Display gate border if dragging in grid (and gate can be dropped)
+		var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
+		$(ui.helper).toggleClass("gate-border", dragInGrid);
+	},
+	stop: function(event, ui) {
+		var res = false;
+		// If dragged into the grid
+		if(event.pageX > synthbio.gui.gatesTabWidth) {
+			// Add new gate to circuit
+			var x = event.pageX - (synthbio.gui.gatesTabWidth + synthbio.gui.gateDimensions.width/2);
+			var y = event.pageY - (synthbio.gui.navbarHeight + synthbio.gui.gateDimensions.height/2);
+			res = [x, y];
+		}
+
+		// Clean up transport layer
+		$("#gates-transport .gate").remove();
+		$("#gates-transport").css('display', 'none');
+
+		return res;
+	}
+}
+
+/**
+ * Adds a compound gate to the list in the gui.
+ *
+ * @param circuit synthbio.Circuit
+ */
+synthbio.gui.addCompoundGate = function(circuit) {
+	synthbio.util.assert(circuit instanceof synthbio.Circuit, "circuit should be Circuit");
+
+	// Create new display element
+	var element = $('<div class="gate compound"><img src="img/gates/compound.svg"/>'
+		+ '<h4>' + circuit.getName() + '</h4>'
+		+ '<p class="subscript">' + circuit.getDescription() + '</p>'
+		+ "</div>");
+
+	// Place new element in grid
+	$('#gates-compound').append(element);
+
+	// Initialize new gate-dragging
+	element.draggable($.extend({}, synthbio.gui.draggableOptions, {
+		stop: function() {
+			var pos = synthbio.gui.draggableOptions.stop.apply(this, arguments);
+			if (pos !== false) {
+				synthbio.loadCompoundCircuit(circuit, pos);
+			}
+		}
+	}));
+};
+
+/**
+ * Loads all compound gates from server and displays them in the list
+ */
+synthbio.gui.loadCompounds = function() {
+	// Delete old compounds
+	$('#gates-compound').empty();
+
+	// Request names from server and define what happens next
+	synthbio.requests.listFiles(synthbio.compoundFolder, function(response) {
+		// problemu technicznego
+		if(!$.isArray(response)) {
+			return;
+		}
+
+		//Get all compounds and add each one to the list
+		$.each(response, function(i, file) {
+			synthbio.requests.getFile(file.filename, synthbio.compoundFolder, function(response) {
+				if(response.success === false) {
+					console.error(response.message);
+				} else {
+					var circuit = synthbio.Circuit.fromMap(response.data);
+					synthbio.gui.addCompoundGate(circuit);
+				}
+			});
+		});
+	});
+};
+
+/**
  * Saves and displays the details on display the circuit title/description in the main GUI.
  * @param filename String with or without the .syn file extension, may be empty, wil be trimmed.
  * @param description String with the description, may be empty, wil be trimmed.
@@ -760,88 +858,24 @@ jsPlumb.ready(function() {
 
 $(document).ready(function() {
 	// Initialize new gate-dragging
-	$('#gates-basic .gate').draggable({ 
-		appendTo: "#gates-transport",
-		containment: 'window',
-		scroll: false,
-		helper: 'clone',
-		start: function(event) {
-			// Prepare transport layer
-			$("#gates-transport").css('display', 'block');
-		},
-		drag: function(event, ui) {
-			// Manually set the position of the helper (the thing you see dragged). Works out much nicer!
-			ui.position.left = event.pageX - synthbio.gui.gateDimensions.width/2;
-			ui.position.top  = event.pageY - synthbio.gui.gateDimensions.height/2;
-
-			// Display gate border if dragging in grid (and gate can be dropped)
-			var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
-			$(ui.helper).toggleClass("gate-border", dragInGrid);
-		},
-		stop: function(event, ui) {
-			// If dragged into the grid
-			if(event.pageX > synthbio.gui.gatesTabWidth) {
-				// Add new gate to circuit
-				var x = event.pageX - (synthbio.gui.gatesTabWidth + synthbio.gui.gateDimensions.width/2);
-				var y = event.pageY - (synthbio.gui.navbarHeight + synthbio.gui.gateDimensions.height/2);
+	$('#gates-basic .gate').draggable($.extend({}, synthbio.gui.draggableOptions, { 
+		stop: function() {
+			var pos = synthbio.gui.draggableOptions.stop.apply(this, arguments);
+			if (pos !== false) {
+				// Create new gate
 				var newGate = synthbio.model.addGate(
 					$(this).attr('class').split(' ')[1], // type of gate (second word in class of the element)
-					[x, y] // position of the new gate
+					pos
 				);
 
 				// Display gate in grid
 				synthbio.gui.displayGate(newGate);
 			}
-
-			// Clean up transport layer
-			$("#gates-transport .gate").remove();
-			$("#gates-transport").css('display', 'none');
 		}
-	});
-
-	// Initialize new gate-dragging
-	$('#gates-compound .gate').draggable({ 
-		appendTo: "#gates-transport",
-		containment: 'window',
-		scroll: false,
-		helper: 'clone',
-		start: function(event) {
-			// Prepare transport layer
-			$("#gates-transport").css('display', 'block');
-		},
-		drag: function(event, ui) {
-			// Manually set the position of the helper (the thing you see dragged). Works out much nicer!
-			ui.position.left = event.pageX - synthbio.gui.gateDimensions.width/2;
-			ui.position.top  = event.pageY - synthbio.gui.gateDimensions.height/2;
-
-			// Display gate border if dragging in grid (and gate can be dropped)
-			var dragInGrid = event.pageX > synthbio.gui.gatesTabWidth;
-			$(ui.helper).toggleClass("gate-border", dragInGrid);
-		},
-		stop: function(event, ui) {
-			// If dragged into the grid
-			if(event.pageX > synthbio.gui.gatesTabWidth) {
-				// Add new gate to circuit
-				var x = event.pageX - (synthbio.gui.gatesTabWidth + synthbio.gui.gateDimensions.width/2);
-				var y = event.pageY - (synthbio.gui.navbarHeight + synthbio.gui.gateDimensions.height/2);
-
-				var model = new synthbio.Circuit("", "");
-				model.addGate("not", [50, 50]);
-				model.addGate("and", [100, 100]);
-				model.addSignal("A", "input", 0);
-				model.addSignal("B", 0, 1);
-				model.addSignal("C", 1, "output");
-
-				synthbio.loadCompoundCircuit(model, [x, y]);
-			}
-
-			// Clean up transport layer
-			$("#gates-transport .gate").remove();
-			$("#gates-transport").css('display', 'none');
-		}
-	});
+	}));
 
 	// Prepare default/empty workspace
+	synthbio.gui.loadCompounds();
 	synthbio.newCircuit();
 });
 
