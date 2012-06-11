@@ -211,6 +211,14 @@ body {
 	padding: 5px;
 }
 
+#tab-validate {
+	padding: 10px;
+	.alert {
+		margin-bottom: 0;
+		.transition(height, 0.2)
+	}
+}
+
 .navbar .nav > li > a {
 	color: lighten(@baseColor, 20%);
 	&:hover {
@@ -546,16 +554,12 @@ body {
 	}
 }
 
-
-#grid {
-}
-
 #simulation-tab {
 	top: auto;
 	/* Keep some distance for the status bar and gates tab (+1 pixel for the border) */
 	left: @tabWidth + 1;
 	bottom: @statusHeight + 1;
-	min-height: 150px;
+	min-height: 85px;
 	background-color: @baseColor;
 	.borderUp(@baseColor, @contrast, @borderHeight);
 	border-width: 1px 0px 0px 0px; /* Top border only */
@@ -563,6 +567,7 @@ body {
 	color: @textColorFaded;
 	z-index: 30;
 	.transition(bottom, 0.3s);
+	overflow: hidden;
 
 	.navbar {
 	    cursor: n-resize;
@@ -697,14 +702,6 @@ body {
 	}
 }
 
-#tab-validate{
-	color: #006633;
-
-	.invalid{
-		color: #700000;
-		font-weight: bold;
-	}
-}
 
 /** Section:
  * ------------------------------

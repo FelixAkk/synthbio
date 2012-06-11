@@ -45,6 +45,7 @@ synthbio.gui.gatesTabWidth = $('#gates-tab').width();
  */
 synthbio.gui.navbarHeight = $('.navbar').height();
 
+synthbio.gui.simulationTabsNavbarHeight = $("#simulation-tab .nav-tabs.navbar").height();
 /**
  * Get normal gates dimensions
  */
@@ -88,21 +89,40 @@ synthbio.gui.resetWorkspace = function() {
 	$(".output").css("right", "10px");
 
 	//Reset tabs
-	synthbio.gui.displayValidation("Please simulate first", true);
+	$("#tab-validate").html(synthbio.gui.defaultValidityTabHTML);
 };
 
 /**
- * Display validation results
+ * Utility function to display validation results. Has a special hacky use where you supply an interger
+ * instead of a boolean for the validity parameter to set some other extra alert classes.
+ *
+ * @param message HTML message string
+ * @param valid Boolean, but can also be an integer, use 0: error, 1: success, 3: info, 4: plain.
+ * @noTabSwitch Automatically switch to the validation tab?
  */
 synthbio.gui.displayValidation = function (message, valid, noTabSwitch) {
-	var element = $('#tab-validate p');
+	var element = $('#tab-validate .alert');
 	element.html(message);
-	if(valid){
-		element.removeClass("invalid");
-	} else {
-		element.addClass("invalid");
+	if(arguments.length > 1) {
+		// Important that these are only 2 equal characters, needs lose compare here to also accept booleans.
+		if(valid == 0){
+			// Green
+			element.attr("class", "alert alert-error");
+			// Same for this if clause head
+		} else if(valid == 1) {
+			// Red
+			element.attr("class", "alert alert-success");
+		} else if(valid === 2) {
+			// Blue
+			element.attr("class", "alert alert-info");
+		} else if(valid === 3) {
+			// Yellow
+			element.attr("class", "alert");
+		}
 	}
-	if (!noTabSwitch) {
+
+	// Oh, phunny double negatives :>
+	if(!noTabSwitch) {
 		$('#simulation-tab a[href="#tab-validate"]').tab("show");
 	}
 };
@@ -860,6 +880,47 @@ $(document).ready(function() {
 		}
 	});
 
+	// Allow resizing of the simulation tabs space
+	var startDragPosition = {x: undefined, y: undefined};
+	(function() {
+		var tab = $("#simulation-tab");
+		var workspace = $("#grid-container");
+		// Whether we have gotten the original (auto) height yet, and have set the min-height to it yet.
+		var measure = false;
+		$("#simulation-tab .navbar").draggable({
+			axis: "y",
+			distance: 10,
+			helper: function() { return $('<div style="display: none">I am the hacky simulation tab helper. I should never appear.</div>'); },
+			start: function(event, ui) {
+				originalHeightTabs = tab.height();
+				originalHeightWorkspace = workspace.height();
+				if(!measure) {
+					tab.height("auto").height();
+					tab.css("min-height", originalHeightTabs);
+					measure = true;
+				}
+			},
+			drag: function(event, ui) {
+				var offsetY = (ui.originalPosition.top - ui.position.top);
+				tab.height(originalHeightTabs + offsetY);
+				workspace.height(originalHeightWorkspace - offsetY);
+			},
+			stop: function() {
+				// Resize the output plot if visible
+				if($("#tab-chart").hasClass("active")) {
+					$("#tab-chart").height($("#simulation-tab").height() - synthbio.gui.simulationTabsNavbarHeight);
+					synthbio.gui.plotResize();
+				}
+			}
+		});
+	})();
+	// Bind a tab change listener so we can set the proper min-height every time
+	(function() {
+		// Array with the original (height: auto) height of each tab
+		var originalTabHeight = []
+	})();
+	// Save the default validity tab contents for another day (to show again after a reset for example)
+	synthbio.gui.defaultValidityTabHTML = $("#tab-validate").html();
 	// Prepare default/empty workspace
 	synthbio.newCircuit();
 });

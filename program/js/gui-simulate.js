@@ -244,7 +244,7 @@ synthbio.gui.simulateHandler = function() {
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
-	chart:   {renderTo: 'chart-group', reflow: false},
+	chart:   {renderTo: 'chart-group', reflow: true},
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
@@ -344,7 +344,12 @@ $(document).ready(function() {
 	synthbio.gui.plot.showLoading();
 
 	//Bind resize handler
-	$('#'+options.chart.renderTo).resize(synthbio.gui.plotResize);
+	$(window).resize(function() {
+		// Only handle events when we need to; the plot is visible and needs resizing
+		if($("#tab-chart").hasClass("active")) {
+			synthbio.gui.plotResize();
+		}
+	});
 
 	// Validate
 	$('#validate').on('click', synthbio.gui.validateHandler);
