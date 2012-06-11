@@ -548,15 +548,15 @@ synthbio.gui.draggableOptions = {
 /**
  * Adds a compound gate to the list in the gui.
  *
- * @param circuit synthbio.Circuit
+ * @param circuit Map that maps to synthbio.Circuit
  */
 synthbio.gui.addCompoundGate = function(circuit) {
-	synthbio.util.assert(circuit instanceof synthbio.Circuit, "circuit should be Circuit");
+	model = synthbio.Circuit.fromMap(circuit);
 
 	// Create new display element
 	var element = $('<div class="gate compound"><img src="img/gates/compound.svg"/>'
-		+ '<h4>' + circuit.getName() + '</h4>'
-		+ '<p class="subscript">' + circuit.getDescription() + '</p>'
+		+ '<h4>' + model.getName() + '</h4>'
+		+ '<p class="subscript">' + model.getDescription() + '</p>'
 		+ "</div>");
 
 	// Place new element in grid
@@ -567,7 +567,9 @@ synthbio.gui.addCompoundGate = function(circuit) {
 		stop: function() {
 			var pos = synthbio.gui.draggableOptions.stop.apply(this, arguments);
 			if (pos !== false) {
-				synthbio.loadCompoundCircuit(circuit, pos);
+				//From map again here, to make sure new objects are used
+				c = synthbio.Circuit.fromMap(circuit);
+				synthbio.loadCompoundCircuit(c, pos);
 			}
 		}
 	}));
@@ -593,8 +595,7 @@ synthbio.gui.loadCompounds = function() {
 				if(response.success === false) {
 					console.error(response.message);
 				} else {
-					var circuit = synthbio.Circuit.fromMap(response.data);
-					synthbio.gui.addCompoundGate(circuit);
+					synthbio.gui.addCompoundGate(response.data);
 				}
 			});
 		});
