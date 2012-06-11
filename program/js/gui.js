@@ -143,7 +143,8 @@ $(document).ready(function() {
 
 	// Hook mouseover listeners for all elements to display tooltips
 	synthbio.gui.setTooltip($("#gates-basic"),      "Predefined AND and NOT gates (fixed). Drag into the modelling grid.");
-	synthbio.gui.setTooltip($("#gates-compound"),   "User defined compound gates (loaded from .syn). Drag into the modelling grid.");
+	synthbio.gui.setTooltip($("#gates-compound"),   "User defined compound gates (loaded from .syn). Drag into the modelling grid." +
+		" These gates will explode to the actual circuit when released into the workspace.");
 	synthbio.gui.setTooltip($("#gate-input"),       "Drag from here to define an input signal for a gate.");
 	synthbio.gui.setTooltip($("#gate-output"),      "Drop a signal endpoint in here to output the signal values.");
 
