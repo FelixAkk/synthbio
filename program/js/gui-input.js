@@ -33,7 +33,7 @@ synthbio.gui.inputEditor = function(){
 	//clear input signals container.
 	$('#input-signals').html('');
 
-	var inputs=synthbio.model.getSimulationInputs();
+	var inputs=synthbio.model.getSimulationSetting();
 
 	//fill advanced settings form fields
 	$('#simulate-length').val(inputs.getLength());
@@ -185,7 +185,7 @@ synthbio.gui.inputEditor = function(){
 synthbio.gui.saveInputs = function(circuit) {
 	circuit = circuit || synthbio.model;
 
-	var simulationInput=circuit.getSimulationInputs();
+	var simulationInput=circuit.getSimulationSetting();
 	
 	//copy the options from the form to the object.
 	synthbio.util.form2object(
