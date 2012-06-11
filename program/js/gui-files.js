@@ -25,6 +25,11 @@ var synthbio = synthbio || {};
 synthbio.gui = synthbio.gui || {};
 
 /**
+ * This is the subfolder for compound gates used on the server.
+ */
+synthbio.compoundFolder = "compound";
+
+/**
  * This variable holds the array of files coming from the last synthbio.requests.getFiles() call.
  * These are reused later when for example checking if the entered file name is existent when overwriting a file.
  */
@@ -108,7 +113,7 @@ synthbio.gui.fileSaveDialog = function() {
 		//Check if circuits should be saved as a compound or not
 		var folderName = "";
 		if($("#compound-toggle").is(":checked")) {
-			folderName = "compound/";
+			folderName = synthbio.compoundFolder;
 		}
 
 		// Allow prompting for confirmation again if a different filename has been entered this time.
@@ -149,6 +154,12 @@ synthbio.gui.fileSaveDialog = function() {
 				console.error(response.message);
 				return false;
 			}
+
+			// Reload compound gates if saved as a compound
+			if (folderName === synthbio.compoundFolder) {
+				synthbio.gui.loadCompounds();
+			}
+
 			// We're done; hide
 			$("#files").modal("hide");
 		});
@@ -186,10 +197,12 @@ synthbio.gui.fileOpenDialog = function() {
 				console.error(response.message);
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not opened.</strong> ' + response.message);
+				return;
+			}else {
+				synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
+				// We're done; hide
+				$("#files").modal("hide");
 			}
-			synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
-			// We're done; hide
-			$("#files").modal("hide");
 		});
 		return false; // would prevent the form from making us go anywhere if .preventDefault() fails
 	});

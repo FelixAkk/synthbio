@@ -25,13 +25,14 @@ import org.json.JSONObject;
 
 import synthbio.models.*;
 
+import synthbio.simulator.Solver;
 import synthbio.simulator.Reaction;
 
 /**
  * Naive implementation to solve the system of ODE's for the BioBricks
  * provided.
  */
-public class JieterSolver {
+public class JieterSolver implements Solver{
 
 	/**
 	 * The circuit to be solved.
@@ -85,7 +86,7 @@ public class JieterSolver {
 		reactions = new ArrayList<Reaction>();
 		species = new HashSet<String>();
 
-		this.calculation_steps = circuit.getSimulationLength() * calculation_resolution;
+		this.calculation_steps = circuit.getSimulationSetting().getLength() * calculation_resolution;
 		
 		this.initReactions();
 	}
@@ -170,7 +171,7 @@ public class JieterSolver {
 	 * Get the number of steps in the resulting data set.
 	 */
 	public int getResultSteps(){
-		return this.circuit.getSimulationLength() * this.result_resolution;
+		return this.circuit.getSimulationSetting().getLength() * this.result_resolution;
 	}
 
 	/**
@@ -178,7 +179,7 @@ public class JieterSolver {
 	 */
 	public double getInputLevelAt(String specie, int t){
 		t = (int)Math.floor(t/this.calculation_resolution);
-		return circuit.getSimulationLevelAt(specie, t);
+		return this.circuit.getSimulationSetting().getLevelAt(specie, t);
 	}
 
 	/**
@@ -314,7 +315,7 @@ public class JieterSolver {
 		JSONObject json = new JSONObject();
 		json.put("solver", "JieterSolver");
 		json.put("names", species);
-		json.put("length", circuit.getSimulationLength());
+		json.put("length", circuit.getSimulationSetting().getLength());
 		json.put("step", 1.0/this.result_resolution);
 		
 		JSONObject data=new JSONObject();
@@ -324,35 +325,5 @@ public class JieterSolver {
 		json.put("data", data);
 		
 		return json;
-	}
-	
-	/**
-	 * Print all species on a certain t.
-	 */
-	public void printSpeciesAt(int t){
-		Integer[] times={t};
-		printSpeciesAt(times);
-	}
-
-	/**
-	 * Print all species on different t's.
-	 */
-	public void printSpeciesAt(Integer[] times){
-		List<Integer> list = Arrays.asList(times);
-
-		System.out.print("  t =");
-		for(int t: list){
-			System.out.print(String.format("%10d", t));
-		}
-		System.out.println();
-		System.out.println("---------------");
-		for(String sp: species){
-			System.out.print(String.format("%1$#3s = ", sp));
-			for(int t: list){
-				System.out.print(String.format("%10.2f", get(sp, t)));
-			}
-			System.out.println();
-		}
-		System.out.println("---------------");
 	}
 }

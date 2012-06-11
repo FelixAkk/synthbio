@@ -120,7 +120,6 @@ synthbio.Gate.prototype.getImage = function(html){
 	}
 };
 synthbio.Gate.prototype.getInputCount = function(){
-	//TODO: better way to determine number of inputs/outputs
 	if(this.getKind() === "not") {
 		return 1;
 	} else if (this.getKind() === "and") {
@@ -247,6 +246,7 @@ synthbio.Circuit.fromMap = function(map) {
 	}
 
 	//Copy remaining properties to object, but forget gates/signals/inputs
+	map = $.extend({}, map);
 	delete map.gates;
 	delete map.signals;
 	delete map.inputs;
@@ -257,11 +257,6 @@ synthbio.Circuit.fromMap = function(map) {
 			circuit[p] = map[p];
 		}
 	}
-
-	//TODO: implement grouping.
-	//~ $.each(map.groups, function(i, elem){
-	//~		circuit.addGroup(synthbio.Group.fromMap(elem));
-	//~ });
 
 	return circuit;
 };
@@ -564,7 +559,6 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination, fullMatc
 			i--;
 		}
 	}
-	//@todo remove from SimulationInputs?
 	return removed;
 };
 
@@ -732,8 +726,6 @@ synthbio.SimulationInputs.prototype.toJSON = function() {
 
 /**
  * toString method.
- *
- * @todo: implement
  */
 synthbio.SimulationInputs.prototype.toString = function() {
 	return 'Simulation bound to ' + this.getCircuit().getName()+ ' has options { length: '+this.getLength()+' , tick width: '+this.getTickWidth()+' , low level: '+this.getLowLevel()+' , high level: '+this.getHighLevel()+'}';

@@ -48,12 +48,13 @@ public class ListCircuitsServlet extends CircuitServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		
 		//create new JSONResponse for this request.
-		JSONResponse json=new JSONResponse();
+		JSONResponse json = new JSONResponse();
 
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 
 		String folderName = request.getParameter("folderName");
+		
 		/* Load syn repository  */
 		try{
 			this.synRepository = this.getRepository(folderName);
@@ -64,8 +65,8 @@ public class ListCircuitsServlet extends CircuitServlet {
 		}
 		
 		try{
-			json.data=this.getFiles();
-			json.success=true;
+			json.data = this.getFiles();
+			json.success = true;
 		}catch(JSONException e) {
 			json.fail("JSON conversion error: "+e.getMessage());
 		}

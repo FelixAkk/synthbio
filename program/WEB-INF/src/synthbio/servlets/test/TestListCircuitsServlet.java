@@ -55,7 +55,7 @@ public class TestListCircuitsServlet extends TestCircuitServlet{
 		JSONObject response=new JSONObject(page);
 
 		//check success and empty message string.
-		assertTrue(response.getBoolean("success"));
+		assertTrue("List is successful", response.getBoolean("success"));
 		assertEquals("", response.getString("message"));
 		
 		//check returned type.

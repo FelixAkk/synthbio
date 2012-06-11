@@ -64,7 +64,7 @@ synthbio.requests.listFiles = function(folderName, callback){
 	synthbio.requests.baseXHR({
 		url: "/ListCircuits",
 		data: {
-			"folderName": folderName
+			"folderName": synthbio.util.appendTrailingDelimiter(folderName)
 		},
 		success: function(response){
 			if(!response.success){
@@ -93,7 +93,7 @@ synthbio.requests.getFile = function(name, folderName, callback){
 		url: "/LoadCircuit",
 		data: {
 			"filename": name,
-			"folderName": folderName
+			"folderName": synthbio.util.appendTrailingDelimiter(folderName)
 		},
 		success: function(response){
 			callback(response);
@@ -120,7 +120,7 @@ synthbio.requests.putFile = function(fileName, folderName, circ, callback) {
 		data: {
 			"filename": fileName,
 			"circuit": JSON.stringify(circ),
-			"folderName": folderName
+			"folderName": synthbio.util.appendTrailingDelimiter(folderName)
 		},
 		success: function(response){
 			if(!response.success){

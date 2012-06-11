@@ -104,7 +104,7 @@ public class TestCircuitConverter {
 		// result
 		
 		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(inputCircuit));
-		MultiTable m = CircuitConverter.getInputs(c);
+		MultiTable m = c.getSimulationSetting().getInputMultiTable();
 		
 		// expected result
 		//"A": "H",

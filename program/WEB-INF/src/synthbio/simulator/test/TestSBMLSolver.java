@@ -27,7 +27,7 @@ import org.sbml.jsbml.validator.ModelOverdeterminedException;
 import org.apache.commons.math.ode.DerivativeException;
 
 import org.simulator.math.odes.MultiTable;
-import synthbio.simulator.Solver;
+import synthbio.simulator.SBMLSolver;
 import synthbio.simulator.CircuitConverter;
 
 import java.awt.Dimension;
@@ -54,42 +54,52 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Testing Solver.
  * @author Albert ten Napel
  */
-public class TestSolver {
-	private final String not = "data/test/simulator/not.sbml";
-	private final String nand = "data/test/simulator/nand.sbml";
+public class TestSBMLSolver {
+	private final String sbml_not = "data/test/simulator/not.sbml";
+	private final String sbml_nand = "data/test/simulator/nand.sbml";
 	
-	private final String tc1 = "data/test/simulator/00001-sbml-l2v4.xml";
-	private final String tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
+	private final String test_tc1 = "data/test/simulator/00001-sbml-l2v4.xml";
+	private final String test_tc2 = "data/test/simulator/00002-sbml-l2v4.xml";
 
-	private final String circ1 = "data/test/simulator/inputCircuit.syn";
-	private final String de1 = "data/test/simulator/de1.syn";
+	private final String syn_circ1 = "data/test/simulator/inputCircuit.syn";
+	private final String syn_de1 = "data/test/simulator/de1.syn";
 
-	public static String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
-		return CircuitConverter.convert((new CircuitFactory()).fromJSON(Util.fileToString(filename)));
+	public CircuitFactory circuitFactory;
+
+	public TestSBMLSolver() throws Exception{
+		circuitFactory = new CircuitFactory();
+	}
+	
+	public String convertFromFile(String filename) throws CircuitException, JSONException, IOException {
+		return CircuitConverter.convert(
+			circuitFactory.fromJSON(Util.fileToString(filename))
+		);
 	}
 	/**
- 	 * Solve a Syn file
+ 	 * Return a multitable after solving a .syn file.
  	 */	
-	private static MultiTable solveSyn(String fileName)
-	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {
-		return Solver.solve((new CircuitFactory()).fromJSON(Util.fileToString(fileName)));
+	private MultiTable solveSyn(String fileName) throws Exception {
+		Circuit circuit = circuitFactory.fromJSON(Util.fileToString(fileName));
+		
+		SBMLSolver s=new SBMLSolver(circuit);
+		s.solve();
+		return s.getResult();
 	}
 
 	/**
 	 * Solves a SBML file.
 	 */
-	private static MultiTable solveSBML(String fileName, double stepSize, double timeEnd)
-	throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		Model m = (new SBMLReader()).readSBML(fileName).getModel();
-		return Solver.solve(m, stepSize, timeEnd);
-	}
-	
+	private static MultiTable solveSBML(String fileName, double stepSize, double timeEnd) throws Exception {
+		Model model = (new SBMLReader()).readSBML(fileName).getModel();
+		
+		return SBMLSolver.solve(model, stepSize, timeEnd);
+	}	
 	/**
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
 	 */
 	@Test
-	public void tc1() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = solveSBML(tc1, 1, 100);
+	public void tc1() throws Exception {
+		MultiTable solution = solveSBML(test_tc1, 1, 100);
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
 		assertThat(s2, is(greaterThan(s1)));
@@ -99,8 +109,8 @@ public class TestSolver {
 	 * Testing one of the files included with the testsuite of SBMLsimulator.
 	 */
 	@Test
-	public void tc2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = solveSBML(tc2, 1, 100);
+	public void tc2() throws Exception {
+		MultiTable solution = solveSBML(test_tc2, 1, 100);
 		double s1 = solution.getColumn("S1").getValue(99);
 		double s2 = solution.getColumn("S2").getValue(99);
 		assertTrue(s2 > s1);
@@ -112,8 +122,8 @@ public class TestSolver {
 	 */
 	@Ignore
 	@Test
-	public void testSBMLnot() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = solveSBML(not, 10, 1000);
+	public void testSBMLnot() throws Exception {
+		MultiTable solution = solveSBML(sbml_not, 10, 1000);
 		showMultiTable(solution);
 		double a = solution.getColumn("a").getValue(99);
 		double b = solution.getColumn("b").getValue(99);
@@ -124,8 +134,8 @@ public class TestSolver {
 	 * Testing a SBML-file containing a nand-gate.
 	 */
 	@Test
-	public void testSBMLnand() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException {
-		MultiTable solution = solveSBML(nand, 0.1, 100);
+	public void testSBMLnand() throws Exception {
+		MultiTable solution = solveSBML(sbml_nand, 0.1, 100);
 		double c = solution.getColumn("c").getValue(99);
 		double d = solution.getColumn("d").getValue(99);
 		assertThat(c, is(greaterThan(d)));
@@ -135,8 +145,8 @@ public class TestSolver {
  	 * Testing the solving of a Syn file.
  	 */	
 	@Test
-	public void testCircuit() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
-		MultiTable solution = solveSyn(circ1);
+	public void testCircuit() throws Exception {
+		MultiTable solution = solveSyn(syn_circ1);
 		double a = solution.getColumn("A").getValue(39);
 		double d = solution.getColumn("D").getValue(39);
 		assertThat(d, is(lessThan(a)));
@@ -146,14 +156,15 @@ public class TestSolver {
  	 * Testing the solving of a Syn file, testing if the degradation works.
  	 */	
 	@Test
-	public void testCircuit2() throws XMLStreamException, IOException, ModelOverdeterminedException, SBMLException, DerivativeException, CircuitException, JSONException {	
-		MultiTable solution = solveSyn(de1);
+	public void testCircuit2() throws Exception {
+		MultiTable solution = solveSyn(syn_de1);
 		double in1 = solution.getColumn("A").getValue(30);
 		double out1 = solution.getColumn("B").getValue(30);
 		double in2 = solution.getColumn("A").getValue(70);
 		double out2 = solution.getColumn("B").getValue(70);
 		double in3 = solution.getColumn("A").getValue(110);
 		double out3 = solution.getColumn("B").getValue(110);
+		
 		assertThat(in1, is(lessThan(out1)));
 		assertThat(in2, is(greaterThan(out2)));
 		assertThat(in3, is(lessThan(out3)));

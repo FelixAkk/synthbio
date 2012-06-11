@@ -25,8 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONString;
 
-import synthbio.models.CircuitException;
 import synthbio.files.BioBrickRepository;
+import synthbio.models.CircuitException;
+import synthbio.models.SimulationSetting;
 import synthbio.simulator.CircuitConverter;
 
 /**
@@ -64,36 +65,14 @@ public class Circuit {
 	private final Set<String> inputs = new HashSet<String>();
 
 	/**
-	 * Simulation length, defaults to 40 ticks.
-	 */
-	private int simulationLength = 40;
-
-	/**
-	 * The length in seconds for each tick.
-	 */
-	private double simulationTickWidth = 1;
-	
-	/**
-	 * Simulation low value.
-	 * in micromole/L
-	 */
-	private double simulationLowLevel = 0;
-	/**
-	 * Simulation high value.
-	 * in micromole/L
-	 */
-	private double simulationHighLevel = 200;
-
-	/**
-	 * For each input protein, define a String of High/Low (H/L) for
-	 * each tick in the simulation.
-	 */
-	private final Map<String, String> simulationInput=new HashMap<String, String>();
-	
-	/**
 	 * List of output proteins.
 	 */
 	private final Set<String> outputs=new HashSet<String>();
+
+	/**
+	 * Simulation input object describing the input for the simulation.
+	 */
+	private SimulationSetting simulationSetting;
 	
 	/**
 	 * Construct the Circuit.
@@ -112,6 +91,8 @@ public class Circuit {
 		if(gates != null){
 			this.gates.addAll(gates);
 		}
+
+		this.simulationSetting=new SimulationSetting();
 	}
 
 	/**
@@ -178,85 +159,17 @@ public class Circuit {
 	}
 
 	/**
-	 * Get the length of the simulation to be executed on this circuit.
+	 * Get the simulations settings for this Circuit.
 	 */
-	public int getSimulationLength() {
-		return this.simulationLength;
+	public SimulationSetting getSimulationSetting(){
+		return this.simulationSetting;
 	}
 
 	/**
-	 * Get the width of a tick in seconds.
+	 * Set the simulations settings for this Circuit.
 	 */
-	public double getSimulationTickWidth() {
-		return this.simulationTickWidth;
-	}
-
-	/**
-	 * Simulation low value
-	 * Concentration in micromole/liter inputted as the low level.
-	 */
-	public double getSimulationLowLevel() {
-		return this.simulationLowLevel;
-	}
-
-	/**
-	 * Simulation high value
-	 * Concentration in micromole/liter inputted as the high level.
-	 */
-	public double getSimulationHighLevel() {
-		return this.simulationHighLevel;
-	}
-	
-	/**
-	 * Get the simulation input for each input protein.
-	 */
-	public Map<String, String> getSimulationInput() {
-		assert this.getInputs().size() == this.simulationInput.size() : "Number of simulation inputs should equal the number of circuit inputs.";
-		return this.simulationInput;
-	}
-	
-	/**
-	 * Get the simulation input for one protein.
-	 *
-	 * @param p The name of the protein.
-	 */
-	public String getSimulationInput(String p) {
-		assertIsProtein(p);
-		assert this.hasInput(p) : "Circuit does not have such an input protein.";
-
-		return this.simulationInput.get(p);
-	}
-
-	/**
-	 * Return high or low for the protein 'p' at tick 'tick'
-	 *
-	 * @param p Input protein.
-	 * @param tick Tick to get a result for.
-	 */
-	public String getSimulationInputAt(String p, int tick) {
-		assertIsInputProtein(p);
-		assert tick <= this.getSimulationLength() : "Tick should not exceed simulation length.";
-
-		String input=this.getSimulationInput(p);
-		if (tick>=input.length()) {
-			//return last defined tick if requested tick exceeds the
-			//defined input length.
-			return input.substring(input.length() - 1);
-		} else {
-			//return the character at position tick.
-			return input.substring(tick, tick + 1);
-		}
-	}
-
-	/**
-	 * Return a concentration for protein p at tick
-	 */ 
-	public Double getSimulationLevelAt(String p, int tick) {
-		if(this.getSimulationInputAt(p, tick).equals("H")){
-			return this.getSimulationHighLevel();
-		}else{
-			return this.getSimulationLowLevel();
-		}
+	public void setSimulationSetting(SimulationSetting ss){
+		this.simulationSetting = ss;
 	}
 	
 	/**
@@ -286,45 +199,7 @@ public class Circuit {
 		this.inputs.add(p);
 	}
 
-	/**
-	 * Set the number of ticks the circuit should be simulated.
-	 *
-	 * @param length The number of ticks.
-	 */
-	public void setSimulationLength(int length) {
-		assert length > 0 : "Simulation length should be greather than 0.";
-		this.simulationLength = length;
-	}
-
-	/**
-	 * Set the simulation tick width.
-	 *
-	 * @param width Width in seconds of one tick.
-	 */
-	public void setSimulationTickWidth(double width) {
-		assert width >= 1 : "Tick width should be greater than 0.";
-		this.simulationTickWidth = width;
-	}
-
-	/**
-	 * Set simulation low level.
-	 *
-	 * @param level Concentration used in simulation as logic low level.
-	 */
-	public void setSimulationLowLevel(double level) {
-		assert level >= 0 : "Low level concentration should be positive.";
-		this.simulationLowLevel = level;
-	}
-
-	/**
-	 * Set simulation high level.
-	 *
-	 * @param level Concentration used in simulation as logic high level.
-	 */
-	public void setSimulationHighLevel(double level) {
-		assert level >= 0 : "High level concentration should be positive.";
-		this.simulationHighLevel = level;
-	}
+	
 		
 	/**
 	 * Define a protein as an output from the circuit.
@@ -336,23 +211,6 @@ public class Circuit {
 		this.outputs.add(p);
 	}
 	
-	/**
-	 * Add the simulator input 'input' for protein 'p'.
-	 * If the input string does not span the simulation length, the last
-	 * tick is repeated for the rest of the simulation length.
-	 *
-	 * @param p Protein
-	 * @param input Input string consisting of (H|L) for each tick.
-	 */
-	public void addSimulationInput(String p, String input){
-		assertIsInputProtein(p);
-		
-		//replace all spaces by empty string.
-		input=input.replaceAll("[^HL]", "");
-		this.simulationInput.put(p, input);
-	}
-	
-
 	/**
 	 * Do we have a gate with index?
 	 */
@@ -498,10 +356,6 @@ public class Circuit {
 				throw new CircuitException("Unused output protein ("+output+").");
 			}
 		}
-		//check if one protein is produced by more than one gate or by
-		//a gate and by the inputs.
-		//@todo implement
-
 		//if we arrive here, the protein assignments are valid.
 	}
 
