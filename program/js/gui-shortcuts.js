@@ -31,8 +31,11 @@ synthbio.gui = synthbio.gui || {};
 synthbio.gui.handleKeystroke = function(event) {
 	if(event.ctrlKey === true) {
 		switch(event.which) {
-			// S key
-			case 83:
+			case 69: // E key
+				synthbio.gui.exportHandler();
+				event.preventDefault();
+			break;
+			case 83: // S key
 				if(event.shiftKey === true) {
 					// the Ctrl+Shift+S case
 					synthbio.gui.fileSaveDialog();
@@ -54,13 +57,13 @@ synthbio.gui.handleKeystroke = function(event) {
 		}
 	} else {
 		switch(event.which) {
-			case 120:
+			case 120: // F9 key
 				synthbio.gui.simulateHandler();
 				break;
-			case 119:
+			case 119: // F8 key
 				synthbio.gui.validateHandler();
 				break;
-			case 117:
+			case 118: // F7 key
 				$('#define-inputs').modal('show');
 				break;
 		}

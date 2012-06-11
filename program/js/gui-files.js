@@ -275,6 +275,19 @@ synthbio.gui.prepareFileDialog = function(event) {
 
 };
 
+synthbio.gui.exportHandler = function() {
+	synthbio.requests.validate(
+		synthbio.model,
+		function(response){
+			if(response.success){
+				window.location="/ExportCircuit?circuit="+JSON.stringify(synthbio.model);
+			}else{
+				alert("Can only export valid circuits: "+response.message);
+			}
+		}
+	);
+};
+
 $(document).ready(function() {
 
 	//new button
@@ -306,17 +319,6 @@ $(document).ready(function() {
 	 * Export circuit to SBML
 	 * Refreshes the page to the exporter.
 	 */
-	$('#export').on('click', function() {
-		synthbio.requests.validate(
-			synthbio.model,
-			function(response){
-				if(response.success){
-					window.location="/ExportCircuit?circuit="+JSON.stringify(synthbio.model);
-				}else{
-					alert("Can only export valid circuits: "+response.message);
-				}
-			}
-		);
-	});
+	$('#export').on('click', synthbio.gui.exportHandler);
 
 });
