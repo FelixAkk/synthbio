@@ -246,16 +246,17 @@
 						rungekuttaevent			Runge Kutta Event Solver
 					-->
 					<option value="jieter">JieterSolver</option>
-					
-					<option value="eulermethod" selected="selected">Euler Method</option>
-					<option value="adamsbashforth">Adams Bashforth Solver</option>
-					<option value="adamsmoulton">Adams Moulton Solver</option>
-					<option value="dormandprince54">Dormand	Prince 54	Solver</option>
-					<option value="dormandprince853">Dormand Prince 853 Solver</option>
-					<option value="agraggbulirschstoer">Gragg Bulirsch Stoer Solver</option>
-					<option value="highamhall54">Higham Hall 54 Solver</option>
-					<option value="rosenbrock">Rosenbrock Solver</option>
-					<option value="rungekuttaevent">Runge Kutta Event Solver</option>
+					<optgroup label="SBML solvers">	
+						<option value="eulermethod" selected="selected">Euler Method</option>
+						<option value="adamsbashforth">Adams Bashforth Solver</option>
+						<option value="adamsmoulton">Adams Moulton Solver</option>
+						<option value="dormandprince54">Dormand	Prince 54	Solver</option>
+						<option value="dormandprince853">Dormand Prince 853 Solver</option>
+						<option value="agraggbulirschstoer">Gragg Bulirsch Stoer Solver</option>
+						<option value="highamhall54">Higham Hall 54 Solver</option>
+						<option value="rosenbrock">Rosenbrock Solver</option>
+						<option value="rungekuttaevent">Runge Kutta Event Solver</option>
+					</optgroup>
 				</select>
 				<a href="javascript: void(0);" id="rerun-simulation"  class="btn btn-success" title="Run simulation again, with selected solver">Run</a>
 			</span>
