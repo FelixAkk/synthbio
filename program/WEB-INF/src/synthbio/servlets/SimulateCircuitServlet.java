@@ -67,14 +67,6 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		// which solver to use?
-		String solverType = "SBMLsimulator";
-		if(request.getParameter("solver") != null) {
-			if(request.getParameter("solver").equals("jieter")) {
-				solverType="jieter";
-			}
-		}
-
 		String circuit=request.getParameter("circuit");
 		if(circuit==null){
 			json.fail("Parameter 'circuit' not set");
@@ -92,12 +84,16 @@ public class SimulateCircuitServlet extends CircuitServlet {
 		}
 
 		// Fire up the right solver and solve.
+		// get the chosen solver
+		String solverType = request.getParameter("solver");
 		Solver solver = null;
 		try {
+			// if jieter was chosen, use JieterSolver.
 			if(solverType.equals("jieter")) {
 				solver = new JieterSolver(c);
+			// else SMBLSolver will handle the other solvers.
 			}else{
-				solver = new SBMLSolver(c);
+				solver = new SBMLSolver(c, solverType);
 			}
 			solver.solve();
 		} catch(Exception e) {
