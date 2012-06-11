@@ -1,7 +1,36 @@
 \documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{amsmath,amssymb}
+\usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
+\usepackage[toc]{multitoc} % Nice two-column TOC
+
+\usepackage{tabto}
+
+\usepackage{pdfpages}
+%~ TikZ is not in use in this document
+%~ \usepackage{pgf}
+%~ \usepackage{tikz}
+%~ \usepackage{pictures/tikz-uml}
+
+% new line after paragraph title.
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
 
 \begin{document}
 
-In the second to last iteration we discovered that our simulator didn't degrade anything, this was discovered so late because non of the tests really targeted degradation. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from the student assistant, the problem found was indeed the SBML format.
+\section*{Simulator problems}
+In the second to last iteration we discovered that our simulator didn't degrade anything, this was discovered so late because non of the tests targeted degradation, we only tested if the reaction speed changed. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from the student assistant, the problem found was indeed the SBML format.\\\\
+The SBML format that we used for the simulation required a list of species and a list of reactions. These Reactions each have a set of reactants, products and modifiers.\\
+The reactants are the fuel of the reactions, the reactants decrease as the reaction occurs.\\
+The products are what the reaction produces in the end, the products increase as the reaction occurs.\\
+The modifiers can speed up or slow down the reaction, but their concentration doesn't change in the reaction.\\
+In our simulation we had two reactions: transcription and translation. The transcription reaction produces mRNA (that encodes for a specific protein) from a gene sequence with help from transcription factors. The translation reaction produces the protein from the mRNA. On top of this degradation takes place: the proteins and mRNA degrade over time.\\
+The transcription and translation reactions, the only reactions we needed, both have a degradation part such that the produced mRNA and the protein will degrade over time. In our SBML file the degradation didn't have a separate reaction, which caused a problem given that the degradation reaction required a different set of reactants, products and modifiers.
+
 
 \end{document}
