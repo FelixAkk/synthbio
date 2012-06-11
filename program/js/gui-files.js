@@ -197,11 +197,12 @@ synthbio.gui.fileOpenDialog = function() {
 				console.error(response.message);
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not opened.</strong> ' + response.message);
-				//ToDo: Should stop here -- or use else?
+				return;
+			}else {
+				synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
+				// We're done; hide
+				$("#files").modal("hide");
 			}
-			synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
-			// We're done; hide
-			$("#files").modal("hide");
 		});
 		return false; // would prevent the form from making us go anywhere if .preventDefault() fails
 	});

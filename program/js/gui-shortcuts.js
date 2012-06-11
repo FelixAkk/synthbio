@@ -58,7 +58,10 @@ synthbio.gui.handleKeystroke = function(event) {
 				synthbio.gui.simulateHandler();
 				break;
 			case 119:
-				synthbio.gui.simulateHandler();
+				synthbio.gui.validateHandler();
+				break;
+			case 117:
+				$('#define-inputs').modal('show');
 				break;
 		}
 		console.log(event.which);

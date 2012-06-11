@@ -348,10 +348,6 @@ public class Circuit {
 				throw new CircuitException("Unused output protein ("+output+").");
 			}
 		}
-		//check if one protein is produced by more than one gate or by
-		//a gate and by the inputs.
-		//@todo implement
-
 		//if we arrive here, the protein assignments are valid.
 	}
 
