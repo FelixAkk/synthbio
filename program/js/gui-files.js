@@ -259,15 +259,10 @@ synthbio.gui.prepareFileDialog = function(event) {
 		synthbio.gui.fTable = $('#files table').dataTable(synthbio.gui.dataTableOptions);
 
 		// Make each row respond to selection
-		// (Jieter) @FelixAkk: could be done more concice with one onclick handler
-		// using the event object passed to the callback to determine the target. 
-		$("#files tbody tr").each(function(index, element) {
-			element = $(element); // extend to provide the .on() function
-			element.on("click", function() {
-				$("#input-filename").val($(this).find("td.filename").html());
-				// Trigger submit
-				$("#files form").submit();
-			});
+		$("#files tbody").on("click", function(event) {
+			$("#input-filename").val($(event.target).parent().find("td.filename").html());
+			// Trigger submit
+			$("#files form").submit();
 		});
 		// When all is done we can finally show the modal
 		$("#files").modal("show");
