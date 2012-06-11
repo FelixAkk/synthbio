@@ -19,12 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.simulator.math.odes.MultiTable;
 import org.json.*;
-
-import java.util.Arrays;
 
 /**
  * Utility class.
@@ -104,72 +99,11 @@ public final class Util {
 		return r;
 	}
 
-	/**
-	 * Converts a CSV-string defining the inputs and returns a JSONObject, formatted like:
-	 *{ 
-	 *	"length": 40,
-	 *	"tickWidth": 1,
-	 *	"lowLevel": 0,
-	 *	"highLevel": 200,
-	 *	"values": {
-	 *  	"A": "H",
-	 *	 	"B": "LLLLLLLLLLH",
-	 * 		"C": "LLHHLLHHLL HHLLHHLLHH LLHHLLHHLL HHLLHHLLHH"
-	 *	}
-	 *}
-	 */
-	public static JSONObject csvInputsToJSON(String csv) throws JSONException {
-		// in the given csv files the tickWidth, lowLevel and highLevel is not defined so here are some constants
-		double tickWidth = 10;
-		double lowLevel = 0;
-		double highLevel = 200;
-		// get the lines
-		String[] lines = csv.split("\n");		
-		// the names
-		String[] names = lines[0].split(",");
-		// stepsize in the csv
-		int stepsize = Integer.parseInt(lines[2].split(",")[0]) - Integer.parseInt(lines[1].split(",")[0]);
-		// length = ticks
-		double length = ((lines.length-1)*stepsize)/tickWidth;
-		// looping through the inputs
-		// gets (for example)
-		// name = [1, 0, 1]
-		HashMap<String, ArrayList<Boolean>> map = new HashMap<String, ArrayList<Boolean>>();
-		for(int i = 1; i < lines.length; i++) {
-			String[] parts = lines[i].split(",");
-			for(int j = 1; j < names.length; j++) {
-				String cname = names[j];
-				if(map.get(cname) == null)
-					map.put(cname, new ArrayList<Boolean>());
-				map.get(cname).add(Integer.parseInt(parts[j]) == 1);
-			}
-		}
-		
-		// creating the JSON object
-		JSONObject json = new JSONObject();
-		json.put("length", (double)length);
-		json.put("tickWidth", tickWidth);
-		json.put("lowLevel", lowLevel);
-		json.put("highLevel", highLevel);
-		
-		// for every name, get the values.
-		JSONObject values = new JSONObject();
-		int size = lines.length-1;
-		for(int i = 1; i < names.length; i++) {
-			String cur = "";
-			for(int j = 0; j < size; j++)
-				cur += repeat(map.get(names[i]).get(j)? "H": "L", (int)(length/size));
-			values.put(names[i], cur);
-		}
-		json.put("values", values);
-
-		return json;
-	}
-
-	private static String repeat(String s, int n) {
+	public static String repeat(char s, int n) {
 		String res = "";
-		for(int i = 0; i < n; i++)
+		for(int i = 0; i < n; i++) {
 			res += s;
+		}
 		return res;
 	}
 }

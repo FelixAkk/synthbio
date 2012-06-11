@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.simulator.math.odes.MultiTable;
-
 /**
  * A class for converting Circuit-objects to SBML.
  * @author Albert ten Napel

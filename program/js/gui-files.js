@@ -144,6 +144,20 @@ synthbio.gui.fileSaveDialog = function() {
 		// If all is good (we end up here), and we check if the filename was suffixed by ".syn" and do so if needed.
 		input = synthbio.gui.filenameExtension(input);
 
+		//If circuit is selected to a compound, we also want to save it as a regular circuit so it can be edited later.
+		if(folderName === synthbio.compoundFolder) {
+			synthbio.requests.putFile(input, "", synthbio.model, function(response) {
+				if(response.success === false) {
+					synthbio.gui.showAdModalAlert('files', 'alert-error',
+						'<strong>File was not saved.</strong> ' + response.message + '</div>');
+					synthbio.gui.showAdModalAlert('files', 'alert-error',
+						"<strong>Server error:</strong> ' + response.error + '.", 10000);
+					console.error(response.message);
+					return false;
+				}
+			});
+		}
+		
 		// Save the file, let's see if it works
 		synthbio.requests.putFile(input, folderName, synthbio.model, function(response) {
 			if(response.success === false) {
@@ -197,11 +211,12 @@ synthbio.gui.fileOpenDialog = function() {
 				console.error(response.message);
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not opened.</strong> ' + response.message);
-				//ToDo: Should stop here -- or use else?
+				return;
+			}else {
+				synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
+				// We're done; hide
+				$("#files").modal("hide");
 			}
-			synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
-			// We're done; hide
-			$("#files").modal("hide");
 		});
 		return false; // would prevent the form from making us go anywhere if .preventDefault() fails
 	});
@@ -258,15 +273,10 @@ synthbio.gui.prepareFileDialog = function(event) {
 		synthbio.gui.fTable = $('#files table').dataTable(synthbio.gui.dataTableOptions);
 
 		// Make each row respond to selection
-		// (Jieter) @FelixAkk: could be done more concice with one onclick handler
-		// using the event object passed to the callback to determine the target. 
-		$("#files tbody tr").each(function(index, element) {
-			element = $(element); // extend to provide the .on() function
-			element.on("click", function() {
-				$("#input-filename").val($(this).find("td.filename").html());
-				// Trigger submit
-				$("#files form").submit();
-			});
+		$("#files tbody").on("click", function(event) {
+			$("#input-filename").val($(event.target).parent().find("td.filename").html());
+			// Trigger submit
+			$("#files form").submit();
 		});
 		// When all is done we can finally show the modal
 		$("#files").modal("show");
@@ -274,14 +284,29 @@ synthbio.gui.prepareFileDialog = function(event) {
 
 };
 
+synthbio.gui.newHandler = function() {
+	if(confirm("Caution: this will delete unsaved work!")) {
+		synthbio.newCircuit();
+	}
+};
+
+synthbio.gui.exportHandler = function() {
+	synthbio.requests.validate(
+		synthbio.model,
+		function(response){
+			if(response.success){
+				window.location="/ExportCircuit?circuit="+JSON.stringify(synthbio.model);
+			}else{
+				alert("Can only export valid circuits: "+response.message);
+			}
+		}
+	);
+};
+
 $(document).ready(function() {
 
 	//new button
-	$('#new').on('click', function() {
-		if(confirm("Caution: this will delete unsaved work!")) {
-			synthbio.newCircuit();
-		}
-	});
+	$('#new').on('click', synthbio.gui.newHandler);
 	/**
 	 * Save file if it already has a filename, else prompt the user with the file dialog
 	 */
@@ -305,17 +330,6 @@ $(document).ready(function() {
 	 * Export circuit to SBML
 	 * Refreshes the page to the exporter.
 	 */
-	$('#export').on('click', function() {
-		synthbio.requests.validate(
-			synthbio.model,
-			function(response){
-				if(response.success){
-					window.location="/ExportCircuit?circuit="+JSON.stringify(synthbio.model);
-				}else{
-					alert("Can only export valid circuits: "+response.message);
-				}
-			}
-		);
-	});
+	$('#export').on('click', synthbio.gui.exportHandler);
 
 });

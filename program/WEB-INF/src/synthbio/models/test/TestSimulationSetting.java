@@ -17,13 +17,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
-import java.util.ArrayList;
-
-import synthbio.Util;
 import synthbio.models.*;
 
 /**
@@ -121,4 +117,26 @@ public class TestSimulationSetting{
 		assertEquals(low, ss.getLevelAt("A", 8), delta);
 	}
 
+	@Test
+	public void testFromCSV() throws Exception{
+		String csv = "t,A,B\n0,0,0\n70,1,0\n100,0,1\n140,1,1";
+
+		SimulationSetting ss = new SimulationSetting();
+		ss.loadInputCSV(csv);
+
+		assertThat(ss.getInputAt("A", 1), is(equalTo("L")));
+		assertThat(ss.getInputAt("B", 1), is(equalTo("L")));
+
+		assertThat(ss.getInputAt("A", 70), is(equalTo("H")));
+		assertThat(ss.getInputAt("B", 70), is(equalTo("L")));
+
+		assertThat(ss.getInputAt("A", 100), is(equalTo("L")));
+		assertThat(ss.getInputAt("B", 100), is(equalTo("H")));
+
+		assertThat(ss.getInputAt("A", 140), is(equalTo("H")));
+		assertThat(ss.getInputAt("B", 140), is(equalTo("H")));
+
+		
+		
+	}
 }

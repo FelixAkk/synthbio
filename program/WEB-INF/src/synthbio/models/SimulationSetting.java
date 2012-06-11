@@ -13,19 +13,15 @@
 
 package synthbio.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.Scanner;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONString;
 
 import org.simulator.math.odes.MultiTable;
+
+import synthbio.Util;
 
 public class SimulationSetting {
 
@@ -114,6 +110,9 @@ public class SimulationSetting {
 
 		return this.timeseries.get(protein);
 	}
+	/**
+	 * Alias for getTimeserie().
+	 */
 	public String getInput(String protein){
 		return this.getTimeserie(protein);
 	}
@@ -186,6 +185,77 @@ public class SimulationSetting {
 	public void setHighLevel(double level) {
 		assert level >= 0 : "High level concentration should be positive.";
 		this.highLevel = level;
+	}
+
+	/**
+	 * Takes a CSV string and converts it to the timeseries.
+	 *
+	 * CSV in the form of:
+	 * t,A,B
+	 * 0,0,0
+	 * 70,1,0
+	 * 100,0,1
+	 * 140,1,1
+	 *
+	 * Throws an exception if some error in the format is found.
+	 */
+	public void loadInputCSV(String csv) throws Exception{
+		Scanner scan = new Scanner(csv);
+		HashMap<String, String> series = new HashMap<String, String>();
+		HashMap<Integer, String> names = new HashMap<Integer, String>();
+		String tokens[];
+		int t;
+		int previous_t;
+		String last;
+		
+		//read header.
+		tokens = scan.nextLine().split(",");
+		if(!tokens[0].equals("t")){
+			throw new Exception("Header should start with a 't'.");
+		}
+		if(tokens.length <= 1) {
+			throw new Exception("No actual input data available.");
+		}
+		for(int i=1; i<tokens.length; i++) {
+			series.put(tokens[i], "");
+			names.put(i, tokens[i]);
+		}
+
+		//first data line.
+		tokens = scan.nextLine().split(",");
+		if(Integer.parseInt(tokens[0]) != 0) {
+			throw new Exception("Definition should start with t=0.");
+		}
+		for(int i=1; i<tokens.length; i++) {
+			series.put(names.get(i), tokens[i].equals("1") ? "H" : "L");
+		}
+		previous_t = 0;
+
+		//save all values from t > 0
+		//idea: look to previous value, add t_n-t_{n-1} times the previous
+		//value and add the current value once.
+		while(scan.hasNextLine()){
+			tokens = scan.nextLine().split(",");
+
+			t = Integer.parseInt(tokens[0]);
+			for(int i=1; i<tokens.length; i++) {
+				last = series.get(names.get(i));
+
+				series.put(
+					names.get(i),
+					last +
+					Util.repeat(last.charAt(last.length()-1), ((t - 1) - previous_t)) + 
+					(tokens[i].equals("1") ? "H" : "L")
+				);
+				
+			}
+			previous_t=t;
+		}
+
+		//save the values to the class.
+		for(String protein: series.keySet()) {
+			this.addInput(protein, series.get(protein));
+		}
 	}
 
 	/**

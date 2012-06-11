@@ -21,9 +21,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
-import java.util.ArrayList;
-
-import synthbio.Util;
 import synthbio.models.*;
 
 /**

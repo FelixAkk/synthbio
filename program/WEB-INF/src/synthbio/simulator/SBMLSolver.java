@@ -24,13 +24,12 @@ import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.validator.ModelOverdeterminedException;
 import org.sbml.jsbml.xml.stax.SBMLReader;
-import org.simulator.math.odes.AbstractDESSolver;
-import org.simulator.math.odes.EulerMethod;
-import org.simulator.math.odes.MultiTable;
+import org.simulator.math.odes.*;
 import org.simulator.sbml.SBMLinterpreter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.json.*;
 
@@ -45,9 +44,54 @@ public class SBMLSolver implements Solver {
 	MultiTable inputs;
 	
 	MultiTable result;
+
+	AbstractDESSolver solver;
 	
 	public SBMLSolver(Circuit c){
 		this.circuit = c;
+		// default solver
+		solver = new EulerMethod();
+	}
+
+	public SBMLSolver(Circuit c, String solvername) {
+		this.circuit = c;
+		solver = getSolver(solvername);
+	}
+
+	/**
+	 *	set the solver, available solvers:
+	 *		Name 								Solver
+	 *		adamsbashforth 			Adams Bashforth Solver
+	 *		adamsmoulton				Adams Moulton Solver
+	 *		dormandprince54			Dormand	Prince 54	Solver
+	 *		dormandprince853		Dormand Prince 853 Solver
+	 *		eulermethod					Euler Method (defaust, if the string is empty)
+	 *		graggbulirschstoer	Gragg Bulirsch Stoer Solver
+	 *		highamhall54				Higham Hall 54 Solver
+	 *		rosenbrock					Rosenbrock Solver
+	 *		rungekuttaevent			Runge Kutta Event Solver
+	 */
+	private AbstractDESSolver getSolver(String name) {
+		if(name.equals("adamsbashforth"))
+			return new AdamsBashforthSolver();
+		else if(name.equals("adamsmoulton"))
+			return new AdamsMoultonSolver();
+		else if(name.equals("dormandprince54"))
+			return new DormandPrince54Solver();
+		else if(name.equals("dormandprince853"))
+			return new DormandPrince853Solver();
+		else if(name.equals("eulermethod"))
+			return new EulerMethod();
+		else if(name.equals("graggbulirschstoer"))
+			return new GraggBulirschStoerSolver();
+		else if(name.equals("highamhall54"))
+			return new HighamHall54Solver();
+		else if(name.equals("rosenbrock"))
+			return new RosenbrockSolver();
+		else if(name.equals("rungekuttaevent"))
+			return new RungeKutta_EventSolver();
+		else
+			return new EulerMethod();
 	}
 	
 	public Circuit getCircuit() {
@@ -100,13 +144,15 @@ public class SBMLSolver implements Solver {
 	public MultiTable getResult(){
 		return this.result;
 	}
+
 	/**
  	 * Solves a Circuit.
  	 */
 	public void solve() throws XMLStreamException, ModelOverdeterminedException, DerivativeException {
 		this.result = solve(
 			sbmlToModel(this.getSBML()),
-			circuit.getSimulationSetting().getInputMultiTable()
+			circuit.getSimulationSetting().getInputMultiTable(),
+			solver
 		);
 	}
 
@@ -117,10 +163,9 @@ public class SBMLSolver implements Solver {
 	 * @param		timeEnd 	the endtime of the simulation 
 	 * @return 						A MultiTable-object containing the solution
 	 */
-	public static MultiTable solve(Model model, double stepSize, double timeEnd)
+	public static MultiTable solve(Model model, double stepSize, double timeEnd, AbstractDESSolver solver)
 	throws ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Setup solver
-		AbstractDESSolver solver = new EulerMethod();
 		solver.setStepSize(stepSize);
 		SBMLinterpreter interpreter = new SBMLinterpreter(model);
 		solver.setStepSize(stepSize);
@@ -134,15 +179,22 @@ public class SBMLSolver implements Solver {
 	}
 
 	/**
+   * solve with EulerMethod
+ 	 */
+	public static MultiTable solve(Model model, double stepSize, double timeEnd)
+	throws ModelOverdeterminedException, SBMLException, DerivativeException {
+		return solve(model, stepSize, timeEnd, new EulerMethod());
+	}
+
+	/**
  	 * solves a Model with specific inputs
  	 * @param		model 		the Model-object to simulate.
 	 * @param		inputs		a MultiTable containing the inputs of the model (see CircuitConverter/getInputs)
 	 * @return 						A MultiTable-object containing the solution
  	 */
-	public static MultiTable solve(Model model, MultiTable inputs)
+	public static MultiTable solve(Model model, MultiTable inputs, AbstractDESSolver solver)
 	throws ModelOverdeterminedException, SBMLException, DerivativeException {
 		// Setup solver
-		AbstractDESSolver solver = new EulerMethod();
 		SBMLinterpreter interpreter = new SBMLinterpreter(model);
 		if (solver instanceof AbstractDESSolver) {
 			((AbstractDESSolver)solver).setIncludeIntermediates(false);
@@ -150,6 +202,14 @@ public class SBMLSolver implements Solver {
 		// Compute the solution
 		MultiTable solution = solver.solve(interpreter, inputs.getBlock(0), interpreter.getInitialValues());
 		return solution;
+	}
+
+	/**
+   * Solve with EulerMethod
+   */
+	public static MultiTable solve(Model model, MultiTable inputs)
+	throws ModelOverdeterminedException, SBMLException, DerivativeException {
+		return solve(model, inputs, new EulerMethod());	
 	}
 	
 	/**
