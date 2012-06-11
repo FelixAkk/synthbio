@@ -50,7 +50,7 @@ QUnit.testStart = function(testBatchName) {
 	// ensure a clean circuit slate every test
 	circuit = new synthbio.Circuit(circuitName, circuitDescription, [gate, gate], [signal, signal], []);
 	
-	simulation = new synthbio.SimulationInputs({"testValue":20});
+	simulation = new synthbio.SimulationSetting({"testValue":20});
 };
 
 var circuitJSON=
@@ -293,7 +293,7 @@ $(document).ready(function() {
 			deepEqual(synthbio.CDS.fromJSON("{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}"), cds1, "parsing JSON object of CDS");
 		});
 	
-	module("SimulationInputs");
+	module("SimulationSetting");
 		test("Simulation Inputs should have all base, testing all getters", function(){
 			equal(simulation.options.testValue, 20, "TestValue is set");
 			equal(simulation.getLength(), 80, "getLength works");

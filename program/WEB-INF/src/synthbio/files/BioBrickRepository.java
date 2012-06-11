@@ -14,7 +14,6 @@
 package synthbio.files;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;

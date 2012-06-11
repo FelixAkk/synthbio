@@ -163,11 +163,6 @@ $(document).ready(function() {
 		}
 	});
 
-	//Ask the user for confirmation if the application is closed
-	//$(window).bind("beforeunload", function(event) {
-	//	return "Caution: this will close the application. Unsaved work will be lost!";
-	//});
-
 	// Allow resizing of the simulation tabs
 	var startDragPosition = {x: undefined, y: undefined};
 	$("#simulation-tab .navbar").draggable({

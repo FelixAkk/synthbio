@@ -17,13 +17,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
-import java.util.ArrayList;
-
-import synthbio.Util;
 import synthbio.models.*;
 
 /**
