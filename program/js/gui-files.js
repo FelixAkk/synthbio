@@ -144,6 +144,20 @@ synthbio.gui.fileSaveDialog = function() {
 		// If all is good (we end up here), and we check if the filename was suffixed by ".syn" and do so if needed.
 		input = synthbio.gui.filenameExtension(input);
 
+		//If circuit is selected to a compound, we also want to save it as a regular circuit so it can be edited later.
+		if(folderName === synthbio.compoundFolder) {
+			synthbio.requests.putFile(input, "", synthbio.model, function(response) {
+				if(response.success === false) {
+					synthbio.gui.showAdModalAlert('files', 'alert-error',
+						'<strong>File was not saved.</strong> ' + response.message + '</div>');
+					synthbio.gui.showAdModalAlert('files', 'alert-error',
+						"<strong>Server error:</strong> ' + response.error + '.", 10000);
+					console.error(response.message);
+					return false;
+				}
+			});
+		}
+		
 		// Save the file, let's see if it works
 		synthbio.requests.putFile(input, folderName, synthbio.model, function(response) {
 			if(response.success === false) {
