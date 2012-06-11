@@ -125,34 +125,4 @@ public class CircuitConverter {
 	private static String speciesString(String species, double amount, boolean input) {
 		return "<species id=\""+species+"\" compartment=\"cell\" initialConcentration=\""+amount+"\" boundaryCondition=\""+input+"\" constant=\""+input+"\"/>\n";
 	}
-	
-	/**
-	 * Returns a MultiTable that contains the (simulation)inputs of the circuits.
-	 */
-	public static MultiTable getInputs(Circuit circuit) {
-		double lowLevel = circuit.getSimulationLowLevel();
-		double highLevel = circuit.getSimulationHighLevel();
-		double ticks = circuit.getSimulationTickWidth();
-		int length = circuit.getSimulationLength();
-		// setup time points
-		double[] timePoints = new double[length];
-		for(int i = 0; i < length; i++)
-			timePoints[i] = i*ticks;
-		// setup names
-		String[] names = circuit.getInputs().toArray(new String[circuit.getInputs().size()]);
-		// setup data
-		double[][] data = new double[length][names.length];
-		for(int iName = 0; iName < names.length; iName++) {
-			// get inputs
-			String val = circuit.getSimulationInput(names[iName]);
-			for(int iTime = 0; iTime < length; iTime++) {
-				// current char (H or L)
-				char cur = (val.length() > iTime? val.charAt(iTime): val.charAt(val.length()-1));
-				// set low or high
-				data[iTime][iName] = (cur == 'L'? lowLevel: highLevel);
-			}
-		}
-		return new MultiTable(timePoints, data, names);
-	}
 }
-

@@ -208,6 +208,7 @@ synthbio.gui.fileOpenDialog = function() {
 };
 synthbio.gui.resetFileDialog = function() {
 	$("#files tbody").html('<tr><td>Loading ...</td></tr>');
+	$("#compound-toggle").attr('checked', false);
 	
 	// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
 	$("#files form").off("submit");

@@ -29,7 +29,6 @@ import synthbio.models.CircuitException;
 import synthbio.files.BioBrickRepository;
 import synthbio.simulator.CircuitConverter;
 
-
 /**
  * The circuit factory takes care of creating Circuit objects from JSON
  * strings. Since some information from the BioBrickRepositor has to be
@@ -233,19 +232,20 @@ public class CircuitFactory{
 			if(!(inputs.has("length") && inputs.has("values"))){
 				throw new CircuitException("JSON input definition should contain a length value and a set of input definitions for each input protein");
 			}
+			SimulationSetting ss = new SimulationSetting();
 			
 			//store the simulation length
-			circuit.setSimulationLength(inputs.getInt("length"));
+			ss.setLength(inputs.getInt("length"));
 
 			//tickWidth, lowLevel and highLevel are optional.
 			if(inputs.has("tickWidth")) {
-				circuit.setSimulationTickWidth(inputs.getDouble("tickWidth"));
+				ss.setTickWidth(inputs.getDouble("tickWidth"));
 			}
 			if(inputs.has("lowLevel")) {
-				circuit.setSimulationLowLevel(inputs.getDouble("lowLevel"));
+				ss.setLowLevel(inputs.getDouble("lowLevel"));
 			}
 			if(inputs.has("highLevel")) {
-				circuit.setSimulationHighLevel(inputs.getDouble("highLevel"));
+				ss.setHighLevel(inputs.getDouble("highLevel"));
 			}
 			
 			//store the simulation values for each protein
@@ -257,9 +257,10 @@ public class CircuitFactory{
 					if(!circuit.hasInput(protein)){
 						throw new CircuitException("Input definition has a protein which is not an input in the signal section");
 					}
-					circuit.addSimulationInput(protein, values.getString(protein));
+					ss.addInput(protein, values.getString(protein));
 				}
 			}
+			circuit.setSimulationSetting(ss);
 		
 		}
 		
