@@ -88,6 +88,21 @@ synthbio.util.calculateSumSeries = function(series) {
 	return res;
 };
 
+/**
+ * Appends a trailing path delimiter to the folder name (if not empty)
+ */
+synthbio.util.appendTrailingDelimiter = function(folder) {
+	if (!folder) {
+		return folder;
+	}
+
+	var last = folder[folder.length - 1];
+	if (last !== '\\' && last !== '/') {
+		folder += '/';
+	}
+
+	return folder;
+};
 
 /**
  * Copy the value of form fields to an object.

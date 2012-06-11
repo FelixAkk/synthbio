@@ -55,7 +55,7 @@ public class TestSaveCircuitServlet extends TestCircuitServlet{
 		
 		JSONObject circuit=Util.fileToJSONObject("data/synstore/example.syn");
 		
-		String page=this.getTestPage(this.url+"?filename=test.syn&circuit="+circuit.toString());
+		String page=this.getTestPage(this.url+"?filename=test.syn&folderName=&circuit="+circuit.toString());
 
 		JSONObject response=new JSONObject(page);
 
@@ -91,7 +91,7 @@ public class TestSaveCircuitServlet extends TestCircuitServlet{
 	public void testSave_notDotSyn() throws Exception {
 		String content="abracadabra";
 		String filename="data/synstore/test.foo";
-		String page=this.getTestPage(this.url+"?filename=test.foo&circuit="+content);
+		String page=this.getTestPage(this.url+"?filename=test.foo&folderName=&circuit="+content);
 
 		JSONObject response=new JSONObject(page);
 
@@ -108,7 +108,7 @@ public class TestSaveCircuitServlet extends TestCircuitServlet{
 	@Test
 	public void testSave_noFilename() throws Exception {
 		String content="abracadabra";
-		String page=this.getTestPage(this.url+"?circuit="+content);
+		String page=this.getTestPage(this.url+"?folderName=&circuit="+content);
 
 		JSONObject response=new JSONObject(page);
 
@@ -121,7 +121,7 @@ public class TestSaveCircuitServlet extends TestCircuitServlet{
 	 */
 	@Test
 	public void testSave_noCircuit() throws Exception {
-		String page=this.getTestPage(this.url+"?filename=test.syn");
+		String page=this.getTestPage(this.url+"?filename=test.syn&folderName=");
 
 		JSONObject response=new JSONObject(page);
 

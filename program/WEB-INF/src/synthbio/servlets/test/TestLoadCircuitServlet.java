@@ -46,7 +46,7 @@ public class TestLoadCircuitServlet extends TestCircuitServlet{
 	 */
 	@Test
 	public void testLoad() throws Exception{
-		String page=this.getTestPage(this.url+"?filename=example.syn");
+		String page=this.getTestPage(this.url+"?filename=example.syn&folderName=");
 		JSONObject response=new JSONObject(page);
 
 		//check success and empty message string.
