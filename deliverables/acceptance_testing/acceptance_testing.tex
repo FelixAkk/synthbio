@@ -22,7 +22,7 @@
 
 
 \section{Acceptance testing}
-This section describes the acceptance testing we perform after each SCRUM iteration. The acceptance tests are test if the system meets the requirements made. In particular we test these using the user interface to see if the system can perform the required tasks without problems. With these test we also manually test the user interface to see if there any display artifacts or bugs. Because these acceptance test call all the functionality throughout the whole system from the interface, they also serve as an important part of the integration testing.
+This section describes the acceptance testing we perform after each SCRUM iteration. The acceptance tests are test if the system meets the requirements made, and how the system performs on pseudo-requirements. In particular we test these using the user interface to see if the system can perform the required tasks without problems. With these test we also manually test the user interface to see if there any display artifacts or bugs. Because these acceptance test call all the functionality throughout the whole system from the interface, they also serve as an important part of the integration testing.
 
 For actual testing, the following table can be copied to fill in the last column with feedback. Each of the following given scenarios can be performed step by step as a test by checking if the results correspond and the actions can be performed. The tester can take liberties to deviate from the scenario and play around with the application to gain a opinion about the usability and user friendliness of the application.
 
@@ -42,14 +42,14 @@ For actual testing, the following table can be copied to fill in the last column
 &\step& In the status bar at the left a descriptive tooltip info string should change when hovering over different elements of the GUI. & \\ \midrule
 
 2 &\setcounter{step}{1}& \textbf{File opening (extends scen. 1):}\\
-&\step& Click on the file menu item, which should drop down a sub-menu with highlighting menu items when hovering over with the mouse. \\
-&\step& In the menu click on the open item. The screen should darken and a modal dialog should slide in. Here some files should be listed.\\
+&\step& Click on the "File" menu item, which should drop down a sub-menu with highlighting menu items when hovering over with the mouse. \\
+&\step& In the menu click on the "Open" item, or press CTRL+O. The screen should darken and a modal dialog should slide in. Here some files should be listed.\\
 &\step& Click open, a warning that no filename is provided should show. On clicking a file the circuit should load and the modal slide out.\\\midrule
 
 3 & & \textbf{File saving (extends scen. 2):}\\
 &\step& Click the Save As item in the File menu, a modal dialog should slide in. Check that the filename of the loaded circuit is already displaying in the input field.\\
 &\step& Click on an existing file, and a confirmation prompt should show.
-On a second click on the file is should save and close the dialog.\\
+On a second click on the file is should save and close the dialog. Check that the filename of the circuit is updated to that of the file that was overridden. Check that the description is still the same as the old one.\\
 &\step& When saving again, but entering a unique filename it should save immediately and close the dialog.\\
 &\step& When saving again, but without entering a filename or entering just spaces, a warning should appear that the filename is incorrect.\\
 &\step& Clear the circuit details if set. Click on File and then Save. Check that it should now prompts with the Save As dialog to enter a filename. Save the file and check that the provided filename now shows in the circuit details (top right).\\ \midrule
@@ -71,6 +71,23 @@ On a second click on the file is should save and close the dialog.\\
 \end{center}
 
 \newpage
+\subsection{Usability grading}
+Here the tester can give grades for specific and overall aspects of the usability of the application. Of course written remarks and feedback on certain aspects are also very valuable, and we encourage the tester to make these along with providing grades. On some aspects an explanation is provided in the footnotes.
+
+In the following table, the grades correspond to the following valuations;\\ 1 = very bad, 3 = bad, 5 = moderate/average, 7 = good, 9 = very good.
+\begin{center}
+\begin{tabularx}{\textwidth}{p{10cm} cc cc c cc cc} \toprule
+\textbf{Aspect} & \multicolumn{9}{c}{\textbf{Score on aspect}} \\ \midrule
+Usability of circuit modelling &1&2&3&4&5&6&7&8&9 \\ \midrule
+Usability of circuit management \footnote{The ease of use and learability of importing, exporting, saving, opening, browsing and editing of circuit details.} &1&2&3&4&5&6&7&8&9 \\ \midrule
+Responsiveness &1&2&3&4&5&6&7&8&9 \\ \midrule
+Performance &1&2&3&4&5&6&7&8&9 \\ \midrule
+Affordance \footnote{The degree in which the UI intuitively implies it's functionality and use.} &1&2&3&4&5&6&7&8&9 \\ \midrule
+Presentation of data \footnote{The quality of communication of, for example; simulation output data, validation results, input data, protein listings} &1&2&3&4&5&6&7&8&9 \\ \midrule
+Visual appeal &1&2&3&4&5&6&7&8&9 \\ \midrule
+\textbf{Overal application usability} &\textbf{1}&\textbf{2}&\textbf{3}&\textbf{4}&\textbf{5}&\textbf{6}&\textbf{7}&\textbf{8}&\textbf{9} \\ \bottomrule
+\end{tabularx}
+\end{center}
 
 \end{document}
 

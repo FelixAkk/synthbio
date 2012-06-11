@@ -80,8 +80,8 @@ var diffSizeSeries = [array1,array4];
 		 * Allows you to alter an object by reading selectors and setters from text fields.
 		 */
 		test('form2Object method', function() {
-			synthbio.util.form2object(circuit.getSimulationInputs(), [{ selector: '#testableOption', setter: 'setLength' }]);
+			synthbio.util.form2object(circuit.getSimulationSetting(), [{ selector: '#testableOption', setter: 'setLength' }]);
 
-			equal(circuit.getSimulationInputs().getLength() , "20", "Can use form data to alter Object methods");
+			equal(circuit.getSimulationSetting().getLength() , "20", "Can use form data to alter Object methods");
 		});
  });

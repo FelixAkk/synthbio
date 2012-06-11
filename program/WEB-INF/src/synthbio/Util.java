@@ -19,12 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.simulator.math.odes.MultiTable;
 import org.json.*;
-
-import java.util.Arrays;
 
 /**
  * Utility class.

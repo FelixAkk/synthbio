@@ -15,17 +15,9 @@ package synthbio.models;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONString;
-
-import synthbio.files.BioBrickRepository;
 import synthbio.models.CircuitException;
 import synthbio.models.SimulationSetting;
 import synthbio.simulator.CircuitConverter;
@@ -356,10 +348,6 @@ public class Circuit {
 				throw new CircuitException("Unused output protein ("+output+").");
 			}
 		}
-		//check if one protein is produced by more than one gate or by
-		//a gate and by the inputs.
-		//@todo implement
-
 		//if we arrive here, the protein assignments are valid.
 	}
 
