@@ -247,6 +247,7 @@ synthbio.Circuit.fromMap = function(map) {
 	}
 
 	//Copy remaining properties to object, but forget gates/signals/inputs
+	map = $.extend({}, map);
 	delete map.gates;
 	delete map.signals;
 	delete map.inputs;
