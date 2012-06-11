@@ -29,7 +29,6 @@ import org.simulator.sbml.SBMLinterpreter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 import org.json.*;
 
