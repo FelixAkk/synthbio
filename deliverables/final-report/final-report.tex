@@ -52,13 +52,13 @@ Our program was developed test driven. This makes for very neat code, but it als
 
 A common issue using server-client structure is the actual connection between the two. In the beginning we had some trouble with this but this was mainly caused by out of sync code and trouble with Apache Tomcat. We decided on a standard version of Tomcat and wrote a setup page on the wiki. Afterwards, the problem was solved.
 
-Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work. (NIELS MORE EXPLANATION)
+Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to create connectors and draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work. (NIELS MORE EXPLANATION)
 
 At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from Javascript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved after trying several options.
 
-Throughout this project we worked with GIT to share our code. We also used the ticket mechanism to keep track of what has to be done. GIT is exceptionally good at merging code but it can go wrong. If there is too little communication between two people who are working on the same code, merging can become difficult. However, with some reverts and recommitting these problems were resolved.
+Throughout this project we worked with Git and GitHub to share our code. We also used the ticket mechanism of GitHub to keep track of what had to be done. Git is exceptionally good at merging code but cannot always prevent conflicts. If there is too little communication between two people who are working on the same code, merging can become difficult. However, with some reverts and recommitting these problems were resolved.
 
-Towards the end of our project, we did some major restructuring. We shifted some functions around, changed some names and did some more testing and commenting. We did this based on the SIG evaluation. The biggest changes were made on the client side.
+Towards the end of our project, we did some major restructuring. We shifted some functions around, changed some names and did some more testing and commenting. We did this based on the feedback we got from the SIG evaluation. The biggest changes were made on the client side.
 
 Our program is not only to model circuits but also to calculate and display the outcome. We displayed the outcome in a graph, but this showed some weird results. It turned out that the solver for our circuits had some issues (ALBERT EXPLAIN HOW IT WAS SOLVED).
 
@@ -73,7 +73,7 @@ Our program is not only to model circuits but also to calculate and display the 
 \subsection{Jan Pieter Waagmeester}
 
 \section{Lightweight SCRUM Plans}
-The following pages will include the relevent parts of our lightweight scrumplans for each iteration. The colored and numbers with a hashtag refer to GitHub issues on \url{https://github.com/FelixAkk/synthbio/issues}. For each iteration, a milestone is available providing a nice overview of the issues for each iteration.
+The following pages will include the relevent parts of our lightweight scrumplans for each iteration. The colored links and numbers with a hashtag refer to GitHub issues on \url{https://github.com/FelixAkk/synthbio/issues}. For each iteration, a milestone is available providing a nice overview of the issues for each iteration.
 
 \includepdf[
 	landscape, frame, nup=1x2, pages=2-3,
