@@ -289,6 +289,12 @@ synthbio.gui.prepareFileDialog = function(event) {
 
 };
 
+synthbio.gui.newHandler = function() {
+	if(confirm("Caution: this will delete unsaved work!")) {
+		synthbio.newCircuit();
+	}
+};
+
 synthbio.gui.exportHandler = function() {
 	synthbio.requests.validate(
 		synthbio.model,
@@ -305,11 +311,7 @@ synthbio.gui.exportHandler = function() {
 $(document).ready(function() {
 
 	//new button
-	$('#new').on('click', function() {
-		if(confirm("Caution: this will delete unsaved work!")) {
-			synthbio.newCircuit();
-		}
-	});
+	$('#new').on('click', synthbio.gui.newHandler);
 	/**
 	 * Save file if it already has a filename, else prompt the user with the file dialog
 	 */
