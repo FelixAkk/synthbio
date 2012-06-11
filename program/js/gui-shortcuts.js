@@ -52,7 +52,6 @@ synthbio.gui.handleKeystroke = function(event) {
 				event.preventDefault();
 				break;
 			default:
-				console.log(event.which);
 				break;
 		}
 	} else {
@@ -67,7 +66,6 @@ synthbio.gui.handleKeystroke = function(event) {
 				$('#define-inputs').modal('show');
 				break;
 		}
-		console.log(event.which);
 	}
 };
 
