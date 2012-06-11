@@ -50,7 +50,7 @@ public class TestListCircuitsServlet extends TestCircuitServlet{
 	 */
 	@Test
 	public void testList() throws Exception{
-		String page=this.getTestPage(this.url+"?action=list&folderName=");
+		String page=this.getTestPage(this.url+"?action=list");
 
 		JSONObject response=new JSONObject(page);
 
