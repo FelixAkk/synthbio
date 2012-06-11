@@ -25,10 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import synthbio.files.SynRepository;
 import synthbio.json.JSONResponse;
-
-import synthbio.Util;
 
 /**
  * Servlet ListCircuitServlet serves a list of circuit files.

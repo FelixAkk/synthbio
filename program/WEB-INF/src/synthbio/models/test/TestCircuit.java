@@ -18,12 +18,10 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
 
-import synthbio.Util;
 import synthbio.models.*;
 
 /**
@@ -64,15 +62,15 @@ public class TestCircuit{
 	public void testConstructor(){
 		Circuit c=new Circuit("Test");
 
-		assertEquals("Test", c.getName());
+		assertThat(c.getName(), is(equalTo("Test")));
 	}
 
 	@Test
 	public void testConstructor2(){
 		Circuit c=new Circuit("Test", "Description");
 
-		assertEquals("Test", c.getName());
-		assertEquals("Description", c.getDescription());
+		assertThat(c.getName(), is(equalTo("Test")));
+		assertThat(c.getDescription(), is(equalTo("Description")));
 		assertEquals(new ArrayList<Gate>(), c.getGates());
 	}
 

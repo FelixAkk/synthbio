@@ -13,35 +13,24 @@
 
 package synthbio.simulator.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.*;
 import org.junit.Test;
-import java.util.ArrayList;
 import java.io.IOException;
-import javax.xml.stream.XMLStreamException;
-import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.validator.ModelOverdeterminedException;
-import org.apache.commons.math.ode.DerivativeException;
 
 import org.simulator.math.odes.MultiTable;
 import synthbio.simulator.SBMLSolver;
 import synthbio.simulator.CircuitConverter;
 
 import java.awt.Dimension;
-import java.util.Arrays;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import java.util.Collections;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.xml.stax.SBMLReader;
-import org.simulator.math.odes.AbstractDESSolver;
-import org.simulator.math.odes.EulerMethod;
-import org.simulator.sbml.SBMLinterpreter;
 import org.json.JSONException;
+
 import synthbio.models.CircuitException;
 import synthbio.models.Circuit;
 import synthbio.models.CircuitFactory;
