@@ -104,5 +104,12 @@ public final class Util {
 		return r;
 	}
 
+	public static String repeat(char s, int n) {
+		String res = "";
+		for(int i = 0; i < n; i++) {
+			res += s;
+		}
+		return res;
+	}
 }
 
