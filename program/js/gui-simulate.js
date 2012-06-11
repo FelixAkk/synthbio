@@ -367,9 +367,7 @@ $(document).ready(function() {
 			synthbio.model,
 			$('#choose-solver').val(),
 			function(response){
-				if(response.message !== '') {
-					//care
-				}else{
+				if(response.message === '') {
 					synthbio.gui.plotOutput(response.data);
 				}
 			}

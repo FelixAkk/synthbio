@@ -174,44 +174,61 @@
 			<h3>Define input signals</h3>
 		</div>
 		<div class="modal-body">
-			<div id="simulation-advanced-toggle" class="btn btn-small">Advanced</div>
-			<div id="simulation-advanced" class="hide">
-				<form class="form-horizontal">
-					<div class="control-group">
-						<label class="control-label" for="simulate-tick-width">Tick width</label>
-						<div class="controls">
-							<div class="input-append">
-								<input type="text" id="simulate-tick-width" class="input-mini" /><span class="add-on">s</span>
+			<ul id="simulation-tabs" class="nav nav-tabs" data-tabs="tabs">
+				<li class="active"><a href="#simulation-editor" data-toggle="tab">Editor</a></li>
+				<li><a href="#simulation-csv" data-toggle="tab">CSV</a></li>
+				<li><a href="#simulation-advanced" data-toggle="tab">Advanced</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="simulation-editor">
+					<form class="form-horizontal">
+						<div class="control-group">
+							<label class="control-label" for="simulate-tick-width">Tick width</label>
+							<div class="controls">
+								<div class="input-append">
+									<input type="text" id="simulate-tick-width" class="input-mini" /><span class="add-on">s</span>
+								</div>
+								<p class="help-block">Duration of each tick in seconds.</p>
 							</div>
-							<p class="help-block">Duration of each tick in seconds.</p>
 						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label" for="simulate-length">Length</label>
-						<div class="controls">
-							<div class="input-append">
-								<input type="text" id="simulate-length" class="input-mini" />	<span class="add-on">ticks</span>
+						<div class="control-group">
+							<label class="control-label" for="simulate-length">Length</label>
+							<div class="controls">
+								<div class="input-append">
+									<input type="text" id="simulate-length" class="input-mini" />	<span class="add-on">ticks</span>
+								</div>
+								<p class="help-block">Number of ticks to be simulated.</p>
 							</div>
-							<p class="help-block">Number of ticks to be simulated.</p>
 						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">Levels</label>
-						<div class="controls">
-							<div class="input-prepend input-append">
-								<span class="add-on">low</span><input type="text" id="simulate-low-level" class="input-mini" /><span class="add-on" title="micromole/L">&micro;M</span>
+					</form>
+					<div class="x-axis" title="One tick equals one second"> t &rarr;</div>
+					<div id="input-signals"></div>
+				</div>
+				<div class="tab-pane" id="simulation-csv">
+					<p>
+						Please provide timings for the simulation in the textarea below. Use a CSV format with <code>t,IN1,IN2</code> on the first row, the initial values in the second row (<code>0,level,level</code>) and row for each transition likewise. The last row will denote the end of the simulation.<br >
+						Spaces and empty rows will be ignored.
+					</p>
+					<textarea id="simulation-csv-textarea"></textarea>
+				</div>
+				<div  class="tab-pane" id="simulation-advanced">
+					<form class="form-horizontal">
+						<div class="control-group">
+							<label class="control-label">Levels</label>
+							<div class="controls">
+								<div class="input-prepend input-append">
+									<span class="add-on">low</span><input type="text" id="simulate-low-level" class="input-mini" /><span class="add-on" title="micromole/L">&micro;M</span>
+								</div>
+								&nbsp;&nbsp;
+								<div class="input-prepend input-append">
+									 <span class="add-on">high</span><input type="text" id="simulate-high-level" class="input-mini" /><span class="add-on" title="micromole/L">&micro;M</span>
+								</div>
+								<p class="help-block">Concentrations for input levels.</p>
 							</div>
-							&nbsp;&nbsp;
-							<div class="input-prepend input-append">
-								 <span class="add-on">high</span><input type="text" id="simulate-high-level" class="input-mini" /><span class="add-on" title="micromole/L">&micro;M</span>
-							</div>
-							<p class="help-block">Concentrations for input levels.</p>
 						</div>
-					</div>
-				</form>
+					</form>
+				</div>
 			</div>
-			<div class="x-axis" title="One tick equals one second"> t &rarr;</div>
-			<div id="input-signals"></div>
 		</div>
 		<div class="modal-footer">
 			<div id="save-inputs-and-simulate" class="btn" data-dismiss="modal">Save &amp; simulate</div>

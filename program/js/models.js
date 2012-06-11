@@ -597,10 +597,10 @@ synthbio.CDS.prototype.toString = function(){
 synthbio.SimulationSetting = function(options, values) {
 	this.options = $.extend(
 		{
-			"length": 80,				//total ticks.
-			"tickWidth": 1,			//length in seconds for one tick.
-			"lowLevel": 0,			//concentration regarded as low.
-			"highLevel": 200		//concentration regarded as high.
+			"length": 40,				//total ticks.
+			"tickWidth": 10,			//length in seconds for one tick.
+			"lowLevel": 0,				//concentration regarded as low.
+			"highLevel": 200			//concentration regarded as high.
 		}, options);
 		
 	/**
@@ -633,6 +633,9 @@ synthbio.SimulationSetting.prototype.getCircuit = function() {
 };
 
 synthbio.SimulationSetting.prototype.setValue = function(protein, value) {
+	if(this.getCSV()!=="") {
+		throw "Should not try to get values when using CSV";
+	}
 	this.updateInputs();
 	if(!this.values[protein]){
 		throw "No such input signal in circuit: "+protein; 
@@ -641,6 +644,20 @@ synthbio.SimulationSetting.prototype.setValue = function(protein, value) {
 	this.values[protein]=value.replace(/[^HL]/g, "");
 };
 
+/**
+ * Get the CSV values.
+ */
+synthbio.SimulationSetting.prototype.getCSV = function() {
+	if(this.values instanceof Object){
+		return "";
+	}else{
+		return this.values;
+	}
+};
+synthbio.SimulationSetting.prototype.setCSV = function(csv) {
+	this.values = csv;
+	console.log('setCSV(', csv, ')', this);
+};
 
 synthbio.SimulationSetting.prototype.getLength = function() {
 	return this.options.length;
@@ -674,6 +691,9 @@ synthbio.SimulationSetting.prototype.setHighLevel = function(level) {
  * Retrieve the Simulation input values for an input signal.
  */
 synthbio.SimulationSetting.prototype.getValue = function(protein) {
+	if(this.getCSV()!=="") {
+		throw "Should not try to get values when using CSV";
+	}
 	this.updateInputs();
 	if(!this.values[protein]){
 		throw "No such input signal in circuit: "+protein; 
@@ -689,6 +709,11 @@ synthbio.SimulationSetting.prototype.getValue = function(protein) {
 synthbio.SimulationSetting.prototype.updateInputs = function(){
 	if(!this.circuit){
 		throw "Circuit should be bound to SimulationSetting first!";
+	}
+	
+	if(this.getCSV() !== "") {
+		console.log('csv active, dont change...');
+		return;
 	}
 	
 	//Make a copy of the current values.
@@ -711,7 +736,9 @@ synthbio.SimulationSetting.prototype.updateInputs = function(){
  */
 synthbio.SimulationSetting.prototype.getValues = function() {
 	synthbio.util.assert(this.getCircuit !== undefined, "Can only get values after circuit is bound to simulation");
-	this.updateInputs();
+	if(this.getCSV() === "") {
+		this.updateInputs();
+	}
 	return this.values;
 };
 

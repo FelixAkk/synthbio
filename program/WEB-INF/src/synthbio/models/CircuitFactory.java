@@ -243,19 +243,23 @@ public class CircuitFactory{
 			}
 			
 			//store the simulation values for each protein
-			JSONObject values = inputs.getJSONObject("values");
-			if(values.length() == 0) {
-				throw new CircuitException("No actual simulation inputs defined.");
+			if(inputs.hasString("values")) {
+				ss.loadInputCSV(inputs.getString("values");
 			}else{
-				for(String protein: values.getNames(values)){
-					if(!circuit.hasInput(protein)){
-						throw new CircuitException("Input definition has a protein which is not an input in the signal section");
+				JSONObject values = inputs.getJSONObject("values");
+				
+				if(values.length() == 0) {
+					throw new CircuitException("No actual simulation inputs defined.");
+				}else{
+					for(String protein: values.getNames(values)){
+						if(!circuit.hasInput(protein)){
+							throw new CircuitException("Input definition has a protein which is not an input in the signal section");
+						}
+						ss.addInput(protein, values.getString(protein));
 					}
-					ss.addInput(protein, values.getString(protein));
 				}
 			}
 			circuit.setSimulationSetting(ss);
-		
 		}
 		
 		return circuit;
