@@ -610,7 +610,7 @@ synthbio.SimulationSetting = function(options, values) {
 	
 	//if values is undefined, but set in the options map, copy it.
 	if(!values && this.options.values) {
-		this.values=this.options.values;
+		this.values = this.options.values;
 		delete this.options.values;
 	}
 
@@ -645,7 +645,7 @@ synthbio.SimulationSetting.prototype.setValue = function(protein, value) {
 };
 
 /**
- * Get the CSV values.
+ * Get the CSV values, or "" if values is an object.
  */
 synthbio.SimulationSetting.prototype.getCSV = function() {
 	if(this.values instanceof Object){
@@ -654,9 +654,12 @@ synthbio.SimulationSetting.prototype.getCSV = function() {
 		return this.values;
 	}
 };
+
+/**
+ * Set the CSV values. Will replace existing values object.
+ */
 synthbio.SimulationSetting.prototype.setCSV = function(csv) {
 	this.values = csv;
-	console.log('setCSV(', csv, ')', this);
 };
 
 synthbio.SimulationSetting.prototype.getLength = function() {
@@ -721,9 +724,10 @@ synthbio.SimulationSetting.prototype.updateInputs = function(){
 	var self=this;
 	$.each(this.circuit.getInputSignals(), function(index, protein){
 		if(self.values[protein]){
-			//keep old value
+			//If contained in the old object, keep value
 			newValues[protein]=self.values[protein];
 		}else{
+			//otherwise, insert a low.
 			newValues[protein]="L";
 		}
 	});

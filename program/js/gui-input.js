@@ -207,8 +207,6 @@ synthbio.gui.saveInputs = function(circuit) {
 		]
 	);
 
-	console.log("csv mode: ", $('#simulation-csv-textarea').val());
-	
 	if($('#simulation-csv-textarea').val() !== "") {
 		simulationSetting.setCSV($('#simulation-csv-textarea').val());
 	}else{
@@ -227,18 +225,7 @@ synthbio.gui.saveInputs = function(circuit) {
 			simulationSetting.setValue(protein, signal);
 		});
 	}
-	console.log(simulationSetting);
 };
-
-	
-
-/**
- * Update the editor according to the new settings for simulation length.
- */
-//~ synthbio.gui.updateInputEditor = function() {
-	//~ synthbio.gui.saveInputs();
-	//~ synthbio.gui.inputEditor();
-//~ };
 
 $(document).ready(function() {
 	/**
@@ -261,31 +248,59 @@ $(document).ready(function() {
 		}else{
 			// build the editor
 			synthbio.gui.updateInputEditor();
-			
-
 		}
 		
 		$('#simulate-low-level').val(simulationSetting.getLowLevel());
 		$('#simulate-high-level').val(simulationSetting.getHighLevel());
 		$('#simulation-csv-textarea').val(simulationSetting.getCSV());
 	});
+
+	/**
+	 * When the simulation-editor tab is clicked, check if csv is active,
+	 * and warn about loosing data if proceeding.
+	 */
 	$('#simulation-tabs a[href="#simulation-editor"]').on('click', function(event) {
 		var simulationSetting = synthbio.model.getSimulationSetting();
 		
 		if(simulationSetting.getCSV() !== "") {
-			if(confirm("When using the input editor, csv input will be lost!")){
+			if(confirm("When using the input editor, CSV input will be lost!")){
 				//emtpy csv and build the editor.
 				simulationSetting.setCSV({});
-				synthbio.gui.updateInputEditor();
+				if(simulationSetting.getLength() == '') {
+					simulationSetting.setLength(40);
+				}
+				if(simulationSetting.getTickWidth() == '') {
+					simulationSetting.setTickWidth(10);
+				}
 				
+				synthbio.gui.updateInputEditor();
 			}else{
-				//don't go there...
+				//If the confirm is answered negative, don't go to the tab.
 				event.preventDefault();
 				return false;
 			}
 		}
 	});
-	
+
+	/**
+	 * When the simulation-csv tab is clicked, check if the editor is active,
+	 * and warn about loosing data if proceeding...
+	 */
+	$('#simulation-tabs a[href="#simulation-csv"]').on('click', function(event) {
+		var simulationSetting = synthbio.model.getSimulationSetting();
+		
+		if(simulationSetting.getCSV() == "") {
+			if(confirm("When using CSV input, the values in the input editor will be lost!")){
+				//Empty the editor, set CSV textarea to
+				simulationSetting.setCSV("t,");
+				$('#simulation-csv-textarea').val('t,');
+			}else{
+				//If the confirm is answered negative, don't go to the tab.
+				event.preventDefault();
+				return false;
+			}
+		}
+	});
 	// Rebuild the editor it after changing simulation length
 	$('#simulate-length').on('change keyup', function() {
 		synthbio.gui.saveInputs();
