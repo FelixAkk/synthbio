@@ -86,6 +86,9 @@ public class SimulateCircuitServlet extends CircuitServlet {
 		// Fire up the right solver and solve.
 		// get the chosen solver
 		String solverType = request.getParameter("solver");
+		if(solverType == null){
+			solverType = "eulermethod";
+		}
 		Solver solver = null;
 		try {
 			// if jieter was chosen, use JieterSolver.

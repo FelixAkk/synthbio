@@ -243,9 +243,13 @@ public class CircuitFactory{
 			}
 			
 			//store the simulation values for each protein
-			if(inputs.hasString("values")) {
-				ss.loadInputCSV(inputs.getString("values");
-			}else{
+			if(inputs.getJSONObject("values") == null) {
+				try{
+					ss.loadInputCSV(inputs.getString("values"));
+				}catch(Exception e) {
+					throw new CircuitException("Error parsing CSV: "+e.getMessage());
+				}
+			}else {
 				JSONObject values = inputs.getJSONObject("values");
 				
 				if(values.length() == 0) {

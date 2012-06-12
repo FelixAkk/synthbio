@@ -551,7 +551,7 @@ synthbio.gui.draggableOptions = {
  * @param circuit Map that maps to synthbio.Circuit
  */
 synthbio.gui.addCompoundGate = function(circuit) {
-	model = synthbio.Circuit.fromMap(circuit);
+	var model = synthbio.Circuit.fromMap(circuit);
 
 	// Create new display element
 	var element = $('<div class="gate compound"><img src="img/gates/compound.svg"/>'
@@ -568,7 +568,7 @@ synthbio.gui.addCompoundGate = function(circuit) {
 			var pos = synthbio.gui.draggableOptions.stop.apply(this, arguments);
 			if (pos !== false) {
 				//From map again here, to make sure new objects are used
-				c = synthbio.Circuit.fromMap(circuit);
+				var c = synthbio.Circuit.fromMap(circuit);
 				synthbio.loadCompoundCircuit(c, pos);
 			}
 		}

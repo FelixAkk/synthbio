@@ -42,27 +42,27 @@ synthbio.gui.updateInputEditor = function(){
 	//iterate over signals and create signal input editors.
 	$.each(
 		inputs.getValues(),
-		function(name, ticks){
-			var signalEditor=$('<div class="signal" id="signal'+name+'">'+name+': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
+		function(name, ticks) {
+			var signalEditor = $('<div class="signal" id="signal' + name + '">' + name + ': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
 			var levels='<div class="levels">';
 			var currentLevel="L";
 			var i;
 			var cssClass;
-			for(i=0; i<inputs.getLength(); i++){
-				if(i < ticks.length){
-					currentLevel=ticks.charAt(i);
+			for(i=0; i<inputs.getLength(); i++) {
+				if(i < ticks.length) {
+					currentLevel = ticks.charAt(i);
 				}
 				cssClass = 'tick ';
-				cssClass += (currentLevel==="H" ? 'high': 'low')+' ';
+				cssClass += (currentLevel === "H" ? 'high': 'low')+' ';
 				
 				//add colored markers on each quarter to see where we are
 				if(i !== 0 && i !== inputs.getLength() && (i % Math.floor(inputs.getLength()/4)) === 0) {
 					cssClass += 'marker ';
 				}
 				
-				levels+='<div class="' + cssClass + '" id="tick'+name+'_'+i+ '"></div>';
+				levels += '<div class="' + cssClass + '" id="tick' + name + '_' + i +  '"></div>';
 			}
-			levels+='</div>';
+			levels += '</div>';
 					
 			signalEditor.append(levels);
 			$('#input-signals').append(signalEditor);
@@ -71,13 +71,13 @@ synthbio.gui.updateInputEditor = function(){
 	
 	//attach click listener to the high/low button.
 	$('.toggle-highlow').on('click', function() {
-		var self=$(this);
+		var self = $(this);
 		self.toggleClass('high').toggleClass('low');
 		self.parent().find('.levels div').toggleClass('high').toggleClass('low');
 	});
 	
 	//click listener for each .levels div containing ticks.
-	var selectionStart={};
+	var selectionStart = {};
 	
 	//utility functions to filter out protein and tickid.
 	var getProtein = function(tick) {
@@ -91,7 +91,7 @@ synthbio.gui.updateInputEditor = function(){
 	$('.levels').on({
 		/* At mousedown, save the tick it occured on.
 		 */
-		'mousedown': function(event){
+		'mousedown': function(event) {
 			var tick=$(event.target);
 			if(tick.hasClass('tick')){
 				selectionStart[getProtein(tick)]=getTickId(tick);
@@ -244,12 +244,14 @@ $(document).ready(function() {
 	/**
 	 * Rebuild the editor on every show of the modal.
 	 */
-	$('#define-inputs').on('show', function() {
+	$('#define-inputs').on('show', function(event) {
+		console.log( 'define-inputs (show)', event);
 		var simulationSetting = synthbio.model.getSimulationSetting();
 		//if csv is not empty, bring up that tab.
 		if(simulationSetting.getCSV() !== "") {
 			//This should be possible by calling $('<tab-li>').tab('show'),
-			//but that invokes recursion....
+			//but that invokes recursion, since the define-inputs on('show'
+			//is also triggered for the tab...
 			$('.tab-pane').removeClass('active');
 			$('#simulation-tabs li').removeClass('active');
 
@@ -283,6 +285,7 @@ $(document).ready(function() {
 			}
 		}
 	});
+	
 	// Rebuild the editor it after changing simulation length
 	$('#simulate-length').on('change keyup', function() {
 		synthbio.gui.saveInputs();

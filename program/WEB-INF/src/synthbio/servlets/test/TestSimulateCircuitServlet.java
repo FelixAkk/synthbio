@@ -44,7 +44,7 @@ public class TestSimulateCircuitServlet extends TestCircuitServlet{
 
 		JSONObject response=new JSONObject(page);
 		
-		assertTrue("Response should be successfull", response.getBoolean("success"));
+		assertTrue(response.getString("message"), response.getBoolean("success"));
 
 		JSONObject data=response.getJSONObject("data");
 		assertThat(data.getString("solver"), equalTo("SBMLSimulator"));

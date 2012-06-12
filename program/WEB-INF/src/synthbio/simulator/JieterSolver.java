@@ -70,12 +70,6 @@ public class JieterSolver implements Solver{
 	public int result_resolution=10;
 
 	/**
-	 * Total calculations steps.
-	 */
-	public int calculation_steps;
-
-
-	/**
 	 * Construct the Solver.
 	 */
 	public JieterSolver(Circuit circuit) {
@@ -84,8 +78,6 @@ public class JieterSolver implements Solver{
 		reactions = new ArrayList<Reaction>();
 		species = new HashSet<String>();
 
-		this.calculation_steps = circuit.getSimulationSetting().getLength() * calculation_resolution;
-		
 		this.initReactions();
 	}
 
@@ -166,10 +158,23 @@ public class JieterSolver implements Solver{
 	}
 
 	/**
+	 * Get the number of calculation steps.
+	 */
+	public int getCalculationSteps(){
+		SimulationSetting ss = circuit.getSimulationSetting();
+		return (int)Math.floor(
+			(ss.getLength() * calculation_resolution) * ss.getTickWidth()
+		);
+	}
+	
+	/**
 	 * Get the number of steps in the resulting data set.
 	 */
 	public int getResultSteps(){
-		return this.circuit.getSimulationSetting().getLength() * this.result_resolution;
+		SimulationSetting ss = this.circuit.getSimulationSetting();
+		return (int)Math.floor(
+			(ss.getLength() * this.result_resolution) * ss.getTickWidth()
+		);
 	}
 
 	/**
@@ -208,7 +213,7 @@ public class JieterSolver implements Solver{
 		double delta_t = 1.0/calculation_resolution;
 		
 		//time steps for t >= 1.
-		for(int t=1; t<calculation_steps; t++) {
+		for(int t=1; t<this.getCalculationSteps(); t++) {
 			//insert inputs for this step.
 			for(String input: circuit.getInputs()) {
 				set(input, t, getInputLevelAt(input, t));

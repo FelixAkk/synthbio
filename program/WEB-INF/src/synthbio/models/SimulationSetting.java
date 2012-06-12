@@ -57,7 +57,7 @@ public class SimulationSetting {
 	}
 
 	/**
-	 * Get the length of the simulation to be executed on this circuit.
+	 * Get the number of ticks to be executed on this circuit.
 	 */
 	public int getLength() {
 		return this.length;
@@ -118,31 +118,53 @@ public class SimulationSetting {
 	}
 
 	/**
-	 * Return high or low for the protein 'p' at tick 'second'
+	 * Return high or low for the protein at second
 	 *
-	 * @param p Input protein.
+	 * @param protein Input protein.
 	 * @param second Second to get a result for.
 	 */
 	public String getInputAt(String protein, int second) {
-		//assertIsInputProtein(p);
-		assert second <= this.getLength() : "Tick should not exceed simulation length.";
+		int tick = (int)Math.floor(second/this.getTickWidth());
 
-		String input=this.getTimeserie(protein);
-		if (second>=input.length()) {
+		return getInputAtTick(protein, tick);
+	}
+	
+	/**
+	 * Get high or low for protein at tick.
+	 * @param protein Input protein
+	 * @param tick Tick to get a result for.
+	 */
+	public String getInputAtTick(String protein, int tick) {
+		//assertIsInputProtein(p);
+		assert tick <= this.getLength() : "Tick should not exceed simulation length.";
+
+		String input = this.getTimeserie(protein);
+		if (tick >= input.length()) {
 			//return last defined tick if requested tick exceeds the
 			//defined input length.
 			return input.substring(input.length() - 1);
 		} else {
 			//return the character at position tick.
-			return input.substring(second, second + 1);
+			return input.substring(tick, tick + 1);
 		}
 	}
 
 	/**
-	 * Return a concentration for protein p at second
+	 * Return a concentration for protein p at second.
 	 */ 
-	public Double getLevelAt(String p, int second) {
-		if(this.getInputAt(p, second).equals("H")){
+	public Double getLevelAt(String protein, int second) {
+		if(this.getInputAt(protein, second).equals("H")){
+			return this.getHighLevel();
+		}else{
+			return this.getLowLevel();
+		}
+	}
+
+	/**
+	 * Return a concentration for a protein at tick.
+	 */
+	public Double getLevelAtTick(String protein, int tick) {
+		if(this.getInputAtTick(protein, tick).equals("H")){
 			return this.getHighLevel();
 		}else{
 			return this.getLowLevel();
@@ -256,6 +278,9 @@ public class SimulationSetting {
 		for(String protein: series.keySet()) {
 			this.addInput(protein, series.get(protein));
 		}
+
+		//set tick width to 1, since we just converted every second to a tick.
+		this.setTickWidth(1);
 	}
 
 	/**
@@ -282,7 +307,7 @@ public class SimulationSetting {
 		// setup time points
 		double[] timePoints = new double[this.getLength()];
 		for(int i = 0; i < length; i++) {
-			timePoints[i] = i*this.getTickWidth();
+			timePoints[i] = i * this.getTickWidth();
 		}
 		
 		// setup names
@@ -291,8 +316,8 @@ public class SimulationSetting {
 		// setup data
 		double[][] data = new double[length][names.length];
 		for(int iName = 0; iName < names.length; iName++) {
-			for(int iTime = 0; iTime < length; iTime++) {
-				data[iTime][iName] = this.getLevelAt(names[iName], iTime);
+			for(int iTime = 0; iTime < this.getLength(); iTime++) {
+				data[iTime][iName] = this.getLevelAtTick(names[iName], iTime);
 			}
 		}
 

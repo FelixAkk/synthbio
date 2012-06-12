@@ -150,7 +150,7 @@
 		</div>
 		<div class="modal-body">
 			<p>
-				Project Zelula is a modelling and simulation package to simulate the protein <em>logic</em> in a cell. With a provided set of BioBricks representing AND- and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuit can be simulated using an ODE-solver.
+				Project Zelula is a modelling and simulation package to simulate the protein <em>logic</em> in a cell. With a provided set of BioBricks representing AND and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuit can be simulated using an solver.
 			</p>
 			<p>
 				Project Zelula is a <em>Contextproject</em> at TU Delft, university of technology. 
@@ -179,7 +179,9 @@
 				<li><a href="#simulation-csv" data-toggle="tab">CSV</a></li>
 				<li><a href="#simulation-advanced" data-toggle="tab">Advanced</a></li>
 			</ul>
+			
 			<div class="tab-content">
+				<!-- Signal editor tab -->
 				<div class="tab-pane active" id="simulation-editor">
 					<form class="form-horizontal">
 						<div class="control-group">
@@ -204,13 +206,17 @@
 					<div class="x-axis" title="One tick equals one second"> t &rarr;</div>
 					<div id="input-signals"></div>
 				</div>
+
+				<!-- CSV tab -->
 				<div class="tab-pane" id="simulation-csv">
 					<p>
-						Please provide timings for the simulation in the textarea below. Use a CSV format with <code>t,IN1,IN2</code> on the first row, the initial values in the second row (<code>0,level,level</code>) and row for each transition likewise. The last row will denote the end of the simulation.<br >
+						Please provide timings for the simulation in the textarea below. Use a CSV format with <code>t,IN1,IN2,...</code> on the first row, the initial values in the second row (<code>0,level,level,...</code>) and row for each transition likewise. The last row will denote the end of the simulation.<br >
 						Spaces and empty rows will be ignored.
 					</p>
 					<textarea id="simulation-csv-textarea"></textarea>
 				</div>
+				
+				<!-- advanced tab -->
 				<div  class="tab-pane" id="simulation-advanced">
 					<form class="form-horizontal">
 						<div class="control-group">
