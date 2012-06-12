@@ -222,4 +222,24 @@ public class TestCircuitFactory{
 			mbbr
 		);
 	}
+	/**
+	 * Test a Circuit fromJSON conversion with csv input definition.
+	 *
+	 * The circuit is valid.
+	 */
+	@Test
+	public void test_handoutOr() throws Exception {
+		Circuit c=this.loadTestFile("handout-or.json");
+
+		String[] expectedInputs={"A", "M"};
+		assertThat(c.getInputs(), hasItems(expectedInputs));
+		assertTrue(c.hasInput("A"));
+		assertTrue(c.hasInput("M"));
+
+		SimulationSetting ss = c.getSimulationSetting();
+		
+		
+		assertThat(ss.getLowLevel(), equalTo(0.0));
+		assertThat(ss.getHighLevel(), equalTo(200.0));
+	}
 }

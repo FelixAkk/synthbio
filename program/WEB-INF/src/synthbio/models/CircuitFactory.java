@@ -228,13 +228,6 @@ public class CircuitFactory{
 			}
 			SimulationSetting ss = new SimulationSetting();
 			
-			//store the simulation length
-			ss.setLength(inputs.getInt("length"));
-
-			//tickWidth, lowLevel and highLevel are optional.
-			if(inputs.has("tickWidth")) {
-				ss.setTickWidth(inputs.getDouble("tickWidth"));
-			}
 			if(inputs.has("lowLevel")) {
 				ss.setLowLevel(inputs.getDouble("lowLevel"));
 			}
@@ -243,23 +236,31 @@ public class CircuitFactory{
 			}
 			
 			//store the simulation values for each protein
-			if(inputs.getJSONObject("values") == null) {
+			Object values = inputs.get("values");
+			if(values instanceof String) {
 				try{
 					ss.loadInputCSV(inputs.getString("values"));
 				}catch(Exception e) {
 					throw new CircuitException("Error parsing CSV: "+e.getMessage());
 				}
 			}else {
-				JSONObject values = inputs.getJSONObject("values");
+				//store the simulation length
+				ss.setLength(inputs.getInt("length"));
+
+				//tickWidth, lowLevel and highLevel are optional.
+				if(inputs.has("tickWidth")) {
+					ss.setTickWidth(inputs.getDouble("tickWidth"));
+				}
+				JSONObject valuesJSON = inputs.getJSONObject("values");
 				
-				if(values.length() == 0) {
+				if(valuesJSON.length() == 0) {
 					throw new CircuitException("No actual simulation inputs defined.");
 				}else{
-					for(String protein: values.getNames(values)){
+					for(String protein: JSONObject.getNames(valuesJSON)){
 						if(!circuit.hasInput(protein)){
 							throw new CircuitException("Input definition has a protein which is not an input in the signal section");
 						}
-						ss.addInput(protein, values.getString(protein));
+						ss.addInput(protein, valuesJSON.getString(protein));
 					}
 				}
 			}
