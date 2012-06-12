@@ -136,3 +136,28 @@ synthbio.util.form2object = function(target, mappings) {
 		}
 	});
 };
+
+/**
+ * Format a date to a standard datetime format (without seconds).
+ *
+ * example: 2012-06-11 16:36
+ *
+ * depends on jqueryUI
+ */
+synthbio.util.formatDatetime = function(date) {
+	if(!(date instanceof Date)) {
+		date = new Date(date);
+	}
+	var datetime = $.datepicker.formatDate("yy-mm-dd", date) + " ";
+	if(date.getHours() <= 9) {
+		datetime += "0";
+	}
+	datetime += date.getHours();
+	datetime += ":";
+	if(date.getMinutes() <= 9) {
+		datetime += "0";
+	}
+	datetime += date.getMinutes();
+	return datetime;
+};
+ 

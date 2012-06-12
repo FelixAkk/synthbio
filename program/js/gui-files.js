@@ -256,10 +256,8 @@ synthbio.gui.prepareFileDialog = function(event) {
 		});
 		var html='';
 		$.each(synthbio.gui.recentFilesList, function(i, file) {
-			var date = new Date(file.modified);
-			var datetime =
-				date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate() + ' ' +
-				date.getHours() + ':' + date.getMinutes();
+			var datetime = synthbio.util.formatDatetime(new Date(file.modified));
+
 			html+='<tr><td class="filename">'+file.filename+'</td><td>x</td><td>'+datetime+'</td></tr>';
 		});
 
