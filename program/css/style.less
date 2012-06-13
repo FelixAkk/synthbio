@@ -130,6 +130,7 @@ body {
 	background-color: @baseColor;
 	min-width: @minWidth;
 	min-height: @minHeight;
+	overflow: hidden;
 }
 
 .navbar {
@@ -550,6 +551,7 @@ body {
 }
 
 #simulation-tabs {
+	position: absolute;
 	top: auto;
 	/* Keep some distance for the status bar and gates tab (+1 pixel for the border) */
 	left: @tabWidth + 1;

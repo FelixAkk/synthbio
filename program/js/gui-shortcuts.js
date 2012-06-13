@@ -53,11 +53,17 @@ synthbio.gui.handleKeystroke = function(event) {
 		}
 	} else {
 		switch(event.which) {
+			// F8
+			case 119:
+				synthbio.gui.validateHandler();
+				break;
+			// F9
 			case 120:
 				synthbio.gui.simulateHandler();
 				break;
-			case 119:
-				synthbio.gui.simulateHandler();
+			// F10
+			case 121:
+				synthbio.gui.showSimulationTabs();
 				break;
 		}
 	}

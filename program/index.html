@@ -45,6 +45,8 @@
 					<li><a href="#show-output" data-toggle="modal">Show output graph</a></li>
 					<li class="divider"></li>
 					<li><a href="javascript: void(0)" id="simulate">Run solver<kbd>F9</kbd></a></li>
+					<li class="divider"></li>
+					<li><a href="javascript:void(0)" id="show-tabs">Show tabs<kbd>F10</kbd></a></li>
 				</ul>
 			</li>
 			<li><a href="#about" data-toggle="modal">About</a></li>
@@ -109,7 +111,7 @@
 	<!-- ================================================== -->
 	<!-- this is where all the simulation related graphs are shown (in a seperate tab) and also validation results -->
 
-	<div id="simulation-tabs" class="stretch">
+	<div id="simulation-tabs" class="stretch" style="bottom: -300px">
 		<ul class="nav nav-tabs navbar">
 			<li class="active"><a href="#tab-validate" data-toggle="tab">Validation</a></li>
 			<li><a href="#tab-chart" data-toggle="tab">Outputs</a></li>
@@ -121,10 +123,9 @@
 			<div class="tab-pane active" id="tab-validate">
 				<div class="alert">
 				<strong>No validation results yet</strong><br />
-					Results of the circuit validity will be shown here. To validate,
-					all gates should be:<br>
+					Results of the circuit validity will be shown here. To validate;<br>
 					<ul>
-						<li>connected</li>
+						<li>all gates should be connected</li>
 						<li>all signals should have proteins assigned</li>
 					</ul>
 					Please validate or simulate first for results.

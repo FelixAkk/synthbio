@@ -41,11 +41,14 @@ synthbio.gui.defaultDescriptionString = "Circuit description.";
 synthbio.gui.gatesTabWidth = $('#gates-tab').width();
 
 /**
- * Width of the <aside> element with all the gates in pixels.
+ * Dimensions of elements in pixels.
  */
 synthbio.gui.navbarHeight = $('.navbar').height();
-
 synthbio.gui.simulationTabsNavbarHeight = $("#simulation-tabs .nav-tabs.navbar").height();
+synthbio.gui.statusBarHeight = synthbio.gui.statusBarHeight;
+
+synthbio.gui.simulationTabsVisible = false;
+
 /**
  * Get normal gates dimensions
  */
@@ -127,6 +130,8 @@ synthbio.gui.displayValidation = function (message, valid, noTabSwitch) {
 	if(!noTabSwitch) {
 		$('#simulation-tabs a[href="#tab-validate"]').tab("show");
 	}
+
+	synthbio.gui.showSimulationTabs(true);
 };
 
 /**
@@ -137,9 +142,7 @@ synthbio.gui.displayValidation = function (message, valid, noTabSwitch) {
 synthbio.gui.toggleSimulationTabs = function(display) {
 	var tabs = $("#simlation-tab");
 	var grid = $("#grid-container");
-
-
-}
+};
 
 /**
  * Add specified number of JSPlumb endpoints to a gate
@@ -761,7 +764,7 @@ jsPlumb.ready(function() {
 	jsPlumb.makeTarget("gate-output", inputEndpoint);
 
 	// Listen for new jsPlumb connections
-	jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
+	jsPlumb.bind("jsPlumbConnection", function (connInfo) {
 		// Get the signal object corresponding with the one in synthbio.model
 		var signal = connInfo.connection.getParameter("signal");
 		signal = signal || synthbio.gui.displayConnection(connInfo.connection).signal;
@@ -792,7 +795,7 @@ jsPlumb.ready(function() {
 	});
 
 	// Listen for disposal of connections; delete endpoints if necessary
-	jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) {
+	jsPlumb.bind("jsPlumbConnectionDetached", function (connInfo) {
 		if (connInfo.sourceId === "gate-input" && !connInfo.sourceEndpoint.connections.length) {
 			jsPlumb.deleteEndpoint(connInfo.sourceEndpoint);
 		}
@@ -811,8 +814,33 @@ jsPlumb.ready(function() {
 	});
 });
 
+/**
+ *
+ * @param show Optional, true is to show, false is to hide, if none provided, the state is toggled.
+ */
+synthbio.gui.showSimulationTabs = function(show) {
+	var tabs = $("#simulation-tabs");
+	var workspace = $("#grid-container");
+	// If first argument is of time boolean (can also be used as event object)
+	if(show === true || show === false) {
+		if(show) {
+			// Clear the override, let it return to default
+			tabs.css("bottom", "");
+			workspace.css("bottom", parseInt(tabs.css("min-height"), 10) + synthbio.gui.statusBarHeight + "px");
+		} else {
+			tabs.css("bottom", "-" + tabs.height() + "px");
+			// Clear the override, let it return to default
+			workspace.css("bottom", "");
+		}
+		synthbio.gui.simulationTabsVisible = show;
+	} else {
+		// toggle using recursive call
+		synthbio.gui.showSimulationTabs(!synthbio.gui.simulationTabsVisible);
+	}
+};
+
 $(document).ready(function() {
-	// Initialize new gate-dragging
+	// Initialize new BASIC gate-dragging
 	$('#gates-basic .gate').draggable({ 
 		appendTo: "#gates-transport",
 		containment: 'window',
@@ -852,7 +880,7 @@ $(document).ready(function() {
 		}
 	});
 
-	// Initialize new gate-dragging
+	// Initialize new COMPOUND gate-dragging
 	$('#gates-compound .gate').draggable({ 
 		appendTo: "#gates-transport",
 		containment: 'window',
@@ -919,7 +947,7 @@ $(document).ready(function() {
 				var offsetY = (ui.originalPosition.top - ui.position.top);
 
 				tabs.height(currentHeight + offsetY);
-				//workspace.height(originalHeightWorkspace - offsetY);
+				workspace.css("bottom", currentHeight + offsetY + synthbio.gui.statusBarHeight + "px");
 			},
 			stop: function() {
 				// Resize the output plot if visible
@@ -932,6 +960,12 @@ $(document).ready(function() {
 	})();
 	// Save the default validity tab contents for another day (to show again after a reset for example)
 	synthbio.gui.defaultValidityTabHTML = $("#tab-validate").html();
+	// Bind listener to the simulation tabs close button
+	$("#simulation-tabs .tab-utilities .close").on("click", function() {
+		synthbio.gui.showSimulationTabs(false);
+	});
+	// Bind listener to the menu item to show simulation tabs
+	$("#show-tabs").on("click", synthbio.gui.showSimulationTabs);
 	// Prepare default/empty workspace
 	synthbio.newCircuit();
 });
