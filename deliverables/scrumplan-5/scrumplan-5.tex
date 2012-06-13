@@ -36,7 +36,7 @@ The time available is five mornings in two weeks by five people. That's about tw
 A list of tasks, assignments and effort estimations is included in a table.
 
 \begin{center}
-\begin{tabularx}{\textwidth}{r p{8cm} | l | cc}
+\begin{tabularx}{\textwidth}{r p{7.5cm} | l | cc}
 \tasktableheading
 
 \task{81}
@@ -47,12 +47,12 @@ A list of tasks, assignments and effort estimations is included in a table.
 \task{86}
 	{Refactoring circuit servlet}
 	{Jieter}
-	{3}{Actual}
+	{3}{4}
 
 \task{87}
 	{Server: Read new CSV input}
 	{Jieter}
-	{2}{Actual}
+	{2}{4}
 
 \task{88}
 	{Client: Tooltip graph}
@@ -123,60 +123,73 @@ A list of tasks, assignments and effort estimations is included in a table.
 \task{43}
 	{Client: Polish circuit styles}
 	{}
-	{Estimate}{Actual}
+	{}{Actual}
 
 \task{60}
 	{Automated QUnit tests from ant}
-	{}
-	{Estimate}{Actual}
+	{Albert}
+	{}{Actual}
 
 \task{14}
 	{Client: Compile .less server side}
 	{}
-	{Estimate}{Actual}
+	{}{dropped}
 
 \task{13}
 	{Client:Assign keyboard shortcuts}
-	{}
-	{Estimate}{Actual}
+	{Felix}
+	{}{Actual}
 
 \task{84}
 	{Client: Input and output fields resize and display open connection}
 	{}
-	{Estimate}{Actual}
+	{}{Actual}
 
 \task{82}
 	{Client: Migrate stuff to simulation tab}
 	{}
-	{Estimate}{Actual}
+	{}{Actual}
 
 \task{65}
 	{Save input/output gate position}
 	{}
-	{Estimate}{Actual}
+	{}{Actual}
 
 \task{43}
 	{Client: Deleting of wires and gates using delete}
 	{}
-	{Estimate}{Actual}
+	{}{Actual}
 
 \task{43}
 	{Client: Highlighting/selecting gates to move multiple or delete multiple}
 	{}
-	{Estimate}{Actual}
+	{}{dropped}
 
 \task{43}
 	{Client: Input and output fields resize and display open connections}
 	{}
-	{Estimate}{Actual}
+	{}{Actual}
 	
 \task{91}
 	{Client: Table with simulation results}
 	{}
-	{Estimate}{Actual}
+	{}{dropped}
 
 
 
+\subtotal{-}{-}
+\subheading{Extra tasks}
+
+\task{}
+	{Fixing the simulator: writing our own simulator}
+	{Jan Pieter}
+	{-}{20}
+	
+\task{}
+	{Exporting graph: serve our own SVG rasterizer}
+	{Jan Pieter}
+	{-}{4}
+	
 \subtotal{-}{-}
 
 \grandtotal{-}{-}
@@ -184,7 +197,16 @@ A list of tasks, assignments and effort estimations is included in a table.
 \end{center}
 
 \section{Reflection on this iteration}
-In this section we will give a quick review on this iteration. \\
+
+\paragraph{Solver issues}
+During this iteration we discovered a problem with the connection to the solver which was implemented. It showed correct results for the transcription and translation reactions, but degradation did not work. After discussing things with Alexey, Jan Pieter decided to write a solver on its own, which initially took about 12 hours of work. Cleaning up the code and some other adjustments took another 8 hours.
+
+During the development of our own solver, Albert worked together with Alexey to fix the problems in the first approach. The result of this is the availability of two solvers in our GUI.
+
+\paragraph{Graph rasterisation, servlet issues}
+The graph library used in our GUI provides a way to export the graph to different image formats. This exporting requires a special server which is provided by the author of the library, but we wanted to be independent of that, so we decided to provide the rasterisation service by our own server code.
+
+At first, it seemed very straight-forward, but quite some time was absorbed by the confusion about Tomcat's class-path. It turns out Tomcat only looks in \verb|WEB-INF/lib/*| and not in it's subdirectories, resulting in a huge stack of \verb|NoClassDefFoundErrors| to fix.
 
 
 \end{document}
