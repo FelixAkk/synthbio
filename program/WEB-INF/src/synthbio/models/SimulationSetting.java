@@ -257,7 +257,12 @@ public class SimulationSetting {
 		//idea: look to previous value, add t_n-t_{n-1} times the previous
 		//value and add the current value once.
 		while(scan.hasNextLine()){
-			tokens = scan.nextLine().split(",");
+			
+			tokens = scan.nextLine().trim().split(",");
+			if(tokens.length == 0){
+				//skip this line.
+				continue;
+			}
 
 			t = Integer.parseInt(tokens[0]);
 			for(int i=1; i<tokens.length; i++) {

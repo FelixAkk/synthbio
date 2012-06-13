@@ -136,7 +136,23 @@ public class TestSimulationSetting{
 		assertThat(ss.getInputAt("A", 140), is(equalTo("H")));
 		assertThat(ss.getInputAt("B", 140), is(equalTo("H")));
 
-		
-		
+	}
+	public void testFromCSV_empty_lines() throws Exception{
+		String csv = "t,A,B\n\n0,0,0\n70,1,0\n\n100,0,1\n140,1,1\n\n";
+
+		SimulationSetting ss = new SimulationSetting();
+		ss.loadInputCSV(csv);
+
+		assertThat(ss.getInputAt("A", 1), is(equalTo("L")));
+		assertThat(ss.getInputAt("B", 1), is(equalTo("L")));
+
+		assertThat(ss.getInputAt("A", 70), is(equalTo("H")));
+		assertThat(ss.getInputAt("B", 70), is(equalTo("L")));
+
+		assertThat(ss.getInputAt("A", 100), is(equalTo("L")));
+		assertThat(ss.getInputAt("B", 100), is(equalTo("H")));
+
+		assertThat(ss.getInputAt("A", 140), is(equalTo("H")));
+		assertThat(ss.getInputAt("B", 140), is(equalTo("H")));
 	}
 }

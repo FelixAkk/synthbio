@@ -16,8 +16,6 @@
 	]
 	,"groups":[],
 	"inputs": {
-		"length": 21,
-		"tickWidth":10,
 		"lowLevel":"0",
 		"highLevel":"200",
 		"values":
