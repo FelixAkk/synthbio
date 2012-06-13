@@ -162,16 +162,16 @@ body {
 		}
 	}
 }
-#simulation-tab .nav-tabs > ul {
+#simulation-tabs .nav-tabs > ul {
 	margin-bottom: 0;
 }
-#simulation-tab .navbar .nav > li > a, .nav-tabs > li > a {
+#simulation-tabs .navbar .nav > li > a, .nav-tabs > li > a {
 	color: lighten(@baseColor, 20%);
 	&:hover {
 		color: @textColorFaded;
 	}
 }
-#simulation-tab .nav-tabs > li > a {
+#simulation-tabs .nav-tabs > li > a {
 	&.tab-utilities {
 		float: right;
 	}
@@ -194,16 +194,16 @@ body {
 	}
 }
 
-#simulation-tab .nav-tabs > li.active > a {
+#simulation-tabs .nav-tabs > li.active > a {
 	.gradient(@grStart, darken(@grStart, 5%));
 	color: #FFFFFF;
 }
 
-#simulation-tab .nav-tabs {
+#simulation-tabs .nav-tabs {
 	height: auto;
 }
 
-#simulation-tab .tab-utilities {
+#simulation-tabs .tab-utilities {
 	z-index: 110;
 	position: absolute;
 	top: 5px;
@@ -215,7 +215,6 @@ body {
 	padding: 10px;
 	.alert {
 		margin-bottom: 0;
-		.transition(height, 0.2)
 	}
 }
 
@@ -373,10 +372,6 @@ body {
 	input {
 	    height: 16px;
 	}
-}
-
-#chart-group {
-	height: 260px;
 }
 
 #chart-separate { 
@@ -554,12 +549,13 @@ body {
 	}
 }
 
-#simulation-tab {
+#simulation-tabs {
 	top: auto;
 	/* Keep some distance for the status bar and gates tab (+1 pixel for the border) */
 	left: @tabWidth + 1;
 	bottom: @statusHeight + 1;
-	min-height: 85px;
+	min-height: 200px;
+	height: 400px;
 	background-color: @baseColor;
 	.borderUp(@baseColor, @contrast, @borderHeight);
 	border-width: 1px 0px 0px 0px; /* Top border only */

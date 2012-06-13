@@ -45,7 +45,7 @@ synthbio.gui.gatesTabWidth = $('#gates-tab').width();
  */
 synthbio.gui.navbarHeight = $('.navbar').height();
 
-synthbio.gui.simulationTabsNavbarHeight = $("#simulation-tab .nav-tabs.navbar").height();
+synthbio.gui.simulationTabsNavbarHeight = $("#simulation-tabs .nav-tabs.navbar").height();
 /**
  * Get normal gates dimensions
  */
@@ -90,6 +90,8 @@ synthbio.gui.resetWorkspace = function() {
 
 	//Reset tabs
 	$("#tab-validate").html(synthbio.gui.defaultValidityTabHTML);
+	$("#simulation-tabs").height("auto");
+	synthbio.gui.plotResize($("#simulation-tabs").width(), $("#simulation-tabs").height());
 };
 
 /**
@@ -123,9 +125,21 @@ synthbio.gui.displayValidation = function (message, valid, noTabSwitch) {
 
 	// Oh, phunny double negatives :>
 	if(!noTabSwitch) {
-		$('#simulation-tab a[href="#tab-validate"]').tab("show");
+		$('#simulation-tabs a[href="#tab-validate"]').tab("show");
 	}
 };
+
+/**
+ * Toggle simulation tabs block.
+ *
+ * @param display Optional boolean. True is to display, false is to hide.
+ */
+synthbio.gui.toggleSimulationTabs = function(display) {
+	var tabs = $("#simlation-tab");
+	var grid = $("#grid-container");
+
+
+}
 
 /**
  * Add specified number of JSPlumb endpoints to a gate
@@ -539,7 +553,7 @@ synthbio.gui.removeDisplaySignal = function(id, allowReconnect) {
 /**
  * Saves and displays the details on display the circuit title/description in the main GUI.
  * @param filename String with or without the .syn file extension, may be empty, wil be trimmed.
- * @param description String with the description, may be empty, wil be trimmed.
+ * @param description String with the description, may be empty, will be trimmed.
  */
 synthbio.gui.setCircuitDetails = function(filename, description) {
 	filename = filename.trim();
@@ -880,44 +894,41 @@ $(document).ready(function() {
 		}
 	});
 
-	// Allow resizing of the simulation tabs space
-	var startDragPosition = {x: undefined, y: undefined};
+	// Bind a tab change listener so we can set the proper min-height every time
 	(function() {
-		var tab = $("#simulation-tab");
+		var tabs = $("#simulation-tabs");
+		var tabsContent = $("#simulation-tabs .tab-content");
+		var tabbar = $(".nav-tabs.navbar", tabs);
 		var workspace = $("#grid-container");
-		// Whether we have gotten the original (auto) height yet, and have set the min-height to it yet.
-		var measure = false;
-		$("#simulation-tab .navbar").draggable({
+
+		// Listen for tab changes
+		$('a[data-toggle="tab"]', tabbar).each(function(index, element) {
+			$(element).on("show", synthbio.gui.tabChange);
+		});
+
+		var currentHeight;
+		// Allow resizing of the simulation tabs space
+		tabbar.draggable({
 			axis: "y",
 			distance: 10,
-			helper: function() { return $('<div style="display: none">I am the hacky simulation tab helper. I should never appear.</div>'); },
+			helper: function() { return $('<div style="display: none">I am the lonely simulation tab helper. I am just a position data sending dummy, and should never appear.</div>'); },
 			start: function(event, ui) {
-				originalHeightTabs = tab.height();
-				originalHeightWorkspace = workspace.height();
-				if(!measure) {
-					tab.height("auto").height();
-					tab.css("min-height", originalHeightTabs);
-					measure = true;
-				}
+				currentHeight = tabs.height();
 			},
 			drag: function(event, ui) {
 				var offsetY = (ui.originalPosition.top - ui.position.top);
-				tab.height(originalHeightTabs + offsetY);
-				workspace.height(originalHeightWorkspace - offsetY);
+
+				tabs.height(currentHeight + offsetY);
+				//workspace.height(originalHeightWorkspace - offsetY);
 			},
 			stop: function() {
 				// Resize the output plot if visible
 				if($("#tab-chart").hasClass("active")) {
-					$("#tab-chart").height($("#simulation-tab").height() - synthbio.gui.simulationTabsNavbarHeight);
+					$("#tab-chart").height($("#simulation-tabs").height() - synthbio.gui.simulationTabsNavbarHeight);
 					synthbio.gui.plotResize();
 				}
 			}
 		});
-	})();
-	// Bind a tab change listener so we can set the proper min-height every time
-	(function() {
-		// Array with the original (height: auto) height of each tab
-		var originalTabHeight = []
 	})();
 	// Save the default validity tab contents for another day (to show again after a reset for example)
 	synthbio.gui.defaultValidityTabHTML = $("#tab-validate").html();

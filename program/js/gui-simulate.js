@@ -233,7 +233,7 @@ synthbio.gui.simulateHandler = function() {
 				synthbio.gui.displayValidation(response.message, false);
 			}else{
 				synthbio.gui.displayValidation("Circuit validates!", true, true);
-				$('#simulation-tab a[href="#tab-chart"]').tab("show");
+				$('#simulation-tabss a[href="#tab-chart"]').tab("show");
 				synthbio.gui.plotOutput(response.data);
 			}
 		}
