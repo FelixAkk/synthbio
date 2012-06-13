@@ -41,7 +41,7 @@ var circuitDescription="testDescription";
 var circuit;
 
 var	simulation;
-var simulationJSON = '{"length":80,"tickWidth":1,"lowLevel":0,"highLevel":200,"testValue":20,"values":{}}';
+var simulationJSON = '{"length":40,"tickWidth":10,"lowLevel":0,"highLevel":200,"values":{}}';
 
 /**
  * Function called before each test for setup
@@ -50,7 +50,7 @@ QUnit.testStart = function(testBatchName) {
 	// ensure a clean circuit slate every test
 	circuit = new synthbio.Circuit(circuitName, circuitDescription, [gate, gate], [signal, signal], []);
 	
-	simulation = new synthbio.SimulationInputs({"testValue":20});
+	simulation = new synthbio.SimulationSetting();
 };
 
 var circuitJSON=
@@ -58,7 +58,7 @@ var circuitJSON=
 	'"description":"'+circuitDescription+'",'+
 	'"gates":['+gateJSON+','+gateJSON+'],'+
 	'"signals":['+signalJSON+','+signalJSON+'],'+
-	'"groups":[],'+	'"inputs":{"length":80,\"tickWidth\":1,\"lowLevel\":0,\"highLevel\":200,\"values":{}}'+
+	'"groups":[],'+	'"inputs":{"length":40,\"tickWidth\":10,\"lowLevel\":0,\"highLevel\":200,\"values\":{}}'+
 	'}';
 
 var exampleJSON='{ '+
@@ -293,11 +293,10 @@ $(document).ready(function() {
 			deepEqual(synthbio.CDS.fromJSON("{\"name\":\"cds1\",\"k2\":\"k2\",\"d1\":\"d1\",\"d2\":\"d2\"}"), cds1, "parsing JSON object of CDS");
 		});
 	
-	module("SimulationInputs");
+	module("SimulationSetting");
 		test("Simulation Inputs should have all base, testing all getters", function(){
-			equal(simulation.options.testValue, 20, "TestValue is set");
-			equal(simulation.getLength(), 80, "getLength works");
-			equal(simulation.getTickWidth(), 1, "getTickWidth works");
+			equal(simulation.getLength(), 40, "getLength works");
+			equal(simulation.getTickWidth(), 10, "getTickWidth works");
 			equal(simulation.getLowLevel(), 0, "getLowLevel works");
 			equal(simulation.getHighLevel(), 200, "getHighLevel works");
 			equal(simulation.getCircuit(), undefined, "bound circuit should start as undefined");	
@@ -306,17 +305,27 @@ $(document).ready(function() {
 		
 		test("Simulations should be able to bind to a circuit", function(){
 			simulation.bindCircuit(circuit);
+			
 			deepEqual(simulation.getCircuit(), circuit, "is able to bind to a circuit");
 			deepEqual(simulation.getValues(), {}, "Can get values after circuit is bound to simulation");
 		});
 		
 		test("Simulations have a toString method", function(){
 			simulation.bindCircuit(circuit);
-			equal(simulation.toString(), "Simulation bound to testCircuit has options { length: 80 , tick width: 1 , low level: 0 , high level: 200}");
+			
+			equal(simulation.toString(), "Simulation bound to testCircuit has options { length: 40 , tick width: 10 , low level: 0 , high level: 200}");
 		});
 		
 		test("Simulations should be able to convert to JSON", function(){
 			simulation.bindCircuit(circuit);
+			
 			equal(JSON.stringify(simulation.toJSON()), simulationJSON, "Converting to JSON works");
+		});
+
+		test("SetCSV", function(){
+			var csv="t,A,B\n0,0,0\n100,1,1";
+			simulation.setCSV(csv);
+
+			equal(simulation.getCSV(), csv);
 		});
 });

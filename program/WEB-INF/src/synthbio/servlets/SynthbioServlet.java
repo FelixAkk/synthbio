@@ -69,6 +69,10 @@ public abstract class SynthbioServlet extends HttpServlet {
 	 * Return a SynRepository with costum folder repository
 	 */
 	public SynRepository getRepository(String folderName) throws Exception {
-		return new SynRepository(this.getWebroot()+"data/synstore/" + folderName);
+		//this was the fix where @tvanhelden was looking for...
+		if(folderName == null){
+			folderName = "";
+		}
+		return new SynRepository(this.getWebroot() + "data/synstore/" + folderName);
 	}
 }

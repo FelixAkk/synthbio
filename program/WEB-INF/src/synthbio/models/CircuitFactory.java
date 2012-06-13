@@ -13,22 +13,15 @@
 
 package synthbio.models;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONString;
 
 import synthbio.models.CircuitException;
 import synthbio.files.BioBrickRepository;
-import synthbio.simulator.CircuitConverter;
-
 
 /**
  * The circuit factory takes care of creating Circuit objects from JSON
@@ -233,34 +226,45 @@ public class CircuitFactory{
 			if(!(inputs.has("length") && inputs.has("values"))){
 				throw new CircuitException("JSON input definition should contain a length value and a set of input definitions for each input protein");
 			}
+			SimulationSetting ss = new SimulationSetting();
 			
-			//store the simulation length
-			circuit.setSimulationLength(inputs.getInt("length"));
-
-			//tickWidth, lowLevel and highLevel are optional.
-			if(inputs.has("tickWidth")) {
-				circuit.setSimulationTickWidth(inputs.getDouble("tickWidth"));
-			}
 			if(inputs.has("lowLevel")) {
-				circuit.setSimulationLowLevel(inputs.getDouble("lowLevel"));
+				ss.setLowLevel(inputs.getDouble("lowLevel"));
 			}
 			if(inputs.has("highLevel")) {
-				circuit.setSimulationHighLevel(inputs.getDouble("highLevel"));
+				ss.setHighLevel(inputs.getDouble("highLevel"));
 			}
 			
 			//store the simulation values for each protein
-			JSONObject values = inputs.getJSONObject("values");
-			if(values.length() == 0) {
-				throw new CircuitException("No actual simulation inputs defined.");
-			}else{
-				for(String protein: values.getNames(values)){
-					if(!circuit.hasInput(protein)){
-						throw new CircuitException("Input definition has a protein which is not an input in the signal section");
+			Object values = inputs.get("values");
+			if(values instanceof String) {
+				try{
+					ss.loadInputCSV(inputs.getString("values"));
+				}catch(Exception e) {
+					throw new CircuitException("Error parsing CSV: "+e.getMessage());
+				}
+			}else {
+				//store the simulation length
+				ss.setLength(inputs.getInt("length"));
+
+				//tickWidth, lowLevel and highLevel are optional.
+				if(inputs.has("tickWidth")) {
+					ss.setTickWidth(inputs.getDouble("tickWidth"));
+				}
+				JSONObject valuesJSON = inputs.getJSONObject("values");
+				
+				if(valuesJSON.length() == 0) {
+					throw new CircuitException("No actual simulation inputs defined.");
+				}else{
+					for(String protein: JSONObject.getNames(valuesJSON)){
+						if(!circuit.hasInput(protein)){
+							throw new CircuitException("Input definition has a protein which is not an input in the signal section");
+						}
+						ss.addInput(protein, valuesJSON.getString(protein));
 					}
-					circuit.addSimulationInput(protein, values.getString(protein));
 				}
 			}
-		
+			circuit.setSimulationSetting(ss);
 		}
 		
 		return circuit;

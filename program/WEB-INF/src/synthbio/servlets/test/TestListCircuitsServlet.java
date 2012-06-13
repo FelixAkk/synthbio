@@ -13,10 +13,7 @@
 
 package synthbio.servlets.test;
 
-import java.io.File;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -25,10 +22,6 @@ import org.junit.Test;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import synthbio.Util;
-
-import com.gargoylesoftware.htmlunit.WebClient;
 
 /**
  * Testing the List Circuits Servlet
@@ -55,7 +48,7 @@ public class TestListCircuitsServlet extends TestCircuitServlet{
 		JSONObject response=new JSONObject(page);
 
 		//check success and empty message string.
-		assertTrue(response.getBoolean("success"));
+		assertTrue("List is successful", response.getBoolean("success"));
 		assertEquals("", response.getString("message"));
 		
 		//check returned type.

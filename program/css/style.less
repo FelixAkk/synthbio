@@ -113,6 +113,9 @@
 		box-shadow: inset @horizontalOffset @verticalOffset @blur @spread @color;
 }
 
+.flushleft{
+	float:left;
+}
 
 /**
  * Selftitled class
@@ -158,7 +161,7 @@ body {
 		kbd {
 			position: absolute;
 			right: 8px;
-			top: 6px;
+			top: 4px;
 			font-family: monospace;
 		}
 	}
@@ -642,6 +645,15 @@ body {
  * Styles for the define-inputs dialog
  */
 #define-inputs{
+	@tickColor: #eee;
+	
+	.tab-pane p, form{
+		margin-top: 6px;
+	}
+	textarea{
+		width: 100%;
+		height: 160px;
+	}
 	.x-axis{
 		width: 50px;
 		float: right;
@@ -666,37 +678,36 @@ body {
 		
 		.tick{
 			display: inline-block;
-			background-color: #eee;
-			width: 6px;
+			background-color: @tickColor;
+			width: 10px;
 			height: 20px;
 			cursor: pointer;
 		}
 		.tick:hover{
-			background-color: lighten(#eee, 2);
+			background-color: lighten(@tickColor, 2);
 		}
 		.low{ border-bottom: 1.5px solid black; }
 		.high{ border-top: 1.5px solid black; }
 
-		.low + .high{
+		.high + .low, .low + .high{
 			border-left: 1px solid black;
-			width: 5px;
+			width: 9px;
 		}
-		.high + .low{
-			border-left: 1px solid black;
-			width: 5px;
+		.tick.marker{
+			background-color: mix(@tickColor, green, 90%);
 		}
 		.tick.changing{
 			border-top: 0px solid;
 			border-bottom: 0px solid;
-			background-color: darken(#eee, 4);
+			background-color: darken(@tickColor, 4);
 			border-left: 0px !important;
 			border-left: 0px !important;
-			width: 6px !important; 
+			width: 10px !important; 
 		}
 		.tick.changed{
 			background-color: #f2dede;
 		}
-		
+	
 	}
 }
 

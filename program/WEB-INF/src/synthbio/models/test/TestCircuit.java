@@ -18,12 +18,10 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import org.junit.Test;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.*;
 
 import java.util.ArrayList;
 
-import synthbio.Util;
 import synthbio.models.*;
 
 /**
@@ -53,9 +51,9 @@ public class TestCircuit{
 		c.addInput("A");
 		c.addInput("B");
 
-		c.setSimulationLength(40);
-		c.addSimulationInput("A", "LLLH");
-		c.addSimulationInput("B", "HLHL");
+		c.getSimulationSetting().setLength(40);
+		c.getSimulationSetting().addInput("A", "LLLH");
+		c.getSimulationSetting().addInput("B", "HLHL");
 		
 		return c;
 	}
@@ -64,15 +62,15 @@ public class TestCircuit{
 	public void testConstructor(){
 		Circuit c=new Circuit("Test");
 
-		assertEquals("Test", c.getName());
+		assertThat(c.getName(), is(equalTo("Test")));
 	}
 
 	@Test
 	public void testConstructor2(){
 		Circuit c=new Circuit("Test", "Description");
 
-		assertEquals("Test", c.getName());
-		assertEquals("Description", c.getDescription());
+		assertThat(c.getName(), is(equalTo("Test")));
+		assertThat(c.getDescription(), is(equalTo("Description")));
 		assertEquals(new ArrayList<Gate>(), c.getGates());
 	}
 
@@ -162,85 +160,4 @@ public class TestCircuit{
 		//should throw an CircuitException
 		c.validate();
 	}
-	
-	/**
-	 * Test if addSimulationInput clears all but (H|L).
-	 */
-	@Test
-	public void testAddSimulationInput() throws Exception {
-		Circuit c=new Circuit("foo", "bar");
-		c.addGate(this.getAndGate());
-		c.addInput("A");
-		c.addInput("B");
-
-		c.setSimulationLength(40);
-		
-		c.addSimulationInput("A", "L /H LL");
-		assertThat(c.getSimulationInput("A"), equalTo("LHLL"));
-
-		c.addSimulationInput("B", "HHHhsblsLL");
-		assertThat(c.getSimulationInput("B"), equalTo("HHHLL"));
-	}
-	
-	/**
-	 * Define some inputs and check if getSimulationInputAt() returns
-	 * things we expect it to return...
-	 */
-	@Test
-	public void testInputSignals_inputAt() throws Exception {
-		Circuit c=this.getValidCircuit();
-
-		assertThat(c.getSimulationInputAt("A", 0), equalTo("L"));
-		assertThat(c.getSimulationInputAt("A", 1), equalTo("L"));
-		assertThat(c.getSimulationInputAt("A", 2), equalTo("L"));
-		assertThat(c.getSimulationInputAt("A", 3), equalTo("H"));
-		assertThat(c.getSimulationInputAt("A", 30), equalTo("H"));
-		
-		//should tick 40 be included? Since 40 ticks starting at 0
-		//yields 39 as upper boundary...
-		//If we decide to change: change assertion in
-		//Circuit::getSimulationInputAt()
-		assertThat(c.getSimulationInputAt("A", 40), equalTo("H"));
-		
-		assertThat(c.getSimulationInputAt("B", 0), equalTo("H"));
-		assertThat(c.getSimulationInputAt("B", 1), equalTo("L"));
-		assertThat(c.getSimulationInputAt("B", 2), equalTo("H"));
-		assertThat(c.getSimulationInputAt("B", 3), equalTo("L"));
-		assertThat(c.getSimulationInputAt("B", 30), equalTo("L"));
-		assertThat(c.getSimulationInputAt("B", 40), equalTo("L"));
-	}
-
-	/**
-	 * Ask for the value of a tick outside the simulated length
-	 */
-	@Test
-	public void testInputSignals_inputAt_outOfBounds() throws Exception {
-		thrown.expect(AssertionError.class);
-		thrown.expectMessage("Tick should not exceed simulation length.");
-
-		Circuit c=this.getValidCircuit();
-
-		c.getSimulationInputAt("A", 42);
-	}
-	
-	/**
-	 * Define an simulation input which is not an input in the circuit.
-	 */
-	@Test
-	public void testInputSignals_invalidInput() throws Exception {
-		thrown.expect(AssertionError.class);
-		thrown.expectMessage("Circuit should have the input D.");
-
-		Circuit c=new Circuit("foo", "bar");
-		c.addGate(this.getAndGate());
-		c.addInput("A");
-		c.addInput("B");
-
-		c.setSimulationLength(40);
-		
-		//this should throw an AssertionError
-		c.addSimulationInput("D", "LLL");
-	}
-
-
 }

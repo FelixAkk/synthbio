@@ -1,0 +1,30 @@
+{	"name":"or-gate.syn",
+	"description":"OR gate as specified in the handout.",
+	"gates": [
+		{"kind":"not","position":{"x":178,"y":102}},
+		{"kind":"not","position":{"x":178,"y":186}},
+		{"kind":"and","position":{"x":376,"y":139}},
+		{"kind":"not","position":{"x":647,"y":140}}
+	],
+	"signals": [
+	{"protein":"A","from":"input","to":0,"fromEndpoint":0,"toEndpoint":0},
+	{"protein":"M","from":"input","to":1,"fromEndpoint":1,"toEndpoint":0},
+	{"protein":"K","from":0,"to":2,"fromEndpoint":0,"toEndpoint":0},
+	{"protein":"I","from":1,"to":2,"fromEndpoint":0,"toEndpoint":1},
+	{"protein":"B","from":2,"to":3,"fromEndpoint":0,"toEndpoint":0},
+	{"protein":"F","from":3,"to":"output","fromEndpoint":0,"toEndpoint":0}
+	]
+	,"groups":[],
+	"inputs": {
+		"length": 21,
+		"tickWidth":10,
+		"lowLevel":"0",
+		"highLevel":"200",
+		"values":
+"t,A,M\n
+0,1,1\n
+70,0,1\n
+140,1,0\n
+210,0,0"
+	}
+}

@@ -227,6 +227,7 @@ synthbio.gui.simulateHandler = function() {
 
 	synthbio.requests.simulate(
 		synthbio.model,
+		$('#choose-solver').val(),
 		function(response){
 			console.log("synthbio.request.simulate called response callback");
 			if(response.message !== '') {
@@ -249,7 +250,11 @@ synthbio.chartOptions = {
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
 	series:  [{name: "Empty", data: [0, 0, 0, 0, 0]}],
-	yAxis:   {min: 0, showFirstLabel: false}
+	yAxis:   {min: 0, showFirstLabel: false},
+	exporting: {
+		enabled: true,
+		url: "/ExportGraph"
+	}
 };
 
 //x-axis: Display the x value and add an "s" (data always starts at 0)
@@ -358,4 +363,36 @@ $(document).ready(function() {
 	 * Run simulation
 	 */
 	$('#simulate').on('click', synthbio.gui.simulateHandler);
+	$('#rerun-simulation').on("click", function() {
+		synthbio.gui.plot.showLoading();
+	
+		synthbio.requests.simulate(
+			synthbio.model,
+			$('#choose-solver').val(),
+			function(response){
+				if(response.message === '') {
+					synthbio.gui.plotOutput(response.data);
+				}
+			}
+		);
+	});
+
+	/**
+	 * Toggle group/separate chart view (default: group)
+	 */
+	$("#toggle-charttype").on("click", function() {
+		
+		$("#chart-separate").toggle(0, function() {
+			if ($(this).is(":visible")) {
+				//Separate charts
+				$("#chart-group").hide();
+				$("#toggle-charttype").text("Group chart");
+			} else {
+				//Group chart
+				$("#chart-group").show();
+				$("#toggle-charttype").text("Separate charts");
+			}
+		});
+
+	});
 });

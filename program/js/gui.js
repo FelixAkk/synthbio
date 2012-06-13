@@ -143,7 +143,8 @@ $(document).ready(function() {
 
 	// Hook mouseover listeners for all elements to display tooltips
 	synthbio.gui.setTooltip($("#gates-basic"),      "Predefined AND and NOT gates (fixed). Drag into the modelling grid.");
-	synthbio.gui.setTooltip($("#gates-compound"),   "User defined compound gates (loaded from .syn). Drag into the modelling grid.");
+	synthbio.gui.setTooltip($("#gates-compound"),   "User defined compound gates (loaded from .syn). Drag into the modelling grid." +
+		" These gates will explode to the actual circuit when released into the workspace.");
 	synthbio.gui.setTooltip($("#gate-input"),       "Drag from here to define an input signal for a gate.");
 	synthbio.gui.setTooltip($("#gate-output"),      "Drop a signal endpoint in here to output the signal values.");
 
@@ -161,10 +162,4 @@ $(document).ready(function() {
 			alert("Your browser does not allow this application to close itself, please close the screen yourself.");
 		}
 	});
-
-	//Ask the user for confirmation if the application is closed
-	//$(window).bind("beforeunload", function(event) {
-	//	return "Caution: this will close the application. Unsaved work will be lost!";
-	//});
-
 });

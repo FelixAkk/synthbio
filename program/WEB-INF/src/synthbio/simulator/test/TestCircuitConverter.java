@@ -14,7 +14,6 @@
 package synthbio.simulator.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.simulator.math.odes.MultiTable;
@@ -104,7 +103,7 @@ public class TestCircuitConverter {
 		// result
 		
 		Circuit c = (new CircuitFactory()).fromJSON(Util.fileToString(inputCircuit));
-		MultiTable m = CircuitConverter.getInputs(c);
+		MultiTable m = c.getSimulationSetting().getInputMultiTable();
 		
 		// expected result
 		//"A": "H",

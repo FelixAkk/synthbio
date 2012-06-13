@@ -88,6 +88,21 @@ synthbio.util.calculateSumSeries = function(series) {
 	return res;
 };
 
+/**
+ * Appends a trailing path delimiter to the folder name (if not empty)
+ */
+synthbio.util.appendTrailingDelimiter = function(folder) {
+	if (!folder) {
+		return folder;
+	}
+
+	var last = folder[folder.length - 1];
+	if (last !== '\\' && last !== '/') {
+		folder += '/';
+	}
+
+	return folder;
+};
 
 /**
  * Copy the value of form fields to an object.
@@ -121,3 +136,28 @@ synthbio.util.form2object = function(target, mappings) {
 		}
 	});
 };
+
+/**
+ * Format a date to a standard datetime format (without seconds).
+ *
+ * example: 2012-06-11 16:36
+ *
+ * depends on jqueryUI
+ */
+synthbio.util.formatDatetime = function(date) {
+	if(!(date instanceof Date)) {
+		date = new Date(date);
+	}
+	var datetime = $.datepicker.formatDate("yy-mm-dd", date) + " ";
+	if(date.getHours() <= 9) {
+		datetime += "0";
+	}
+	datetime += date.getHours();
+	datetime += ":";
+	if(date.getMinutes() <= 9) {
+		datetime += "0";
+	}
+	datetime += date.getMinutes();
+	return datetime;
+};
+ 

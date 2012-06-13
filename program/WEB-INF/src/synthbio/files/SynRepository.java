@@ -5,8 +5,8 @@
  * TU Delft - University of Technology
  *  
  * Authors: 
- * 	Felix Akkermans, Niels Doekemeijer, Thomas van Helden
- * 	Albert ten Napel, Jan Pieter Waagmeester
+ *  Felix Akkermans, Niels Doekemeijer, Thomas van Helden
+ *  Albert ten Napel, Jan Pieter Waagmeester
  * 
  * https://github.com/FelixAkk/synthbio
  */
@@ -14,10 +14,8 @@
 package synthbio.files;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Scanner;
 import java.util.HashMap;
 
 import synthbio.Util;

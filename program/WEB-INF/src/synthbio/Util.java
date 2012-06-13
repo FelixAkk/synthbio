@@ -19,11 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 
-import java.util.ArrayList;
-import org.simulator.math.odes.MultiTable;
 import org.json.*;
-
-import java.util.Arrays;
 
 /**
  * Utility class.
@@ -103,53 +99,12 @@ public final class Util {
 		return r;
 	}
 
-	/**
- 	 * Converts a MultiTable to a JSON-string of the format:
- 	 * 	{
- 	 * 		"names": [A, B],
- 	 * 		"length": 10,
- 	 * 		"step": 1,
- 	 *		"time": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
- 	 * 		"data": {
- 	 *			"A": [0, 0, 0, 0, 0, 600, 600, 600, 600, 600],
- 	 *			"B": [...]
- 	 * 		}
- 	 * 	}
- 	 */
-	public static JSONObject multiTableToJSON(MultiTable m) throws JSONException {
-		double[] timePoints = m.getTimePoints();
-		double timeLength = timePoints.length;
-		double step = timePoints[1] - timePoints[0];
-		
-		// get all names
-		int cc = m.getColumnCount() - 3; // - 3 because gene, cell and empty are unused.
-		ArrayList<String> names = new ArrayList<String>(cc);
-		for(int i = 0; i < cc + 3; i++) {
-			String cur = m.getColumnName(i);
-			if(!cur.equals("gene") && !cur.equals("cell") && !cur.equals("empty") && !cur.equals("Time"))
-				names.add(cur);
+	public static String repeat(char s, int n) {
+		String res = "";
+		for(int i = 0; i < n; i++) {
+			res += s;
 		}
-
-		// creating the JSON object
-		JSONObject json = new JSONObject();
-		json.put("solver", "SBMLSimulator");
-		json.put("names", new JSONArray(names));
-		json.put("length", timeLength);
-		json.put("step", step);
-		json.put("time", Arrays.asList(timePoints));
-		
-		// for every name, get the data in the column of that name.
-		JSONObject data = new JSONObject();
-		for(String name: names) {
-			ArrayList<Double> cur = new ArrayList<Double>((int)timeLength);
-			for(Double d: m.getColumn(name)) {
-				cur.add(d);
-			}
-			data.put(name, new JSONArray(cur));
-		}
-		json.put("data", data);
-
-		return json;
+		return res;
 	}
 }
 

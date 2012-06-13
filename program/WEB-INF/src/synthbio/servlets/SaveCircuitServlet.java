@@ -20,13 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import synthbio.files.SynRepository;
 import synthbio.json.JSONResponse;
-
-import synthbio.Util;
 
 /**
  * Servlet ListCircuitServlets serves a list of circuit files.
@@ -46,7 +40,7 @@ public class SaveCircuitServlet extends CircuitServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
 		
 		//create new JSONResponse for this request.
-		JSONResponse json=new JSONResponse();
+		JSONResponse json = new JSONResponse();
 
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
@@ -81,8 +75,8 @@ public class SaveCircuitServlet extends CircuitServlet {
 		}
 		try{
 			this.synRepository.putFile(filename, circuit);
-			json.message="Saved succesfully";
-			json.success=true;
+			json.message = "Saved succesfully";
+			json.success = true;
 		}catch(Exception e) {
 			json.fail("Could not save .syn-file: "+e.getMessage());
 		}

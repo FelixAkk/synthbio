@@ -120,7 +120,6 @@ synthbio.Gate.prototype.getImage = function(html){
 	}
 };
 synthbio.Gate.prototype.getInputCount = function(){
-	//TODO: better way to determine number of inputs/outputs
 	if(this.getKind() === "not") {
 		return 1;
 	} else if (this.getKind() === "and") {
@@ -218,8 +217,8 @@ synthbio.Circuit = function(circuitName, desc, gates, signals, groupings, inputs
 	this.signals = signals || [];
 	this.groups = groupings || [];
 
-	//Create the SimulationInputs object.
-	this.inputs = inputs || new synthbio.SimulationInputs();
+	//Create the SimulationSetting object.
+	this.inputs = inputs || new synthbio.SimulationSetting();
 	this.inputs.bindCircuit(this);
 };
 
@@ -247,6 +246,7 @@ synthbio.Circuit.fromMap = function(map) {
 	}
 
 	//Copy remaining properties to object, but forget gates/signals/inputs
+	map = $.extend({}, map);
 	delete map.gates;
 	delete map.signals;
 	delete map.inputs;
@@ -257,11 +257,6 @@ synthbio.Circuit.fromMap = function(map) {
 			circuit[p] = map[p];
 		}
 	}
-
-	//TODO: implement grouping.
-	//~ $.each(map.groups, function(i, elem){
-	//~		circuit.addGroup(synthbio.Group.fromMap(elem));
-	//~ });
 
 	return circuit;
 };
@@ -282,7 +277,7 @@ synthbio.Circuit.prototype.toString = function(){
 		" consists of gates:{ " + this.getGates().toString() + " }" +
 		" and signals:{ " + this.getSignals().toString() + " }" +
 		" and groupings:{ " + this.getGroups() + "}" +
-		" and SimulationInputs: {" + this.getSimulationInputs() + "}";
+		" and SimulationSetting: {" + this.getSimulationSetting() + "}";
 };
 synthbio.Circuit.prototype.getName = function() {
 	return this.name;
@@ -306,14 +301,14 @@ synthbio.Circuit.prototype.getGroups = function() {
 	return this.groups;
 };
 
-synthbio.Circuit.prototype.getSimulationInputs = function(){
+synthbio.Circuit.prototype.getSimulationSetting = function(){
 	return this.inputs;
 };
 synthbio.Circuit.prototype.setSimulationInput = function(inputs){
-	if(inputs instanceof synthbio.SimulationInputs){
+	if(inputs instanceof synthbio.SimulationSetting){
 		this.inputs=inputs;
 	}else{
-		this.inputs=new synthbio.SimulationInputs(inputs);
+		this.inputs=new synthbio.SimulationSetting(inputs);
 	}
 	this.inputs.bindCircuit(this);
 };
@@ -564,7 +559,6 @@ synthbio.Circuit.prototype.removeSignal = function(origin, destination, fullMatc
 			i--;
 		}
 	}
-	//@todo remove from SimulationInputs?
 	return removed;
 };
 
@@ -590,7 +584,7 @@ synthbio.CDS.prototype.toString = function(){
 };
 
 /**
- * SimulalionInputs records settings to run the simulation.
+ * SimulalionSetting records settings to run the simulation.
  * 
  * Might be initialized with two maps or with one map.
  *
@@ -600,13 +594,13 @@ synthbio.CDS.prototype.toString = function(){
  * Two-argument: 'options' contains simulation parameters, 'values' is a
  * <protein, values>-hashmap.
  */
-synthbio.SimulationInputs = function(options, values) {
+synthbio.SimulationSetting = function(options, values) {
 	this.options = $.extend(
 		{
-			"length": 80,				//total ticks.
-			"tickWidth": 1,			//length in seconds for one tick.
-			"lowLevel": 0,			//concentration regarded as low.
-			"highLevel": 200		//concentration regarded as high.
+			"length": 40,				//total ticks.
+			"tickWidth": 10,			//length in seconds for one tick.
+			"lowLevel": 0,				//concentration regarded as low.
+			"highLevel": 200			//concentration regarded as high.
 		}, options);
 		
 	/**
@@ -616,29 +610,32 @@ synthbio.SimulationInputs = function(options, values) {
 	
 	//if values is undefined, but set in the options map, copy it.
 	if(!values && this.options.values) {
-		this.values=this.options.values;
+		this.values = this.options.values;
 		delete this.options.values;
 	}
 
 	/**
-	 * Reference to the circuit the SimulationInputs object belongs to.
+	 * Reference to the circuit the SimulationSetting object belongs to.
 	 */
 	this.circuit = undefined;
 }; 
 
 /**
- * Bind the circuit to the the SimulationInputs object to be able
+ * Bind the circuit to the the SimulationSetting object to be able
  * to ask about its inputs.
  */
-synthbio.SimulationInputs.prototype.bindCircuit = function(circuit){
+synthbio.SimulationSetting.prototype.bindCircuit = function(circuit){
 	this.circuit=circuit;
 	this.updateInputs();
 };
-synthbio.SimulationInputs.prototype.getCircuit = function() {
+synthbio.SimulationSetting.prototype.getCircuit = function() {
 	return this.circuit;
 };
 
-synthbio.SimulationInputs.prototype.setValue = function(protein, value) {
+synthbio.SimulationSetting.prototype.setValue = function(protein, value) {
+	if(this.getCSV()!=="") {
+		throw "Should not try to get values when using CSV";
+	}
 	this.updateInputs();
 	if(!this.values[protein]){
 		throw "No such input signal in circuit: "+protein; 
@@ -647,31 +644,48 @@ synthbio.SimulationInputs.prototype.setValue = function(protein, value) {
 	this.values[protein]=value.replace(/[^HL]/g, "");
 };
 
+/**
+ * Get the CSV values, or "" if values is an object.
+ */
+synthbio.SimulationSetting.prototype.getCSV = function() {
+	if(this.values instanceof Object){
+		return "";
+	}else{
+		return this.values;
+	}
+};
 
-synthbio.SimulationInputs.prototype.getLength = function() {
+/**
+ * Set the CSV values. Will replace existing values object.
+ */
+synthbio.SimulationSetting.prototype.setCSV = function(csv) {
+	this.values = csv;
+};
+
+synthbio.SimulationSetting.prototype.getLength = function() {
 	return this.options.length;
 };
-synthbio.SimulationInputs.prototype.getTickWidth = function() {
+synthbio.SimulationSetting.prototype.getTickWidth = function() {
 	return this.options.tickWidth;
 };
-synthbio.SimulationInputs.prototype.getLowLevel= function() {
+synthbio.SimulationSetting.prototype.getLowLevel= function() {
 	return this.options.lowLevel;
 };
-synthbio.SimulationInputs.prototype.getHighLevel = function() {
+synthbio.SimulationSetting.prototype.getHighLevel = function() {
 	return this.options.highLevel;
 };
 
-synthbio.SimulationInputs.prototype.setLength = function(length) {
+synthbio.SimulationSetting.prototype.setLength = function(length) {
 	this.options.length = length;
 };
-synthbio.SimulationInputs.prototype.setTickWidth = function(width) {
+synthbio.SimulationSetting.prototype.setTickWidth = function(width) {
 	console.log(this);
 	this.options.tickWidth = width;
 };
-synthbio.SimulationInputs.prototype.setLowLevel = function(level) {
+synthbio.SimulationSetting.prototype.setLowLevel = function(level) {
 	this.options.lowLevel = level;
 };
-synthbio.SimulationInputs.prototype.setHighLevel = function(level) {
+synthbio.SimulationSetting.prototype.setHighLevel = function(level) {
 	this.options.highLevel = level;
 };
 
@@ -679,7 +693,10 @@ synthbio.SimulationInputs.prototype.setHighLevel = function(level) {
 /**
  * Retrieve the Simulation input values for an input signal.
  */
-synthbio.SimulationInputs.prototype.getValue = function(protein) {
+synthbio.SimulationSetting.prototype.getValue = function(protein) {
+	if(this.getCSV()!=="") {
+		throw "Should not try to get values when using CSV";
+	}
 	this.updateInputs();
 	if(!this.values[protein]){
 		throw "No such input signal in circuit: "+protein; 
@@ -692,9 +709,14 @@ synthbio.SimulationInputs.prototype.getValue = function(protein) {
  * input signals are present in this.inputs; Throw away signals that are
  * not input signals anymore.
  */
-synthbio.SimulationInputs.prototype.updateInputs = function(){
+synthbio.SimulationSetting.prototype.updateInputs = function(){
 	if(!this.circuit){
-		throw "Circuit should be bound to SimulationInputs first!";
+		throw "Circuit should be bound to SimulationSetting first!";
+	}
+	
+	if(this.getCSV() !== "") {
+		console.log('csv active, dont change...');
+		return;
 	}
 	
 	//Make a copy of the current values.
@@ -702,9 +724,10 @@ synthbio.SimulationInputs.prototype.updateInputs = function(){
 	var self=this;
 	$.each(this.circuit.getInputSignals(), function(index, protein){
 		if(self.values[protein]){
-			//keep old value
+			//If contained in the old object, keep value
 			newValues[protein]=self.values[protein];
 		}else{
+			//otherwise, insert a low.
 			newValues[protein]="L";
 		}
 	});
@@ -715,9 +738,11 @@ synthbio.SimulationInputs.prototype.updateInputs = function(){
 /**
  * Get a <protein, values> map for each input signal
  */
-synthbio.SimulationInputs.prototype.getValues = function() {
+synthbio.SimulationSetting.prototype.getValues = function() {
 	synthbio.util.assert(this.getCircuit !== undefined, "Can only get values after circuit is bound to simulation");
-	this.updateInputs();
+	if(this.getCSV() === "") {
+		this.updateInputs();
+	}
 	return this.values;
 };
 
@@ -725,16 +750,14 @@ synthbio.SimulationInputs.prototype.getValues = function() {
  * toJSON method.
  * Change structure a little...
  */
-synthbio.SimulationInputs.prototype.toJSON = function() {
+synthbio.SimulationSetting.prototype.toJSON = function() {
 	this.updateInputs();
 	return $.extend({}, this.options, {values: this.values});
 };
 
 /**
  * toString method.
- *
- * @todo: implement
  */
-synthbio.SimulationInputs.prototype.toString = function() {
+synthbio.SimulationSetting.prototype.toString = function() {
 	return 'Simulation bound to ' + this.getCircuit().getName()+ ' has options { length: '+this.getLength()+' , tick width: '+this.getTickWidth()+' , low level: '+this.getLowLevel()+' , high level: '+this.getHighLevel()+'}';
 };

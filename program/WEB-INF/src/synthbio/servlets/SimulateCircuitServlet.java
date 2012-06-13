@@ -20,17 +20,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
-
-import synthbio.files.BioBrickRepository;
 import synthbio.models.Circuit;
-import synthbio.models.CircuitException;
 import synthbio.models.CircuitFactory;
 import synthbio.json.JSONResponse;
 import synthbio.simulator.Solver;
+import synthbio.simulator.SBMLSolver;
 import synthbio.simulator.JieterSolver;
-
-import synthbio.Util;
 
 /**
  * Servlet SimulateCircuitServlet serves a simulation for a provided
@@ -72,14 +67,6 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		// which solver to use?
-		String solver="SBMLsimulator";
-		if(request.getParameter("solver") != null) {
-			if(request.getParameter("solver").equals("jieter")) {
-				solver="jieter";
-			}
-		}
-
 		String circuit=request.getParameter("circuit");
 		if(circuit==null){
 			json.fail("Parameter 'circuit' not set");
@@ -96,28 +83,32 @@ public class SimulateCircuitServlet extends CircuitServlet {
 			return;
 		}
 
-		if(solver.equals("jieter")) {
-			//use Jieter's Solver.
-			try {
-				JieterSolver js=new JieterSolver(c);
-				js.solve();
-				
-				json.data = js.toJSON();
-				json.success = true;
-			} catch(Exception e) {
-				json.fail("Failed solving: "+e.getMessage());
-				this.log(e);
-			}
-		}else{
-			//use SBMLsimulator's Solver.
-			try {
-				json.data = Util.multiTableToJSON(Solver.solve(c));
-				json.success = true;
-			} catch(Exception e) {
-				json.fail("Failed solving: "+e.getMessage());
-			}
+		// Fire up the right solver and solve.
+		// get the chosen solver
+		String solverType = request.getParameter("solver");
+		if(solverType == null){
+			solverType = "eulermethod";
 		}
+		Solver solver = null;
+		try {
+			// if jieter was chosen, use JieterSolver.
+			if(solverType.equals("jieter")) {
+				solver = new JieterSolver(c);
+			// else SMBLSolver will handle the other solvers.
+			}else{
+				solver = new SBMLSolver(c, solverType);
+			}
+			solver.solve();
+		} catch(Exception e) {
+			json.fail("Failed solving: "+e.getMessage());
+			out.println(json.toJSONString());
+			return;
+		}
+
+		// put results in JSON and output.
 		try{
+			json.data = solver.toJSON();
+			json.success = true;
 			out.println(json.toJSONString());
 		}catch(Throwable e){
 			json.fail("Error serializing to JSON: "+e.getMessage());

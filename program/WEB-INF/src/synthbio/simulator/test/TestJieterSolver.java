@@ -16,7 +16,6 @@ package synthbio.simulator.test;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -52,9 +51,9 @@ public class TestJieterSolver {
 		c.addInput("B");
 		c.addOutput("C");
 
-		c.addSimulationInput("A", "LLLLHHHHHH HHHHHHHHHH HHHHHHHHHH");
-		c.addSimulationInput("B", "HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH");
-		c.setSimulationLength(40);
+		c.getSimulationSetting().addInput("A", "LLLLHHHHHH HHHHHHHHHH HHHHHHHHHH");
+		c.getSimulationSetting().addInput("B", "HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH");
+		c.getSimulationSetting().setLength(40);
 		return c;
 	}
 	public Circuit getNotCircuit(){
@@ -66,49 +65,13 @@ public class TestJieterSolver {
 		));
 		c.addInput("A");
 		c.addOutput("B");
-		c.setSimulationLength(40);
-		c.addSimulationInput("A", "L");
+		c.getSimulationSetting().setLength(40);
+		c.getSimulationSetting().addInput("A", "L");
 		
 		return c;
 	}
 
-	/**
-	 * Check if getSimulationLevelAt() returns correct values
-	 * with different stepsizes.
-	 */
-	@Test
-	public void testSimulationLevelAt() {
-		Circuit c = this.getNotCircuit();
-
-		double low = c.getSimulationLowLevel();
-		double high = c.getSimulationHighLevel();
-		c.addSimulationInput("A", "LLLLHHHHLLL LLHHLLHHHH HHHHHHHHHH");
-		
-		JieterSolver js=new JieterSolver(c);
-
-		js.calculation_resolution = 1000;
-		assertEquals(low, js.getInputLevelAt("A", 0), delta);
-		assertEquals(low, js.getInputLevelAt("A", 1), delta);
-		assertEquals(low, js.getInputLevelAt("A", 2), delta);
-		
-		assertEquals(low, js.getInputLevelAt("A", 3999), delta);
-		assertEquals(high, js.getInputLevelAt("A", 4000), delta);
-		
-		assertEquals(high, js.getInputLevelAt("A", 7999), delta);
-		assertEquals(low, js.getInputLevelAt("A", 8000), delta);
-
-		js.calculation_resolution = 100;
-		assertEquals(low, js.getInputLevelAt("A", 0), delta);
-		assertEquals(low, js.getInputLevelAt("A", 1), delta);
-		assertEquals(low, js.getInputLevelAt("A", 2), delta);
-		
-		assertEquals(low, js.getInputLevelAt("A", 399), delta);
-		assertEquals(high, js.getInputLevelAt("A", 400), delta);
-		
-		assertEquals(high, js.getInputLevelAt("A", 799), delta);
-		assertEquals(low, js.getInputLevelAt("A", 800), delta);
-	}
-
+	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
@@ -137,7 +100,7 @@ public class TestJieterSolver {
 		Circuit c = this.getNotCircuit();
 		
 		//20s low, 20s high
-		c.addSimulationInput("A", "LLLLLLLLLLLLLLLLLLLL HHHHHHHHHHHHHHHHHHHH");
+		c.getSimulationSetting().addInput("A", "LLLLLLLLLLLLLLLLLLLL HHHHHHHHHHHHHHHHHHHH");
 		
 		JieterSolver js=new JieterSolver(c);
 
@@ -164,8 +127,8 @@ public class TestJieterSolver {
 	@Test
 	public void testAndCircuit() throws Exception {
 		Circuit c = this.getAndCircuit();
-		c.addSimulationInput("A", "LLLLLLLLLL LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH");
-		c.addSimulationInput("B", "LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH LLLLLLLLLL");
+		c.getSimulationSetting().addInput("A", "LLLLLLLLLL LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH");
+		c.getSimulationSetting().addInput("B", "LLLLLLLLLL HHHHHHHHHH HHHHHHHHHH LLLLLLLLLL");
 
 		JieterSolver js=new JieterSolver(c);
 		js.solve();
@@ -219,7 +182,7 @@ public class TestJieterSolver {
 		assertTrue(json.has("names"));
 		//todo: check if all names in js.species exist in names.
 
-		assertEquals(c.getSimulationLength(), json.getInt("length"));
+		assertEquals(c.getSimulationSetting().getLength(), json.getInt("length"));
 		assertEquals(1.0/js.result_resolution, json.getDouble("step"), delta);
 		
 		assertTrue(json.has("data"));

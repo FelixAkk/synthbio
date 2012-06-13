@@ -1,0 +1,67 @@
+\section{Description of Zelula}
+Zelula is a modelling and simulation package which enables users to simulate the protien \textit{logic} in a cell. With a provided set of BioBricks representing AND and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuits can be simulated, the results will be presented as a concentration/time graph.
+
+\pgfdeclareimage[width=0.45\textwidth]{gui-final}{pictures/gui_final1.png}
+%~ \pgfdeclareimage[width=0.45\textwidth]{gui-final}{pictures/gui_final_spitscreen.png}
+
+\newcommand{\screenshotScale}{1.4}
+
+\subsection{Circuit editor}
+\begin{figure}[h!]
+\centering\begin{tikzpicture}[scale=\screenshotScale]
+	\pgftext[left, base]{\pgfuseimage{gui-final}}
+	\draw [draw=red,very thick] (0, 2.4) -- (0, 3.7) -- (7.15, 3.7) -- (7.15,0.14) -- (1.5,0.14) -- (1.5, 2.4) -- (0,2.4);
+\end{tikzpicture}
+\end{figure}
+
+\noindent Zelula enables the user to intuitively construct circuits from the basic available building blocks. Gates can be dragged from the sidebar to arbitrary positions in the working area. Connections between the gates can easily be dragged from and to the \textit{input} and \textit{output} connectors and the endpoints on gates. 
+
+When a connection is made, no protein is selected for it by default. The user may select which protein to use. Visual feedback on protein assignment is provided through the colors of the connections.
+
+The interface prevents the user to make some simple mistakes. For example, it's impossible to connect two inputs. If the user connects one output to two inputs, the interface makes sure the protein on those connections is the same.
+
+Even the position of the circuits' input and output connectors can be freely choosen by dragging them using the text as an handel.
+
+Removing gates and connection is a matter of double clicking on them.
+
+\subsection{Compound library}
+\begin{figure}[h!]
+\centering\begin{tikzpicture}[scale=\screenshotScale]
+	\pgftext[left, base]{\pgfuseimage{gui-final}}
+	\draw [draw=red,very thick] (0,0.14) rectangle (1.5, 2.5);
+\end{tikzpicture}
+\end{figure}
+
+\noindent Every circuit can be saved as a compound gate, which means it can easily be reused in later circuits. The saved compound gates are presented to the user in the sidebar, below of the basic gates. When a user drags a compound gate to the working area, it will expand to the original arrangement of gates, with the inner connections in place. The only thing left for the user is connecting it to the rest of its circuit.
+
+\subsection{Validation}
+When a user is satisfied with his work, he can validate the circuit. Different errors like unassigned proteins or inclomplete connections will be reported. The user will see the error message below the circuit, providing excellent overview to both the circuit and the errors to solve the problem.
+
+\subsection{Simulation}
+A valid circuit can be simulated. In order to simulate a circuit, the input must be defined as a function of time. Zelula provides two ways to accomplish this. Firstly, in an input editor the level for each input can be defined as a function of time in a visual way, secondly, a CSV text can be provided describing the transitions as a function of time.
+\\
+image pending Felix' commit.
+
+\paragraph{Input editor}
+bla \\
+image pending Felix' commit.
+
+\paragraph{CSV input}
+bla \\
+image pending Felix' commit.
+\begin{verbatim}
+t,A,B
+0,0,0
+70,1,0
+140,1,1
+210,1,1
+\end{verbatim}
+
+\subsection{Exporting}
+The work done in Zelula can be shared in two different ways: the user can export the circuit to a SBML file, a common format uses in syntetic Biology. Secondly, the visualistion of the graphs can be exported to a number of different image formats.
+
+\paragraph{SBML}
+
+\paragraph{Graph images}
+foo \\
+image pending Felix' commit.

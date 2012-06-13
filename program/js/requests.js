@@ -64,7 +64,7 @@ synthbio.requests.listFiles = function(folderName, callback){
 	synthbio.requests.baseXHR({
 		url: "/ListCircuits",
 		data: {
-			"folderName": folderName
+			"folderName": synthbio.util.appendTrailingDelimiter(folderName)
 		},
 		success: function(response){
 			if(!response.success){
@@ -93,7 +93,7 @@ synthbio.requests.getFile = function(name, folderName, callback){
 		url: "/LoadCircuit",
 		data: {
 			"filename": name,
-			"folderName": folderName
+			"folderName": synthbio.util.appendTrailingDelimiter(folderName)
 		},
 		success: function(response){
 			callback(response);
@@ -120,7 +120,7 @@ synthbio.requests.putFile = function(fileName, folderName, circ, callback) {
 		data: {
 			"filename": fileName,
 			"circuit": JSON.stringify(circ),
-			"folderName": folderName
+			"folderName": synthbio.util.appendTrailingDelimiter(folderName)
 		},
 		success: function(response){
 			if(!response.success){
@@ -200,11 +200,14 @@ synthbio.requests.validate = function(circuit, callback){
  * @param callback Function to apply on the response
  * @param circuit Circuit to simulate.
  */
-synthbio.requests.simulate = function(circuit, callback){
+synthbio.requests.simulate = function(circuit, solver, callback){
 	
 	synthbio.requests.baseXHR({
 		url: "/SimulateCircuit",
-		data: { 'circuit': JSON.stringify(circuit) },
+		data: {
+			'solver': solver,
+			'circuit': JSON.stringify(circuit)
+		},
 		success: function(response){
 			callback(response);
 		},
