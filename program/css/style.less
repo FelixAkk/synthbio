@@ -176,9 +176,6 @@ body {
 	}
 }
 #simulation-tabs .nav-tabs > li > a {
-	&.tab-utilities {
-		float: right;
-	}
 	font-size: 14px;
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	border-width: 1px 1px 0px 1px;
@@ -213,6 +210,13 @@ body {
 	top: 5px;
 	right: 5px;
 	padding: 5px;
+
+	a {
+		opacity: 0.4;
+		&:hover {
+			opacity: 1;
+		}
+	}
 }
 
 #tab-validate {
@@ -651,7 +655,8 @@ body {
 		margin-top: 6px;
 	}
 	textarea{
-		width: 100%;
+		font-family: Monospace;
+		width: 520px;
 		height: 160px;
 	}
 	.x-axis{
@@ -710,7 +715,6 @@ body {
 	
 	}
 }
-
 
 /** Section:
  * ------------------------------

@@ -45,10 +45,10 @@ synthbio.gui.gatesTabWidth = $('#gates-tab').width();
  */
 synthbio.gui.navbarHeight = $('.navbar').height();
 synthbio.gui.simulationTabsNavbarHeight = $("#simulation-tabs .nav-tabs.navbar").height();
-synthbio.gui.statusBarHeight = synthbio.gui.statusBarHeight;
+synthbio.gui.statusBarHeight = $(".status").height();
 
 synthbio.gui.simulationTabsVisible = false;
-
+synthbio.gui.simulationTabsInFullscreen = false;
 /**
  * Get normal gates dimensions
  */
@@ -943,6 +943,47 @@ synthbio.gui.showSimulationTabs = function(show) {
 		synthbio.gui.showSimulationTabs(!synthbio.gui.simulationTabsVisible);
 	}
 };
+/**
+ *
+ * @param fullscreen Optional, true is to go fullscreen, false is to go back to a variable size state, if none provided, the state is toggled.
+ */
+synthbio.gui.simulationTabsFullscreen = function(fullscreen) {
+	var tabs = $("#simulation-tabs");
+	var workspace = $("#grid-container");
+	var tabbar = $(".nav-tabs.navbar", tabs);
+	var chevron = $('[class^="icon-chevron-"], [class*=" icon-chevron-"]');
+	// If first argument is of time boolean (can also be used as event object)
+	if(fullscreen === true || fullscreen === false) {
+		if(fullscreen) {
+			tabs.css("top", synthbio.gui.navbarHeight);
+			tabs.css("height", "auto");
+			workspace.css("display", "none");
+			tabbar.draggable('disable');
+			chevron.attr("class", chevron.attr("class").replace("up", "down")); // Flip the fullscreen toggle arrow
+		} else {
+			// Clear the overrides, let it return to default
+			tabs.css("top", "");
+			tabs.css("height", "");
+			workspace.css("display", "");
+			tabbar.draggable('enable');
+			chevron.attr("class", chevron.attr("class").replace("down", "up")); // Flip the fullscreen toggle arrow
+		}
+		synthbio.gui.handleOutputTabResize();
+		synthbio.gui.simulationTabsInFullscreen = fullscreen;
+	} else {
+		// toggle using recursive call
+		synthbio.gui.simulationTabsFullscreen(!synthbio.gui.simulationTabsInFullscreen);
+	}
+};
+
+/**
+ * Event handling function that can be called when the content div of the simulation output (#tab-chart) is resized
+ * and it's contents should scale acoordingly
+ */
+synthbio.gui.handleOutputTabResize = function() {
+	$("#tab-chart").height($("#simulation-tabs").height() - synthbio.gui.simulationTabsNavbarHeight);
+	synthbio.gui.plotResize();
+};
 
 $(document).ready(function() {
 	// Initialize new gate-dragging
@@ -962,7 +1003,7 @@ $(document).ready(function() {
 		}
 	}));
 
-	// Bind a tab change listener so we can set the proper min-height every time
+	// Bind listeners to make the tabs resizable
 	(function() {
 		var tabs = $("#simulation-tabs");
 		var tabsContent = $("#simulation-tabs .tab-content");
@@ -989,21 +1030,20 @@ $(document).ready(function() {
 				tabs.height(currentHeight + offsetY);
 				workspace.css("bottom", currentHeight + offsetY + synthbio.gui.statusBarHeight + "px");
 			},
-			stop: function() {
-				// Resize the output plot if visible
-				if($("#tab-chart").hasClass("active")) {
-					$("#tab-chart").height($("#simulation-tabs").height() - synthbio.gui.simulationTabsNavbarHeight);
-					synthbio.gui.plotResize();
-				}
-			}
+			stop: synthbio.gui.handleOutputTabResize
 		});
+
+		// Also allow fullscreen toggle by a double click on the window bar like most OS userspaces allow
+		tabbar.on('dblclick', synthbio.gui.simulationTabsFullscreen);
 	})();
 	// Save the default validity tab contents for another day (to show again after a reset for example)
 	synthbio.gui.defaultValidityTabHTML = $("#tab-validate").html();
 	// Bind listener to the simulation tabs close button
-	$("#simulation-tabs .tab-utilities .close").on("click", function() {
+	$("#simulation-tabs .tab-utilities #tabs-close").on("click", function() {
 		synthbio.gui.showSimulationTabs(false);
 	});
+	// Bind listener to the simulation tabs close button
+	$("#simulation-tabs .tab-utilities #tabs-size").on("click", synthbio.gui.simulationTabsFullscreen);
 	// Bind listener to the menu item to show simulation tabs
 	$("#show-tabs").on("click", synthbio.gui.showSimulationTabs);
 	// Prepare default/empty workspace

@@ -117,7 +117,8 @@
 			<li><a href="#tab-chart" data-toggle="tab">Outputs</a></li>
 		</ul>
 		<div class="tab-utilities">
-			<a class="close">×</a>
+			<a class="icon-white icon-chevron-up" href="javascript: void(0);" id="tabs-size"></a>
+			<a class="icon-white icon-remove" href="javascript: void(0);" id="tabs-close"></a>
 		</div>
 		<div class="tab-content">
 			<div class="tab-pane active" id="tab-validate">
@@ -187,7 +188,7 @@
 		</div>
 		<div class="modal-body">
 			<!-- three tabs for the simulation window -->
-			<ul id="simulation-tabs" class="nav nav-tabs" data-tabs="tabs">
+			<ul id="input-options-tabs" class="nav nav-tabs" data-tabs="tabs">
 				<li class="active"><a href="#simulation-editor" data-toggle="tab">Editor</a></li>
 				<li><a href="#simulation-csv" data-toggle="tab">CSV</a></li>
 				<li><a href="#simulation-advanced" data-toggle="tab">Advanced</a></li>
@@ -222,9 +223,11 @@
 
 				<!-- CSV tab -->
 				<div class="tab-pane" id="simulation-csv">
-					<p>
-						Please provide timings for the simulation in the textarea below. Use a CSV format with <code>t,IN1,IN2,...</code> on the first row, the initial values in the second row (<code>0,level,level,...</code>) and row for each transition likewise. The last row will denote the end of the simulation.<br >
-						Spaces and empty rows will be ignored.
+					<p class="alert alert-info">
+						Please provide timings for the simulation in the textarea below.
+						Use a CSV format with <code>t,IN1,IN2,...</code> on the first row, the initial values in
+						the second row (<code>0,level,level,...</code>) and row for each transition likewise.
+						The last row will denote the end of the simulation. Spaces and empty rows will be ignored.
 					</p>
 					<textarea id="simulation-csv-textarea"></textarea>
 				</div>

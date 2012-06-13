@@ -59,16 +59,13 @@ synthbio.gui.handleKeystroke = function(event) {
 			case 118: // F7 key
 				$('#define-inputs').modal('show');
 				break
-			// F8
-			case 119:
+			case 119: // F8
 				synthbio.gui.validateHandler();
 				break;
-			// F9
-			case 120:
+			case 120: // F9
 				synthbio.gui.simulateHandler();
 				break;
-			// F10
-			case 121:
+			case 121: // F10
 				synthbio.gui.showSimulationTabs();
 				break;
 		}
