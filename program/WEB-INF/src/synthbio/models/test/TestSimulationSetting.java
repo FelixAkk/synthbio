@@ -117,6 +117,9 @@ public class TestSimulationSetting{
 		assertEquals(low, ss.getLevelAt("A", 8), delta);
 	}
 
+	/**
+	 * Basic check for the CSV parser.
+	 */
 	@Test
 	public void testFromCSV() throws Exception{
 		String csv = "t,A,B\n0,0,0\n70,1,0\n100,0,1\n140,1,1";
@@ -135,8 +138,12 @@ public class TestSimulationSetting{
 
 		assertThat(ss.getInputAt("A", 140), is(equalTo("H")));
 		assertThat(ss.getInputAt("B", 140), is(equalTo("H")));
-
 	}
+
+	/**
+	 * Check if the parser ignores empty lines.
+	 */
+	@Test
 	public void testFromCSV_empty_lines() throws Exception{
 		String csv = "t,A,B\n\n0,0,0\n70,1,0\n\n100,0,1\n140,1,1\n\n";
 
@@ -154,5 +161,21 @@ public class TestSimulationSetting{
 
 		assertThat(ss.getInputAt("A", 140), is(equalTo("H")));
 		assertThat(ss.getInputAt("B", 140), is(equalTo("H")));
+	}
+
+	/**
+	 * Check if the parser complains about lines with not enough values.
+	 */
+	@Test
+	public void testFromCSV_errorInLine() throws Exception{
+		thrown.expect(Exception.class);
+		thrown.expectMessage("Error in line: '70,1', not enough columns.");
+
+		
+		String csv = "t,A,B\n\n0,0,0\n70,1\n\n100,0,1\n140,1,1\n\n";
+
+		SimulationSetting ss = new SimulationSetting();
+		ss.loadInputCSV(csv);
+		
 	}
 }
