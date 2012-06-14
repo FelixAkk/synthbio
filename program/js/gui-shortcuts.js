@@ -56,14 +56,17 @@ synthbio.gui.handleKeystroke = function(event) {
 		}
 	} else {
 		switch(event.which) {
-			case 120: // F9 key
-				synthbio.gui.simulateHandler();
-				break;
-			case 119: // F8 key
-				synthbio.gui.validateHandler();
-				break;
 			case 118: // F7 key
 				$('#define-inputs').modal('show');
+				break
+			case 119: // F8
+				synthbio.gui.validateHandler();
+				break;
+			case 120: // F9
+				synthbio.gui.simulateHandler();
+				break;
+			case 121: // F10
+				synthbio.gui.showSimulationTabs();
 				break;
 		}
 	}

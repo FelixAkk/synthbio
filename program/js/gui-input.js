@@ -240,9 +240,9 @@ $(document).ready(function() {
 			//but that invokes recursion, since the define-inputs on('show'
 			//is also triggered for the tab...
 			$('.tab-pane').removeClass('active');
-			$('#simulation-tabs li').removeClass('active');
+			$('#input-options-tabs li').removeClass('active');
 
-			$('#simulation-tabs a[href="#simulation-csv"]').parent().addClass('active');
+			$('#input-options-tabs a[href="#simulation-csv"]').parent().addClass('active');
 			$('#simulation-csv').addClass('active');
 
 		}else{
@@ -259,7 +259,7 @@ $(document).ready(function() {
 	 * When the simulation-editor tab is clicked, check if csv is active,
 	 * and warn about loosing data if proceeding.
 	 */
-	$('#simulation-tabs a[href="#simulation-editor"]').on('click', function(event) {
+	$('#input-options-tabs a[href="#simulation-editor"]').on('click', function(event) {
 		var simulationSetting = synthbio.model.getSimulationSetting();
 		
 		if(simulationSetting.getCSV() !== "") {
@@ -286,7 +286,7 @@ $(document).ready(function() {
 	 * When the simulation-csv tab is clicked, check if the editor is active,
 	 * and warn about loosing data if proceeding...
 	 */
-	$('#simulation-tabs a[href="#simulation-csv"]').on('click', function(event) {
+	$('#input-options-tabs a[href="#simulation-csv"]').on('click', function(event) {
 		var simulationSetting = synthbio.model.getSimulationSetting();
 		
 		if(simulationSetting.getCSV() == "") {
