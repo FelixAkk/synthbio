@@ -133,6 +133,7 @@ body {
 	background-color: @baseColor;
 	min-width: @minWidth;
 	min-height: @minHeight;
+	overflow: hidden;
 }
 
 .navbar {
@@ -165,19 +166,16 @@ body {
 		}
 	}
 }
-#simulation-tab .nav-tabs > ul {
+#simulation-tabs .nav-tabs > ul {
 	margin-bottom: 0;
 }
-#simulation-tab .navbar .nav > li > a, .nav-tabs > li > a {
+#simulation-tabs .navbar .nav > li > a, .nav-tabs > li > a {
 	color: lighten(@baseColor, 20%);
 	&:hover {
 		color: @textColorFaded;
 	}
 }
-#simulation-tab .nav-tabs > li > a {
-	&.tab-utilities {
-		float: right;
-	}
+#simulation-tabs .nav-tabs > li > a {
 	font-size: 14px;
 	.borderDown(@baseColor, @contrast, @borderHeight);
 	border-width: 1px 1px 0px 1px;
@@ -197,21 +195,35 @@ body {
 	}
 }
 
-#simulation-tab .nav-tabs > li.active > a {
+#simulation-tabs .nav-tabs > li.active > a {
 	.gradient(@grStart, darken(@grStart, 5%));
 	color: #FFFFFF;
 }
 
-#simulation-tab .nav-tabs {
+#simulation-tabs .nav-tabs {
 	height: auto;
 }
 
-#simulation-tab .tab-utilities {
+#simulation-tabs .tab-utilities {
 	z-index: 110;
 	position: absolute;
 	top: 5px;
 	right: 5px;
 	padding: 5px;
+
+	a {
+		opacity: 0.4;
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+#tab-validate {
+	padding: 10px;
+	.alert {
+		margin-bottom: 0;
+	}
 }
 
 .navbar .nav > li > a {
@@ -368,11 +380,6 @@ body {
 	input {
 	    height: 16px;
 	}
-}
-
-#chart-group {
-	width: 530px;
-	height: 400px;
 }
 
 #chart-separate { 
@@ -550,16 +557,14 @@ body {
 	}
 }
 
-
-#grid {
-}
-
-#simulation-tab {
+#simulation-tabs {
+	position: absolute;
 	top: auto;
 	/* Keep some distance for the status bar and gates tab (+1 pixel for the border) */
 	left: @tabWidth + 1;
 	bottom: @statusHeight + 1;
-	min-height: 150px;
+	min-height: 200px;
+	height: 400px;
 	background-color: @baseColor;
 	.borderUp(@baseColor, @contrast, @borderHeight);
 	border-width: 1px 0px 0px 0px; /* Top border only */
@@ -567,9 +572,18 @@ body {
 	color: @textColorFaded;
 	z-index: 30;
 	.transition(bottom, 0.3s);
+	overflow: hidden;
 
 	.navbar {
 	    cursor: n-resize;
+	}
+
+	#simulation-options {
+		position: absolute;
+		z-index: 100;
+		top: 66px;
+		left: 50%;
+		margin-left: -200px;
 	}
 }
 
@@ -649,7 +663,8 @@ body {
 		margin-top: 6px;
 	}
 	textarea{
-		width: 100%;
+		font-family: Monospace;
+		width: 520px;
 		height: 160px;
 	}
 	.x-axis{
@@ -707,10 +722,6 @@ body {
 		}
 	
 	}
-}
-
-#validate-alert.invalid .modal-body{
-	background-color: #f2dede;
 }
 
 /** Section:
