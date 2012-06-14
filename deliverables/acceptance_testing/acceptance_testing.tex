@@ -70,10 +70,15 @@ On a second click on the file is should save and close the dialog. Check that th
 &\step& Drag gates into the workspace and connect them to form a 2-to-1 multiplexer. Connect the inputs and the outputs, and assign proteins to all signals.\\
 &\step& Open the Simulate menu and click Define Inputs. A modal dialog should appear showing graphs of each protein.\\
 &\step& Click and drag in these graphs to define when the concentration of the proteins is high.\\
-&\step& Define inputs so one input is selected and high at one point in time, and some later the other input is selected and high. Run the simulation and ensure that the correct output is given. \\
+&\step& Define inputs so one input is selected and high at one point in time, and some later the other input is selected and high. Run the simulation and ensure that the correct output is given. \\ \midrule
 
 6 &\setcounter{step}{1}& \textbf{Compund gates (extends scen. 1, 2):}\\
-&\step& ACCEPTANCE TEST FOR COMPOUND GATES\\
+&\step& Go to the File menu and open a previously made circuit.  \\
+&\step& Go to the File menu again and click on SaveAs. The SaveAs dialog will open.\\ 
+&\step& Check the "Compound gate" checkbox at the bottom of the dialog. \\ 
+&\step& Now press SaveAs. The file should now be saved as the original, but also as a compound gate. The gate should now appear as compound gate in the panel on the left.\\
+&\step& Open the File menu and click New. Drag and drop the compound gate into the empty new workspace. The gates of the dragged in circuit should be displayed, including the wires between the gates (not the input and output). If the proteins in the compound circuit are available, they will be set as well. Otherwise, they will be set to none(Choose protein). \\
+
 \end{longtable}
 \end{center}
 

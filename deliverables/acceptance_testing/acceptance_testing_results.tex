@@ -35,14 +35,15 @@ When trying to open an ERROR file it gives an error saying it can't be loaded.
 With saving we found one bug. When opening a file in FireFox and then using SaveAs on the same file, it should ask confirmation if you want to override this file, but it doesn't. All features work including hotkeys and opening the SaveAs dialog when saving a file for the first time.
 
 \subsection{Create simple circuit}
-With the application you can create a simple circuit. This works in both browsers. Choosing proteins is also not an issue. There are no double proteins possibilities. Also when deleting gates or wire, the proteins reset correctly. When having a wire as input for multiple gates, the proteins are set automatically. 
-When validating it all works as well, but you need to put the right proteins in, since some gates only accept certain proteins.
+With the application you can create a simple circuit. This worked in both browsers. Choosing proteins was also not an issue. There are no double proteins possibilities. Also when deleting gates or wire, the proteins reset correctly. When having a wire as input for multiple gates, the proteins were set automatically. 
+When validating it all worked as well.
 
 \subsection{Create and simulate a 2-to-1 multiplexer:}
 This works fine in both Chrome and FireFox. Building circuits is no problem. The Define Inputs menu looks great and you can set concentrations to different levels. Before simulating the circuit is first validated. If it is invalid is is shown correctly.
 
 \subsection{Compound Gates}
-TODO
+Opening a circuit was not problem. But for some reason saving a gate as compound proved difficult.If you want to save something under the same name, it won't work. This error has to be fixed. When you save it under a new name, it does work.
+But without changing anything, you can save as a compound. Once this was done, all following steps were executed with positive results.
 
 \subsection{General bugs}
 In general we found some bugs in resizing and in dialog modals.
