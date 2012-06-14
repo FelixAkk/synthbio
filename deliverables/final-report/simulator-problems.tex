@@ -4,8 +4,10 @@
 \usepackage{amsmath,amssymb}
 \usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
 \usepackage[toc]{multitoc} % Nice two-column TOC
-
+\usepackage{graphicx}
+\usepackage{wrapfig}
 \usepackage{tabto}
+\usepackage[font=small]{caption}
 
 \usepackage{pdfpages}
 %~ TikZ is not in use in this document
@@ -21,16 +23,32 @@
   {\normalfont\normalsize\bfseries}}
 \makeatother
 
+
 \begin{document}
 
 \section*{Simulator problems}
-In the second to last iteration we discovered that our simulator didn't degrade anything, this was discovered so late because non of the tests targeted degradation, we only tested if the reaction speed changed. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from the student assistant, the problem found was indeed the SBML format.\\\\
-The SBML format that we used for the simulation required a list of species and a list of reactions. These Reactions each have a set of reactants, products and modifiers.\\
-The reactants are the fuel of the reactions, the reactants decrease as the reaction occurs.\\
-The products are what the reaction produces in the end, the products increase as the reaction occurs.\\
-The modifiers can speed up or slow down the reaction, but their concentration doesn't change in the reaction.\\
-In our simulation we had two reactions: transcription and translation. The transcription reaction produces mRNA (that encodes for a specific protein) from a gene sequence with help from transcription factors. The translation reaction produces the protein from the mRNA. On top of this degradation takes place: the proteins and mRNA degrade over time.\\
-The transcription and translation reactions, the only reactions we needed, both have a degradation part such that the produced mRNA and the protein will degrade over time. In our SBML file the degradation didn't have a separate reaction, which caused a problem given that the degradation reaction required a different set of reactants, products and modifiers.
+In the second to last iteration we discovered that our simulator didn't degrade anything, this was discovered so late because non of the tests targeted degradation, we only tested if the reaction speed changed. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from Alexey, the problem found was indeed the SBML format.\\
 
+\begin{figure}[h!]
+	\centering\includegraphics[scale=0.35]{../../screenshots/2012-05-31-not-output.png}
+	\caption{Wrong output, B doesn't degrade.}
+\end{figure}
 
+\noindent The SBML format that is used for the simulation requires a list of species and a list of reactions. These reactions each have a set of reactants, products and modifiers:
+\begin{itemize}
+	\item reactants are the fuel of the reactions, the reactants decrease as the reaction occurs,
+	\item products are what the reaction produces in the end, the products increase as the reaction occurs,
+	\item modifiers can speed up or slow down the reaction, but their concentration doesn't change in the reaction.
+\end{itemize}
+In our simulation we have two reactions: transcription and translation. The transcription reaction produces mRNA (that encodes for a specific protein) from a gene sequence with help from transcription factors. The translation reaction produces the protein from the mRNA. On top of this degradation takes place: the proteins and mRNA degrade over time.\\
+\\
+In our SBML file the degradation didn't have a separate reaction, which caused a problem given that the degradation reaction required a different set of reactants, products and modifiers from the transcription and translation reactions.\\
+The transcription reaction produces something from a gene sequence. The degradation reactions need to degrade to something, but it's not producing something from a gene sequence, so putting the degradation in the same reaction as the transcription (or translation) reaction would be wrong since they have different reactants and different products.\\
+
+\begin{wrapfigure}{l}{8cm}
+	\centering\includegraphics[scale=0.5]{../../screenshots/2012-06-14-not-output.png}
+	\caption{Correct output, B degrades.}
+\end{wrapfigure}
+
+\noindent To fix this we split the transcription and translation reactions such that the degradations got their own reactions, this allowed us to specify different reactants, products and modifiers for the degradation.
 \end{document}
