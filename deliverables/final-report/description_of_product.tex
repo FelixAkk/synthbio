@@ -10,7 +10,7 @@
 
 
 \section{Description of Zelula}
-Zelula is a modelling and simulation package which enables users to simulate the protien \textit{logic} in a cell. With a provided set of BioBricks representing AND and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuits can be simulated, the results will be presented as a concentration/time graph.
+Zelula is a modelling and simulation package which enables users to simulate the protein \textit{logic} in a cell. With a provided set of BioBricks representing AND and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuits can be simulated, the results will be presented as a concentration/time graph.
 
 
 \subsection{Circuit editor}
@@ -27,7 +27,7 @@ When a connection is made, no protein is selected for it by default. The user ma
 
 The interface prevents the user to make some simple mistakes. For example, it's impossible to connect two inputs. If the user connects one output to two inputs, the interface makes sure the protein on those connections is the same.
 
-Even the position of the circuits' input and output connectors can be freely choosen by dragging them using the text as an handel.
+Even the position of the circuits' input and output connectors can be freely chosen by dragging them using the text as an handle.
 
 Removing gates and connection is a matter of double clicking on them.
 
@@ -65,15 +65,7 @@ When a user clicks on a tick, it is toggled. The user may also select ranges by 
 \end{tikzpicture}
 \end{figure}
 
-\noindent The input may also be defined by a simple CSV format, as defined by the SA. For two input species, it may look like this. 
-\begin{verbatim}
-t,A,B
-0,0,0
-70,1,0
-140,1,1
-210,1,1
-\end{verbatim}
-The length of the simulation is defined by the last line.
+\noindent The input may also be defined by a simple CSV format, as defined by the SA.
 
 \subsection{Exporting}
 The work done in Zelula can be shared in two different ways: the user can export the circuit to a SBML file, a common format uses in syntetic Biology.

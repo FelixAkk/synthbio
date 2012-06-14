@@ -23,6 +23,14 @@
   {\normalfont\normalsize\bfseries}}
 \makeatother
 
+% some commands to link to files.
+\newcommand{\urlRAD}{https://github.com/FelixAkk/synthbio/raw/master/deliverables/rad/rad.pdf}
+\newcommand{\hrefRAD}{\href{\urlRAD}{Requirements Analysis and Design @Github}}
+
+\newcommand{\urlTestImplementation}{https://github.com/FelixAkk/synthbio/raw/master/deliverables/test-implementation/test-implementation.pdf}
+\newcommand{\hrefTestImplementation}{\href{\urlTestImplementation}{Test and Implemention plan @Github}}
+
+
 
 \title{Programming Life - Final report}
 
@@ -34,31 +42,40 @@ Albert ten Napel \\
 Jan Pieter Waagmeester}
 
 \begin{document}
-\maketitle
 
+\maketitle
+\thispagestyle{empty}
 \vfill
 
 \small{\tableofcontents}
-\pagebreak
+\pagebreak{}
 
-\section*{Abstract}
-This document concludes the whole \textit{Contextproject} and especially the development of our product: Zelula. This piece of software provides synthetic biologists with a visual tool to design, simulate and validate biological logic circuits.
+\section*{Preface} ??
+
+
+\pagebreak
+\begin{abstract}
+\noindent This document concludes the whole \textit{Contextproject} and especially the development of our product: Zelula. This piece of software provides synthetic biologists with a visual tool to design, simulate and validate biological logic circuits.
 
 The project was roughly devided in two parts: the design stage and the implementation stage. Both were roughly of equal length.
 
 todo fix more.
+\end{abstract}
+\pagebreak
 
 \section{Introduction}
-After finishing 
+After finishing the fifth SCRUM iteration, this documents provides an overview of the product we developed, how the process went and how it compares to the plans we made in the documentation phase. 
+
+
 \include{description_of_product}
 
 \section{Design and implementation process}
 The first half of the project was focused on design, while the second part was all about implementation. In this chapter we will reflect on the consistency between design and implementation. We will clarify what was implemented according to the documents and what was changed or perhaps not implemented.
 
-In the Test \& Implementation plan\footnote{linkie linkie} we set up a list of requirements according to the MoSCoW model. What follows is a copy of this list with comments on how (and if) it is implemented, but first we will give a quick comparison of the intended and eventual GUI design.
+In the Test \& Implementation plan\footnote{\hrefTestImplementation} we set up a list of requirements according to the MoSCoW model. What follows is a copy of this list with comments on how (and if) it is implemented, but first we will give a quick comparison of the intended and eventual GUI design.
 
 \subsection{Client GUI}
-In our RAD document\footnote{linkie linkie} we gave a few simple sketches of what we had in mind for the user interface of the client. The final implementation is greatly influenced by these sketches, as can be seen from the following screenshots.\\
+In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we had in mind for the user interface of the client. The final implementation is greatly influenced by these sketches, as can be seen from the following screenshots.\\
 
 \centerline{\small 3.1 Sketches from RAD document: model and simulate.}
 \noindent \includegraphics[width=8cm]{pictures/gui_sketch1_marks.png} 
@@ -154,6 +171,26 @@ Our program is not only to model circuits but also to calculate and display the 
 \subsection{Thomas van Helden}
 \subsection{Albert ten Napel}
 \subsection{Jan Pieter Waagmeester}
+The first thing I would like to note is that I am suprised by the final product we managed to deliver, it exceeds my expectation. I looks good, works well, has clean code and all the must-haves we defined. Overall, I am also satisfied with the way the team worked together. There were some frustrations now and then, but always room for feedback. 
+
+I will reflect in more detail on two area's: the technical develepment and the team collaboration.
+
+\paragraph{Develepment \& tool use}
+% Development process, TDD, tool use.
+It was quite some time ago since I did collaboratorive Java development on larger scale. So I did not have strong opinions about the tool chain to be used, however, during the Software testing class I got my share of Eclipse frustration, so glad to leave that for a while.
+
+I'm used to the command line and enjoyed learning to use new tools like \verb|tomcat|, \verb|ant|, \verb|git|. Tomcat is a very complicated way to have simple server functionality. Since we only needed exaclty that, it might have been more efficient to select something more lightweight, however, lots of documentation is available. Ant is a powerfull way of to automate boring tasks and made me smile from time to time. Git, especially in combination with Github beats every other SCM toolchain I have used before. Easy of branching makes it usefull, local commits make code review by peers way easier, but like any other SCM depends on how it's used.
+
+The actual development was often quite straightforward. No very complicated algorithms, mostly pushing simple data structures around. That said, testing things is not always easy. For example, testing JSON responses is not a trivial task if the testing tools have no notion about its structure. I think we could have put more focus on exactly what to test, not only on line or branch coverage.
+
+I really did like the test driven design approach. Some refactoring made the importance of tests very clear: the tested parts worked like before because problems were identified by the tests, but the untested functionality lagged behind.
+
+
+\paragraph{Team collaboration}
+% balance of work, Initiative. SCM frustration
+Balancing the work during projects is an always an issue. Some people have less time available, some like to invest more time. Some are perfectionists, others don not care about brace placement. I think being one of the more active people does not always justify complaints about others contributing less. Some people could have displayed more initiative from time to time.
+
+Working together in a source code management system can be a source of frustrations: braking \textit{the make}, little care when committing unintentional changes or merges. I sometimes found it hard to patiently correct them and explain the how and why.
 
 
 \section{Lightweight SCRUM Plans}
