@@ -197,9 +197,9 @@ synthbio.gui.plotOutput = function(response) {
  * Resize plot to make use of full space
  */
 synthbio.gui.plotResize = function(w, h) {
-	w = w || $("#tab-chart").width();
+	w = w || $("#simulation-tabs").width();
 	h = h || $("#tab-chart").height();
-	synthbio.gui.plot.setSize(w, h)
+	synthbio.gui.plot.setSize(w, h);
 }
 
 /**
@@ -358,7 +358,7 @@ $(document).ready(function() {
 
 	// Validate
 	$('#validate').on('click', synthbio.gui.validateHandler);
-
+	$('#validate-refresh').on('click', synthbio.gui.validateHandler);
 	/**
 	 * Run simulation
 	 */
