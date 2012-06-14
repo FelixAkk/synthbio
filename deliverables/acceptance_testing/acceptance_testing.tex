@@ -45,7 +45,9 @@ For actual testing, the following table can be copied to fill in the last column
 2 &\setcounter{step}{1}& \textbf{File opening (extends scen. 1):}\\
 &\step& Click on the File menu item, which should drop down a sub-menu with highlighting menu items when hovering over with the mouse. \\
 &\step& In the menu click on the Open item, or press CTRL+O. The screen should darken and a modal dialog should slide in. Here some files should be listed.\\
-&\step& Click open, a warning that no filename is provided should show. On clicking a file the circuit should load and the modal slide out.\\\midrule
+&\step& Click open, a warning that no filename is provided should show.\\
+&\step& When trying to open an incorrectly saved file "FAKE.syn", it gives an error message.\\
+&\step&On clicking a file the circuit should load and the modal slide out. The opened file should now display in the workspace.\\\midrule
 
 3 & & \textbf{File saving (extends scen. 2):}\\
 &\step& Click the Save As item in the File menu or press CTRL+Shift+S, a modal dialog should slide in. Check that the filename of the loaded circuit is already displaying in the input field.\\
@@ -58,14 +60,14 @@ On a second click on the file is should save and close the dialog. Check that th
 4 &\setcounter{step}{1}& \textbf{Create simple circuit (extends scen. 1, 3):}\\
 &\step& Drag two NOT-gates into the workspace, connect these to the inputs of an AND-gate and connect everything to the inputs and outputs.\\
 &\step& Click on the ``Choose protein'' overlay on a signal. A dropdown should appear listing all proteins and a none option.\\
-&\step& Assign random proteins to the signals. Check that the already assigned proteins are not available anymore after selecting. Check that when none is selected, the previously assigned protein is made available again for selection elsewhere.\\
+&\step& Assign proteins to the signals. Check that the already assigned proteins are not available anymore after selecting. Check that when none is selected, the previously assigned protein is made available again for selection elsewhere.\\
 &\step& Check that the circuit validates by clicking on the Simulate menu and selecting the Validate Circuit item. A modal dialog should appear showing in green that the circuit is valid.\\
 &\step& Check that no two signals can be connected to a single gate input.\\
 &\step& Check that one output signal can be assigned to different inputs.\\
 &\step& Check that when a protein is assigned to such a forking signal, the overlay for both changes to show the same protein.\\ \midrule
 
 5 &\setcounter{step}{1}& \textbf{Create and simulate a 2-to-1 multiplexer (extends scen. 1):}\\
-&\step& Drag gates into the workspace and connect them to form a 2-to-1 multiplexer. Connect the inputs and the outputs, and assign random proteins to all signals.\\
+&\step& Drag gates into the workspace and connect them to form a 2-to-1 multiplexer. Connect the inputs and the outputs, and assign proteins to all signals.\\
 &\step& Open the Simulate menu and click Define Inputs. A modal dialog should appear showing graphs of each protein.\\
 &\step& Click and drag in these graphs to define when the concentration of the proteins is high.\\
 &\step& Define inputs so one input is selected and high at one point in time, and some later the other input is selected and high. Run the simulation and ensure that the correct output is given. \\
