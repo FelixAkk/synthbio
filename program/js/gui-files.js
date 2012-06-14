@@ -150,8 +150,6 @@ synthbio.gui.fileSaveDialog = function() {
 				if(response.success === false) {
 					synthbio.gui.showAdModalAlert('files', 'alert-error',
 						'<strong>File was not saved.</strong> ' + response.message + '</div>');
-					synthbio.gui.showAdModalAlert('files', 'alert-error',
-						"<strong>Server error:</strong> ' + response.error + '.", 10000);
 					console.error(response.message);
 					return false;
 				}
@@ -163,8 +161,6 @@ synthbio.gui.fileSaveDialog = function() {
 			if(response.success === false) {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not saved.</strong> ' + response.message + '</div>');
-				synthbio.gui.showAdModalAlert('files', 'alert-error',
-					"<strong>Server error:</strong> ' + response.error + '.", 10000);
 				console.error(response.message);
 				return false;
 			}
@@ -212,7 +208,7 @@ synthbio.gui.fileOpenDialog = function() {
 				synthbio.gui.showAdModalAlert('files', 'alert-error',
 					'<strong>File was not opened.</strong> ' + response.message);
 				return;
-			}else {
+			} else {
 				synthbio.loadCircuit(synthbio.Circuit.fromMap(response.data));
 				// We're done; hide
 				$("#files").modal("hide");

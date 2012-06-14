@@ -90,73 +90,6 @@ synthbio.gui.plotSeries = function(series, timestep) {
 };
 
 /**
- * Plot an array of series separately
- * @param series Array of output points ([{name: "name", data: [1, 2, 3, ..]}, ..])
- */
-synthbio.gui.plotSeriesSeparate = (function() {
-	//Keep track of old charts to destroy before overriding
-	var charts = [];
-
-	return function(series) {
-		//Adjust the default options
-		var chartOptions = $.extend(true, {}, synthbio.chartOptions, {
-			chart: {
-				zoomType: 'x',
-				height: 100,
-				width: 510,
-				marginLeft: 25,
-				marginRight: 0,
-				marginBottom: 15
-			},
-			title: {text: null},
-
-			legend:        { enabled: false },
-			navigator:     { enabled: false },
-			rangeSelector: { enabled: false },
-			scrollbar:     { enabled: false },
-			exporting:     { enabled: false }
-		});
-
-		//Delete previous charts
-		$.each(charts, function(idx, chart) {
-			chart.destroy();
-		});
-		charts = [];
-
-		//Get container and clear
-		var container = $("#chart-separate");
-		container.empty();
-
-		//Plot new series
-		$.each(series, function(idx, data) {
-			//Create div for chart and append to container
-			var el = $('<div class="chart">'+data.name+': </div>');
-			container.append(el);
-
-			//Add series to options
-			data.visible = true;
-			var options = $.extend(true, {}, chartOptions, {
-				chart: {
-					renderTo: el[0],
-					reflow: true
-				},
-				yAxis: {title: {text: data.name}},
-				series: [data]
-			});
-
-			//Plot chart and add to chart array
-			var chart = new Highcharts.StockChart(options);
-			charts.push(chart);
-		});
-
-		//Default text if there are no results
-		if (charts.length < 1) {
-			container.html("Please simulate first.");
-		}
-	};
-}());
-
-/**
  * Plot simulation output
  * @param response Data object from synthbio.requests.simulate
  */
@@ -190,15 +123,15 @@ synthbio.gui.plotOutput = function(response) {
 	});
 
 	synthbio.gui.plotSeries(series, timestep);
-	synthbio.gui.plotSeriesSeparate(series);
 };
 
 /**
  * Resize plot to make use of full space
  */
 synthbio.gui.plotResize = function(w, h) {
-	w = w || $("#simulation-tabs").width();
-	h = h || $("#tab-chart").height();
+	var tabs = $("#simulation-tabs");
+	w = w || tabs.width();
+	h = h || tabs.height() - synthbio.gui.simulationTabsNavbarHeight;
 	synthbio.gui.plot.setSize(w, h);
 }
 
@@ -225,17 +158,22 @@ synthbio.gui.simulateHandler = function() {
 	console.log('Simulate initiated.');
 	synthbio.gui.plot.showLoading();
 
+	$('#simulation-tabs a[href="#tab-validate"]').tab("show");
+	synthbio.gui.showSimulationTabs(true);
+
 	synthbio.requests.simulate(
 		synthbio.model,
 		$('#choose-solver').val(),
 		function(response){
 			console.log("synthbio.request.simulate called response callback");
 			if(response.message !== '') {
-				synthbio.gui.displayValidation(response.message, false);
-			}else{
+				synthbio.gui.displayValidation(response.message, false, false);
+			} else {
 				synthbio.gui.displayValidation("Circuit validates!", true, true);
-				$('#simulation-tabss a[href="#tab-chart"]').tab("show");
+				$('#simulation-tabs a[href="#tab-chart"]').tab("show");
 				synthbio.gui.plotOutput(response.data);
+				// Because a new plot is created, it needs to be told to settle in place (instead if leaving default size)
+				synthbio.gui.plotResize();
 			}
 		}
 	);
@@ -359,6 +297,7 @@ $(document).ready(function() {
 	// Validate
 	$('#validate').on('click', synthbio.gui.validateHandler);
 	$('#validate-refresh').on('click', synthbio.gui.validateHandler);
+
 	/**
 	 * Run simulation
 	 */

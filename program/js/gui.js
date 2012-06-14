@@ -136,7 +136,7 @@ $(document).ready(function() {
 	$('.dropdown-toggle').dropdown();
 
 	// Start pinging
-	//synthbio.gui.pingServer();
+	synthbio.gui.pingServer();
 	
 	// Set default tooltip info-string
 	synthbio.gui.resetTooltip();
@@ -147,7 +147,8 @@ $(document).ready(function() {
 		" These gates will explode to the actual circuit when released into the workspace.");
 	synthbio.gui.setTooltip($("#gate-input"),       "Drag from here to define an input signal for a gate.");
 	synthbio.gui.setTooltip($("#gate-output"),      "Drop a signal endpoint in here to output the signal values.");
-
+	synthbio.gui.setTooltip($("#simulation-tabs .nav-tabs.navbar"), "Drag to resize the tabs. Double click to toggle " +
+		"fullscreen. Use F10 to toggle close/open these tabs.");
 	// Hook click listener for editing the circuit details
 	$("#circuit-details button").on("click", synthbio.gui.editCircuitDetails);
 
