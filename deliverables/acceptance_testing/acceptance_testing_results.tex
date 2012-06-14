@@ -1,0 +1,78 @@
+%&latex
+\documentclass{article}
+
+\usepackage[dutch]{babel}
+\usepackage{tabularx}
+\usepackage{fullpage}
+\usepackage{booktabs}
+
+\newcounter{step}
+\setcounter{step}{1}
+\newcommand{\step}{\arabic{step}\stepcounter{step}}
+\begin{document}
+
+%+Title
+\title{Acceptance testing results}
+\author{Thomas van Helden}
+\date{\today}
+\maketitle
+%-Title
+
+
+
+\section{Acceptance testing results}
+These are the results of the acceptance tests we ran at the end of our fifth SCRUM sprint. We looked at all the basics for our program, searching for possible bugs and errors. We went through all the startup processes to check if all menus would display correctly in FireFox 13.0 and Chrome 19.0. We then had a look at if we can open, save and make new circuits. Afterwards we looked at validating and simulating our circuits after setting the inputs. We managed to find some errors and we intend to fix them.
+
+\subsection{Basic startup and workspace initialisation}
+This is where we looked at the basic setup  of our application. We went to the URL and the page loaded correctly. The connection to the server did not show correctly, but we had it disabled at the time of this test. The handle bars also worked properly. There was one bug in this section: We found that in FireFox the editing of the circuit name and description in the upper right corner didn't work. When pressing the edit option, the name and description should become editable, and they did not.
+All the other features like tooltips did work according to our expectations.
+
+\subsection{File opening}
+When we tested the opening of files everything worked perfectly. The File menu displayed correctly. Same went for the open file dialog. It was openable with CTRL+O and loaded files we displayed correctly in the workspace, with all the preset proteins.
+When trying to open an ERROR file it gives an error saying it can't be loaded.
+
+\subsection{File saving}
+With saving we found one bug. When opening a file in FireFox and then using SaveAs on the same file, it should ask confirmation if you want to override this file, but it doesn't. All features work including hotkeys and opening the SaveAs dialog when saving a file for the first time.
+
+\subsection{Create simple circuit}
+With the application you can create a simple circuit. This worked in both browsers. Choosing proteins was also not an issue. There are no double proteins possibilities. Also when deleting gates or wire, the proteins reset correctly. When having a wire as input for multiple gates, the proteins were set automatically. 
+When validating it all worked as well.
+
+\subsection{Create and simulate a 2-to-1 multiplexer:}
+This works fine in both Chrome and FireFox. Building circuits is no problem. The Define Inputs menu looks great and you can set concentrations to different levels. Before simulating the circuit is first validated. If it is invalid is is shown correctly.
+
+\subsection{Compound Gates}
+Opening a circuit was not problem. But for some reason saving a gate as compound proved difficult.If you want to save something under the same name, it won't work. This error has to be fixed. When you save it under a new name, it does work.
+But without changing anything, you can save as a compound. Once this was done, all following steps were executed with positive results.
+
+\subsection{General bugs}
+In general we found some bugs in resizing and in dialog modals.
+
+Any dialog modal which can open with a hotkey one bug. When you open a dialog and close it, it darkens a bit and then it becomes normal again. However, when you repeat this process fast enough, the new dialog opens over the fog of the previous one, which makes the screen darker. When you repeat this process you can fully blackout your screen. In some cases the application freezes, in some cases all usability is still there, you just can't see it.
+
+When resizing the application there are some bugs as well. Although they are hard to fix, since they are not our own libraries, we do acknowledge them.
+For instance, when simply resizing the browser, the input and output shift along, but the circuit doesn't. This causes the wires to be displayed incorrectly. Also, the result panel does not resize correctly, to fit the graph nicely, at first. When resizing it one bit or rerunning the simulation from the bottom panel, it does resize.
+Final example is when you run a simulation, then go from the output tab (bottom panel) to the validation panel, and then rerun the simulation, the graph and the bar for the graph are not shown correctly.
+
+\newpage
+\subsection{Usability grading}
+Here the tester can give grades for specific and overall aspects of the usability of the application. Of course written remarks and feedback on certain aspects are also very valuable, and we encourage the tester to make these along with providing grades. On some aspects an explanation is provided in the footnotes.
+
+In the following table, the grades correspond to the following valuations;\\ 1 = very bad, 3 = bad, 5 = moderate/average, 7 = good, 9 = very good.
+\begin{center}
+\begin{tabularx}{\textwidth}{p{10cm} cc cc c cc cc} \toprule
+\textbf{Aspect} & \multicolumn{1}{c}{\textbf{Score on aspect}} \\ \midrule
+Usability of circuit modelling &8 \\ \midrule
+Usability of circuit management \footnote{The ease of use and learability of importing, exporting, saving, opening, browsing and editing of circuit details.} &8 \\ \midrule
+Responsiveness &7 \\ \midrule
+Performance &7 \\ \midrule
+Affordance \footnote{The degree in which the UI intuitively implies it's functionality and use.} &7 \\ \midrule
+Presentation of data \footnote{The quality of communication of, for example; simulation output data, validation results, input data, protein listings} &6 \\ \midrule
+Visual appeal &7 \\ \midrule
+\textbf{Overal application usability} &\textbf{7} \\ \bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}
+
+

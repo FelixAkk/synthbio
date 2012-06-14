@@ -181,6 +181,12 @@ public class CircuitFactory{
 
 				//Not Gate can be connected right away.
 				if(circuit.gateAt(to).getKind().equals("not")){
+					if(!this.getBbr().hasNotPromotor(signal.getString("protein"))) {
+						throw new CircuitException(
+							"NotPromotor (" + signal.getString("protein") + ") "+
+							"@" + circuit.gateAt(to).getPosition() + " is not defined in this BioBrick set."
+						);
+					}
 					circuit.gateAt(to).setPromotor(
 						this.getBbr().getNotPromotor(signal.getString("protein"))
 					);
@@ -189,7 +195,14 @@ public class CircuitFactory{
 					if(!tmpTF.containsKey(to)){
 						tmpTF.put(to, signal.getString("protein"));
 					}else{
-						//now we have two inputs, add the AndPromtor to the Gate.
+						//now we have two inputs, check if such an AndPromotor exists...
+						if(!this.getBbr().hasAndPromotor(signal.getString("protein"), tmpTF.get(to))) {
+							throw new CircuitException(
+								"AndPromotor (" + signal.getString("protein") + ", " + tmpTF.get(to) + ") "+
+								"@" + circuit.gateAt(to).getPosition() + " is not defined in this BioBrick set."
+							);
+						}
+						//and add the AndPromtor to the Gate.
 						circuit.gateAt(to).setPromotor(
 							this.getBbr().getAndPromotor(signal.getString("protein"), tmpTF.get(to))
 						);

@@ -23,6 +23,14 @@
   {\normalfont\normalsize\bfseries}}
 \makeatother
 
+% some commands to link to files.
+\newcommand{\urlRAD}{https://github.com/FelixAkk/synthbio/raw/master/deliverables/rad/rad.pdf}
+\newcommand{\hrefRAD}{\href{\urlRAD}{Requirements Analysis and Design @Github}}
+
+\newcommand{\urlTestImplementation}{https://github.com/FelixAkk/synthbio/raw/master/deliverables/test-implementation/test-implementation.pdf}
+\newcommand{\hrefTestImplementation}{\href{\urlTestImplementation}{Test and Implemention plan @Github}}
+
+
 
 \title{Programming Life - Final report}
 
@@ -34,86 +42,106 @@ Albert ten Napel \\
 Jan Pieter Waagmeester}
 
 \begin{document}
-\maketitle
 
+\maketitle
+\thispagestyle{empty}
 \vfill
 
 \small{\tableofcontents}
-\pagebreak
+\pagebreak{}
 
-\section*{Abstract}
-This document concludes the whole \textit{Contextproject} and especially the development of our product: Zelula. This piece of software provides synthetic biologists with a visual tool to design, simulate and validate biological logic circuits.
+\section*{Preface} ??
+
+
+\pagebreak
+\begin{abstract}
+\noindent This document concludes the whole \textit{Contextproject} and especially the development of our product: Zelula. This piece of software provides synthetic biologists with a visual tool to design, simulate and validate biological logic circuits.
 
 The project was roughly devided in two parts: the design stage and the implementation stage. Both were roughly of equal length.
 
 todo fix more.
+\end{abstract}
+\pagebreak
 
 \section{Introduction}
-After finishing 
+After finishing the fifth SCRUM iteration, this documents provides an overview of the product we developed, how the process went and how it compares to the plans we made in the documentation phase. 
+
+
 \include{description_of_product}
 
 \section{Design and implementation process}
 The first half of the project was focused on design, while the second part was all about implementation. In this chapter we will reflect on the consistency between design and implementation. We will clarify what was implemented according to the documents and what was changed or perhaps not implemented.
 
-In the Test \& Implementation plan\footnote{linkie linkie} we set up a list of requirements according to the MoSCoW model. What follows is a copy of this list with comments on how (and if) it is implemented, but first we will give a quick comparison of the intended and eventual GUI design.
+In the Test \& Implementation plan\footnote{\hrefTestImplementation} we set up a list of requirements according to the MoSCoW model. What follows is a copy of this list with comments on how (and if) it is implemented, but first we will give a quick comparison of the intended and eventual GUI design.
 
 \subsection{Client GUI}
-In our RAD document\footnote{linkie linkie} we gave a few simple sketches of what we had in mind for the user interface of the client.
+In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we had in mind for the user interface of the client. The final implementation is greatly influenced by these sketches, as can be seen from the following screenshots.\\
 
-\includegraphics[width=15cm]{pictures/gui_final1.png}
+\centerline{\small 3.1 Sketches from RAD document: model and simulate.}
+\noindent \includegraphics[width=8cm]{pictures/gui_sketch1_marks.png} 
+\includegraphics[width=8cm]{pictures/gui_sketch2_marks.png}\\
 
+\centerline{\small 3.2 Screenshots of the final GUI implementation: mainscreen, define inputs (E) and outputs (F).}
+\noindent \includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
+\includegraphics[width=4cm]{pictures/gui_final_inputselect.png}
+\includegraphics[width=4cm]{pictures/gui_final_output.png}\\
+
+The matching letters in the "before/after" pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins so that they are easily distinctable and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
+
+It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
+
+\newpage
 \subsection{Must-Haves}
 \begin{description}
 \item[1. Connection] \textit{Client and server must be able to communicate. If there is no connection, the user should be notified.}\\
-This is an explanation.
+This was one of the first finished tasks, as it is essential for both client and server. The client will show an error dialog when no connection to the server can be established. While there is a connection, the user can view the connection delay (in milliseconds) in the bottom right corner of the screen.
 
 \item[2. Available gates] \textit{The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.}\\
-This is an explanation.
+As can be seen in image 3.2.A, the user is presented with a list of draggable (regular and compound) gates.
 
 \item[3. Design circuit] \textit{The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.}
 	\begin{itemize}
-	\item \textbf{3.1} \textit{The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the distinctive AND symbol normally used in circuit design.}\\
-	This is an explanation.
-
+	\item \textbf{3.1} \textit{The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the distinctive AND symbol normally used in circuit design.}
 	\item \textbf{3.2} \textit{The user must be able to drag and drop gates from the list into the working area.}\\
-	This is an explanation.
+	Gates are visualized using a simple, yet distinctive image (image 3.2.A). They can dragged from the list and dropped into the workspace (3.2.D).
 
 	\item \textbf{3.3} \textit{The user must be able freely to move the gate around in the working area, but gates will snap to grid points on the working area.}\\
-	This is an explanation.
+	After the gates are dropped into the workspace, the description of the gate disappears and the image remains. The gates can still be dragged around the screen.\\
+	At first, we got the system working without a grid snapping system. This worked very well and we did not see the need to implement a grid. That is why we postponed this requirement, and decided to drop it near the end of the project.
 
 	\item \textbf{3.4} \textit{The user must be able to draw connections between the gates in the form of wires.}\\
-	This is an explanation.
+	In the workspace, gates get endpoints for input and output (the little green and blue dots in image 3.2.D). Wires can be dragged from the output endpoints to the input endpoints. Wires from input to input and output to output endpoints are not possible. Output endpoints can contain multiple wires, while inputs only allow one.
 
 	\item \textbf{3.5} \textit{The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.}\\
-	This is an explanation.
+	We have added input and output gates which serve as big input or output endpoint. Wires can be dragged from the input and dropped into the output.
 
 	\end{itemize}
 \item[4. Available proteins] \textit{The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).}\\
-This is an explanation.
+Clicking Simulate $>$ Show proteins in the menu will display a table with the avaible proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (image 3.2.D).
 
 \item[5. Protein specification] \textit{The user must be able to specify which protein is used for a certain signal.}\\
-This is an explanation.
+After opening the list of unselected proteins (image 3.2.D), clicking a protein results in this protein being specified for the connection.
 
 \item[6. Export circuit] \textit{The application must to able to save a circuit to a .syn file.}\\
-This is an explanation.
+A circuit can be saved using File $>$ Save and exported to SBML using the File $>$ Export menu item.
 
 \item[7. Import circuit] \textit{The application must be able to load an exported circuit from a .syn file.}\\
-This is an explanation.
+Saved files can be loaded using the File $>$ Open menu item.
 
 \item[8. Input values specification] \textit{The user must be able to specify the input values used for the simulation of the circuit.}\\
-This is an explanation.
+Clicking Simulate $>$ Define inputs (or pressing F7) will open a dialog in which the input values can be defined (image 3.2). These input values can also be loaded from a .csv file.
 
 \item[9. Circuit validation] \textit{The user must to be able validate his circuit in the application and get feedback over where there are conflicts.}\\
-This is an explanation.
+Pressing F8 (or clicking Simulate $>$ Validate circuit) will give a validation of the circuit. This validation is done server side, and conflicts are grounded by useful feedback.
 
 \item[10. Circuit simulation] \textit{The application must be able to simulate a valid circuit and present the output values to the user.}\\
-This is an explanation.
+Pressing F9 (or clicking Simulate $>$ Run solver) will simulate on the server and present the user with a plot of the output values (image 3.2). The user can zoom in/out and specify which proteins are visible in the plot (only the input and output values are shown by default). Because we use a simulating library which supports multiple solving methods, we give the user the options to select a method.
 \end{description}
 
 \subsection{Should-Haves}
 \begin{description}
 \item[11. Re-use circuits] \textit{The application can import pre-defined circuits as extra gates. This is not a necessity, but would be a great addition to the program (and will ease building circuits). Among others, protein specification, importing and exporting will be more difficult to implement.}\\
-This is an explanation.
+This was a requirement we really wanted to add, but decided to implement a simpler version due to time restrictions. We wanted to make it so that compound gates were visualized the same as regular gates, but decided this would be too much work. We can now mark circuits as compound gates at the time of saving. These gates will then show up in the list of compound gates and can be dragged into the workspace. When dropped, the old circuit will show up (minus the input/output signals).
 \end{description}
 
 
@@ -143,6 +171,26 @@ Our program is not only to model circuits but also to calculate and display the 
 \subsection{Thomas van Helden}
 \subsection{Albert ten Napel}
 \subsection{Jan Pieter Waagmeester}
+The first thing I would like to note is that I am suprised by the final product we managed to deliver, it exceeds my expectation. I looks good, works well, has clean code and all the must-haves we defined. Overall, I am also satisfied with the way the team worked together. There were some frustrations now and then, but always room for feedback. 
+
+I will reflect in more detail on two area's: the technical develepment and the team collaboration.
+
+\paragraph{Develepment \& tool use}
+% Development process, TDD, tool use.
+It was quite some time ago since I did collaboratorive Java development on larger scale. So I did not have strong opinions about the tool chain to be used, however, during the Software testing class I got my share of Eclipse frustration, so glad to leave that for a while.
+
+I'm used to the command line and enjoyed learning to use new tools like \verb|tomcat|, \verb|ant|, \verb|git|. Tomcat is a very complicated way to have simple server functionality. Since we only needed exaclty that, it might have been more efficient to select something more lightweight, however, lots of documentation is available. Ant is a powerfull way of to automate boring tasks and made me smile from time to time. Git, especially in combination with Github beats every other SCM toolchain I have used before. Easy of branching makes it usefull, local commits make code review by peers way easier, but like any other SCM depends on how it's used.
+
+The actual development was often quite straightforward. No very complicated algorithms, mostly pushing simple data structures around. That said, testing things is not always easy. For example, testing JSON responses is not a trivial task if the testing tools have no notion about its structure. I think we could have put more focus on exactly what to test, not only on line or branch coverage.
+
+I really did like the test driven design approach. Some refactoring made the importance of tests very clear: the tested parts worked like before because problems were identified by the tests, but the untested functionality lagged behind.
+
+
+\paragraph{Team collaboration}
+% balance of work, Initiative. SCM frustration
+Balancing the work during projects is an always an issue. Some people have less time available, some like to invest more time. Some are perfectionists, others don not care about brace placement. I think being one of the more active people does not always justify complaints about others contributing less. Some people could have displayed more initiative from time to time.
+
+Working together in a source code management system can be a source of frustrations: braking \textit{the make}, little care when committing unintentional changes or merges. I sometimes found it hard to patiently correct them and explain the how and why.
 
 
 \section{Lightweight SCRUM Plans}

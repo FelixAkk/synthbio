@@ -123,19 +123,23 @@ public class BioBrickRepository{
 	 * @param tf The transcription factor to check.
 	 * @return The NotPromotor, or null if none exist.
 	 */
-	public NotPromotor getNotPromotor(String tf){
-		for(NotPromotor p: this.notPromotors){
-			if(p.getTf().equals(tf)){
+	public NotPromotor getNotPromotor(String tf) {
+		for(NotPromotor p: this.notPromotors) {
+			if(p.getTf().equals(tf)) {
 				return p;
 			}
 		}
 		return null;
 	}
 
+	public boolean hasNotPromotor(String tf) {
+		return this.getNotPromotor(tf) != null;
+	}
+	
 	/**
 	 * Collection of all known AndPromotors
 	 */
-	public Collection<AndPromotor> getAndPromotors(){
+	public Collection<AndPromotor> getAndPromotors() {
 		return this.andPromotors;
 	}
 
@@ -156,5 +160,8 @@ public class BioBrickRepository{
 		}
 		return null;
 	}
-
+	
+	public boolean hasAndPromotor(String tf1, String tf2) {
+		return this.getAndPromotor(tf1, tf2) != null;
+	}
 }
