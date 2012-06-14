@@ -41,10 +41,14 @@ synthbio.gui.defaultDescriptionString = "Circuit description.";
 synthbio.gui.gatesTabWidth = $('#gates-tab').width();
 
 /**
- * Width of the <aside> element with all the gates in pixels.
+ * Dimensions of elements in pixels.
  */
 synthbio.gui.navbarHeight = $('.navbar').height();
+synthbio.gui.simulationTabsNavbarHeight = $("#simulation-tabs .nav-tabs.navbar").height();
+synthbio.gui.statusBarHeight = $(".status").height();
 
+synthbio.gui.simulationTabsVisible = false;
+synthbio.gui.simulationTabsInFullscreen = false;
 /**
  * Get normal gates dimensions
  */
@@ -84,7 +88,7 @@ synthbio.gui.resetWorkspace = function() {
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
 
-	//Reset the circuit details
+	// Also reset the circuit details
 	synthbio.gui.setCircuitDetails("","");
 	
 	//Reset input/output gate positions
@@ -92,6 +96,58 @@ synthbio.gui.resetWorkspace = function() {
 	$(".input, .output").css("left", "");
 	$(".input").css("left", "10px");
 	$(".output").css("right", "10px");
+
+	//Reset tabs
+	$("#tab-validate").html(synthbio.gui.defaultValidityTabHTML);
+	$("#simulation-tabs").height("auto");
+	synthbio.gui.plotResize($("#simulation-tabs").width(), $("#simulation-tabs").height());
+};
+
+/**
+ * Utility function to display validation results. Has a special hacky use where you supply an interger
+ * instead of a boolean for the validity parameter to set some other extra alert classes.
+ *
+ * @param message HTML message string
+ * @param valid Boolean, but can also be an integer, use 0: error, 1: success, 3: info, 4: plain.
+ * @noTabSwitch Automatically switch to the validation tab?
+ */
+synthbio.gui.displayValidation = function (message, valid, noTabSwitch) {
+	var element = $('#tab-validate .alert');
+	element.html(message);
+	if(arguments.length > 1) {
+		// Important that these are only 2 equal characters, needs lose compare here to also accept booleans.
+		if(valid == 0){
+			// Green
+			element.attr("class", "alert alert-error");
+			// Same for this if clause head
+		} else if(valid == 1) {
+			// Red
+			element.attr("class", "alert alert-success");
+		} else if(valid === 2) {
+			// Blue
+			element.attr("class", "alert alert-info");
+		} else if(valid === 3) {
+			// Yellow
+			element.attr("class", "alert");
+		}
+	}
+
+	// Oh, phunny double negatives :>
+	if(!noTabSwitch) {
+		$('#simulation-tabs a[href="#tab-validate"]').tab("show");
+	}
+
+	synthbio.gui.showSimulationTabs(true);
+};
+
+/**
+ * Toggle simulation tabs block.
+ *
+ * @param display Optional boolean. True is to display, false is to hide.
+ */
+synthbio.gui.toggleSimulationTabs = function(display) {
+	var tabs = $("#simlation-tab");
+	var grid = $("#grid-container");
 };
 
 /**
@@ -605,7 +661,7 @@ synthbio.gui.loadCompounds = function() {
 /**
  * Saves and displays the details on display the circuit title/description in the main GUI.
  * @param filename String with or without the .syn file extension, may be empty, wil be trimmed.
- * @param description String with the description, may be empty, wil be trimmed.
+ * @param description String with the description, may be empty, will be trimmed.
  */
 synthbio.gui.setCircuitDetails = function(filename, description) {
 	filename = filename.trim();
@@ -813,7 +869,7 @@ jsPlumb.ready(function() {
 	jsPlumb.makeTarget("gate-output", inputEndpoint);
 
 	// Listen for new jsPlumb connections
-	jsPlumb.bind("jsPlumbConnection", function(connInfo, originalEvent) {
+	jsPlumb.bind("jsPlumbConnection", function (connInfo) {
 		// Get the signal object corresponding with the one in synthbio.model
 		var signal = connInfo.connection.getParameter("signal");
 		signal = signal || synthbio.gui.displayConnection(connInfo.connection).signal;
@@ -844,7 +900,7 @@ jsPlumb.ready(function() {
 	});
 
 	// Listen for disposal of connections; delete endpoints if necessary
-	jsPlumb.bind("jsPlumbConnectionDetached", function(connInfo, originalEvent) {
+	jsPlumb.bind("jsPlumbConnectionDetached", function (connInfo) {
 		if (connInfo.sourceId === "gate-input" && !connInfo.sourceEndpoint.connections.length) {
 			jsPlumb.deleteEndpoint(connInfo.sourceEndpoint);
 		}
@@ -862,6 +918,72 @@ jsPlumb.ready(function() {
 		}
 	});
 });
+
+/**
+ *
+ * @param show Optional, true is to show, false is to hide, if none provided, the state is toggled.
+ */
+synthbio.gui.showSimulationTabs = function(show) {
+	var tabs = $("#simulation-tabs");
+	var workspace = $("#grid-container");
+	// If first argument is of time boolean (can also be used as event object)
+	if(show === true || show === false) {
+		if(show) {
+			// Clear the override, let it return to default
+			tabs.css("bottom", "");
+			workspace.css("bottom", parseInt(tabs.css("min-height"), 10) + synthbio.gui.statusBarHeight + "px");
+		} else {
+			tabs.css("bottom", "-" + tabs.height() + "px");
+			// Clear the override, let it return to default
+			workspace.css("bottom", "");
+		}
+		synthbio.gui.simulationTabsVisible = show;
+	} else {
+		// toggle using recursive call
+		synthbio.gui.showSimulationTabs(!synthbio.gui.simulationTabsVisible);
+	}
+};
+/**
+ *
+ * @param fullscreen Optional, true is to go fullscreen, false is to go back to a variable size state, if none provided, the state is toggled.
+ */
+synthbio.gui.simulationTabsFullscreen = function(fullscreen) {
+	var tabs = $("#simulation-tabs");
+	var workspace = $("#grid-container");
+	var tabbar = $(".nav-tabs.navbar", tabs);
+	var chevron = $('[class^="icon-chevron-"], [class*=" icon-chevron-"]');
+	// If first argument is of time boolean (can also be used as event object)
+	if(fullscreen === true || fullscreen === false) {
+		if(fullscreen) {
+			tabs.css("top", synthbio.gui.navbarHeight);
+			tabs.css("height", "auto");
+			workspace.css("display", "none");
+			tabbar.draggable('disable');
+			chevron.attr("class", chevron.attr("class").replace("up", "down")); // Flip the fullscreen toggle arrow
+		} else {
+			// Clear the overrides, let it return to default
+			tabs.css("top", "");
+			tabs.css("height", "");
+			workspace.css("display", "");
+			tabbar.draggable('enable');
+			chevron.attr("class", chevron.attr("class").replace("down", "up")); // Flip the fullscreen toggle arrow
+		}
+		synthbio.gui.handleOutputTabResize();
+		synthbio.gui.simulationTabsInFullscreen = fullscreen;
+	} else {
+		// toggle using recursive call
+		synthbio.gui.simulationTabsFullscreen(!synthbio.gui.simulationTabsInFullscreen);
+	}
+};
+
+/**
+ * Event handling function that can be called when the content div of the simulation output (#tab-chart) is resized
+ * and it's contents should scale acoordingly
+ */
+synthbio.gui.handleOutputTabResize = function() {
+	$("#tab-chart").height($("#simulation-tabs").height() - synthbio.gui.simulationTabsNavbarHeight);
+	synthbio.gui.plotResize();
+};
 
 $(document).ready(function() {
 	// Initialize new gate-dragging
@@ -881,6 +1003,49 @@ $(document).ready(function() {
 		}
 	}));
 
+	// Bind listeners to make the tabs resizable
+	(function() {
+		var tabs = $("#simulation-tabs");
+		var tabsContent = $("#simulation-tabs .tab-content");
+		var tabbar = $(".nav-tabs.navbar", tabs);
+		var workspace = $("#grid-container");
+
+		// Listen for tab changes
+		$('a[data-toggle="tab"]', tabbar).each(function(index, element) {
+			$(element).on("show", synthbio.gui.tabChange);
+		});
+
+		var currentHeight;
+		// Allow resizing of the simulation tabs space
+		tabbar.draggable({
+			axis: "y",
+			distance: 10,
+			helper: function() { return $('<div style="display: none">I am the lonely simulation tab helper. I am just a position data sending dummy, and should never appear.</div>'); },
+			start: function(event, ui) {
+				currentHeight = tabs.height();
+			},
+			drag: function(event, ui) {
+				var offsetY = (ui.originalPosition.top - ui.position.top);
+
+				tabs.height(currentHeight + offsetY);
+				workspace.css("bottom", currentHeight + offsetY + synthbio.gui.statusBarHeight + "px");
+			},
+			stop: synthbio.gui.handleOutputTabResize
+		});
+
+		// Also allow fullscreen toggle by a double click on the window bar like most OS userspaces allow
+		tabbar.on('dblclick', synthbio.gui.simulationTabsFullscreen);
+	})();
+	// Save the default validity tab contents for another day (to show again after a reset for example)
+	synthbio.gui.defaultValidityTabHTML = $("#tab-validate").html();
+	// Bind listener to the simulation tabs close button
+	$("#simulation-tabs .tab-utilities #tabs-close").on("click", function() {
+		synthbio.gui.showSimulationTabs(false);
+	});
+	// Bind listener to the simulation tabs close button
+	$("#simulation-tabs .tab-utilities #tabs-size").on("click", synthbio.gui.simulationTabsFullscreen);
+	// Bind listener to the menu item to show simulation tabs
+	$("#show-tabs").on("click", synthbio.gui.showSimulationTabs);
 	// Prepare default/empty workspace
 	synthbio.gui.loadCompounds();
 	synthbio.newCircuit();
