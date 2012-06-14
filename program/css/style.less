@@ -166,42 +166,44 @@ body {
 		}
 	}
 }
-#simulation-tabs .nav-tabs > ul {
-	margin-bottom: 0;
-}
-#simulation-tabs .navbar .nav > li > a, .nav-tabs > li > a {
-	color: lighten(@baseColor, 20%);
-	&:hover {
-		color: @textColorFaded;
-	}
-}
-#simulation-tabs .nav-tabs > li > a {
-	font-size: 14px;
-	.borderDown(@baseColor, @contrast, @borderHeight);
-	border-width: 1px 1px 0px 1px;
-	padding-top: 6px;
-	padding-bottom: 6px;
-	margin-top: 4px;
-	padding-left: 12px;
-	padding-right: 12px;
-	margin-left: 4px;
-	margin-right: 4px;
-
-	.innerShadow(0px, 1px, 5px, -1px, rgba(0, 0, 0, 0.5));
-	.gradient(lighten(@grStart, 10%), lighten(@grStop, 5%));
-	
-	&:hover {
-		.gradient(lighten(@grStart, 15%), lighten(@grStop, 10%));
-	}
-}
-
-#simulation-tabs .nav-tabs > li.active > a {
-	.gradient(@grStart, darken(@grStart, 5%));
-	color: #FFFFFF;
-}
-
-#simulation-tabs .nav-tabs {
+#simulation-tabs ul.nav-tabs {
 	height: auto;
+	margin-bottom: 0;
+	 & > li {
+		a {
+			font-size: 14px;
+			.borderDown(@baseColor, @contrast, @borderHeight);
+			border-width: 1px 1px 0px 1px;
+			padding-top: 6px;
+			padding-bottom: 6px;
+			margin-top: 4px;
+			padding-left: 12px;
+			padding-right: 12px;
+			margin-left: 4px;
+			margin-right: 4px;
+
+			color: lighten(@baseColor, 20%);
+			.innerShadow(0px, 1px, 5px, -1px, rgba(0, 0, 0, 0.5));
+			.gradient(lighten(@grStart, 10%), lighten(@grStop, 5%));
+
+			.caret {
+				border-bottom-color: @textColorFaded;
+				border-top-color: @textColorFaded;
+			}
+			&:hover {
+				color: @textColorFaded;
+				.gradient(lighten(@grStart, 15%), lighten(@grStop, 10%));
+			}
+		}
+		&.active > a {
+			.gradient(@grStart, darken(@grStart, 5%));
+			color: #FFF;
+		}
+	}
+
+	.dropdown-toggle .caret, .nav-pills .dropdown-toggle .caret {
+		margin-top: 9px;
+	}
 }
 
 #simulation-tabs .tab-utilities {
@@ -240,13 +242,9 @@ body {
 .dropdown .caret {
 	margin-left: 5px;
 	margin-top: 10px;
-}
-.navbar .nav .dropdown-toggle .caret, .navbar .nav .open.dropdown .caret {
+	opacity: 0.6;
 	border-bottom-color: @textColorFaded;
 	border-top-color: @textColorFaded;
-}
-.caret {
-	opacity: 0.6;
 }
 .dropdown-menu a {
 	font-size: 13px;
@@ -564,7 +562,7 @@ body {
 	left: @tabWidth + 1;
 	bottom: @statusHeight + 1;
 	min-height: 200px;
-	height: 400px;
+	height: 300px;
 	background-color: @baseColor;
 	.borderUp(@baseColor, @contrast, @borderHeight);
 	border-width: 1px 0px 0px 0px; /* Top border only */

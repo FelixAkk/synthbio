@@ -114,6 +114,14 @@
 		<ul class="nav nav-tabs navbar">
 			<li class="active"><a href="#tab-validate" data-toggle="tab">Validation</a></li>
 			<li><a href="#tab-chart" data-toggle="tab">Outputs</a></li>
+			<li class="dropdown open">
+				<a href="#tab-input" class="dropdown-toggle" data-toggle="dropdown">Inputs<b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="#input-editor" data-toggle="tab">Editor</a></li>
+					<li><a href="#input-csv" data-toggle="tab">CSV</a></li>
+					<li><a href="#input-advanced" data-toggle="tab">Advanced</a></li>
+				</ul>
+			</li>
 		</ul>
 		<div class="tab-utilities">
 			<a class="icon-white icon-chevron-up" href="javascript: void(0);" id="tabs-size"></a>
@@ -154,7 +162,7 @@
 						<option value="eulermethod" selected="selected">Euler Method</option>
 						<option value="adamsbashforth">Adams Bashforth Solver</option>
 						<option value="adamsmoulton">Adams Moulton Solver</option>
-						<option value="dormandprince54">Dormand	Prince 54	Solver</option>
+						<option value="dormandprince54">Dormand	Prince 54 Solver</option>
 						<option value="dormandprince853">Dormand Prince 853 Solver</option>
 						<option value="agraggbulirschstoer">Gragg Bulirsch Stoer Solver</option>
 						<option value="highamhall54">Higham Hall 54 Solver</option>
@@ -165,6 +173,9 @@
 				<a href="javascript: void(0);" id="rerun-simulation" class="btn btn-success" title="Run simulation again, with selected solver">Run</a>
 				</div>
 				<div id="chart-group"></div>
+			</div>
+			<div class="tab-pane" id="tab-input">
+				hellew
 			</div>
 		</div>
 	</div>

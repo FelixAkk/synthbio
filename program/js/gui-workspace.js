@@ -83,7 +83,6 @@ synthbio.gui.resetWorkspace = function() {
 
 	//Reset plots
 	synthbio.gui.plotSeries([]);
-	synthbio.gui.plotSeriesSeparate([]);
 
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
@@ -99,8 +98,10 @@ synthbio.gui.resetWorkspace = function() {
 
 	//Reset tabs
 	$("#tab-validate").html(synthbio.gui.defaultValidityTabHTML);
-	$("#simulation-tabs").height("auto");
-	synthbio.gui.plotResize($("#simulation-tabs").width(), $("#simulation-tabs").height());
+	$("#simulation-tabs").css("height", "");
+	$("#simulation-tabs").css("bottom", "-" + $("#simulation-tabs").height() + "px");
+	$("#grid-container").css("bottom", "");
+	synthbio.gui.plotResize();
 };
 
 /**
@@ -931,7 +932,7 @@ synthbio.gui.showSimulationTabs = function(show) {
 		if(show) {
 			// Clear the override, let it return to default
 			tabs.css("bottom", "");
-			workspace.css("bottom", parseInt(tabs.css("min-height"), 10) + synthbio.gui.statusBarHeight + "px");
+			workspace.css("bottom", tabs.height() + synthbio.gui.statusBarHeight + "px");
 		} else {
 			tabs.css("bottom", "-" + tabs.height() + "px");
 			// Clear the override, let it return to default
@@ -956,6 +957,8 @@ synthbio.gui.simulationTabsFullscreen = function(fullscreen) {
 	if(fullscreen === true || fullscreen === false) {
 		if(fullscreen) {
 			tabs.css("top", synthbio.gui.navbarHeight);
+			// Store the current hight in an attribute
+			tabs.attr("data-height", tabs.height());
 			tabs.css("height", "auto");
 			workspace.css("display", "none");
 			tabbar.draggable('disable');
@@ -968,21 +971,12 @@ synthbio.gui.simulationTabsFullscreen = function(fullscreen) {
 			tabbar.draggable('enable');
 			chevron.attr("class", chevron.attr("class").replace("down", "up")); // Flip the fullscreen toggle arrow
 		}
-		synthbio.gui.handleOutputTabResize();
+		synthbio.gui.plot.plotResize();
 		synthbio.gui.simulationTabsInFullscreen = fullscreen;
 	} else {
 		// toggle using recursive call
 		synthbio.gui.simulationTabsFullscreen(!synthbio.gui.simulationTabsInFullscreen);
 	}
-};
-
-/**
- * Event handling function that can be called when the content div of the simulation output (#tab-chart) is resized
- * and it's contents should scale acoordingly
- */
-synthbio.gui.handleOutputTabResize = function() {
-	$("#tab-chart").height($("#simulation-tabs").height() - synthbio.gui.simulationTabsNavbarHeight);
-	synthbio.gui.plotResize();
 };
 
 $(document).ready(function() {
@@ -1026,16 +1020,26 @@ $(document).ready(function() {
 			},
 			drag: function(event, ui) {
 				var offsetY = (ui.originalPosition.top - ui.position.top);
+				var newHeight = currentHeight + offsetY;
 
-				tabs.height(currentHeight + offsetY);
-				workspace.css("bottom", currentHeight + offsetY + synthbio.gui.statusBarHeight + "px");
+				// Modify by now allowing to go lower than minimum height
+				if(newHeight < parseInt(tabs.css("min-height"), 10)) {
+					newHeight = parseInt(tabs.css("min-height"), 10);
+				}
+
+				tabs.height(newHeight);
+				workspace.css("bottom", newHeight + synthbio.gui.statusBarHeight + "px");
 			},
-			stop: synthbio.gui.handleOutputTabResize
+			stop: function() {
+				synthbio.gui.plotResize();
+				jsPlumb.repaintEverything();
+			}
 		});
 
 		// Also allow fullscreen toggle by a double click on the window bar like most OS userspaces allow
 		tabbar.on('dblclick', synthbio.gui.simulationTabsFullscreen);
 	})();
+
 	// Save the default validity tab contents for another day (to show again after a reset for example)
 	synthbio.gui.defaultValidityTabHTML = $("#tab-validate").html();
 	// Bind listener to the simulation tabs close button
