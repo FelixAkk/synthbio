@@ -149,17 +149,15 @@ This was a requirement we really wanted to add, but decided to implement a simpl
 
 During this project we have encountered some problems. In this section we will have a look at some of the highlights of these problems and how we fixed them.
 
-Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQeury testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing.
+Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQeury testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code.
 
-A common issue using server-client structure is the actual connection between the two. In the beginning we had some trouble with this but this was mainly caused by out of sync code and trouble with Apache Tomcat. We decided on a standard version of Tomcat and wrote a setup page on the wiki. Afterwards, the problem was solved.
+Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to create connectors and draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work.
 
-Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to create connectors and draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work. (NIELS MORE EXPLANATION)
-
-At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from Javascript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved after trying several options.
+At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from Javascript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved by fully generating the menus every time we needed it. When opening a menu we just adjust its size, to simulate its dropdown effect.
 
 Throughout this project we worked with Git and GitHub to share our code. We also used the ticket mechanism of GitHub to keep track of what had to be done. Git is exceptionally good at merging code but cannot always prevent conflicts. If there is too little communication between two people who are working on the same code, merging can become difficult. However, with some reverts and recommitting these problems were resolved.
 
-Towards the end of our project, we did some major restructuring. We shifted some functions around, changed some names and did some more testing and commenting. We did this based on the feedback we got from the SIG evaluation. The biggest changes were made on the client side.
+Towards the end of our project, we did some major restructuring. We shifted some functions around, changed some names and did some more testing and commenting. We did this based on the feedback we got from the SIG evaluation. On the client side we put every function into files named exactly after the part of the program they run in. This makes it a lot easier to look for functions when you want to adjust code, or notice an error in some part of the program.
 
 Our program is not only to model circuits but also to calculate and display the outcome. We displayed the outcome in a graph, but this showed some weird results. It turned out that the solver for our circuits had some issues (ALBERT EXPLAIN HOW IT WAS SOLVED).
 
@@ -169,6 +167,15 @@ Our program is not only to model circuits but also to calculate and display the 
 \subsection{Felix Akkermans}
 \subsection{Niels Doekemeijer}
 \subsection{Thomas van Helden}
+I am quite amazed about the product we managed to put together. I'm certainly glad we made it with a nice JS GUI. Previous projects were all made in Java leading to horific GUIs. This project is also the most complex product I've ever made. So in several ways, this was the most challenging IT project I've worked on. Once again, I've learned that a good preparation works a million times better than just starting to code. 
+
+My reflection on the teamwork can be divided into three parts: A general part, feedback on my work and communication about the product.
+In general I was very pleased with the team. We all started every sprint with a meeting. We discussed the issues in the previous sprint and we divided the work. Although some did more than other, we all had an understanding mindset towards each other.
+
+I believe the biggest part was the feedback on me. I personally feel as if I really didn't do the job I could normally do. I was occupied with a lot of things, personal and professional, and so I was unable to do my job properly. This was discussed in the team and I got some really good feedback on how to improve my attitude towards the team. 
+
+Communication, in what I've learned so far, is always an issue. Although we did a good job, there were still some miscommunications leading to extra work and stress. It happened a few times that people were working on the same thing without the other one knowing. This resulted in two people doing double work, wasting hours of time. This was no real disaster but it was a shame. Apart from these few points there was nothing to mention with regard to our teamwork.
+
 \subsection{Albert ten Napel}
 \subsection{Jan Pieter Waagmeester}
 The first thing I would like to note is that I am suprised by the final product we managed to deliver, it exceeds my expectation. I looks good, works well, has clean code and all the must-haves we defined. Overall, I am also satisfied with the way the team worked together. There were some frustrations now and then, but always room for feedback. 
@@ -188,7 +195,7 @@ I really did like the test driven design approach. Some refactoring made the imp
 
 \paragraph{Team collaboration}
 % balance of work, Initiative. SCM frustration
-Balancing the work during projects is an always an issue. Some people have less time available, some like to invest more time. Some are perfectionists, others don not care about brace placement. I think being one of the more active people does not always justify complaints about others contributing less. Some people could have displayed more initiative from time to time.
+Balancing the work during projects is an always an issue. Some people have less time available, some like to invest more time. Some are perfectionists, others do not care about brace placement. I think being one of the more active people does not always justify complaints about others contributing less. Some people could have displayed more initiative from time to time.
 
 Working together in a source code management system can be a source of frustrations: braking \textit{the make}, little care when committing unintentional changes or merges. I sometimes found it hard to patiently correct them and explain the how and why.
 
