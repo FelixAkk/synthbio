@@ -1,0 +1,15 @@
+{
+  "name": "unexistant-andpromotor.syn",
+  "description": "Logic for this circuit: D = ~(A^B)",
+  "gates": [
+    { "kind": "and", "position": {"x": 2,"y": 2}}
+  ],
+  "signals": [
+    { "from": "input", "to": 0, "protein": "A"},
+    { "from": "input", "to": 0, "protein": "C"},
+    { "from": 0, "to": "output", "protein": "D"}
+  ],
+  "grouping": [
+
+  ]
+}

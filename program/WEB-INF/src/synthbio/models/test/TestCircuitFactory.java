@@ -213,6 +213,18 @@ public class TestCircuitFactory{
 		this.loadTestFile("invalid-emptyProteinInSignal.json");
 	}
 
+	/**
+	 * Check if the fromJSON method complains about unexistant AndPromotor
+	 * combinations.
+	 */
+	@Test
+	public void test_UnexistantAndPromotor() throws Exception {
+		thrown.expect(CircuitException.class);
+		thrown.expectMessage("AndPromotor (C, A) @(2.0,2.0) is not defined in this BioBrick set.");
+
+		this.loadTestFile("unexistant-andpromotor.json");
+	}
+
 	@Test
 	public void test_exampleMultichar() throws Exception {
 		BioBrickRepository mbbr = new BioBrickRepository("data/biobricks/multichar/");
