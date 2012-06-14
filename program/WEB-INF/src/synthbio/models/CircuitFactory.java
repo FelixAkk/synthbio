@@ -181,6 +181,12 @@ public class CircuitFactory{
 
 				//Not Gate can be connected right away.
 				if(circuit.gateAt(to).getKind().equals("not")){
+					if(!this.getBbr().hasNotPromotor(signal.getString("protein"))) {
+						throw new CircuitException(
+							"NotPromotor (" + signal.getString("protein") + ") "+
+							"@" + circuit.gateAt(to).getPosition() + " is not defined in this BioBrick set."
+						);
+					}
 					circuit.gateAt(to).setPromotor(
 						this.getBbr().getNotPromotor(signal.getString("protein"))
 					);
