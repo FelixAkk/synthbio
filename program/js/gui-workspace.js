@@ -710,7 +710,7 @@ synthbio.gui.setCircuitDetails = function(filename, description) {
  */
 synthbio.gui.editCircuitDetails = function(event) {
 	var details = $("#circuit-details");
-	var button = $(event.srcElement);
+	var button = $(event.target);
 	// Check in which state the circuit details display thingy is (i.e. editting or displaying)
 	if(button.html() === "Edit") {
 		// Set new content
