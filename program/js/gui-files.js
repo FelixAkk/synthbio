@@ -120,18 +120,18 @@ synthbio.gui.fileSaveDialog = function() {
 		if(input !== previousInput) {
 			confirmation = false;
 			previousInput = input;
+		
 		}
+		
 		// Check if the user is about to overwrite an existing file and hasn't confirmed yet
-		if(synthbio.gui.hasRecentFile(input) && !confirmation) {
-			// But exclude the case of overwriting the file that the current circuit is named to
-			if(input === synthbio.model.getName()) {
-				return false;
-			}
+		// But exclude the case of overwriting the file that the current circuit is named to
+		if(synthbio.gui.hasRecentFile(input) && !confirmation && input === synthbio.model.getName()) {
 			synthbio.gui.showAdModalAlert('files', 'alert-error',
 				"<strong>Overwrite file?</strong> Press enter again to confirm");
 			confirmation = true;
 			return false;
 		}
+		
 		// Check if filename is empty
 		if(input === "") {
 			// Show alert
