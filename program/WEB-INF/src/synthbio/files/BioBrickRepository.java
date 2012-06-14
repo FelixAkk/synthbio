@@ -156,5 +156,8 @@ public class BioBrickRepository{
 		}
 		return null;
 	}
+	public boolean hasAndPromotor(String tf1, String tf2) {
+		return this.getAndPromotor(tf1, tf2) != null;
+	}
 
 }
