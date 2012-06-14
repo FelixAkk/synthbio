@@ -1,10 +1,17 @@
-\section{Description of Zelula}
-Zelula is a modelling and simulation package which enables users to simulate the protien \textit{logic} in a cell. With a provided set of BioBricks representing AND and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuits can be simulated, the results will be presented as a concentration/time graph.
 
+%images used:
 \pgfdeclareimage[width=0.45\textwidth]{gui-final}{pictures/gui_final1.png}
+\pgfdeclareimage[width=0.45\textwidth]{gui-input-csv}{pictures/define-inputs-csv.png}
+\pgfdeclareimage[width=0.45\textwidth]{gui-input-editor}{pictures/define-inputs-editor.png}
 %~ \pgfdeclareimage[width=0.45\textwidth]{gui-final}{pictures/gui_final_spitscreen.png}
 
 \newcommand{\screenshotScale}{1.4}
+
+
+
+\section{Description of Zelula}
+Zelula is a modelling and simulation package which enables users to simulate the protien \textit{logic} in a cell. With a provided set of BioBricks representing AND and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuits can be simulated, the results will be presented as a concentration/time graph.
+
 
 \subsection{Circuit editor}
 \begin{figure}[h!]
@@ -39,16 +46,26 @@ When a user is satisfied with his work, he can validate the circuit. Different e
 
 \subsection{Simulation}
 A valid circuit can be simulated. In order to simulate a circuit, the input must be defined as a function of time. Zelula provides two ways to accomplish this. Firstly, in an input editor the level for each input can be defined as a function of time in a visual way, secondly, a CSV text can be provided describing the transitions as a function of time.
-\\
-image pending Felix' commit.
 
 \paragraph{Input editor}
-bla \\
-image pending Felix' commit.
+\begin{figure}[h!]
+\centering\begin{tikzpicture}[scale=\screenshotScale]
+	\pgftext[left, base]{\pgfuseimage{gui-input-editor}}
+\end{tikzpicture}
+\end{figure}
+
+\noindent The input editor enables the user to define each input signal in a visual way. Each tick represents a number of seconds in the simulation. The user can select this number of seconds, and also the number of ticks available.
+
+When a user clicks on a tick, it is toggled. The user may also select ranges by clicking on a certain tick an dragging the mouse to another tick while holding the mouse button.
 
 \paragraph{CSV input}
-bla \\
-image pending Felix' commit.
+\begin{figure}[h!]
+\centering\begin{tikzpicture}[scale=\screenshotScale]
+	\pgftext[left, base]{\pgfuseimage{gui-input-csv}}
+\end{tikzpicture}
+\end{figure}
+
+\noindent The input may also be defined by a simple CSV format, as defined by the SA. For two input species, it may look like this. 
 \begin{verbatim}
 t,A,B
 0,0,0
@@ -56,12 +73,14 @@ t,A,B
 140,1,1
 210,1,1
 \end{verbatim}
+The length of the simulation is defined by the last line.
 
 \subsection{Exporting}
-The work done in Zelula can be shared in two different ways: the user can export the circuit to a SBML file, a common format uses in syntetic Biology. Secondly, the visualistion of the graphs can be exported to a number of different image formats.
+The work done in Zelula can be shared in two different ways: the user can export the circuit to a SBML file, a common format uses in syntetic Biology.
 
-\paragraph{SBML}
+Secondly, the visualistion of the graphs can be exported to a number of different image formats.
 
-\paragraph{Graph images}
-foo \\
-image pending Felix' commit.
+\subsection{Server}
+The server operates in the background, serving the files needed for the GUI, providing file storage and simulation services. The user does not interact with it in a direct way.
+
+The servlets depends on Tomcat and might be distribugted as a \verb|.war| archive. 

@@ -162,23 +162,4 @@ $(document).ready(function() {
 			alert("Your browser does not allow this application to close itself, please close the screen yourself.");
 		}
 	});
-
-	// Allow resizing of the simulation tabs
-	var startDragPosition = {x: undefined, y: undefined};
-	$("#simulation-tab .navbar").draggable({
-		axis: "y",
-		distance: 10,
-		start: function(event, ui) {
-
-			console.log(ui);
-		},
-		drag: function(event) {
-			var block = $(this).parent();
-
-			console.log("event: " + event.pageY, ", height: " + block.css("height"));
-		},
-		stop: function() {
-			console.log("end drag");
-		}
-	});
 });

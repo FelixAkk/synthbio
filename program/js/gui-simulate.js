@@ -136,7 +136,10 @@ synthbio.gui.plotSeriesSeparate = (function() {
 			//Add series to options
 			data.visible = true;
 			var options = $.extend(true, {}, chartOptions, {
-				chart: {renderTo: el[0]},
+				chart: {
+					renderTo: el[0],
+					reflow: true
+				},
 				yAxis: {title: {text: data.name}},
 				series: [data]
 			});
@@ -191,6 +194,15 @@ synthbio.gui.plotOutput = function(response) {
 };
 
 /**
+ * Resize plot to make use of full space
+ */
+synthbio.gui.plotResize = function(w, h) {
+	w = w || $("#simulation-tabs").width();
+	h = h || $("#tab-chart").height();
+	synthbio.gui.plot.setSize(w, h);
+}
+
+/**
  * General event handler for when the validate action is called.
  */
 synthbio.gui.validateHandler = function(){
@@ -198,16 +210,10 @@ synthbio.gui.validateHandler = function(){
 	synthbio.requests.validate(
 		synthbio.model,
 		function(response){
-			if(response.message !== '') {
-				$('#validate-alert p').html(response.message);
-				if(!response.success){
-					$('#validate-alert').addClass("invalid");
-				}
-				$('#validate-alert').modal();
-			}else{
-				//call
-				alert('simulation valid, display...');
-			}
+			synthbio.gui.displayValidation(
+				response.message || "No response..", 
+				response.success
+			);
 		}
 	);
 };
@@ -225,16 +231,10 @@ synthbio.gui.simulateHandler = function() {
 		function(response){
 			console.log("synthbio.request.simulate called response callback");
 			if(response.message !== '') {
-				$('#validate-alert p').html(response.message);
-				if(!response.success){
-
-					$('#validate-alert').addClass("invalid");
-				}
-
-				console.log(synthbio.model);
-				$('#validate-alert').modal();
+				synthbio.gui.displayValidation(response.message, false);
 			}else{
-				$('#show-output').modal();
+				synthbio.gui.displayValidation("Circuit validates!", true, true);
+				$('#simulation-tabss a[href="#tab-chart"]').tab("show");
 				synthbio.gui.plotOutput(response.data);
 			}
 		}
@@ -245,7 +245,7 @@ synthbio.gui.simulateHandler = function() {
  * Setup options for Highcharts.StockChart 
  */
 synthbio.chartOptions = {
-	chart:   {renderTo: 'chart-group'},
+	chart:   {renderTo: 'chart-group', reflow: true},
 	credits: {enabled: false},
 	title:   {text: 'Simulation output'},
 	loading: {style: { backgroundColor: 'silver' }},
@@ -290,8 +290,7 @@ synthbio.chartOptions.tooltip = {
 //navigator: Make sure the id is "navseries"
 synthbio.chartOptions.navigator = {
 	series: { id: "navseries", data: [0, 0, 0, 0, 0] },
-	xAxis: synthbio.chartOptions.xAxis,
-	top: 340
+	xAxis: synthbio.chartOptions.xAxis
 };
 
 //legend: Show legend at the right
@@ -349,13 +348,17 @@ $(document).ready(function() {
 	synthbio.gui.plot = new Highcharts.StockChart(options);
 	synthbio.gui.plot.showLoading();
 
-	// Validate
-	$('#validate').on('click', synthbio.gui.validateHandler);
-	$("#validate-alert").bind('closed', function(){
-		$(this).find("p").html('');
-		$('#validate-alert').addClass("invalid");
+	//Bind resize handler
+	$(window).resize(function() {
+		// Only handle events when we need to; the plot is visible and needs resizing
+		if($("#tab-chart").hasClass("active")) {
+			synthbio.gui.plotResize();
+		}
 	});
 
+	// Validate
+	$('#validate').on('click', synthbio.gui.validateHandler);
+	$('#validate-refresh').on('click', synthbio.gui.validateHandler);
 	/**
 	 * Run simulation
 	 */
