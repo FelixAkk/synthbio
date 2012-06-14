@@ -57,7 +57,7 @@ Jan Pieter Waagmeester}
 \begin{abstract}
 \noindent This document concludes the whole \textit{Contextproject} and especially the development of our product: Zelula. This piece of software provides synthetic biologists with a visual tool to design, simulate and validate biological logic circuits.
 
-The project was roughly devided in two parts: the design stage and the implementation stage. Both were roughly of equal length.
+The project was roughly divided in two parts: the design stage and the implementation stage. Both were roughly of equal length.
 
 todo fix more.
 \end{abstract}
@@ -86,7 +86,7 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 \includegraphics[width=4cm]{pictures/gui_final_inputselect.png}
 \includegraphics[width=4cm]{pictures/gui_final_output.png}\\
 
-The matching letters in the "before/after" pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins so that they are easily distinctable and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
+The matching letters in the "before/after" pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins such that they can easily be distinguished and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
 
 It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
@@ -117,7 +117,7 @@ As can be seen in image 3.2.A, the user is presented with a list of draggable (r
 
 	\end{itemize}
 \item[4. Available proteins] \textit{The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).}\\
-Clicking Simulate $>$ Show proteins in the menu will display a table with the avaible proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (image 3.2.D).
+Clicking Simulate $>$ Show proteins in the menu will display a table with the available proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (image 3.2.D).
 
 \item[5. Protein specification] \textit{The user must be able to specify which protein is used for a certain signal.}\\
 After opening the list of unselected proteins (image 3.2.D), clicking a protein results in this protein being specified for the connection.
@@ -149,11 +149,11 @@ This was a requirement we really wanted to add, but decided to implement a simpl
 
 During this project we have encountered some problems. In this section we will have a look at some of the highlights of these problems and how we fixed them.
 
-Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQeury testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code.
+Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQuery testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code.
 
 Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to create connectors and draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work.
 
-At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from Javascript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved by fully generating the menus every time we needed it. When opening a menu we just adjust its size, to simulate its dropdown effect.
+At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from JavaScript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved by fully generating the menus every time we needed it. When opening a menu we just adjust its size, to simulate its dropdown effect.
 
 Throughout this project we worked with Git and GitHub to share our code. We also used the ticket mechanism of GitHub to keep track of what had to be done. Git is exceptionally good at merging code but cannot always prevent conflicts. If there is too little communication between two people who are working on the same code, merging can become difficult. However, with some reverts and recommitting these problems were resolved.
 
@@ -175,26 +175,35 @@ I started taking more initiative in the implementation phase and tried to always
 This high activity and devotion sometimes lead to "code-clashes" as more people accidentally worked on the same bit of code. I personally think these little conflicts are no big deal and I rather have work being done twice than work not being done at all. It did not affect our team work and I think we settled these few miscommunications well.
 
 \subsection{Thomas van Helden}
-I am quite amazed about the product we managed to put together. I'm certainly glad we made it with a nice JS GUI. Previous projects were all made in Java leading to horific GUIs. This project is also the most complex product I've ever made. So in several ways, this was the most challenging IT project I've worked on. Once again, I've learned that a good preparation works a million times better than just starting to code. 
+I am quite amazed about the product we managed to put together. I'm certainly glad we made it with a nice JS GUI. Previous projects were all made in Java leading to horrific GUIs. This project is also the most complex product I've ever made. So in several ways, this was the most challenging IT project I've worked on. Once again, I've learned that a good preparation works a million times better than just starting to code. 
 
 My reflection on the teamwork can be divided into three parts: A general part, feedback on my work and communication about the product.
 In general I was very pleased with the team. We all started every sprint with a meeting. We discussed the issues in the previous sprint and we divided the work. Although some did more than other, we all had an understanding mindset towards each other.
 
 I believe the biggest part was the feedback on me. I personally feel as if I really didn't do the job I could normally do. I was occupied with a lot of things, personal and professional, and so I was unable to do my job properly. This was discussed in the team and I got some really good feedback on how to improve my attitude towards the team. 
 
-Communication, in what I've learned so far, is always an issue. Although we did a good job, there were still some miscommunications leading to extra work and stress. It happened a few times that people were working on the same thing without the other one knowing. This resulted in two people doing double work, wasting hours of time. This was no real disaster but it was a shame. Apart from these few points there was nothing to mention with regard to our teamwork.
+Communication, in what I've learned so far, is always an issue. Although we did a good job, there was still some miscommunication leading to extra work and stress. It happened a few times that people were working on the same thing without the other one knowing. This resulted in two people doing double work, wasting hours of time. This was no real disaster but it was a shame. Apart from these few points there was nothing to mention with regard to our teamwork.
 
 \subsection{Albert ten Napel}
+I think the project has been very successful, the resulting product is a beautiful, easy to use application that has quite a few useful functions. The teamwork itself was pretty good, we had a meeting each scrum iteration planning on what we would do that iteration. This way I knew what I should do and what was expected of me. In previous projects I was often not sure on what I was to do and the planning was really weak. We also used GitHub, which allowed us to create issues detailing things like optional tasks, bugs and unassigned work. When I was finished with a task and I didn't have anything to do, I could check the issues and pick a new task.\\
+\\
+Communication was mostly good, if somebody had a problem he could tell it to the group and we would all think about it. There was some miscommunication regarding tasks that two people were doing at the same time without the other knowing. But in the end this was solved fairly quickly and wasn't that big of a problem.\\
+\\
+During the project I learn to better manage things, for example using tools like ant. I also learned how to set up a server-side system with Tomcat and Java Servlets and how to manage libraries in Java. Furthermore we used git instead of svn (which was used in earlier projects), I learned a lot about how to use git.\\
+Test driven design wasn't something that I liked a lot. In theory I like the idea but in practice I find writing all of the tests upfront more of a burden and a lot of time was spent actually fixing tests instead of fixing code.\\
+\\
+I didn't do a lot of client side, JavaScript things, because early on I wasn't very interested in that part of the application. Later on I didn't feel confident that I could help with the JavaScript stuff because I wasn't very familiar with the client side. I think I should have done a bit more, since I would've learned some things and with a next project I would like to look more into the GUI side of things.
+
 \subsection{Jan Pieter Waagmeester}
-The first thing I would like to note is that I am suprised by the final product we managed to deliver, it exceeds my expectation. I looks good, works well, has clean code and all the must-haves we defined. Overall, I am also satisfied with the way the team worked together. There were some frustrations now and then, but always room for feedback. 
+The first thing I would like to note is that I am surprised by the final product we managed to deliver, it exceeds my expectation. I looks good, works well, has clean code and all the must-haves we defined. Overall, I am also satisfied with the way the team worked together. There were some frustrations now and then, but always room for feedback. 
 
-I will reflect in more detail on two area's: the technical develepment and the team collaboration.
+I will reflect in more detail on two areas: the technical development and the team collaboration.
 
-\paragraph{Develepment \& tool use}
+\paragraph{Development \& tool use}
 % Development process, TDD, tool use.
-It was quite some time ago since I did collaboratorive Java development on larger scale. So I did not have strong opinions about the tool chain to be used, however, during the Software testing class I got my share of Eclipse frustration, so glad to leave that for a while.
+It was quite some time ago since I did collaborative Java development on larger scale. So I did not have strong opinions about the tool chain to be used, however, during the Software testing class I got my share of Eclipse frustration, so glad to leave that for a while.
 
-I'm used to the command line and enjoyed learning to use new tools like \verb|tomcat|, \verb|ant|, \verb|git|. Tomcat is a very complicated way to have simple server functionality. Since we only needed exaclty that, it might have been more efficient to select something more lightweight, however, lots of documentation is available. Ant is a powerfull way of to automate boring tasks and made me smile from time to time. Git, especially in combination with Github beats every other SCM toolchain I have used before. Easy of branching makes it usefull, local commits make code review by peers way easier, but like any other SCM depends on how it's used.
+I'm used to the command line and enjoyed learning to use new tools like \verb|tomcat|, \verb|ant|, \verb|git|. Tomcat is a very complicated way to have simple server functionality. Since we only needed exactly that, it might have been more efficient to select something more lightweight, however, lots of documentation is available. Ant is a powerful way of to automate boring tasks and made me smile from time to time. Git, especially in combination with GitHub beats every other SCM toolchain I have used before. Easy of branching makes it useful, local commits make code review by peers way easier, but like any other SCM depends on how it's used.
 
 The actual development was often quite straightforward. No very complicated algorithms, mostly pushing simple data structures around. That said, testing things is not always easy. For example, testing JSON responses is not a trivial task if the testing tools have no notion about its structure. I think we could have put more focus on exactly what to test, not only on line or branch coverage.
 
@@ -209,7 +218,7 @@ Working together in a source code management system can be a source of frustrati
 
 
 \section{Lightweight SCRUM Plans}
-The following pages will include the relevent parts of our lightweight scrumplans for each iteration. The colored links and numbers with a hashtag refer to GitHub issues on \url{https://github.com/FelixAkk/synthbio/issues}. For each iteration, a milestone is available providing a nice overview of the issues for each iteration.
+The following pages will include the relevant parts of our lightweight scrumplans for each iteration. The colored links and numbers with a hashtag refer to GitHub issues on \url{https://github.com/FelixAkk/synthbio/issues}. For each iteration, a milestone is available providing a nice overview of the issues for each iteration.
 
 \includepdf[
 	landscape, frame, nup=1x2, pages=2-3,
