@@ -1,0 +1,30 @@
+\section{Future implementations}
+Throughout this project we implemented a lot of features, but we were not able to implement all our ideas. In this section we will explain some features which could be implemented in the future. Some of these are would-likes we thought of during the design phase, others were ideas we though up during implementation. We tried to make our application in such a way that there is a good base for these ideas.
+
+\subsection{Groupings}
+One of the ideas we had was the concept of groupings. We would use groupings to specify the structure of a circuit. This would be easily converted to JSON and would help to load files to the workspace, directly displaying every circuit with proper spacing and placement. This was not implemented mainly because of time deficiency.
+
+\subsection{Protein concentration}
+Another idea was the ability to set the protein concentrations. Within a nice interface, one could easily specify which proteins would have which concentration, and perhaps even at which time the protein would start. This idea was also encouraged by the TA's but unfortunately we didn't have enough time.
+
+\subsection{Highlighting validation error}
+When a circuit validates it says in green: "Circuit validates!". When there are some errors, it displays in text which errors are present. What would be nice if the element causing the error would light up in the workspace. So for instance, a wire has no protein specified, then that wire would light up.
+If a gate has an open input slot, that gate would light up, or maybe that input slot.
+
+\subsection{The green dot}
+Currently, there is a bug in the GUI. Sometimes the end point of the last output wire, connected to the output panel, is displayed at the top left corner of the workspace. This bug only occurs once in a while and after hovering over the wire or shifting gates or panels, it disappears. We did not fix this issue because it is probably an issue within the jsPlumb library we use and we did not have time to fix such a small bug.
+
+\subsection{Compound and normal gate distinction}
+Compound gate are now saved as regular gates, but also separately in a compound folder. So to change a compound gate you have to change the regular circuit and resave it as a compound gate. It would nice to have this separated, so compound gates could be altered by itself.
+We chose not to do this because of time restrictions. We do have the foundation for this to work, so implementing it will be rather easy.
+
+\subsection{Compound gate display}
+This was one of the major things we would like to add. If you drag and drop a compound gate, it shows the circuit it is buildup of. Our original plan was to display these gates as a small gate, on which you could zoom in or double click to see the entire circuit. This was rather complex, and we did not have enough time to implement this unfortunately.
+
+\subsection{Input and output fields display open wires}
+What would be nice for our input and output panel, is to have connection slots. So per available connection there would be an open connection slot generated on the input and output panel. This would make it more visible when a connection has not been made yet. Also it would generate standard points from where they wires would start. This would prevent the weird shifting of wires, which sometimes happens when resizing the window or dragging gates.
+We saw this point of improvement as too small to actually implement it, with regard to our available time.
+
+\subsection{Zoom workspace}
+Right now we use the browsers standard zoom to zoom in and out. But this also changes the menu and side panel size. This is undesirable, so what we would like is to have a zoom which only affects the workspace. Perhaps in combination with the groupings, you could zoom out to groupings level. In combination with the compound gates you would zoom in on them to see their inner circuit. This was also too big to implement.
+
