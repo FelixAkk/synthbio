@@ -70,7 +70,7 @@ After finishing the fifth SCRUM iteration, this documents provides an overview o
 \include{description_of_product}
 
 \section{Design and implementation process}
-The first half of the project was focused on design, while the second part was all about implementation. In this chapter we will reflect on the consistency between design and implementation. We will clarify what was implemented according to the documents and what was changed or perhaps not implemented. This will done with help of a reflection on the initial GUI sketches (3.1) and our list of requirements (3.2).
+The first half of the project was focused on design, while the second part was all about implementation. In this chapter we will reflect on the consistency between design and implementation. We will clarify what was implemented according to the documents and what was changed or perhaps not implemented. This will be done with help of a reflection on the initial GUI sketches (3.1) and our list of requirements (3.2).
 
 \subsection{Client GUI}
 In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we had in mind for the user interface of the client. The final implementation is greatly influenced by these sketches, as can be seen from the following screenshots.\\
@@ -79,7 +79,7 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 \noindent \includegraphics[width=8cm]{pictures/gui_sketch1_marks.png} 
 \includegraphics[width=8cm]{pictures/gui_sketch2_marks.png}\\
 
-\centerline{\small 3.2 Screenshots of the final GUI implementation: mainscreen, define inputs (E) and outputs (F).}
+\centerline{\small 3.2 Screenshots of the final GUI implementation: main screen, define inputs (E) and outputs (F).}
 \noindent \includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
 \includegraphics[width=4cm]{pictures/gui_final_inputselect.png}
 \includegraphics[width=4cm]{pictures/gui_final_output.png}\\
@@ -150,6 +150,11 @@ This was a requirement we really wanted to add, but decided to implement a simpl
 
 During this project we have encountered some problems. In this section we will have a look at some of the highlights of these problems and how we fixed them.
 
+\paragraph{Planning and design}
+Since, for some of us, this was the first time working with SCRUM, it took some getting used to. At first, we had to get used to working towards a result in two weeks and estimating what we could do. This became easier as the project progressed. 
+
+What we really noticed is that our design was not complete. We hadn't thought of the complete structure and failed to set some standards of coding. This led to less readable code, which is annoying when reviewing each others code,  and no clear idea which function was implemented where. Especially later on, some functions turned out to be double implemented or unused. This point is also discussed in the paragraph about restructuring.
+
 \paragraph{QUnit}
 Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQuery testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code and the code is readable. 
 
@@ -163,7 +168,7 @@ At one point, we figured we wanted to select our proteins from dropdown menus on
 Throughout this project we worked with Git and GitHub to share our code. We also used the ticket mechanism of GitHub to keep track of what had to be done. Git is exceptionally good at merging code but cannot always prevent conflicts. If there is too little communication between two people who are working on the same code, merging can become difficult. However, with some reverts and recommitting these problems were resolved.
 
 \paragraph{Restructuring}
-We had a lot of code clutched together. We had that idea ourselves and the SIG evaluation gave the same result. So towards the end of our project, we did some major restructuring. We shifted some functions around, changed some names and did some more testing and commenting.On the client side we put every function into files named exactly after the part of the program they run in. This made it a lot easier to look for functions when you wanted to adjust code, or notice an error in some part of the program. 
+We had a lot of code clutched together. We had that idea ourselves and the SIG evaluation gave the same result. So towards the end of our project, we did some major restructuring. We shifted some functions around, deleted unused functions, changed some names and did some more testing and commenting. On the client side we put every function into files named exactly after the part of the program they run in. This made it a lot easier to look for functions when you wanted to adjust code, or notice an error in some part of the program. 
 
 \paragraph{Solver issues}
 During the final iteration we discovered a problem with the connection to the solver which was implemented. It showed correct results for the transcription and translation reactions, but degradation did not work. After discussing things with Alexey, Jan Pieter decided to write a solver on its own, which initially took about 12 hours of work. Cleaning up the code and some other adjustments took another 8 hours.
@@ -178,14 +183,14 @@ At first, it seemed very straight-forward, but quite some time was absorbed by t
 
 \section{Reflection on the teamwork}
 
-\section{Individual reflection on the project} %max 1 A4 per teammember
+\section{Individual reflection on the project} %max 1 A4 per team member
 \subsection{Felix Akkermans}
 \subsection{Niels Doekemeijer}
 Looking back at this project, I am quite pleased with the overall teamwork and final result. I feel like we had a bit of a rough start, having very few meetings in the first part of the project. This resulted in somewhat lower grades than expected for the first few documents. Writing reports is not my favourite part of projects, but it has to be done and I did my share.
 
 After starting implementation of the product, I feel like the group came more at ease (having more weekly meetings definitely helped, too). I had never worked with SCRUM before, but I can see why it's accepted as a development method as it definitely helps to always have a working product. Demonstrations after each iteration helped us confirm that we were well on our way. We put a lot more work in the implementation than in the reports, but I think both were of very decent level.
 
-I started taking more initiative in the implementation phase and tried to always have an overview over what was happening and what needed to be done. My opinion is that every group member had a phase in which they did a lot of work and a phase in which they did less than usual. I think the overall activity and devotion to the project was good. This has lead to a decent product which has exceeded my initial expectations.
+I started taking more initiative in the implementation phase and tried to always have an overview over what was happening and what needed to be done. My opinion is that every group member had a phase in which they did a lot of work and a phase in which they did less than usual. I think the overall activity and devotion to the project was good. This has led to a decent product which has exceeded my initial expectations.
 
 This high activity and devotion sometimes lead to "code-clashes" as more people accidentally worked on the same bit of code. I personally think these little conflicts are no big deal and I rather have work being done twice than work not being done at all. It did not affect our team work and I think we settled these few miscommunications well.
 
