@@ -106,7 +106,7 @@ synthbio.gui.fileSaveDialog = function() {
 	$("#files form").on("submit", function(event) {
 		// Surpress default redirection due to <form action="destination.html"> action
 		event.stopPropagation();
-		event.preventDefault();
+		event.preventDefault();	
 		// get the filename
 		var input = $("#input-filename").val().trim();
 		
@@ -115,23 +115,23 @@ synthbio.gui.fileSaveDialog = function() {
 		if($("#compound-toggle").is(":checked")) {
 			folderName = synthbio.compoundFolder;
 		}
-
+		
 		// Allow prompting for confirmation again if a different filename has been entered this time.
 		if(input !== previousInput) {
 			confirmation = false;
 			previousInput = input;
+		
 		}
+		
 		// Check if the user is about to overwrite an existing file and hasn't confirmed yet
-		if(synthbio.gui.hasRecentFile(input) && !confirmation) {
-			// But exclude the case of overwriting the file that the current circuit is named to
-			if(input === synthbio.model.getName()) {
-				return false;
-			}
+		// But exclude the case of overwriting the file that the current circuit is named to
+		if(synthbio.gui.hasRecentFile(input) && !confirmation && input === synthbio.model.getName()) {
 			synthbio.gui.showAdModalAlert('files', 'alert-error',
 				"<strong>Overwrite file?</strong> Press enter again to confirm");
 			confirmation = true;
 			return false;
 		}
+		
 		// Check if filename is empty
 		if(input === "") {
 			// Show alert
@@ -222,6 +222,7 @@ synthbio.gui.resetFileDialog = function() {
 	$("#compound-toggle").attr('checked', false);
 	
 	// Remove all preveiously registered event handlers. Critical! Else they stack and on each rigging action.
+	$("#files tbody").off("click");
 	$("#files form").off("submit");
 	var inputfield = $("#files .modal-footer input");
 	// clear entered text
@@ -231,6 +232,11 @@ synthbio.gui.resetFileDialog = function() {
 		source: []
 	});
 	$("#files .modal-alert-fader").height("0px");
+
+	if(synthbio.gui.fTable !== undefined) {
+		// If we run this for the second time and fTable is defined, clear the old table
+		synthbio.gui.fTable.fnClearTable();
+	}
 };
 
 synthbio.gui.prepareFileDialog = function(event) {
@@ -256,14 +262,10 @@ synthbio.gui.prepareFileDialog = function(event) {
 
 			html+='<tr><td class="filename">'+file.filename+'</td><td>x</td><td>'+datetime+'</td></tr>';
 		});
-
-		// Initialize DataTable, before adding rows to it.
-		if(synthbio.gui.fTable !== undefined) {
-			// If we run this for the second time and fTable is defined, clear the old table
-			synthbio.gui.fTable.fnClearTable();
-		}
+		
 		$('#files tbody').html(html);
 
+		// Initialize DataTable, before adding rows to it.
 		synthbio.gui.fTable = $('#files table').dataTable(synthbio.gui.dataTableOptions);
 
 		// Make each row respond to selection
@@ -313,12 +315,9 @@ $(document).ready(function() {
 	 * Setup/rig file operation dialog when the `Open` menu item is clicked.
 	 */
 	$("#open").on("click", synthbio.gui.fileOpenDialog);
-
+	
 	// Cleanup time; prepare the file dialog for another time
 	$('#files').on('hidden', synthbio.gui.resetFileDialog);
-
-	// List files from server.
-	$('#files').on('show', synthbio.gui.prepareFileDialog);
 
 	/**
 	 * Export circuit to SBML

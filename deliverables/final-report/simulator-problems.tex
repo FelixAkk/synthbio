@@ -1,37 +1,9 @@
-\documentclass[a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage{fullpage}
-\usepackage{amsmath,amssymb}
-\usepackage[colorlinks,linkcolor=blue]{hyperref} % use colored text in stead of ugly boxes
-\usepackage[toc]{multitoc} % Nice two-column TOC
-\usepackage{graphicx}
-\usepackage{wrapfig}
-\usepackage{tabto}
-\usepackage[font=small]{caption}
-
-\usepackage{pdfpages}
-%~ TikZ is not in use in this document
-%~ \usepackage{pgf}
-%~ \usepackage{tikz}
-%~ \usepackage{pictures/tikz-uml}
-
-% new line after paragraph title.
-\makeatletter
-\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
-  {-3.25ex\@plus -1ex \@minus -.2ex}%
-  {1.5ex \@plus .2ex}%
-  {\normalfont\normalsize\bfseries}}
-\makeatother
-
-
-\begin{document}
-
-\section*{Simulator problems}
-In the second to last iteration we discovered that our simulator didn't degrade anything, this was discovered so late because non of the tests targeted degradation, we only tested if the reaction speed changed. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from Alexey, the problem found was indeed the SBML format.\\
+In the second to last iteration we discovered that our simulator didn't degrade anything (Figure~\ref{fig:wrong}), this was discovered so late because non of the tests targeted degradation, we only tested if the reaction speed changed. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from Alexey, the problem found was indeed the SBML format.\\
 
 \begin{figure}[h!]
 	\centering\includegraphics[scale=0.35]{../../screenshots/2012-05-31-not-output.png}
 	\caption{Wrong output, B doesn't degrade.}
+	\label{fig:wrong}
 \end{figure}
 
 \noindent The SBML format that is used for the simulation requires a list of species and a list of reactions. These reactions each have a set of reactants, products and modifiers:
@@ -48,7 +20,7 @@ The transcription reaction produces something from a gene sequence. The degradat
 \begin{wrapfigure}{l}{8cm}
 	\centering\includegraphics[scale=0.5]{../../screenshots/2012-06-14-not-output.png}
 	\caption{Correct output, B degrades.}
+	\label{fig:correct}
 \end{wrapfigure}
 
-\noindent To fix this we split the transcription and translation reactions such that the degradations got their own reactions, this allowed us to specify different reactants, products and modifiers for the degradation.
-\end{document}
+To fix this (Figure~\ref{fig:correct}) we split the transcription and translation reactions such that the degradations got their own reactions, this allowed us to specify different reactants, products and modifiers for the degradation.
