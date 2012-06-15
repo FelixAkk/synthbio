@@ -19,10 +19,9 @@ Zelula is a modelling and simulation package which enables users to simulate the
 	\pgftext[left, base]{\pgfuseimage{gui-final}}
 	\draw [draw=red,very thick] (0, 2.4) -- (0, 3.7) -- (7.15, 3.7) -- (7.15,0.14) -- (1.5,0.14) -- (1.5, 2.4) -- (0,2.4);
 \end{tikzpicture}
-\caption{GUI mainscreen; highlighted is the workspace with the regular (draggable) gates.}
 \end{figure}
 
-\noindent Zelula enables the user to intuitively construct circuits from the basic available building blocks (see figure 1 for the mainscreen). Gates can be dragged from the sidebar to arbitrary positions in the working area. Connections between the gates can easily be dragged from and to the \textit{input} and \textit{output} connectors and the endpoints on gates. 
+\noindent Zelula enables the user to intuitively construct circuits from the basic available building blocks. Gates can be dragged from the sidebar to arbitrary positions in the working area. Connections between the gates can easily be dragged from and to the \textit{input} and \textit{output} connectors and the endpoints on gates. 
 
 When a connection is made, no protein is selected for it by default. The user may select which protein to use. Visual feedback on protein assignment is provided through the colors of the connections.
 
@@ -32,17 +31,15 @@ Even the position of the circuits' input and output connectors can be freely cho
 
 Removing gates and connection is a matter of double clicking on them.
 
-\newpage
 \subsection{Compound library}
 \begin{figure}[h!]
 \centering\begin{tikzpicture}[scale=\screenshotScale]
 	\pgftext[left, base]{\pgfuseimage{gui-final}}
 	\draw [draw=red,very thick] (0,0.14) rectangle (1.5, 2.5);
 \end{tikzpicture}
-\caption{GUI mainscreen; highlighted is the box with the (draggable) compound gates.}
 \end{figure}
 
-\noindent Every circuit can be saved as a compound gate, which means it can easily be reused in later circuits. The saved compound gates are presented to the user in the sidebar, below of the basic gates (figure 2). When a user drags a compound gate to the working area, it will expand to the original arrangement of gates, with the inner connections in place. The only thing left for the user is connecting it to the rest of its circuit.
+\noindent Every circuit can be saved as a compound gate, which means it can easily be reused in later circuits. The saved compound gates are presented to the user in the sidebar, below of the basic gates. When a user drags a compound gate to the working area, it will expand to the original arrangement of gates, with the inner connections in place. The only thing left for the user is connecting it to the rest of its circuit.
 
 \subsection{Validation}
 When a user is satisfied with his work, he can validate the circuit. Different errors like unassigned proteins or inclomplete connections will be reported. The user will see the error message below the circuit, providing excellent overview to both the circuit and the errors to solve the problem.
@@ -55,23 +52,20 @@ A valid circuit can be simulated. In order to simulate a circuit, the input must
 \centering\begin{tikzpicture}[scale=\screenshotScale]
 	\pgftext[left, base]{\pgfuseimage{gui-input-editor}}
 \end{tikzpicture}
-\caption{Dialog for defining input values per protein in client.}
 \end{figure}
 
-\noindent The input editor (figure 3) enables the user to define each input signal in a visual way. Each tick represents a number of seconds in the simulation. The user can select this number of seconds, and also the number of ticks available.
+\noindent The input editor enables the user to define each input signal in a visual way. Each tick represents a number of seconds in the simulation. The user can select this number of seconds, and also the number of ticks available.
 
 When a user clicks on a tick, it is toggled. The user may also select ranges by clicking on a certain tick an dragging the mouse to another tick while holding the mouse button.
 
-\newpage
 \paragraph{CSV input}
 \begin{figure}[h!]
 \centering\begin{tikzpicture}[scale=\screenshotScale]
 	\pgftext[left, base]{\pgfuseimage{gui-input-csv}}
 \end{tikzpicture}
-\caption{Dialog for defining input values in client by CSV.}
 \end{figure}
 
-\noindent The input may also be defined by a simple CSV format (figure 4), as defined by the SA.
+\noindent The input may also be defined by a simple CSV format, as defined by the SA.
 
 \subsection{Exporting}
 The work done in Zelula can be shared in two different ways: the user can export the circuit to a SBML file, a common format uses in syntetic Biology.
