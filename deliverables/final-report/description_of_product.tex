@@ -10,14 +10,14 @@
 
 
 \section{Description of Zelula}
-Zelula is a modelling and simulation package which enables users to simulate the protein \textit{logic} in a cell. With a provided set of BioBricks representing AND and NOT gates, the user is able to design interactions between the different BioBricks. The resulting circuits can be simulated, the results will be presented as a concentration/time graph.
+Zelula is a modelling and simulation package which enables users to simulate the protein \textit{logic} in a cell. With a provided set of BioBricks representing the basic AND and NOT gates, the user is able to design more complex circuits of interactions between the different BioBricks. The resulting circuits can be simulated and the results will be presented as a concentration/time graph.
 
 
 \subsection{Circuit editor}
 \begin{figure}[h!]
 \centering\begin{tikzpicture}[scale=\screenshotScale]
-	\pgftext[left, base]{\pgfuseimage{gui-final}}
-	\draw [draw=red,very thick] (0, 2.4) -- (0, 3.7) -- (7.15, 3.7) -- (7.15,0.14) -- (1.5,0.14) -- (1.5, 2.4) -- (0,2.4);
+        \pgftext[left, base]{\pgfuseimage{gui-final}}
+        \draw [draw=red,very thick] (0, 2.4) -- (0, 3.7) -- (7.15, 3.7) -- (7.15,0.14) -- (1.5,0.14) -- (1.5, 2.4) -- (0,2.4);
 \end{tikzpicture}
 \end{figure}
 
@@ -34,8 +34,8 @@ Removing gates and connection is a matter of double clicking on them.
 \subsection{Compound library}
 \begin{figure}[h!]
 \centering\begin{tikzpicture}[scale=\screenshotScale]
-	\pgftext[left, base]{\pgfuseimage{gui-final}}
-	\draw [draw=red,very thick] (0,0.14) rectangle (1.5, 2.5);
+        \pgftext[left, base]{\pgfuseimage{gui-final}}
+        \draw [draw=red,very thick] (0,0.14) rectangle (1.5, 2.5);
 \end{tikzpicture}
 \end{figure}
 
@@ -50,7 +50,7 @@ A valid circuit can be simulated. In order to simulate a circuit, the input must
 \paragraph{Input editor}
 \begin{figure}[h!]
 \centering\begin{tikzpicture}[scale=\screenshotScale]
-	\pgftext[left, base]{\pgfuseimage{gui-input-editor}}
+        \pgftext[left, base]{\pgfuseimage{gui-input-editor}}
 \end{tikzpicture}
 \end{figure}
 
@@ -61,18 +61,18 @@ When a user clicks on a tick, it is toggled. The user may also select ranges by 
 \paragraph{CSV input}
 \begin{figure}[h!]
 \centering\begin{tikzpicture}[scale=\screenshotScale]
-	\pgftext[left, base]{\pgfuseimage{gui-input-csv}}
+        \pgftext[left, base]{\pgfuseimage{gui-input-csv}}
 \end{tikzpicture}
 \end{figure}
 
 \noindent The input may also be defined by a simple CSV format, as defined by the SA.
 
 \subsection{Exporting}
-The work done in Zelula can be shared in two different ways: the user can export the circuit to a SBML file, a common format uses in syntetic Biology.
+The work done in Zelula can be shared in two different ways: the user can export the circuit to a SBML file, a common format uses in synthetic biology.
 
-Secondly, the visualistion of the graphs can be exported to a number of different image formats.
+Secondly, the the graph that visualizes thee simulation output can be exported to a number of different image formats.
+
+Of course if the user has access to the server like when it is ran locally, the user can simply save the circuit using the editor to obtain it in our application specific format (\verb=.syn=) that contains all information that was present in the application.
 
 \subsection{Server}
-The server operates in the background, serving the files needed for the GUI, providing file storage and simulation services. The user does not interact with it in a direct way.
-
-The servlets depends on Tomcat and might be distribugted as a \verb|.war| archive. 
+The server operates in the background, serving the files and data needed for the GUI, providing persistent data storage and simulation services. The user does not interact with it in a direct way, and no server is required to be present for modelling and design. Each service of the server is provided by a Java servlet. These servlets depend on the Apache Tomcat webserver and might be distributed as a \verb|.war| archive. 

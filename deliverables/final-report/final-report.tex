@@ -1,3 +1,4 @@
+%
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
@@ -56,12 +57,12 @@ Jan Pieter Waagmeester}
 
 \pagebreak
 \begin{abstract}
-\noindent This document concludes the whole \textit{Contextproject} and especially the development of our product: Zelula. This piece of software provides synthetic biologists with a visual tool to design, simulate and validate biological logic circuits.
+\noindent This document concludes the our whole run-through of the \textit{Contextproject}; the development of our product: Zelula. This software application provides synthetic biologists with a visual, easy to use tool to design, simulate and validate biological logic circuits.
 
-The project was roughly divided in two parts: the design stage and the implementation stage. Both were roughly of equal length.
+The project was roughly divided in two parts: the design stage and the implementation stage. Both were roughly of equal length. During the implementation the SCRUM method was employed and development was driven by tests.
 
-todo fix more.
-\end{abstract}
+The teamwork and development issues we encountered are reflected upon and analyzed.
+Despite the obstacles all requirements were met and we managed to deliver a well refined product.\end{abstract}
 \pagebreak
 
 \section{Introduction}
@@ -71,7 +72,7 @@ After finishing the fifth SCRUM iteration, this documents provides an overview o
 \include{description_of_product}
 
 \section{Design and implementation process}
-The first half of the project was focused on design, while the second part was all about implementation. In this chapter we will reflect on the consistency between design and implementation. We will clarify what was implemented according to the documents and what was changed or perhaps not implemented. This will be done with help of a reflection on the initial GUI sketches (3.1) and our list of requirements (3.2).
+The first half of the project was focused on design, while the second part was all about implementation. In this chapter we will reflect on the translation from design to implementation. We will clarify what was implemented according to the documents and what was changed or perhaps not implemented. This will be done with help of a reflection on the initial GUI sketches (3.1) and our list of requirements (3.2).
 
 \subsection{Client GUI}
 In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we had in mind for the user interface of the client. The final implementation is greatly influenced by these sketches, as can be seen from the following screenshots.\\
@@ -82,18 +83,11 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 \caption{Sketches from RAD document: model and simulate.}
 \end{figure}
 
-<<<<<<< HEAD
-\centerline{\small 3.2 Screenshots of the final GUI implementation: main screen, define inputs (E) and outputs (F).}
-\noindent \includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
-\includegraphics[width=4cm]{pictures/gui_final_inputselect.png}
-\includegraphics[width=4cm]{pictures/gui_final_output.png}\\
-=======
 \begin{figure}[h!]
 \includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
 \includegraphics[width=8cm]{pictures/gui_final2_marks.png}
 \caption{Screenshots of the final GUI implementation: mainscreen and outputs (F).}
 \end{figure}
->>>>>>> 81b47074a20d7570ac61b4ad623473dd614e5dd5
 
 The matching letters in the "before" (figure 5) and "after" (figure 6) pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins such that they can easily be distinguished and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
 
@@ -242,10 +236,11 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 \includegraphics[width=4cm]{pictures/gui_final_inputselect.png}
 \includegraphics[width=4cm]{pictures/gui_final_output.png}\\
 
-The matching letters in the "before/after" pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins such that they can easily be distinguished and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
+The matching letters in the "before/after" pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins so that they are easily distinctable and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection. It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
 It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
+Implementation was greatly accelerated by the use of frameworks and libraries such as jQuery, Bootstrap, HighCharts and jsPlumb. The use of such frameworks of course also implies the study of their use, and solving problems or limitations you encountered with them. This costed considerable time as eluded in section 4.
 \newpage
 \subsection{Requirements}
 In the Test \& Implementation plan\footnote{\hrefTestImplementation} we set up a list of requirements according to the MoSCoW model. What follows is a copy of this list with comments on how (and if) it is implemented.
@@ -312,10 +307,13 @@ During this project we have encountered some problems. In this section we will h
 Since, for some of us, this was the first time working with SCRUM, it took some getting used to. At first, we had to get used to working towards a result in two weeks and estimating what we could do. This became easier as the project progressed. 
 What we really noticed is that our design was not complete. We hadn't thought of the complete structure and failed to set some standards of coding. This led to less readable code, which is annoying when reviewing each others code, and no clear idea which function was implemented where. Especially later on, some functions turned out to be double implemented or unused. This point is also discussed in the paragraph about restructuring.
 
+\paragraph{Setup}
+A common issue using server-client structure is the actual connection between the two. In the beginning we had some trouble with this but this was mainly caused by out of sync code and trouble with Apache Tomcat. We decided on a standard version of Tomcat and wrote a setup page on the wiki\footnote{\url{https://github.com/FelixAkk/synthbio/wiki/Tomcat-installation}}. Afterwards, the problem was solved.
+
 \paragraph{QUnit}
 Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQuery testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code and the code is readable. 
 
-\paragraph{Drag&Drop}
+\paragraph{Drag and drop}
 Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to create connectors and draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work.
 
 \paragraph{Dropdown menus}

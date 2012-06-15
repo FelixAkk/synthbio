@@ -612,8 +612,8 @@ synthbio.gui.addCompoundGate = function(circuit) {
 
 	// Create new display element
 	var element = $('<div class="gate compound"><img src="img/gates/compound.svg"/>'
-		+ '<h4>' + model.getName() + '</h4>'
-		+ '<p class="subscript">' + model.getDescription() + '</p>'
+		+ '<h4>' + (model.getName() || 'Compound gate') + '</h4>'
+		+ '<p class="subscript">' + (model.getDescription() || 'Compound') + '</p>'
 		+ "</div>");
 
 	// Place new element in grid
