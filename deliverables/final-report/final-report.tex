@@ -1,3 +1,4 @@
+%
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
@@ -7,6 +8,7 @@
 
 \usepackage{graphicx}
 \usepackage{tabto}
+\usepackage{wrapfig}
 
 \usepackage{pdfpages}
 
@@ -29,7 +31,6 @@
 
 \newcommand{\urlTestImplementation}{https://github.com/FelixAkk/synthbio/raw/master/deliverables/test-implementation/test-implementation.pdf}
 \newcommand{\hrefTestImplementation}{\href{\urlTestImplementation}{Test and Implemention plan @Github}}
-
 
 
 \title{Programming Life - Final report}
@@ -87,10 +88,11 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 \caption{Screenshots of the final GUI implementation: mainscreen and outputs (F).}
 \end{figure}
 
-The matching letters in the "before" (figure 5) and "after" (figure 6) pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins such that they can easily be distinguished and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
+The matching letters in the "before" (figure 5) and "after" (figure 6) pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins so that they are easily distinctable and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection. It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
 It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
+Implementation was greatly accelerated by the use of frameworks and libraries such as jQuery, Bootstrap, HighCharts and jsPlumb. The use of such frameworks of course also implies the study of their use, and solving problems or limitations you encountered with them. This costed considerable time as eluded in section 4.
 \newpage
 \subsection{Requirements}
 In the Test \& Implementation plan\footnote{\hrefTestImplementation} we set up a list of requirements according to the MoSCoW model. What follows is a copy of this list with comments on how (and if) it is implemented.
@@ -121,10 +123,10 @@ As can be seen in figure 6.A, the user is presented with a list of draggable (re
 
 	\end{itemize}
 \item[4. Available proteins] \textit{The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).}\\
-Clicking Simulate $>$ Show proteins in the menu will display a table with the available proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (figure 6.C).
+Clicking Simulate $>$ Show proteins in the menu will display a table with the available proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (figure 6.D).
 
 \item[5. Protein specification] \textit{The user must be able to specify which protein is used for a certain signal.}\\
-After opening the list of unselected proteins (figure 6.C), clicking a protein results in this protein being specified for the connection.
+After opening the list of unselected proteins (figure 6.D), clicking a protein results in this protein being specified for the connection.
 
 \item[6. Export circuit] \textit{The application must to able to save a circuit to a .syn file.}\\
 A circuit can be saved using File $>$ Save and exported to SBML using the File $>$ Export menu item.
@@ -153,17 +155,37 @@ This was a requirement we really wanted to add, but decided to implement a simpl
 
 During this project we have encountered some problems. In this section we will have a look at some of the highlights of these problems and how we fixed them.
 
-Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQuery testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code.
+\paragraph{Planning and design}
+Since, for some of us, this was the first time working with SCRUM, it took some getting used to. At first, we had to get used to working towards a result in two weeks and estimating what we could do. This became easier as the project progressed. 
+What we really noticed is that our design was not complete. We hadn't thought of the complete structure and failed to set some standards of coding. This led to less readable code, which is annoying when reviewing each others code, and no clear idea which function was implemented where. Especially later on, some functions turned out to be double implemented or unused. This point is also discussed in the paragraph about restructuring.
 
+\paragraph{Setup}
+A common issue using server-client structure is the actual connection between the two. In the beginning we had some trouble with this but this was mainly caused by out of sync code and trouble with Apache Tomcat. We decided on a standard version of Tomcat and wrote a setup page on the wiki\footnote{\url{https://github.com/FelixAkk/synthbio/wiki/Tomcat-installation}}. Afterwards, the problem was solved.
+
+\paragraph{QUnit}
+Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQuery testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code and the code is readable. 
+
+\paragraph{Drag and drop}
 Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to create connectors and draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work.
 
+\paragraph{Dropdown menus}
 At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from JavaScript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved by fully generating the menus every time we needed it. When opening a menu we just adjust its size, to simulate its dropdown effect.
 
+\paragraph{Communication and github merging}
 Throughout this project we worked with Git and GitHub to share our code. We also used the ticket mechanism of GitHub to keep track of what had to be done. Git is exceptionally good at merging code but cannot always prevent conflicts. If there is too little communication between two people who are working on the same code, merging can become difficult. However, with some reverts and recommitting these problems were resolved.
 
-Towards the end of our project, we did some major restructuring. We shifted some functions around, changed some names and did some more testing and commenting. We did this based on the feedback we got from the SIG evaluation. On the client side we put every function into files named exactly after the part of the program they run in. This makes it a lot easier to look for functions when you want to adjust code, or notice an error in some part of the program.
+\paragraph{Restructuring}
+We had a lot of code clutched together. We had that idea ourselves and the SIG evaluation gave the same result. So towards the end of our project, we did some major restructuring. We shifted some functions around, deleted unused functions, changed some names and did some more testing and commenting. On the client side we put every function into files named exactly after the part of the program they run in. This made it a lot easier to look for functions when you wanted to adjust code, or notice an error in some part of the program. 
 
-Our program is not only to model circuits but also to calculate and display the outcome. We displayed the outcome in a graph, but this showed some weird results. It turned out that the solver for our circuits had some issues (ALBERT EXPLAIN HOW IT WAS SOLVED).
+\paragraph{Solver issues}
+During the final iteration we discovered a problem with the connection to the solver which was implemented. It showed correct results for the transcription and translation reactions, but degradation did not work. After discussing things with Alexey, Jan Pieter decided to write a solver on its own, which initially took about 12 hours of work. Cleaning up the code and some other adjustments took another 8 hours.
+During the development of our own solver, Albert worked together with Alexey to fix the problems in the first approach. The result of this is the availability of two solvers in our GUI.
+
+\paragraph{Graph rasterisation, servlet issues}
+The graph library used in our GUI provides a way to export the graph to different image formats. This exporting requires a special server which is provided by the author of the library, but we wanted to be independent of that, so we decided to provide the rasterisation service by our own server code.
+At first, it seemed very straight-forward, but quite some time was absorbed by the confusion about Tomcat's class-path. It turns out Tomcat only looks in \verb|WEB-INF/lib/*| and not in it's subdirectories, resulting in a huge stack of \verb|NoClassDefFoundErrors| to fix.
+
+\include{simulator-problems}
 
 \section{Reflection on the teamwork}
 
