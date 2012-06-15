@@ -65,8 +65,9 @@ todo fix more.
 \pagebreak
 
 \section{Introduction}
-After finishing the fifth SCRUM iteration, this documents provides an overview of the product we developed, how the process went and how it compares to the plans we made in the documentation phase. 
+This report will detail our design and implementation of Zelula for the \textit{Contextproject}. Zelula is a piece of software for synthetic biologists with a visual tool to design, validate and simulate biological circuits.
 
+Chapter 2 will contain a description of the product, every part of the finished product will be detailed. Chapter 3 contains a description of the design and implementation process, detailing how the design compares to the implementation. Chapter 4 describes the key problems we had and explains the solutions. Chapter 5 contains a general reflection on the teamwork, followed by chapter 6 which contains individual reflections of the team members. Lastly chapter 7 lists our scrumplans.
 
 \include{description_of_product}
 
@@ -76,16 +77,19 @@ The first half of the project was focused on design, while the second part was a
 \subsection{Client GUI}
 In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we had in mind for the user interface of the client. The final implementation is greatly influenced by these sketches, as can be seen from the following screenshots.\\
 
-\centerline{\small 3.1 Sketches from RAD document: model and simulate.}
-\noindent \includegraphics[width=8cm]{pictures/gui_sketch1_marks.png} 
-\includegraphics[width=8cm]{pictures/gui_sketch2_marks.png}\\
+\begin{figure}[h!]
+\includegraphics[width=8cm]{pictures/gui_sketch1_marks.png} 
+\includegraphics[width=8cm]{pictures/gui_sketch2_marks.png}
+\caption{Sketches from RAD document: model and simulate.}
+\end{figure}
 
-\centerline{\small 3.2 Screenshots of the final GUI implementation: mainscreen, define inputs (E) and outputs (F).}
-\noindent \includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
-\includegraphics[width=4cm]{pictures/gui_final_inputselect.png}
-\includegraphics[width=4cm]{pictures/gui_final_output.png}\\
+\begin{figure}[h!]
+\includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
+\includegraphics[width=8cm]{pictures/gui_final2_marks.png}
+\caption{Screenshots of the final GUI implementation: main screen and outputs (F).}
+\end{figure}
 
-The matching letters in the "before/after" pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins so that they are easily distinctable and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection. It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
+The matching letters in the "before" (figure 5) and "after" (figure 6) pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins so that they are easily distinguishable and we added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection. It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
 It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
@@ -100,30 +104,30 @@ In the Test \& Implementation plan\footnote{\hrefTestImplementation} we set up a
 This was one of the first finished tasks, as it is essential for both client and server. The client will show an error dialog when no connection to the server can be established. While there is a connection, the user can view the connection delay (in milliseconds) in the bottom right corner of the screen.
 
 \item[2. Available gates] \textit{The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.}\\
-As can be seen in image 3.2.A, the user is presented with a list of draggable (regular and compound) gates.
+As can be seen in figure 6.A, the user is presented with a list of draggable (regular and compound) gates.
 
 \item[3. Design circuit] \textit{The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.}
 	\begin{itemize}
 	\item \textbf{3.1} \textit{The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the distinctive AND symbol normally used in circuit design.}
 	\item \textbf{3.2} \textit{The user must be able to drag and drop gates from the list into the working area.}\\
-	Gates are visualized using a simple, yet distinctive image (image 3.2.A). They can dragged from the list and dropped into the workspace (3.2.D).
+	Gates are visualized using a simple, yet distinctive image (figure 6.A). They can be dragged from the list and dropped into the workspace (figure 6.D).
 
 	\item \textbf{3.3} \textit{The user must be able freely to move the gate around in the working area, but gates will snap to grid points on the working area.}\\
 	After the gates are dropped into the workspace, the description of the gate disappears and the image remains. The gates can still be dragged around the screen.\\
 	At first, we got the system working without a grid snapping system. This worked very well and we did not see the need to implement a grid. That is why we postponed this requirement, and decided to drop it near the end of the project.
 
 	\item \textbf{3.4} \textit{The user must be able to draw connections between the gates in the form of wires.}\\
-	In the workspace, gates get endpoints for input and output (the little green and blue dots in image 3.2.D). Wires can be dragged from the output endpoints to the input endpoints. Wires from input to input and output to output endpoints are not possible. Output endpoints can contain multiple wires, while inputs only allow one.
+	In the workspace, gates get endpoints for input and output (the little green and blue dots in figure 6.D). Wires can be dragged from the output endpoints to the input endpoints. Wires from input to input and output to output endpoints are not possible. Output endpoints can contain multiple wires, while inputs only allow one.
 
 	\item \textbf{3.5} \textit{The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.}\\
 	We have added input and output gates which serve as big input or output endpoint. Wires can be dragged from the input and dropped into the output.
 
 	\end{itemize}
 \item[4. Available proteins] \textit{The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).}\\
-Clicking Simulate $>$ Show proteins in the menu will display a table with the available proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (image 3.2.D).
+Clicking Simulate $>$ Show proteins in the menu will display a table with the available proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (figure 6.D).
 
 \item[5. Protein specification] \textit{The user must be able to specify which protein is used for a certain signal.}\\
-After opening the list of unselected proteins (image 3.2.D), clicking a protein results in this protein being specified for the connection.
+After opening the list of unselected proteins (figure 6.D), clicking on a protein results in this protein being specified for the connection.
 
 \item[6. Export circuit] \textit{The application must to able to save a circuit to a .syn file.}\\
 A circuit can be saved using File $>$ Save and exported to SBML using the File $>$ Export menu item.
@@ -132,13 +136,13 @@ A circuit can be saved using File $>$ Save and exported to SBML using the File $
 Saved files can be loaded using the File $>$ Open menu item.
 
 \item[8. Input values specification] \textit{The user must be able to specify the input values used for the simulation of the circuit.}\\
-Clicking Simulate $>$ Define inputs (or pressing F7) will open a dialog in which the input values can be defined (image 3.2). These input values can also be loaded from a .csv file.
+Clicking Simulate $>$ Define inputs (or pressing F7) will open a dialog in which the input values can be defined (figure 6). These input values can also be loaded from a .csv file.
 
 \item[9. Circuit validation] \textit{The user must to be able validate his circuit in the application and get feedback over where there are conflicts.}\\
 Pressing F8 (or clicking Simulate $>$ Validate circuit) will give a validation of the circuit. This validation is done server side, and conflicts are grounded by useful feedback.
 
 \item[10. Circuit simulation] \textit{The application must be able to simulate a valid circuit and present the output values to the user.}\\
-Pressing F9 (or clicking Simulate $>$ Run solver) will simulate on the server and present the user with a plot of the output values (image 3.2). The user can zoom in/out and specify which proteins are visible in the plot (only the input and output values are shown by default). Because we use a simulating library which supports multiple solving methods, we give the user the options to select a method.
+Pressing F9 (or clicking Simulate $>$ Run solver) will simulate on the server and present the user with a plot of the output values (figure 6). The user can zoom in/out and specify which proteins are visible in the plot (only the input and output values are shown by default). Because we use a simulating library which supports multiple solving methods, we give the user the options to select a method.
 \end{description}
 
 \paragraph{Should-Haves}
@@ -166,7 +170,7 @@ Our program was developed test driven. This makes for very neat code, but it als
 Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to create connectors and draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work.
 
 \paragraph{Dropdown menus}
-At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from JavaScript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved by fully generating the menus every time we needed it. When opening a menu we just adjust its size, to simulate its dropdown effect.
+At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular HTML dropdown menus are not an issue, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved by fully generating the menus every time we needed it. When opening a menu we just adjust its size, to simulate its dropdown effect.
 
 \paragraph{Communication and github merging}
 Throughout this project we worked with Git and GitHub to share our code. We also used the ticket mechanism of GitHub to keep track of what had to be done. Git is exceptionally good at merging code but cannot always prevent conflicts. If there is too little communication between two people who are working on the same code, merging can become difficult. However, with some reverts and recommitting these problems were resolved.
@@ -175,7 +179,7 @@ Throughout this project we worked with Git and GitHub to share our code. We also
 We had a lot of code clutched together. We had that idea ourselves and the SIG evaluation gave the same result. So towards the end of our project, we did some major restructuring. We shifted some functions around, deleted unused functions, changed some names and did some more testing and commenting. On the client side we put every function into files named exactly after the part of the program they run in. This made it a lot easier to look for functions when you wanted to adjust code, or notice an error in some part of the program. 
 
 \paragraph{Solver issues}
-During the final iteration we discovered a problem with the connection to the solver which was implemented. It showed correct results for the transcription and translation reactions, but degradation did not work. After discussing things with Alexey, Jan Pieter decided to write a solver on its own, which initially took about 12 hours of work. Cleaning up the code and some other adjustments took another 8 hours.
+During the second to last iteration we discovered a problem with the connection to the solver which was implemented. It didn't show correct results for the transcription and translation reactions, because degradation didn't work. After discussing things with Alexey, Jan Pieter decided to write a solver on its own, which initially took about 12 hours of work. Cleaning up the code and some other adjustments took another 8 hours.
 During the development of our own solver, Albert worked together with Alexey to fix the problems in the first approach. The result of this is the availability of two solvers in our GUI.
 
 \paragraph{Graph rasterisation, servlet issues}
@@ -187,6 +191,13 @@ The GUI was initially implemented with several key GUI elements such as the oupu
 \include{simulator-problems}
 
 \section{Reflection on the teamwork}
+The teamwork during this project grew better as time passed. We got more used to each other and every one became a little more enthusiastic during the implementation phase. The first phase, the design phase in which we wrote a lot of documents, passed without any big problems. We had a meeting every week in which we divided tasks and had little brainstorms. These brainstorms brought up a lot of ideas and we were eager to start implementing.
+
+The second phase, implementation, started off very well with good results after the first iteration. Again we had weekly meetings to divide work and to discuss ideas, but a lot of the communication was now done casually. We came together more often while implementing, so the threshold to ask questions and throw out ideas lowered. The rate at which code emerged was pretty high.
+
+This high activity occasionally resulted in work being done twice, but these miscommunications were resolved well. There were no other notable problems, other than perhaps some implementation problems. Such implementation problems were handled by having multiple people look at the problem and discussing possible fixes.
+
+Every project member is proud of the delivered product and is satisfied with how the project elapsed. The next chapter will give a personal reflection of each team member on the project.
 
 \section{Individual reflection on the project} %max 1 A4 per teammember
 \subsection{Felix Akkermans}
@@ -204,7 +215,7 @@ Looking back at this project, I am quite pleased with the overall teamwork and f
 
 After starting implementation of the product, I feel like the group came more at ease (having more weekly meetings definitely helped, too). I had never worked with SCRUM before, but I can see why it's accepted as a development method as it definitely helps to always have a working product. Demonstrations after each iteration helped us confirm that we were well on our way. We put a lot more work in the implementation than in the reports, but I think both were of very decent level.
 
-I started taking more initiative in the implementation phase and tried to always have an overview over what was happening and what needed to be done. My opinion is that every group member had a phase in which they did a lot of work and a phase in which they did less than usual. I think the overall activity and devotion to the project was good. This has lead to a decent product which has exceeded my initial expectations.
+I started taking more initiative in the implementation phase and tried to always have an overview over what was happening and what needed to be done. My opinion is that every group member had a phase in which they did a lot of work and a phase in which they did less than usual. I think the overall activity and devotion to the project was good. This has led to a decent product which has exceeded my initial expectations.
 
 This high activity and devotion sometimes lead to "code-clashes" as more people accidentally worked on the same bit of code. I personally think these little conflicts are no big deal and I rather have work being done twice than work not being done at all. It did not affect our team work and I think we settled these few miss-communications well.
 
@@ -250,9 +261,10 @@ Balancing the work during projects is an always an issue. Some people have less 
 
 Working together in a source code management system can be a source of frustrations: braking \textit{the make}, little care when committing unintentional changes or merges. I sometimes found it hard to patiently correct them and explain the how and why.
 
+\include{future-implementation}
 
 \section{Lightweight SCRUM Plans}
-The following pages will include the relevant parts of our lightweight scrumplans for each iteration. The colored links and numbers with a hashtag refer to GitHub issues on \url{https://github.com/FelixAkk/synthbio/issues}. For each iteration, a milestone is available providing a nice overview of the issues for each iteration.
+The following pages will include the relevant parts of our lightweight scrumplan for each iteration. The colored links and numbers with a hashtag refer to GitHub issues on \url{https://github.com/FelixAkk/synthbio/issues}. For each iteration, a milestone is available providing a nice overview of the issues for each iteration.
 
 \includepdf[
 	landscape, frame, nup=1x2, pages=2-3,
