@@ -75,16 +75,19 @@ The first half of the project was focused on design, while the second part was a
 \subsection{Client GUI}
 In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we had in mind for the user interface of the client. The final implementation is greatly influenced by these sketches, as can be seen from the following screenshots.\\
 
-\centerline{\small 3.1 Sketches from RAD document: model and simulate.}
-\noindent \includegraphics[width=8cm]{pictures/gui_sketch1_marks.png} 
-\includegraphics[width=8cm]{pictures/gui_sketch2_marks.png}\\
+\begin{figure}[h!]
+\includegraphics[width=8cm]{pictures/gui_sketch1_marks.png} 
+\includegraphics[width=8cm]{pictures/gui_sketch2_marks.png}
+\caption{Sketches from RAD document: model and simulate.}
+\end{figure}
 
-\centerline{\small 3.2 Screenshots of the final GUI implementation: mainscreen, define inputs (E) and outputs (F).}
-\noindent \includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
-\includegraphics[width=4cm]{pictures/gui_final_inputselect.png}
-\includegraphics[width=4cm]{pictures/gui_final_output.png}\\
+\begin{figure}[h!]
+\includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
+\includegraphics[width=8cm]{pictures/gui_final2_marks.png}
+\caption{Screenshots of the final GUI implementation: mainscreen and outputs (F).}
+\end{figure}
 
-The matching letters in the "before/after" pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins such that they can easily be distinguished and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
+The matching letters in the "before" (figure 5) and "after" (figure 6) pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins such that they can easily be distinguished and added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
 
 It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
@@ -98,30 +101,30 @@ In the Test \& Implementation plan\footnote{\hrefTestImplementation} we set up a
 This was one of the first finished tasks, as it is essential for both client and server. The client will show an error dialog when no connection to the server can be established. While there is a connection, the user can view the connection delay (in milliseconds) in the bottom right corner of the screen.
 
 \item[2. Available gates] \textit{The application must be able to present a list of available gates to the user. These gates can be used to model the circuit.}\\
-As can be seen in image 3.2.A, the user is presented with a list of draggable (regular and compound) gates.
+As can be seen in figure 6.A, the user is presented with a list of draggable (regular and compound) gates.
 
 \item[3. Design circuit] \textit{The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.}
 	\begin{itemize}
 	\item \textbf{3.1} \textit{The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the distinctive AND symbol normally used in circuit design.}
 	\item \textbf{3.2} \textit{The user must be able to drag and drop gates from the list into the working area.}\\
-	Gates are visualized using a simple, yet distinctive image (image 3.2.A). They can dragged from the list and dropped into the workspace (3.2.D).
+	Gates are visualized using a simple, yet distinctive image (figure 6.A). They can dragged from the list and dropped into the workspace (figure 6.D).
 
 	\item \textbf{3.3} \textit{The user must be able freely to move the gate around in the working area, but gates will snap to grid points on the working area.}\\
 	After the gates are dropped into the workspace, the description of the gate disappears and the image remains. The gates can still be dragged around the screen.\\
 	At first, we got the system working without a grid snapping system. This worked very well and we did not see the need to implement a grid. That is why we postponed this requirement, and decided to drop it near the end of the project.
 
 	\item \textbf{3.4} \textit{The user must be able to draw connections between the gates in the form of wires.}\\
-	In the workspace, gates get endpoints for input and output (the little green and blue dots in image 3.2.D). Wires can be dragged from the output endpoints to the input endpoints. Wires from input to input and output to output endpoints are not possible. Output endpoints can contain multiple wires, while inputs only allow one.
+	In the workspace, gates get endpoints for input and output (the little green and blue dots in figure 6.D). Wires can be dragged from the output endpoints to the input endpoints. Wires from input to input and output to output endpoints are not possible. Output endpoints can contain multiple wires, while inputs only allow one.
 
 	\item \textbf{3.5} \textit{The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.}\\
 	We have added input and output gates which serve as big input or output endpoint. Wires can be dragged from the input and dropped into the output.
 
 	\end{itemize}
 \item[4. Available proteins] \textit{The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).}\\
-Clicking Simulate $>$ Show proteins in the menu will display a table with the available proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (image 3.2.D).
+Clicking Simulate $>$ Show proteins in the menu will display a table with the available proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (figure 6.C).
 
 \item[5. Protein specification] \textit{The user must be able to specify which protein is used for a certain signal.}\\
-After opening the list of unselected proteins (image 3.2.D), clicking a protein results in this protein being specified for the connection.
+After opening the list of unselected proteins (figure 6.C), clicking a protein results in this protein being specified for the connection.
 
 \item[6. Export circuit] \textit{The application must to able to save a circuit to a .syn file.}\\
 A circuit can be saved using File $>$ Save and exported to SBML using the File $>$ Export menu item.
@@ -130,13 +133,13 @@ A circuit can be saved using File $>$ Save and exported to SBML using the File $
 Saved files can be loaded using the File $>$ Open menu item.
 
 \item[8. Input values specification] \textit{The user must be able to specify the input values used for the simulation of the circuit.}\\
-Clicking Simulate $>$ Define inputs (or pressing F7) will open a dialog in which the input values can be defined (image 3.2). These input values can also be loaded from a .csv file.
+Clicking Simulate $>$ Define inputs (or pressing F7) will open a dialog in which the input values can be defined (figure 6). These input values can also be loaded from a .csv file.
 
 \item[9. Circuit validation] \textit{The user must to be able validate his circuit in the application and get feedback over where there are conflicts.}\\
 Pressing F8 (or clicking Simulate $>$ Validate circuit) will give a validation of the circuit. This validation is done server side, and conflicts are grounded by useful feedback.
 
 \item[10. Circuit simulation] \textit{The application must be able to simulate a valid circuit and present the output values to the user.}\\
-Pressing F9 (or clicking Simulate $>$ Run solver) will simulate on the server and present the user with a plot of the output values (image 3.2). The user can zoom in/out and specify which proteins are visible in the plot (only the input and output values are shown by default). Because we use a simulating library which supports multiple solving methods, we give the user the options to select a method.
+Pressing F9 (or clicking Simulate $>$ Run solver) will simulate on the server and present the user with a plot of the output values (figure 6). The user can zoom in/out and specify which proteins are visible in the plot (only the input and output values are shown by default). Because we use a simulating library which supports multiple solving methods, we give the user the options to select a method.
 \end{description}
 
 \paragraph{Should-Haves}
