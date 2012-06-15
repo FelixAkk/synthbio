@@ -182,12 +182,23 @@ During the development of our own solver, Albert worked together with Alexey to 
 The graph library used in our GUI provides a way to export the graph to different image formats. This exporting requires a special server which is provided by the author of the library, but we wanted to be independent of that, so we decided to provide the rasterisation service by our own server code.
 At first, it seemed very straight-forward, but quite some time was absorbed by the confusion about Tomcat's class-path. It turns out Tomcat only looks in \verb|WEB-INF/lib/*| and not in it's subdirectories, resulting in a huge stack of \verb|NoClassDefFoundErrors| to fix.
 
+\paragraph{Migrating GUI elements from modals to a workspace tab}
+The GUI was initially implemented with several key GUI elements such as the ouput, input and validation results in modals. Although this was not according to the final designs, and has several drawbacks on usability when working on a circuit alongside, this far easier to implement than in an element that was always present in the workspace. This element had high requirements on flexibility (being able to hide, show again without overlapping the workspace, resize to meet size requirements, go fullscreen in a usable way etc.), which was not provided by any ready made framework or library. This meant implement a lot of workspace management and crafting on these tabs. As work progressed on this it turned out to be a more and more complex task, going far over the estimated time. At some point we had to decide which workspace we'd write the report about and deliver at the last scrum. Although work was nearly completed, there was just not enough time and we left this feature out.
 \include{simulator-problems}
 
 \section{Reflection on the teamwork}
 
 \section{Individual reflection on the project} %max 1 A4 per teammember
 \subsection{Felix Akkermans}
+The project was the longest spanning one I've participated in thus far. Especially the synthetic biology/programming life direction really appealed to me. I had very high hopes, and am very happy that with this project we managed to realize something great.
+
+During the start the project took a very different direction than expected, which caused the necessary confusion during the documentation phase when it came definitions and work that was to be expected. At the same time we had a course in project management skills, which I think certainly helped us cope with this, although not ideally as fast and flexible as we could have. But then again this was the first time we were actively and consciously trying to apply these skills. At several occasions I really noticed this made a difference in insight and outcome.
+
+The documentation phase went quite smooth, with an increase of quality in our work as we managed feedback from the tutors.
+
+When we started on the implementation we paid special attention to the novel project management method (SCRUM) we were going to use. I think we coped with this very well, and got up to speed with it's iterative rhythm very well. From the first iteration we have a working presentable product, and managed to stick to this pattern throughout the project. During each iteration we had our share of teamwork and implementation problems. The implementation problems we coped with reasonable I think. Be it slow and gradual, in general the teamwork and improved. I felt that for some the dedication to the project declined quite at some point, but in the end everyone delivered a good contribution to the project.
+
+My work has mostly focussed on the GUI. I feel that my work and criticism was appreciated here and this also made it a great job to work on. I felt that I made a useful and good contribution with directing the GUI, but I wish I had more time to spend at reviewing work of others and helping in their fields. This often left me with a feeling of a lack of overview of the project. 
 \subsection{Niels Doekemeijer}
 Looking back at this project, I am quite pleased with the overall teamwork and final result. I feel like we had a bit of a rough start, having very few meetings in the first part of the project. This resulted in somewhat lower grades than expected for the first few documents. Writing reports is not my favourite part of projects, but it has to be done and I did my share.
 
@@ -195,7 +206,7 @@ After starting implementation of the product, I feel like the group came more at
 
 I started taking more initiative in the implementation phase and tried to always have an overview over what was happening and what needed to be done. My opinion is that every group member had a phase in which they did a lot of work and a phase in which they did less than usual. I think the overall activity and devotion to the project was good. This has lead to a decent product which has exceeded my initial expectations.
 
-This high activity and devotion sometimes lead to "code-clashes" as more people accidentally worked on the same bit of code. I personally think these little conflicts are no big deal and I rather have work being done twice than work not being done at all. It did not affect our team work and I think we settled these few miscommunications well.
+This high activity and devotion sometimes lead to "code-clashes" as more people accidentally worked on the same bit of code. I personally think these little conflicts are no big deal and I rather have work being done twice than work not being done at all. It did not affect our team work and I think we settled these few miss-communications well.
 
 \subsection{Thomas van Helden}
 I am quite amazed about the product we managed to put together. I'm certainly glad we made it with a nice JS GUI. Previous projects were all made in Java leading to horrific GUIs. This project is also the most complex product I've ever made. So in several ways, this was the most challenging IT project I've worked on. Once again, I've learned that a good preparation works a million times better than just starting to code. 
@@ -270,3 +281,4 @@ The following pages will include the relevant parts of our lightweight scrumplan
 
 
 \end{document}
+
