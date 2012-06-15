@@ -150,17 +150,31 @@ This was a requirement we really wanted to add, but decided to implement a simpl
 
 During this project we have encountered some problems. In this section we will have a look at some of the highlights of these problems and how we fixed them.
 
-Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQuery testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code.
+\paragraph{QUnit}
+Our program was developed test driven. This makes for very neat code, but it also comes with some problems. We mainly encountered problems with QUnit, a JQuery testing framework similar to Java's JUnit. Although the testing was done properly, the feedback on the results was not very helpful. Eventually we managed to tackle this problem with some extra manual testing. We chose to do some extra manual testing instead of switching testing framework because of all the work we already put into it. Also, QUnit works really easy with JQuery code and the code is readable. 
 
+\paragraph{Drag&Drop}
 Another problem client side was the dragging and dropping of gates and connecting them with wires. We had anticipated this as being tough and found a solution in jsPlumb, a solution with its downsides. The framework jsPlumb makes it easy to create connectors and draw wires between gates, but it didn't fully meet our needs so we had to customize it, leading to quite some hours of extra work.
 
+\paragraph{Dropdown menus}
 At one point, we figured we wanted to select our proteins from dropdown menus on our wires. Regular dropdown menus from JavaScript are not an issues, however combining this with jsPlumb and bootstrap proved to be a little more difficult. This took more time than we had anticipated but was eventually solved by fully generating the menus every time we needed it. When opening a menu we just adjust its size, to simulate its dropdown effect.
 
+\paragraph{Communication and github merging}
 Throughout this project we worked with Git and GitHub to share our code. We also used the ticket mechanism of GitHub to keep track of what had to be done. Git is exceptionally good at merging code but cannot always prevent conflicts. If there is too little communication between two people who are working on the same code, merging can become difficult. However, with some reverts and recommitting these problems were resolved.
 
-Towards the end of our project, we did some major restructuring. We shifted some functions around, changed some names and did some more testing and commenting. We did this based on the feedback we got from the SIG evaluation. On the client side we put every function into files named exactly after the part of the program they run in. This makes it a lot easier to look for functions when you want to adjust code, or notice an error in some part of the program.
+\paragraph{Restructuring}
+We had a lot of code clutched together. We had that idea ourselves and the SIG evaluation gave the same result. So towards the end of our project, we did some major restructuring. We shifted some functions around, changed some names and did some more testing and commenting.On the client side we put every function into files named exactly after the part of the program they run in. This made it a lot easier to look for functions when you wanted to adjust code, or notice an error in some part of the program. 
 
-Our program is not only to model circuits but also to calculate and display the outcome. We displayed the outcome in a graph, but this showed some weird results. It turned out that the solver for our circuits had some issues (ALBERT EXPLAIN HOW IT WAS SOLVED).
+\paragraph{Solver issues}
+During the final iteration we discovered a problem with the connection to the solver which was implemented. It showed correct results for the transcription and translation reactions, but degradation did not work. After discussing things with Alexey, Jan Pieter decided to write a solver on its own, which initially took about 12 hours of work. Cleaning up the code and some other adjustments took another 8 hours.
+
+During the development of our own solver, Albert worked together with Alexey to fix the problems in the first approach. The result of this is the availability of two solvers in our GUI.
+
+\paragraph{Graph rasterisation, servlet issues}
+The graph library used in our GUI provides a way to export the graph to different image formats. This exporting requires a special server which is provided by the author of the library, but we wanted to be independent of that, so we decided to provide the rasterisation service by our own server code.
+
+At first, it seemed very straight-forward, but quite some time was absorbed by the confusion about Tomcat's class-path. It turns out Tomcat only looks in \verb|WEB-INF/lib/*| and not in it's subdirectories, resulting in a huge stack of \verb|NoClassDefFoundErrors| to fix.
+
 
 \section{Reflection on the teamwork}
 
