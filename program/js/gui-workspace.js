@@ -971,7 +971,7 @@ synthbio.gui.simulationTabsFullscreen = function(fullscreen) {
 			tabbar.draggable('enable');
 			chevron.attr("class", chevron.attr("class").replace("down", "up")); // Flip the fullscreen toggle arrow
 		}
-		synthbio.gui.plot.plotResize();
+		synthbio.gui.plotResize();
 		synthbio.gui.simulationTabsInFullscreen = fullscreen;
 	} else {
 		// toggle using recursive call

@@ -27,7 +27,7 @@
 \begin{document}
 
 \section*{Simulator problems}
-In the second to last iteration we discovered that our simulator didn't degrade anything, this was discovered so late because non of the tests targeted degradation, we only tested if the reaction speed changed. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from Alexey, the problem found was indeed the SBML format.\\
+In the second to last iteration we discovered that our simulator didn't degrade anything (see figure 1), this was discovered so late because non of the tests targeted degradation, we only tested if the reaction speed changed. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from Alexey, the problem found was indeed the SBML format.\\
 
 \begin{figure}[h!]
 	\centering\includegraphics[scale=0.35]{../../screenshots/2012-05-31-not-output.png}
@@ -50,5 +50,5 @@ The transcription reaction produces something from a gene sequence. The degradat
 	\caption{Correct output, B degrades.}
 \end{wrapfigure}
 
-\noindent To fix this we split the transcription and translation reactions such that the degradations got their own reactions, this allowed us to specify different reactants, products and modifiers for the degradation.
+\noindent To fix this (see figure 2) we split the transcription and translation reactions such that the degradations got their own reactions, this allowed us to specify different reactants, products and modifiers for the degradation.
 \end{document}

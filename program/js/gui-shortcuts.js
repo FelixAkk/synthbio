@@ -36,19 +36,24 @@ synthbio.gui.handleKeystroke = function(event) {
 				event.preventDefault();
 			break;
 			case 83: // S key
-				if(event.shiftKey === true) {
-					// the Ctrl+Shift+S case
-					synthbio.gui.fileSaveDialog();
-				} else {
-					// the Ctrl+S case
-					synthbio.gui.saveHandler();
+				if($('#files').is(":hidden")) {
+					if(event.shiftKey === true) {
+						// the Ctrl+Shift+S case
+						synthbio.gui.fileSaveDialog();
+					} else {
+						// the Ctrl+S case
+						synthbio.gui.saveHandler();
+					}
 				}
 				event.preventDefault();
 				break;
-			// S key
+			// O key
 			case 79:
-				// the Ctrl+O case
-				synthbio.gui.fileOpenDialog();
+				if($('#files').is(":hidden")) {
+					console.log("CTRL+O");
+					// the Ctrl+O case
+					synthbio.gui.fileOpenDialog();
+				}
 				event.preventDefault();
 				break;
 			default:
