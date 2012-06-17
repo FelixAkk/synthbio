@@ -73,9 +73,11 @@ Chapter \ref{product-description} will contain a description of the product, eve
 
 \section{Design and implementation process}
 \label{design-implementation}
-The first half of the project was focused on design, while the second part was all about implementation. In this chapter we will reflect on the consistency between design and implementation. We will clarify what was implemented according to the documents and what was changed or perhaps not implemented. This will done with help of a reflection on the initial GUI sketches (3.1) and our list of requirements (3.2).
+The first half of the project was focused on design, while the second part was all about implementation. In this chapter we will reflect on the consistency between design and implementation. We will clarify what was implemented according to the documents and what was changed or perhaps not implemented. This will done with help of a reflection on the initial GUI sketches (\ref{process-gui}) and our list of requirements (\ref{process-requirements}).
+The chapter is conclude with a short section about how we finally tested our work (\ref{process-testing}).
 
 \subsection{Client GUI}
+\label{process-gui}
 In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we had in mind for the user interface of the client. The final implementation is greatly influenced by these sketches, as can be seen from the following screenshots.\\
 
 \begin{figure}[h!]
@@ -97,8 +99,10 @@ The matching letters in the ``before'' (figure~\ref{fig-gui-proposed}) and ``aft
 It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
 
 Implementation was greatly accelerated by the use of frameworks and libraries such as jQuery, Bootstrap, HighCharts, jsPlumb and JSON-Java. The use of such frameworks of course also implies the study of their use, and solving problems or limitations encountered with them. This costed considerable time as eluded in section~\ref{problems-solutions-highlights}.
+
 \newpage
 \subsection{Requirements}
+\label{process-requirements}
 In the Test \& Implementation plan\footnote{\hrefTestImplementation} we set up a list of requirements according to the MoSCoW model. What follows is a copy of this list with comments on how (and if) it is implemented.
 
 \paragraph{Must-Haves}
@@ -112,8 +116,8 @@ As can be seen in figure~\ref{fig-gui-implemented}.A, the user is presented with
 \item[3. Design circuit] \textit{The user must be able to design a circuit by specifying gates (using a drag-and-drop) and the relations between these gates.}
 	\begin{itemize}
 	\item \textbf{3.1} \textit{The application must be able to visualize a gate using a simplified image. This image should relate to the function of the gate. For example, for the AND gate, it is logical to use the distinctive AND symbol normally used in circuit design.}
-        Gates are visualized using a simple, yet distinctive image 
-(figure~\ref{fig-gui-implemented}.A). We simply used SVG images in the HTML to display these.
+	
+	Gates are visualized using a simple, yet distinctive image (figure~\ref{fig-gui-implemented}.A). We simply used SVG images in the HTML to display these.
 
 	\item \textbf{3.2} \textit{The user must be able to drag and drop gates from the list into the working area.}\\
 	Gates are visualized using a simple, yet distinctive image (figure~\ref{fig-gui-implemented}.A). They can be dragged from the list and dropped into the workspace (figure~\ref{fig-gui-implemented}.D).
@@ -127,8 +131,8 @@ As can be seen in figure~\ref{fig-gui-implemented}.A, the user is presented with
 
 	\item \textbf{3.5} \textit{The user must be able to draw input and output wires for the circuit, to explicitly state which proteins will be used as input.}\\
 	We have added input and output gates which serve as big input or output endpoint. Wires can be dragged from the input and dropped into the output.
+\end{itemize}
 
-	\end{itemize}
 \item[4. Available proteins] \textit{The application must be able to present the user with an overview of available proteins to assign to signals (visualized by the wires).}\\
 Clicking Simulate $>$ Show proteins in the menu will display a table with the available proteins and matching parameters. This table is sortable and can be filtered. Each wire will also have an overlay with the selected protein. Clicking on this overlay displays a list of proteins that can still be used for selection (figure~\ref{fig-gui-implemented}.D).
 
@@ -157,6 +161,17 @@ Pressing F9 (or clicking Simulate $>$ Run solver) will simulate on the server an
 This was a requirement we really wanted to add, but decided to implement a simpler version due to time restrictions. We wanted to make it so that compound gates were visualized the same as regular gates, but decided this would be too much work. We can now mark circuits as compound gates at the time of saving. These gates will then show up in the list of compound gates and can be dragged into the workspace. When dropped, the old circuit will show up (minus the input/output signals).
 \end{description}
 
+\subsection{Testing and test coverage}
+\label{process-testing}
+
+Since the development of this project was to be test-driven, we did put some effort in writing a test and implementation plan\footnote{\hrefTestImplementation}. Did we actually used such an approach? Did it work?
+
+\paragraph{Unit testing}
+
+\paragraph{Test coverage}
+% reflection on real coverage, as well as branch coverage for js an java.
+
+\paragraph{Acceptance testing}
 
 \section{Key problems and solutions - highlights}
 \label{problems-solutions-highlights}
@@ -209,7 +224,7 @@ Every project member is proud of the delivered product and is satisfied with how
 
 \section{Individual reflection on the project} %max 1 A4 per teammember
 \label{individual-reflection}
-Here each team member gives a summary of their experience and analysis of the project.
+In this section each team member gives a summary of their experience and analysis of the project.
 \subsection{Felix Akkermans}
 The project was the longest spanning one I've participated in thus far. Especially the synthetic biology/programming life direction really appealed to me. I had very high hopes, and am very happy that with this project we managed to realize something great.
 
@@ -319,7 +334,10 @@ Iteration & Estimated & Actual & Comparison \\
 	addtotoc={2 , subsection , 1 , Scrumplan 5 , scrum-5}
 ]{../scrumplan-5/scrumplan-5.pdf}
 
-
+\includepdf[
+	landscape, frame, nup=1x2, pages=1-2,
+	addtotoc={2 , subsection , 1 , Acceptance testing , acceptance-testing}
+]{../acceptance_testing/acceptance_testing_results.pdf}
 \end{document}
 
  product will be detailed. Chapter 3 contains a description of the design 

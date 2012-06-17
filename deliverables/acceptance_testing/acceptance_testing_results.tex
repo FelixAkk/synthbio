@@ -1,5 +1,5 @@
 %&latex
-\documentclass{article}
+\documentclass[a4paper]{article}
 
 \usepackage[dutch]{babel}
 \usepackage{tabularx}
@@ -9,6 +9,10 @@
 \newcounter{step}
 \setcounter{step}{1}
 \newcommand{\step}{\arabic{step}\stepcounter{step}}
+
+% something from above messes up pdf output, so force it.
+\pdfoutput=1
+
 \begin{document}
 
 %+Title
@@ -53,7 +57,7 @@ When resizing the application there are some bugs as well. Although they are har
 For instance, when simply resizing the browser, the input and output shift along, but the circuit doesn't. This causes the wires to be displayed incorrectly. Also, the result panel does not resize correctly, to fit the graph nicely, at first. When resizing it one bit or rerunning the simulation from the bottom panel, it does resize.
 Final example is when you run a simulation, then go from the output tab (bottom panel) to the validation panel, and then rerun the simulation, the graph and the bar for the graph are not shown correctly.
 
-\newpage
+\vfill
 \subsection{Usability grading}
 Here the tester can give grades for specific and overall aspects of the usability of the application. Of course written remarks and feedback on certain aspects are also very valuable, and we encourage the tester to make these along with providing grades. On some aspects an explanation is provided in the footnotes.
 
