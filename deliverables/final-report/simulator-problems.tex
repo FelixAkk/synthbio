@@ -1,4 +1,5 @@
-\paragraph{Simulator problems in detail}
+\subsection{Simulator problems in detail}
+\label{simulator-problems}
 In the second to last iteration we discovered that our simulator didn't degrade anything (Figure~\ref{fig:wrong}), this was discovered so late because non of the tests targeted degradation, we only tested if the reaction speed changed. Either the solver library (SBMLsimulator) was wrong or the SBML format used was. After some testing and help from Alexey, the problem found was indeed the SBML format.\\
 
 \begin{figure}[h!]
