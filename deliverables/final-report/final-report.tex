@@ -164,24 +164,32 @@ This was a requirement we really wanted to add, but decided to implement a simpl
 \subsection{Testing and test coverage}
 \label{process-testing}
 
-Since the development of this project was to be test-driven, we did put some effort in writing a test and implementation plan\footnote{\hrefTestImplementation}. Did we actually used such an approach? Did it work?
+Since the development of this project was to be test-driven, we did put some effort in writing a test and implementation plan\footnote{\hrefTestImplementation}. This section reflects on the use of that document, and on the amount of testing we actually did.
 
 \paragraph{Unit testing}
 Unit testing was a major part of our test plan. Having written a test plan implies that it is to be used, however, we did not really use the plan in deciding what to test. Tests were mainly written together with the code, not necessarily before implementing it.
 
 Unit testing client side JavaScript code was planned, but not implemented in the same depth as intended. GUI interaction was not tested in any automatized way, mainly because we did not know how to do it. It might have been possible to invest more time in it, but since the structure of the interface did change a lot it might have been really cumbersome. Testing these aspects of the program was done through acceptance tests, with a detailed description below.
 
+Judging from the past, we lacked the experience to write a decent doable test plan. We made some bold and broad plans but both too precise and too vague. More emphasis on the testing during the development could have fixed it, but was omitted.
+
 \paragraph{Test coverage}
 % reflection on real coverage, as well as branch coverage for js an java.
-Testing for coverage was not really covered in our testing plan, however, during the selection of tasks for iteration 4 we decided to explicitly check and improve coverage. We used Cobertura to report on Java coverage, and JSCoverage to report on JavaScript coverage.
+Testing for coverage was not really covered in our testing plan, however, during the selection of tasks for iteration~4 we decided to explicitly check and improve coverage. We used Cobertura to report on Java coverage, and JSCoverage to report on JavaScript coverage.
 
-As can be seen in figure~\label{fig-java-coverage}, branch coverage figures are moderately high, but not exceptional. 
+As can be seen in figure~\ref{fig-java-coverage}, branch coverage figures are moderately high, but not exceptional. Apart from that, coverage on issues not easily recognizable by coverage reports like these is not always very good. For example, a more detailed plan on the things a test for a solver should cover could have exposed the simulator problems more early in the process\footnote{For a detailed explanation on this problem, refer to section~\ref{simulator-problems}}.
 \begin{figure}[h!]
 	\includegraphics[width=\textwidth]{pictures/java-coverage-packages.png}
 	\includegraphics[width=\textwidth]{pictures/java-coverage-models.png}
 	\caption{Overview of Java package coverage and the coverage of a selected package.}
 	\label{fig-java-coverage}
 \end{figure}
+\begin{figure}[h!]
+	\centering\includegraphics[width=.6\textwidth]{../../screenshots/2012-06-17-jscoverage-report-small.png}
+	\caption{Overview of JavaScript coverage.}
+	\label{fig-javascript-coverage}
+\end{figure}
+
 
 \paragraph{Acceptance testing}
 
@@ -292,7 +300,6 @@ I'm used to the command line and enjoyed learning to use new tools like \verb|to
 The actual development was often quite straightforward. No very complicated algorithms, mostly pushing simple data structures around. That said, testing things is not always easy. For example, testing JSON responses is not a trivial task if the testing tools have no notion about its structure. I think we could have put more focus on exactly what to test, not only on line or branch coverage.
 
 I really did like the test driven design approach, or more precisely, the fact that tests existed. Some refactoring made the importance of tests very clear: the tested parts worked like before because problems were identified by the tests, but the untested functionality lagged behind.
-
 
 \paragraph{Team collaboration}
 % balance of work, Initiative. SCM frustration
