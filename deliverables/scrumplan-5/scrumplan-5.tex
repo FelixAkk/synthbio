@@ -62,7 +62,7 @@ A list of tasks, assignments and effort estimations is included in a table.
 \task{73}
 	{Client: Resize}
 	{Felix}
-	{6}{Actual}
+	{6}{4}
 
 \task{66}
 	{Client: Acceptance testing}
@@ -77,12 +77,12 @@ A list of tasks, assignments and effort estimations is included in a table.
 \task{77}
 	{Finish Scrum plan 5}
 	{Felix}
-	{2}{Actual}
+	{2}{2}
 
 \task{52}
 	{Final report: Key Problems/Solutions}
 	{Thomas + rest}
-	{4}{2+}
+	{4}{2+1}
 
 \task{55}
 	{Final report: Reflection Teamwork}
@@ -112,9 +112,9 @@ A list of tasks, assignments and effort estimations is included in a table.
 \task{}
 	{Code Review}
 	{Everyone}
-	{5 * 3}{6+2+3+2}
+	{5 * 3}{6+2+3+2+1}
 
-\subtotal{77}{-}
+\subtotal{77}{70,1}
  
 \subheading{
 	Optional tasks
@@ -122,57 +122,57 @@ A list of tasks, assignments and effort estimations is included in a table.
 
 \task{43}
 	{Client: Polish circuit styles}
-	{}
-	{}{Actual}
+	{-}
+	{-}{dropped}
 
 \task{60}
 	{Automated QUnit tests from ant}
 	{Albert}
-	{}{1}
+	{-}{1}
 
 \task{14}
 	{Client: Compile .less server side}
-	{}
-	{}{dropped}
+	{-}
+	{-}{dropped}
 
 \task{13}
 	{Client: Assign keyboard shortcuts}
 	{Felix}
-	{}{Actual}
+	{-}{3}
 
 \task{84}
 	{Client: Input and output fields resize and display open connection}
-	{}
-	{}{dropped}
+	{-}
+	{-}{dropped}
 
 \task{82}
 	{Client: Migrate stuff to simulation tab}
-	{}
-	{}{Actual}
+	{Felix}
+	{-}{12}
 
 \task{65}
 	{Save input/output gate position}
 	{Niels}
-	{}{2}
+	{-}{2}
 
 \task{43}
 	{Client: Deleting of wires and gates using delete}
-	{}
-	{}{dropped}
+	{-}
+	{-}{dropped}
 
 \task{43}
 	{Client: Highlighting/selecting gates to move multiple or delete multiple}
-	{}
-	{}{dropped}
+	{-}
+	{-}{dropped}
 	
 \task{91}
 	{Client: Table with simulation results}
-	{}
-	{}{dropped}
+	{-}
+	{-}{dropped}
 
 
 
-\subtotal{-}{-}
+\subtotal{-}{18}
 \subheading{Extra tasks}
 
 \task{}
@@ -187,7 +187,7 @@ A list of tasks, assignments and effort estimations is included in a table.
 	
 \subtotal{-}{24}
 
-\grandtotal{-}{-}
+\grandtotal{77}{112,1}
 \end{tabularx}
 \end{center}
 
@@ -203,5 +203,14 @@ The graph library used in our GUI provides a way to export the graph to differen
 
 At first, it seemed very straight-forward, but quite some time was absorbed by the confusion about Tomcat's class-path. It turns out Tomcat only looks in \verb|WEB-INF/lib/*| and not in it's subdirectories, resulting in a huge stack of \verb|NoClassDefFoundErrors| to fix.
 
+\paragraph{Overtime}
+It's obvious that in this iteration we went far over our estimated time. This is due to several .factors.
 
+Firstly we found ourselves in an awkward situation when we found the simulator was not working correctly, we set out to fix this, , and because this was an issue that could not be pushed back to another SCRUM iteration, we also set out to write our own solver as an insurance.
+We managed to fix both the 3rd party solver and complete our own. This was of course a good outcome, but it did take a big bite out of our time expenditure.
+
+Furthermore, this iteration we really started performing the acceptance testing, which brought up some bugs, which required fixing.
+
+Also, because this was quite a long iteration and we really wanted to deliver a great product, we pushed very hard at implementing some should-haves/nice-to-haves.
 \end{document}
+
