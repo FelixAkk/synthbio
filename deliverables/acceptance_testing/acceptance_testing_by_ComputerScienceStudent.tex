@@ -1,0 +1,72 @@
+%&latex
+\documentclass[a4paper]{article}
+
+\usepackage[dutch]{babel}
+\usepackage{tabularx}
+\usepackage{fullpage}
+\usepackage{booktabs}
+
+\newcounter{step}
+\setcounter{step}{1}
+\newcommand{\step}{\arabic{step}\stepcounter{step}}
+
+% something from above messes up pdf output, so force it.
+\pdfoutput=1
+
+\begin{document}
+
+%+Title
+\title{Acceptance testing results}
+\author{Jelle Licht}
+\date{\today}
+\maketitle
+%-Title
+
+
+
+\section{Acceptance testing results}
+This acceptance test was done by a computer science student, who is currently doing a different ContextProject. These are his findings.
+
+\subsection{Basic startup and workspace initialization}
+The edit description and filename at the top right is an unusual place. Was not expecting that there.
+
+\subsection{File opening}
+No comment.
+
+\subsection{File saving}
+It is unclear whether saving in the save file dialog works with one or two clicks. Especially with the confirmation prompt, because it skips it when you double click.
+
+\subsection{Create simple circuit}
+Works intuative.
+
+\subsection{Create and simulate a 2-to-1 multiplexer:}
+The display of the graph is in a tiny space. Would depict it in a larger space, with more options to resize it.
+
+\subsection{Compound Gates}
+No further remarks.
+
+\subsection{General bugs}
+Nothing to mention.
+
+\vfill
+\subsection{Usability grading}
+Here the tester can give grades for specific and overall aspects of the usability of the application. Of course written remarks and feedback on certain aspects are also very valuable, and we encourage the tester to make these along with providing grades. On some aspects an explanation is provided in the footnotes.
+
+In the following table, the grades correspond to the following valuations;\\ 1 = very bad, 3 = bad, 5 = moderate/average, 7 = good, 9 = very good.
+\begin{center}
+\begin{tabularx}{\textwidth}{p{10cm} cc cc c cc cc} \toprule
+\textbf{Aspect} & \multicolumn{1}{c}{\textbf{Score on aspect}} \\ \midrule
+Usability of circuit modelling &8\\ \midrule
+Usability of circuit management \footnote{The ease of use and learability of importing, exporting, saving, opening, browsing and editing of circuit details.} &4 \\ \midrule
+Responsiveness &8 \\ \midrule
+Performance &8 \\ \midrule
+Affordance \footnote{The degree in which the UI intuitively implies it's functionality and use.} &6 \\ \midrule
+Presentation of data \footnote{The quality of communication of, for example; simulation output data, validation results, input data, protein listings} &5 \\ \midrule
+Visual appeal &9 \\ \midrule
+\textbf{Overal application usability} &\textbf{7} \\ \bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}
+
+
