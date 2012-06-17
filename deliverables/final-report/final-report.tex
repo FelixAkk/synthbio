@@ -49,7 +49,7 @@ Jan Pieter Waagmeester}
 \vfill
 
 \small{\tableofcontents}
-\pagebreak{}
+\pagebreak
 
 \section*{Preface} ??
 
@@ -58,18 +58,27 @@ Jan Pieter Waagmeester}
 \begin{abstract}
 \noindent This document concludes the whole \textit{Contextproject} and especially the development of our product: Zelula. This piece of software provides synthetic biologists with a visual tool to design, simulate and validate biological logic circuits.
 
-The project was roughly divided in two parts: the design stage and the implementation stage. Both were roughly of equal length.
+When we compare the final product to its design, the GUI looks a lot like the sketches made in the design phase. Not only that: every must-have is recognizable in the final product.
+The proposed tests are not always implemented, but a fair amount of the code is covered. We discovered that testing certains things is quite hard, so we had to rely more on acceptance testing than anticipated.
 
-todo fix more.
+During the development we encountered a number of problems, ranging from planning and design to bugs in libraries used. One particular case of the latter was the problems we had connecting our program with an external solver. It took quite some time to debug the SBML files used in that communication.
+
+As a team, we really think we delivered a nice product. We are also satisfied by the way the team operated.
+
+A number of features did not fit in our schedule and will improve the program significantly, to name a few: a more thorough grouping/compound implementation, highlighting errors in the actual GUI and different workspace improvements.
+
 \end{abstract}
-\pagebreak
+
 
 \section{Introduction}
 This report will detail our design and implementation of Zelula for the \textit{Contextproject}. Zelula is a piece of software for synthetic biologists with a visual tool to design, validate and simulate biological circuits.
 
-Chapter \ref{product-description} will contain a description of the product, every part of the finished product will be detailed. Chapter \ref{design-implementation} contains a description of the design and implementation process, detailing how the design compares to the implementation. Chapter \ref{problems-solutions-highlights} describes the key problems we had and explains the solutions. Chapter \ref{team-reflection} contains a general reflection on the teamwork, followed by chapter \ref{individual-reflection} which contains individual reflections of the team members. Lastly chapter \ref{scrumplans} lists our scrumplans.
+Chapter~\ref{product-description} will contain a description of the product, every part of the finished product will be detailed. Chapter~\ref{design-implementation} contains a description of the design and implementation process, detailing how the design compares to the implementation. Chapter~\ref{problems-solutions-highlights} describes the key problems we had and explains the solutions. Chapter~\ref{team-reflection} contains a general reflection on the teamwork, followed by chapter~\ref{individual-reflection} which contains individual reflections of the team members.
 
-\include{description_of_product}
+Lastly appendix~\ref{scrumplans} lists our scrumplans.
+
+\input{description_of_product}
+
 
 \section{Design and implementation process}
 \label{design-implementation}
@@ -85,9 +94,7 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 \includegraphics[width=8cm]{pictures/gui_sketch2_marks.png}
 \caption{Sketches from RAD document: model and simulate.}
 \label{fig-gui-proposed}
-\end{figure}
-
-\begin{figure}[h!]
+\qquad \\
 \includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
 \includegraphics[width=8cm]{pictures/gui_final2_marks.png}
 \caption{Screenshots of the final GUI implementation: main screen and outputs (F).}
@@ -96,7 +103,7 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 
 The matching letters in the ``before'' (figure~\ref{fig-gui-proposed}) and ``after'' (figure~\ref{fig-gui-implemented}) pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins so that they are easily distinguishable and we added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
 
-It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
+It is according to the SCRUM-workflow that we have added these little features. We started off with a basic working product and added them along the way.
 
 Implementation was greatly accelerated by the use of frameworks and libraries such as jQuery, Bootstrap, HighCharts, jsPlumb and JSON-Java. The use of such frameworks of course also implies the study of their use, and solving problems or limitations encountered with them. This costed considerable time as eluded in section~\ref{problems-solutions-highlights}.
 
@@ -122,7 +129,7 @@ As can be seen in figure~\ref{fig-gui-implemented}.A, the user is presented with
 	\item \textbf{3.2} \textit{The user must be able to drag and drop gates from the list into the working area.}\\
 	Gates are visualized using a simple, yet distinctive image (figure~\ref{fig-gui-implemented}.A). They can be dragged from the list and dropped into the workspace (figure~\ref{fig-gui-implemented}.D).
 
-	\item \textbf{3.3} \textit{The user must be able freely to move the gate around in the working area, but gates will snap to grid points on the working area.}\\
+	\item \textbf{3.3} \textit{The user must be able freely move the gate around in the working area, but gates will snap to grid points on the working area.}\\
 	After the gates are dropped into the workspace, the description of the gate disappears and the image remains. The gates can still be dragged around the screen.\\
 	At first, we got the system working without a grid snapping system. This worked very well and we did not see the need to implement a grid. That is why we postponed this requirement, and decided to drop it near the end of the project.
 
@@ -148,7 +155,7 @@ Saved files can be loaded using the File $>$ Open menu item.
 \item[8. Input values specification] \textit{The user must be able to specify the input values used for the simulation of the circuit.}\\
 Clicking Simulate $>$ Define inputs (or pressing F7) will open a dialog in which the input values can be defined (figure 6). These input values can also be loaded from a .csv file.
 
-\item[9. Circuit validation] \textit{The user must to be able validate his circuit in the application and get feedback over where there are conflicts.}\\
+\item[9. Circuit validation] \textit{The user must to be able to validate his circuit in the application and get feedback over where there are conflicts.}\\
 Pressing F8 (or clicking Simulate $>$ Validate circuit) will give a validation of the circuit. This validation is done server side, and conflicts are grounded by useful feedback.
 
 \item[10. Circuit simulation] \textit{The application must be able to simulate a valid circuit and present the output values to the user.}\\
@@ -161,15 +168,16 @@ Pressing F9 (or clicking Simulate $>$ Run solver) will simulate on the server an
 This was a requirement we really wanted to add, but decided to implement a simpler version due to time restrictions. We wanted to make it so that compound gates were visualized the same as regular gates, but decided this would be too much work. We can now mark circuits as compound gates at the time of saving. These gates will then show up in the list of compound gates and can be dragged into the workspace. When dropped, the old circuit will show up (minus the input/output signals).
 \end{description}
 
+\pagebreak
 \subsection{Testing and test coverage}
 \label{process-testing}
 
 Since the development of this project was to be test-driven, we did put some effort in writing a test and implementation plan\footnote{\hrefTestImplementation}. This section reflects on the use of that document, and on the amount of testing we actually did.
 
 \paragraph{Unit testing}
-Unit testing was a major part of our test plan. Having written a test plan implies that it is to be used, however, we did not really use the plan in deciding what to test. Tests were mainly written together with the code, not necessarily before implementing it.
+Unit testing was a major part of our test plan. Having written a test plan implies the actual use of it, however, we did not really use the plan in deciding what to test. Tests were mainly written together with the code, not necessarily before implementing it.
 
-Unit testing client side JavaScript code was planned, but not implemented in the same depth as intended. GUI interaction was not tested in any automatized way, mainly because we did not know how to do it. It might have been possible to invest more time in it, but since the structure of the interface did change a lot it might have been really cumbersome. Testing these aspects of the program was done through acceptance tests, with a detailed description below.
+Unit testing client side JavaScript code was planned, but not implemented in the same depth as intended. GUI interaction was not tested in any automatized way, mainly because we did not know how to do it. It might have been possible to invest more time in it, but since the structure of the interface did change a lot it would have been really cumbersome. Testing these aspects of the program was done through acceptance tests, with a detailed description below.
 
 Judging from the past, we lacked the experience to write a decent doable test plan. We made some bold and broad plans but both too precise and too vague. More emphasis on the testing during the development could have fixed it, but was omitted.
 
@@ -177,7 +185,7 @@ Judging from the past, we lacked the experience to write a decent doable test pl
 % reflection on real coverage, as well as branch coverage for js an java.
 Testing for coverage was not really covered in our testing plan, however, during the selection of tasks for iteration~4 we decided to explicitly check and improve coverage. We used Cobertura to report on Java coverage, and JSCoverage to report on JavaScript coverage.
 
-As can be seen in figure~\ref{fig-java-coverage}, branch coverage figures are moderately high, but not exceptional. Apart from that, coverage on issues not easily recognizable by coverage reports like these is not always very good. For example, a more detailed plan on the things a test for a solver should cover could have exposed the simulator problems more early in the process\footnote{For a detailed explanation on this problem, refer to section~\ref{simulator-problems}}.
+As can be seen in figure~\ref{fig-java-coverage}, branch coverage figures are moderately high, but not exceptional. Apart from that, coverage on issues not easily recognizable by coverage reports like these is not always very good. For example, a more detailed plan on the things a test for a solver should cover could have exposed the simulator problems earlier in the process\footnote{For a detailed explanation on this problem, refer to section~\ref{simulator-problems}}.
 \begin{figure}[h!]
 	\includegraphics[width=\textwidth]{pictures/java-coverage-packages.png}
 	\includegraphics[width=\textwidth]{pictures/java-coverage-models.png}
@@ -185,7 +193,7 @@ As can be seen in figure~\ref{fig-java-coverage}, branch coverage figures are mo
 	\label{fig-java-coverage}
 \end{figure}
 \begin{figure}[h!]
-	\centering\includegraphics[width=.6\textwidth]{../../screenshots/2012-06-17-jscoverage-report-small.png}
+	\centering\includegraphics[width=.7\textwidth]{../../screenshots/2012-06-17-jscoverage-report-small.png}
 	\caption{Overview of JavaScript coverage.}
 	\label{fig-javascript-coverage}
 \end{figure}
@@ -202,6 +210,7 @@ they also serve as an important part of the integration testing.
 The acceptance testing included the running of several specified scenarios, and a grading on several usability aspects to measure how well the application performs there.
 
 In the end these tests were write quite late, and we only came to performing these test in the last iteration (SCRUM iteration 5). We had several people perform these tests, some developers, and some other computer science students, as these fall within the category of target users. Despite this we these test runs revealed a lot of bugs and gave us valuable feedback that influenced us in making changed in the application during the last iteration. Some structured reports can be found attached at the end of this document.
+
 
 \pagebreak
 >>>>>>> origin/master
@@ -242,11 +251,14 @@ At first, it seemed very straight-forward, but quite some time was absorbed by t
 
 \paragraph{Migrating GUI elements from modals to a workspace tab}
 The GUI was initially implemented with several key GUI elements such as the output, input and validation results in modals. Although this was not according to the final designs, and has several drawbacks on usability when working on a circuit alongside, this was far easier to implement than in an element that was always present in the workspace. This element had high requirements on flexibility (being able to hide, show again without overlapping the workspace, resize to meet size requirements, go fullscreen in a usable way etc.), which was not provided by any ready made framework or library. This meant implement a lot of workspace management and crafting on these tabs. As work progressed on this it turned out to be a more and more complex task, going far over the estimated time. At some point we had to decide which workspace we'd write the report about and deliver at the last scrum. Although work was nearly completed, there was just not enough time and we left this feature out.
-\include{simulator-problems}
-\include{late-requirements}
+\input{simulator-problems}
+\input{late-requirements}
+
+\pagebreak
+
 \section{Reflection on the teamwork}
 \label{team-reflection}
-The teamwork during this project grew better as time passed. We got more used to each other and every one became a little more enthusiastic during the implementation phase. The first phase, the design phase in which we wrote a lot of documents, passed without any big problems. We had a meeting every week in which we divided tasks and had little brainstorms. These brainstorms brought up a lot of ideas and we were eager to start implementing.
+The teamwork during this project grew better as time passed. We got more used to each other and everyone became a little more enthusiastic during the implementation phase. The first phase, the design phase in which we wrote a lot of documents, passed without any big problems. We had a meeting every week in which we divided tasks and had little brainstorms. These brainstorms brought up a lot of ideas and we were eager to start implementing.
 
 The second phase, implementation, started off very well with good results after the first iteration. Again we had weekly meetings to divide work and to discuss ideas, but a lot of the communication was now done casually. We came together more often while implementing, so the threshold to ask questions and throw out ideas lowered. The rate at which code emerged was pretty high.
 
@@ -298,7 +310,7 @@ Test driven design wasn't something that I liked a lot. In theory I like the ide
 I didn't do a lot of client side, JavaScript things, because early on I wasn't very interested in that part of the application. Later on I didn't feel confident that I could help with the JavaScript stuff because I wasn't very familiar with the client side. I think I should have done a bit more, since I would've learned some things and with a next project I would like to look more into the GUI side of things.
 
 \subsection{Jan Pieter Waagmeester}
-The first thing I would like to note is that I am surprised by the final product we managed to deliver, it exceeds my expectation. I looks good, works well, has clean code and all the must-haves we defined. Overall, I am also satisfied with the way the team worked together. There were some frustrations now and then, but always room for feedback. 
+The first thing I would like to note is that I am surprised by the final product we managed to deliver, it exceeds my expectation. It looks good, works well, has clean code and all the must-haves we defined. Overall, I am also satisfied with the way the team worked together. There were some frustrations now and then, but always room for feedback. 
 
 I will reflect in more detail on two areas: the technical development and the team collaboration.
 
@@ -318,7 +330,7 @@ Balancing the work during projects is an always an issue. Some people have less 
 
 Working together in a source code management system can be a source of frustrations: braking \textit{the make}, little care when committing unintentional changes or merges. I sometimes found it hard to patiently correct them and explain the how and why.
 
-\include{future-implementation}
+\input{future-implementation}
 
 
 % what follows are appendices.

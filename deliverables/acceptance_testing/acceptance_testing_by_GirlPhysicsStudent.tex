@@ -1,0 +1,78 @@
+%&latex
+\documentclass[a4paper]{article}
+
+\usepackage[dutch]{babel}
+\usepackage{tabularx}
+\usepackage{fullpage}
+\usepackage{booktabs}
+
+\newcounter{step}
+\setcounter{step}{1}
+\newcommand{\step}{\arabic{step}\stepcounter{step}}
+
+% something from above messes up pdf output, so force it.
+\pdfoutput=1
+
+\begin{document}
+
+%+Title
+\title{Acceptance testing results}
+\author{Thomas van Helden}
+\date{\today}
+\maketitle
+%-Title
+
+
+
+\section{Acceptance testing results}
+These are the results of the acceptance tests we ran at the end of our fifth SCRUM sprint. We looked at all the basics for our program, searching for possible bugs and errors. We went through all the startup processes to check if all menus would display correctly in FireFox 13.0 and Chrome 19.0. We then had a look at if we can open, save and make new circuits. Afterwards we looked at validating and simulating our circuits after setting the inputs. At the end, we tested our compound gates and filled in a score of the results. This test was run by a physics student.
+
+\subsection{Basic startup and workspace initialization}
+What is meant by GUI? It is what is meant by this.
+Where is the status bar? I don't know what it should look like.
+
+\subsection{File opening}
+You ask me to click on the open item. I don't know where it is? If you mean the "Open" option in the menu it is not really clear. 
+
+\subsection{File saving}
+The steps tell me there is a confirmation prompt. What is this and where will it be located?
+Also, saving a blank file without description does not change the name of the circuit in the top left panel.
+
+\subsection{Create simple circuit}
+This all feels rather natural.
+
+\subsection{Create and simulate a 2-to-1 multiplexer:}
+What is a 2-to1 multiplexer? How am I supposed to build that?
+If I validate and I get an error, a refresh button appears. When I click on it, it doesn't do anything. I would expect it to retry the validation.
+When I open the Simulate menu and click on Define Inputs it does not show graphs. I don't know where to locate these.
+If I change to the editor tab, It asks me if I want to delete the CSV. I am not sure if that is a good idea.
+You ask me to run the simulation, is that the same as run solver?
+
+\subsection{Compound Gates}
+No further remarks.
+
+\subsection{General bugs}
+Just the one where saving an unnamed file does not apply the save name in the description.
+
+\vfill
+\subsection{Usability grading}
+Here the tester can give grades for specific and overall aspects of the usability of the application. Of course written remarks and feedback on certain aspects are also very valuable, and we encourage the tester to make these along with providing grades. On some aspects an explanation is provided in the footnotes.
+
+In the following table, the grades correspond to the following valuations;\\ 1 = very bad, 3 = bad, 5 = moderate/average, 7 = good, 9 = very good.
+\begin{center}
+\begin{tabularx}{\textwidth}{p{10cm} cc cc c cc cc} \toprule
+\textbf{Aspect} & \multicolumn{1}{c}{\textbf{Score on aspect}} \\ \midrule
+Usability of circuit modelling &9\\ \midrule
+Usability of circuit management \footnote{The ease of use and learability of importing, exporting, saving, opening, browsing and editing of circuit details.} &6 \\ \midrule
+Responsiveness &9 \\ \midrule
+Performance &8 \\ \midrule
+Affordance \footnote{The degree in which the UI intuitively implies it's functionality and use.} &7 \\ \midrule
+Presentation of data \footnote{The quality of communication of, for example; simulation output data, validation results, input data, protein listings} &8 \\ \midrule
+Visual appeal &8 \\ \midrule
+\textbf{Overal application usability} &\textbf{7} \\ \bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}
+
+
