@@ -1,0 +1,72 @@
+%&latex
+\documentclass[a4paper]{article}
+
+\usepackage[dutch]{babel}
+\usepackage{tabularx}
+\usepackage{fullpage}
+\usepackage{booktabs}
+
+\newcounter{step}
+\setcounter{step}{1}
+\newcommand{\step}{\arabic{step}\stepcounter{step}}
+
+% something from above messes up pdf output, so force it.
+\pdfoutput=1
+
+\begin{document}
+
+%+Title
+\title{Acceptance testing results}
+\author{Thomas van Helden}
+\date{\today}
+\maketitle
+%-Title
+
+
+
+\section{Acceptance testing results}
+These are the results of the acceptance tests we ran at the end of our fifth SCRUM sprint. We looked at all the basics for our program, searching for possible bugs and errors. We went through all the startup processes to check if all menus would display correctly in FireFox 13.0 and Chrome 19.0. We then had a look at if we can open, save and make new circuits. Afterwards we looked at validating and simulating our circuits after setting the inputs. At the end, we tested our compound gates and filled in a score of the results. We had this done by multiple people.
+
+\subsection{Basic startup and workspace initialization}
+Remarks about this section
+
+\subsection{File opening}
+Remarks about this section
+
+\subsection{File saving}
+Remarks about this section
+
+\subsection{Create simple circuit}
+Remarks about this section
+
+\subsection{Create and simulate a 2-to-1 multiplexer:}
+Remarks about this section
+
+\subsection{Compound Gates}
+Remarks about this section
+
+\subsection{General bugs}
+Gernal remarks
+
+\vfill
+\subsection{Usability grading}
+Here the tester can give grades for specific and overall aspects of the usability of the application. Of course written remarks and feedback on certain aspects are also very valuable, and we encourage the tester to make these along with providing grades. On some aspects an explanation is provided in the footnotes.
+
+In the following table, the grades correspond to the following valuations;\\ 1 = very bad, 3 = bad, 5 = moderate/average, 7 = good, 9 = very good.
+\begin{center}
+\begin{tabularx}{\textwidth}{p{10cm} cc cc c cc cc} \toprule
+\textbf{Aspect} & \multicolumn{1}{c}{\textbf{Score on aspect}} \\ \midrule
+Usability of circuit modelling &1\\ \midrule
+Usability of circuit management \footnote{The ease of use and learability of importing, exporting, saving, opening, browsing and editing of circuit details.} &1 \\ \midrule
+Responsiveness &1 \\ \midrule
+Performance &1 \\ \midrule
+Affordance \footnote{The degree in which the UI intuitively implies it's functionality and use.} &1 \\ \midrule
+Presentation of data \footnote{The quality of communication of, for example; simulation output data, validation results, input data, protein listings} &1 \\ \midrule
+Visual appeal &1 \\ \midrule
+\textbf{Overal application usability} &\textbf{1} \\ \bottomrule
+\end{tabularx}
+\end{center}
+
+\end{document}
+
+
