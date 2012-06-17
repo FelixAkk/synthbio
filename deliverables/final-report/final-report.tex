@@ -172,14 +172,23 @@ Since the development of this project was to be test-driven, we did put some eff
 % reflection on real coverage, as well as branch coverage for js an java.
 
 \paragraph{Acceptance testing}
+ The acceptance tests
+are test if the system meets the requirements made, and how the system performs on pseudo-requirements.
+In particular we test these using the user interface to see if the system can perform the required tasks without
+problems. With these test we also manually test the user interface to see if there any display artifacts or
+bugs. Because these acceptance test call all the functionality throughout the whole system from the interface,
+they also serve as an important part of the integration testing.
 
+The acceptance testing included the running of several specified scenarios, and a grading on several usability aspects to measure how well the application performs there.
+
+In the end these tests were write quite late, and we only came to performing these test in the last iteration (SCRUM iteration 5). We had several people perform these tests, some developers, and some other computer science students, as these fall within the category of target users. Despite this we these test runs revealed a lot of bugs and gave us valuable feedback that influenced us in making changed in the application during the last iteration. Some structured reports can be found attached at the end of this document.
 \section{Key problems and solutions - highlights}
 \label{problems-solutions-highlights}
 
 During this project we have encountered some problems. In this section we will have a look at some of the highlights of these problems and how we fixed them.
 
 \paragraph{Planning and design}
-Since, for some of us, this was the first time working with SCRUM, it took some getting used to. At first, we had to get used to working towards a result in two weeks and estimating what we could do. This became easier as the project progressed. 
+Since, for some of us, this was the first time working with SCRUM, it took some getting used to. At first, we had to get used to working towards a result in two weeks and estimating what we could do. This quickly became easier as the project progressed. 
 What we really noticed is that our design was not complete. We hadn't thought of the complete structure and failed to set some standards of coding. This led to less readable code, which is annoying when reviewing each others code, and no clear idea which function was implemented where. Especially later on, some functions turned out to be double implemented or unused. This point is also discussed in the paragraph about restructuring.
 
 \paragraph{Setup}
