@@ -19,10 +19,10 @@ In our simulation we have two reactions: transcription and translation. The tran
 In our SBML file the degradation didn't have a separate reaction, which caused a problem given that the degradation reaction required a different set of reactants, products and modifiers from the transcription and translation reactions.\\
 The transcription reaction produces something from a gene sequence. The degradation reactions need to degrade to something, but it's not producing something from a gene sequence, so putting the degradation in the same reaction as the transcription (or translation) reaction would be wrong since they have different reactants and different products.\\
 
-\begin{wrapfigure}{l}{8cm}
+\begin{figure}[h!]
 	\centering\includegraphics[scale=0.5]{../../screenshots/2012-06-14-not-output.png}
 	\caption{Correct output, B degrades.}
 	\label{fig:correct}
-\end{wrapfigure}
+\end{figure}
 
 To fix this (Figure~\ref{fig:correct}) we split the transcription and translation reactions such that the degradations got their own reactions, this allowed us to specify different reactants, products and modifiers for the degradation.

@@ -61,8 +61,11 @@ Jan Pieter Waagmeester}
 When we compare the final product to its design, the GUI looks a lot like the sketches made in the design phase. Not only that: every must-have is recognizable in the final product.
 The proposed tests are not always implemented, but a fair amount of the code is covered. We discovered that testing certains things is quite hard, so we had to rely more on acceptance testing than anticipated.
 
-During the development we encountered a number of problems, ranging from planning and design to 
+During the development we encountered a number of problems, ranging from planning and design to bugs in libraries used. One particular case of the latter was the problems we had connecting our program with an external solver. It took quite some time to debug the SBML files used in that communication.
 
+As a team, we really think we delivered a nice product. We are also satisfied by the way the team operated.
+
+A number of features did not fit in our schedule and will improve the program significantly, to name a few: a more thorough grouping/compound implementation, highlighting errors in the actual GUI and different workspace improvements.
 
 \end{abstract}
 
@@ -76,7 +79,6 @@ Lastly appendix~\ref{scrumplans} lists our scrumplans.
 
 \input{description_of_product}
 
-\pagebreak
 
 \section{Design and implementation process}
 \label{design-implementation}
@@ -92,9 +94,7 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 \includegraphics[width=8cm]{pictures/gui_sketch2_marks.png}
 \caption{Sketches from RAD document: model and simulate.}
 \label{fig-gui-proposed}
-\end{figure}
-
-\begin{figure}[h!]
+\qquad \\
 \includegraphics[width=8cm]{pictures/gui_final1_marks.png} 
 \includegraphics[width=8cm]{pictures/gui_final2_marks.png}
 \caption{Screenshots of the final GUI implementation: main screen and outputs (F).}
@@ -103,7 +103,7 @@ In our RAD document\footnote{\hrefRAD} we gave a few simple sketches of what we 
 
 The matching letters in the ``before'' (figure~\ref{fig-gui-proposed}) and ``after'' (figure~\ref{fig-gui-implemented}) pictures show the same functionality. So A and B provide all the gates, D is the workspace, and so on. There have not been any great changes from what we had in mind for the user interface. We did, however, add a lot of features along the way; small features we did not think of at the beginning. For example, we colored the proteins so that they are easily distinguishable and we added general gates which serve as input or output. Another example is that used proteins cannot be chosen from during protein selection.
 
-It is according to the SCRUM-workflow that we have added these little features. We started of with a basic working product and added them along the way.
+It is according to the SCRUM-workflow that we have added these little features. We started off with a basic working product and added them along the way.
 
 Implementation was greatly accelerated by the use of frameworks and libraries such as jQuery, Bootstrap, HighCharts, jsPlumb and JSON-Java. The use of such frameworks of course also implies the study of their use, and solving problems or limitations encountered with them. This costed considerable time as eluded in section~\ref{problems-solutions-highlights}.
 
@@ -129,7 +129,7 @@ As can be seen in figure~\ref{fig-gui-implemented}.A, the user is presented with
 	\item \textbf{3.2} \textit{The user must be able to drag and drop gates from the list into the working area.}\\
 	Gates are visualized using a simple, yet distinctive image (figure~\ref{fig-gui-implemented}.A). They can be dragged from the list and dropped into the workspace (figure~\ref{fig-gui-implemented}.D).
 
-	\item \textbf{3.3} \textit{The user must be able freely to move the gate around in the working area, but gates will snap to grid points on the working area.}\\
+	\item \textbf{3.3} \textit{The user must be able freely move the gate around in the working area, but gates will snap to grid points on the working area.}\\
 	After the gates are dropped into the workspace, the description of the gate disappears and the image remains. The gates can still be dragged around the screen.\\
 	At first, we got the system working without a grid snapping system. This worked very well and we did not see the need to implement a grid. That is why we postponed this requirement, and decided to drop it near the end of the project.
 
@@ -155,7 +155,7 @@ Saved files can be loaded using the File $>$ Open menu item.
 \item[8. Input values specification] \textit{The user must be able to specify the input values used for the simulation of the circuit.}\\
 Clicking Simulate $>$ Define inputs (or pressing F7) will open a dialog in which the input values can be defined (figure 6). These input values can also be loaded from a .csv file.
 
-\item[9. Circuit validation] \textit{The user must to be able validate his circuit in the application and get feedback over where there are conflicts.}\\
+\item[9. Circuit validation] \textit{The user must to be able to validate his circuit in the application and get feedback over where there are conflicts.}\\
 Pressing F8 (or clicking Simulate $>$ Validate circuit) will give a validation of the circuit. This validation is done server side, and conflicts are grounded by useful feedback.
 
 \item[10. Circuit simulation] \textit{The application must be able to simulate a valid circuit and present the output values to the user.}\\
@@ -168,6 +168,7 @@ Pressing F9 (or clicking Simulate $>$ Run solver) will simulate on the server an
 This was a requirement we really wanted to add, but decided to implement a simpler version due to time restrictions. We wanted to make it so that compound gates were visualized the same as regular gates, but decided this would be too much work. We can now mark circuits as compound gates at the time of saving. These gates will then show up in the list of compound gates and can be dragged into the workspace. When dropped, the old circuit will show up (minus the input/output signals).
 \end{description}
 
+\pagebreak
 \subsection{Testing and test coverage}
 \label{process-testing}
 
@@ -242,6 +243,7 @@ The GUI was initially implemented with several key GUI elements such as the outp
 \input{simulator-problems}
 \input{late-requirements}
 
+\pagebreak
 
 \section{Reflection on the teamwork}
 \label{team-reflection}
