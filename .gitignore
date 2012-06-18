@@ -5,6 +5,8 @@
 *.toc
 *.out
 *.gz
+*.nav
+*.snm
 
 # java class files we are not interested in.
 *.class
