@@ -1,0 +1,59 @@
+1X inspringen is een pagina
+2X inspringen is een bullet op een pagina
+3X inspringen is wat we/ik gaan zeggen tijdens die bullet (steekwoorden)
+
+Presentatie:
+	Deze presentatie
+		Wie zijn wij?
+			Group E programming life
+			Felix Akkermans
+			Niels Doekemeijer
+			Thomas van Helden
+			Albert ten Napel
+			Jan Pieter Waagmeester
+		Presentatie verloop
+			We gaan het hebeen over ......
+	Waar gaat het project over
+		Hoe hebben wij het gelezen
+		Relevantie van de opdracht
+	Wat wilden we bouwen
+		Modeleer programma schrijven met een intuitieve GUI
+			Een modeleer programma maken waarin we ciruits kunnen bouwenn, opslaan, openen, valideren, zelf inputs kunnen specificeren en kan simuleren.
+		Compound gates
+			Gebruikers de mogelijkheid bieden om makkelijk grotere circuits te bouwen door kleinere componenten te hergebruiken.
+		Hoe hebben we het geimplementeerd
+		Java server
+			Junit tests
+			Connectie met TomCat
+			SBML solvers
+		Javascript client
+			Qunit tests
+			jsPlumb
+			less
+			Bootstrap
+			HighCharts
+			Jquery
+		Cross Platform
+			interface is websbased
+			backend java
+			interface is resolution independant, alles is in vectors
+			minimum resolution is de standaard
+			Werkt in FireFox, Chrome 
+			werkt op tablets en telefoons
+		Uitbreidbaar
+			Nette code
+			Goed gescheiden componenten
+		Open source
+	How would we improve our program 
+		Compound gates verbeterde weergave
+			Compound gates hoe ze nu worden weergeven
+			We willen dat ze als normale gates worden weergegeven en dat je kan inzoomen om het circuit er in te zien
+		Advanced zooming
+			Nu zoomt de pagina ipv de workspace
+		Separate graph
+			Simulatie resultaat weergave nu
+			Mooi als het als apart scherm weer te geven is
+				Dual screen
+	
+	Vragen tussendoor + aankondiging Demo
+	
