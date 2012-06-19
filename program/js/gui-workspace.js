@@ -930,6 +930,7 @@ jsPlumb.ready(function() {
  * Toggle simulation tabs block.
  *
  * @param show Optional, true is to show, false is to hide, if none provided, the state is toggled.
+ * @param tab Optional, provide the DOM ID
  */
 synthbio.gui.toggleSimulationTabs = function(show) {
 	var tabs = $("#simulation-tabs");
@@ -1045,16 +1046,21 @@ $(document).ready(function() {
 		tabbar.on('dblclick', synthbio.gui.simulationTabsFullscreen);
 	})();
 
+	// Bind listener to the menu item to show simulation tabs
+	$("#show-tabs").on("click", synthbio.gui.toggleSimulationTabs);
+
+	$("#define-inputs").on("click", synthbio.gui.toggleSimulationTabs)
+
 	// Save the default validity tab contents for another day (to show again after a reset for example)
 	synthbio.gui.defaultValidityTabHTML = $("#tab-validate .alert").html();
+
 	// Bind listener to the simulation tabs close button
 	$("#simulation-tabs .tab-utilities #tabs-close").on("click", function() {
 		synthbio.gui.toggleSimulationTabs(false);
 	});
+
 	// Bind listener to the simulation tabs close button
 	$("#simulation-tabs .tab-utilities #tabs-size").on("click", synthbio.gui.simulationTabsFullscreen);
-	// Bind listener to the menu item to show simulation tabs
-	$("#show-tabs").on("click", synthbio.gui.toggleSimulationTabs);
 	// Prepare default/empty workspace
 	synthbio.gui.loadCompounds();
 	synthbio.newCircuit();
