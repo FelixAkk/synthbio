@@ -83,8 +83,10 @@ synthbio.loadCompoundCircuit = function(circuit, position) {
 	//This is the number needed for adjusting the new signals
 	var gateCount = synthbio.model.getGates().length;
 
-	//Calculate top left position for adjustment for other gates
 	var gates = circuit.getGates();
+	var signals = circuit.getSignals();
+	
+	//Calculate top left position for adjustment for other gates
 	var origin = [Infinity, Infinity];
 	$.each(gates, function(index, element) {
 		origin[0] = Math.min(origin[0], element.getX());
@@ -104,19 +106,20 @@ synthbio.loadCompoundCircuit = function(circuit, position) {
 		synthbio.model.addGate(element);
 		synthbio.gui.displayGate(element);
 	});
-
+	
+	//Reset used proteins
+	$.each(signals, function(index, signal) {
+		if (!synthbio.validProtein(signal.protein) || synthbio.model.isProteinUsed(signal.protein)) {
+			signal.setProtein("");
+		}
+	});
+	
 	//Add signals (not the ones connected to input/output)
-	$.each(circuit.getSignals(), function(index, element){
+	$.each(signals, function(index, element){
 		if (!element.isInput() && !element.isOutput()) {
 			//Adjust from/to to make sure they are correct in the new model
 			element.setFrom(element.getFrom() + gateCount);
 			element.setTo(element.getTo() + gateCount);
-
-			//Check if protein is used, reset if it is
-			var prot = element.getProtein();
-			if (!synthbio.validProtein(prot) ||	synthbio.model.isProteinUsed(prot)) {
-				element.setProtein("");
-			}
 
 			//Add signal to model and display it
 			synthbio.model.addSignal(element);
