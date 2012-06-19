@@ -108,8 +108,9 @@ synthbio.loadCompoundCircuit = function(circuit, position) {
 	});
 	
 	//Reset used proteins
-	$.each(signals, function(index, element){
-		if (!synthbio.validProtein(prot) ||	synthbio.model.isProteinUsed(prot)) {
+	$.each(signals, function(index, element) {
+		console.log(element);
+		if (!synthbio.validProtein(element.protein) || synthbio.model.isProteinUsed(element.protein)) {
 			element.setProtein("");
 		}
 	});
