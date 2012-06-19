@@ -69,8 +69,12 @@ synthbio.gui.gateDimensions = (function () {
 /**
  * Clear the workspace GUI. If called the model is not cleared! Should always be called as part of a circuit loading,
  * reloading of the GUI, or clearing of the model.
+ *
+ * @param circuit Optional, if you're resetting the workspace for the loading of a new circuit, you can provide the
+ * synthbio.Circuit that is being loaded, and the workspace will reset and initialize to the properties of the provided
+ * circuit.
  */
-synthbio.gui.resetWorkspace = function() {
+synthbio.gui.resetWorkspace = function(circuit) {
 	jsPlumb.removeEveryEndpoint();
 
 	var id;
@@ -87,8 +91,11 @@ synthbio.gui.resetWorkspace = function() {
 	//Workaround for bug in jQuery/jsPlumb (Firefox only)
 	jsPlumb.addEndpoint("grid-container").setVisible(false);
 
-	// Also reset the circuit details
+	// Also reset the circuit details display
 	synthbio.gui.setCircuitDetails("","");
+
+	// Update the input edior
+	synthbio.gui.updateInputEditor();
 	
 	//Reset input/output gate positions
 	$(".input, .output").css("top", "");
@@ -102,6 +109,9 @@ synthbio.gui.resetWorkspace = function() {
 	$("#simulation-tabs").css("bottom", "-" + $("#simulation-tabs").height() + "px");
 	$("#grid-container").css("bottom", "");
 	synthbio.gui.plotResize();
+
+	// Rebuild the editor
+	synthbio.gui.updateInputEditor();
 };
 
 /**
@@ -138,17 +148,7 @@ synthbio.gui.displayValidation = function (message, valid, noTabSwitch) {
 		$('#simulation-tabs a[href="#tab-validate"]').tab("show");
 	}
 
-	synthbio.gui.showSimulationTabs(true);
-};
-
-/**
- * Toggle simulation tabs block.
- *
- * @param display Optional boolean. True is to display, false is to hide.
- */
-synthbio.gui.toggleSimulationTabs = function(display) {
-	var tabs = $("#simlation-tab");
-	var grid = $("#grid-container");
+	synthbio.gui.toggleSimulationTabs(true);
 };
 
 /**
@@ -514,10 +514,8 @@ synthbio.gui.displaySignal = function(signal, connection) {
 	var res = {connection: connection, signal: signal};
 	synthbio.model.addSignal(signal);
 	synthbio.gui.displaySignalIdMap[connection.id] = res;
+	synthbio.gui.updateInputEditor();
 
-	if(signal.getProtein() !== "") {
-		synthbio.gui.updateInputEditor();
-	}
 	return res;
 };
 
@@ -929,10 +927,11 @@ jsPlumb.ready(function() {
 });
 
 /**
+ * Toggle simulation tabs block.
  *
  * @param show Optional, true is to show, false is to hide, if none provided, the state is toggled.
  */
-synthbio.gui.showSimulationTabs = function(show) {
+synthbio.gui.toggleSimulationTabs = function(show) {
 	var tabs = $("#simulation-tabs");
 	var workspace = $("#grid-container");
 	// If first argument is of time boolean (can also be used as event object)
@@ -949,8 +948,10 @@ synthbio.gui.showSimulationTabs = function(show) {
 		synthbio.gui.simulationTabsVisible = show;
 	} else {
 		// toggle using recursive call
-		synthbio.gui.showSimulationTabs(!synthbio.gui.simulationTabsVisible);
+		synthbio.gui.toggleSimulationTabs(!synthbio.gui.simulationTabsVisible);
 	}
+
+	jsPlumb.repaintEverything();
 };
 /**
  *
@@ -1048,12 +1049,12 @@ $(document).ready(function() {
 	synthbio.gui.defaultValidityTabHTML = $("#tab-validate .alert").html();
 	// Bind listener to the simulation tabs close button
 	$("#simulation-tabs .tab-utilities #tabs-close").on("click", function() {
-		synthbio.gui.showSimulationTabs(false);
+		synthbio.gui.toggleSimulationTabs(false);
 	});
 	// Bind listener to the simulation tabs close button
 	$("#simulation-tabs .tab-utilities #tabs-size").on("click", synthbio.gui.simulationTabsFullscreen);
 	// Bind listener to the menu item to show simulation tabs
-	$("#show-tabs").on("click", synthbio.gui.showSimulationTabs);
+	$("#show-tabs").on("click", synthbio.gui.toggleSimulationTabs);
 	// Prepare default/empty workspace
 	synthbio.gui.loadCompounds();
 	synthbio.newCircuit();

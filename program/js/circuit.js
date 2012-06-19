@@ -40,10 +40,10 @@ synthbio.model = {};
 synthbio.loadCircuit = function(circuit) {
 	synthbio.util.assert(circuit instanceof synthbio.Circuit, "Provided circuit is not an instance of sythnbio.Circuit.");
 
-	// Clear the GUI
-	synthbio.gui.resetWorkspace();
-
 	synthbio.model = circuit;
+
+	// Clear and refresh the GUI
+	synthbio.gui.resetWorkspace(circuit);
 
 	if (circuit.gateInputPos) {
 		var input = $("#gate-input");

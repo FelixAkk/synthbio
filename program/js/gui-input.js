@@ -28,7 +28,6 @@ synthbio.gui = synthbio.gui || {};
  * Create the input editor.
  */
 synthbio.gui.updateInputEditor = function(){
-	console.log('updateInputEditor()...');
 	
 	//clear input signals container.
 	$('#input-signals').html('');
@@ -37,14 +36,16 @@ synthbio.gui.updateInputEditor = function(){
 
 	//fill advanced settings form fields
 	$('#simulate-length').val(inputs.getLength());
-	$('#simulate-tick-width').val(inputs.getTickWidth());
+	$('#simulate-low-level').val(inputs.getLowLevel());
+	$('#simulate-high-level').val(inputs.getHighLevel());
 
 	//iterate over signals and create signal input editors.
 	$.each(
 		inputs.getValues(),
 		function(name, ticks) {
+			if(name === "") return;
 			var signalEditor = $('<tr class="signal" id="signal' + name + '">' +
-				'<td>' + name + '</td>' +
+				'<td class="pName">' + name + '</td>' +
 				'<td><a class="btn toggle-highlow low" href="#" title="Inverts the defined signal (all values are flipped).">' +
 				'<i class="icon-resize-vertical"></i> Flip</a></td></tr>');
 			var levels='<td class="levels">';
@@ -77,6 +78,8 @@ synthbio.gui.updateInputEditor = function(){
 		var self = $(this);
 		self.toggleClass('high').toggleClass('low');
 		self.closest("tr").find('.levels div').toggleClass('high').toggleClass('low');
+		//do a sort of auto save by saving now already instead of requiring the user to explicitly click save
+		synthbio.gui.saveProteinInputLevels(inputs);
 	});
 	
 	//click listener for each .levels div containing ticks.
@@ -184,17 +187,35 @@ synthbio.gui.updateInputEditor = function(){
 
 			//clear saved selection start.
 			selectionStart={};
+
+			//do a sort of auto save by saving now already instead of requiring the user to explicitly click save
+			synthbio.gui.saveProteinInputLevels(inputs);
 		}
 	});
 };
 
+synthbio.gui.saveProteinInputLevels = function(simulationSetting) {
+//copy the values for each input signal
+	$('.signal').each(function (index, elem) {
+		var signal = '';
+		$(this).find('.tick').each(function (index, tick) {
+			if ($(tick).hasClass('high')) {
+				signal += 'H';
+			} else {
+				signal += 'L';
+			}
+		});
+
+		var protein = $(this).attr('id').substr(-1);
+		simulationSetting.setValue(protein, signal);
+	});
+}
 /**
  * Save inputs back to circuit.
  * 
  * @param circuit the circuit to save to, defaults to syntbio.model
  */
 synthbio.gui.saveInputs = function(circuit) {
-	console.log("save inputs...");
 	circuit = circuit || synthbio.model;
 	
 	var simulationSetting = circuit.getSimulationSetting();
@@ -212,21 +233,8 @@ synthbio.gui.saveInputs = function(circuit) {
 
 	if($('#input-csv-textarea').val() !== "") {
 		simulationSetting.setCSV($('#input-csv-textarea').val());
-	}else{
-		//copy the values for each input signal 
-		$('.signal').each(function(index, elem) {
-			var signal = '';
-			$(this).find('.tick').each(function(index, tick) {
-				if($(tick).hasClass('high')) {
-					signal += 'H';
-				} else {
-					signal += 'L';
-				}
-			});
-			
-			var protein=$(this).attr('id').substr(-1);
-			simulationSetting.setValue(protein, signal);
-		});
+	} else {
+		sythbio.gui.saveProteinInputLevels(simulationSetting);
 	}
 };
 
@@ -235,11 +243,9 @@ $(document).ready(function() {
 	 * Rebuild the editor on every show of inputs definition tab.
 	 */
 	$('#simulation-tabs li.dropdown a[href="#input-editor"]').tab('show', function(event) {
-		console.log( 'define-inputs (show)', event);
 		var simulationSetting = synthbio.model.getSimulationSetting();
 		//if csv is not empty, bring up that tab.
 		if(simulationSetting.getCSV() !== "") {
-			$('#input-options-tabs a[href="#input-csv"]').parent().addClass('active');
 			$('#input-csv').addClass('active');
 
 		} else {

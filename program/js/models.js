@@ -584,7 +584,7 @@ synthbio.CDS.prototype.toString = function(){
 };
 
 /**
- * SimulalionSetting records settings to run the simulation.
+ * SimulationSetting records settings to run the simulation.
  * 
  * Might be initialized with two maps or with one map.
  *

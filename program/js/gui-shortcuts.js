@@ -71,7 +71,7 @@ synthbio.gui.handleKeystroke = function(event) {
 				synthbio.gui.simulateHandler();
 				break;
 			case 121: // F10
-				synthbio.gui.showSimulationTabs();
+				synthbio.gui.toggleSimulationTabs();
 				break;
 		}
 	}

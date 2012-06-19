@@ -159,7 +159,7 @@ synthbio.gui.simulateHandler = function() {
 	synthbio.gui.plot.showLoading();
 
 	$('#simulation-tabs a[href="#tab-chart"]').tab("show");
-	synthbio.gui.showSimulationTabs(true);
+	synthbio.gui.toggleSimulationTabs(true);
 
 	synthbio.requests.simulate(
 		synthbio.model,
