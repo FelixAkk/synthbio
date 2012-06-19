@@ -21,7 +21,7 @@ Presentatie:
 			Een modeleer programma maken waarin we ciruits kunnen bouwenn, opslaan, openen, valideren, zelf inputs kunnen specificeren en kan simuleren.
 		Compound gates
 			Gebruikers de mogelijkheid bieden om makkelijk grotere circuits te bouwen door kleinere componenten te hergebruiken.
-		Hoe hebben we het geimplementeerd
+	Hoe hebben we het geimplementeerd
 		Java server
 			Junit tests
 			Connectie met TomCat
