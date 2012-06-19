@@ -35,6 +35,7 @@ synthbio.gui.updateInputEditor = function(){
 	var inputs = synthbio.model.getSimulationSetting();
 
 	//fill advanced settings form fields
+	$('#simulate-tick-width').val(inputs.getTickWidth());
 	$('#simulate-length').val(inputs.getLength());
 	$('#simulate-low-level').val(inputs.getLowLevel());
 	$('#simulate-high-level').val(inputs.getHighLevel());
@@ -234,7 +235,7 @@ synthbio.gui.saveInputs = function(circuit) {
 	if($('#input-csv-textarea').val() !== "") {
 		simulationSetting.setCSV($('#input-csv-textarea').val());
 	} else {
-		sythbio.gui.saveProteinInputLevels(simulationSetting);
+		synthbio.gui.saveProteinInputLevels(simulationSetting);
 	}
 };
 
@@ -302,18 +303,16 @@ $(document).ready(function() {
 			}
 		}
 	});
-	// Rebuild the editor it after changing simulation length
-	$('#simulate-length').on('change', function() {
-		synthbio.gui.saveInputs();
-		synthbio.gui.updateInputEditor();
-	});
 	
 	// attach action to save button.
 	$('#save-inputs').on('click', function(){
 		synthbio.gui.saveInputs();
+		synthbio.gui.updateInputEditor();
 	});
+
 	$('#save-inputs-and-simulate').on('click', function() {
 		synthbio.gui.saveInputs();
+		synthbio.gui.updateInputEditor();
 		//trigger click on simulation button to start simuation
 		$('#simulate').click();
 	});
