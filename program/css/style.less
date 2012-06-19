@@ -166,11 +166,11 @@ body {
 		}
 	}
 }
-#simulation-tabs ul.nav-tabs {
+#simulation-tabs > ul.nav-tabs {
 	height: auto;
 	margin-bottom: 0;
 	 & > li {
-		a {
+		> a {
 			font-size: 14px;
 			.borderDown(@baseColor, @contrast, @borderHeight);
 			border-width: 1px 1px 0px 1px;
@@ -218,13 +218,6 @@ body {
 		&:hover {
 			opacity: 1;
 		}
-	}
-}
-
-#tab-validate {
-	padding: 10px;
-	.alert {
-		margin-bottom: 0;
 	}
 }
 
@@ -576,12 +569,100 @@ body {
 	    cursor: n-resize;
 	}
 
+	#tab-validate {
+		padding: 10px;
+		.alert {
+			margin-bottom: 0;
+		}
+	}
+
 	#simulation-options {
 		position: absolute;
 		z-index: 100;
 		top: 66px;
 		left: 50%;
 		margin-left: -200px;
+	}
+
+	/*
+	 * Styles for the define-inputs tabs
+	 */
+	#input-editor, #input-csv {
+		padding: 15px;
+		background-color: #FFF;
+		color: #000;
+		top: 35px;
+
+		.form-horizontal {
+			display: inline-block;
+			padding-right: 18px;
+			border-right: 1px solid lightgray;
+			float: left;
+		}
+
+		.controls.multiple > * {
+			display: block;
+			margin-bottom: 18px;
+		}
+
+		textarea {
+			font-family: Monospace;
+			width: 520px;
+			height: 160px;
+		}
+
+
+		#input-graphs {
+			float: left;
+			margin-left: 18px;
+
+			.x-axis {
+				float: right;
+				margin-left: 18px;
+				font-family: "Times New Roman", Georgia, Serif;
+				font-style: italic;
+				font-size: 25px;
+			}
+
+
+			@tickColor: #eee;
+
+			.levels{
+
+				.tick{
+					display: inline-block;
+					background-color: @tickColor;
+					width: 10px;
+					height: 27px;
+					cursor: pointer;
+					vertical-align: middle;
+				}
+				.tick:hover{
+					background-color: lighten(@tickColor, 2);
+				}
+				.low{ border-bottom: 1.5px solid black; }
+				.high{ border-top: 1.5px solid black; }
+
+				.high + .low, .low + .high{
+					border-left: 1px solid black;
+					width: 9px;
+				}
+				.tick.marker{
+					background-color: mix(@tickColor, green, 90%);
+				}
+				.tick.changing{
+					border-top: 0px solid;
+					border-bottom: 0px solid;
+					background-color: darken(@tickColor, 4);
+					border-left: 0px !important;
+					border-left: 0px !important;
+					width: 10px !important;
+				}
+				.tick.changed{
+					background-color: #f2dede;
+				}
+			}
+		}
 	}
 }
 
@@ -649,77 +730,6 @@ body {
 	top: @iconSize * 1.75;
 	overflow: hidden;
 	display: none;
-}
-
-/*
- * Styles for the define-inputs dialog
- */
-#define-inputs{
-	@tickColor: #eee;
-	
-	.tab-pane p, form{
-		margin-top: 6px;
-	}
-	textarea{
-		font-family: Monospace;
-		width: 520px;
-		height: 160px;
-	}
-	.x-axis{
-		width: 50px;
-		float: right;
-		text-align: right;
-	}
-	.signal{
-		clear: right;
-		border-bottom: 1px dotted gray;
-		padding: 10px 4px;
-	}
-	.toggle-highlow{
-		display: inline-block;
-		width: 10px;
-		cursor: pointer;
-	}
-	.levels{
-		display: inline-block;
-		white-space: nowrap;
-		cursor: default;
-		height: 20px;
-		vertical-align: middle;
-		
-		.tick{
-			display: inline-block;
-			background-color: @tickColor;
-			width: 10px;
-			height: 20px;
-			cursor: pointer;
-		}
-		.tick:hover{
-			background-color: lighten(@tickColor, 2);
-		}
-		.low{ border-bottom: 1.5px solid black; }
-		.high{ border-top: 1.5px solid black; }
-
-		.high + .low, .low + .high{
-			border-left: 1px solid black;
-			width: 9px;
-		}
-		.tick.marker{
-			background-color: mix(@tickColor, green, 90%);
-		}
-		.tick.changing{
-			border-top: 0px solid;
-			border-bottom: 0px solid;
-			background-color: darken(@tickColor, 4);
-			border-left: 0px !important;
-			border-left: 0px !important;
-			width: 10px !important; 
-		}
-		.tick.changed{
-			background-color: #f2dede;
-		}
-	
-	}
 }
 
 /** Section:

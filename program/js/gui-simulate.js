@@ -158,7 +158,7 @@ synthbio.gui.simulateHandler = function() {
 	console.log('Simulate initiated.');
 	synthbio.gui.plot.showLoading();
 
-	$('#simulation-tabs a[href="#tab-validate"]').tab("show");
+	$('#simulation-tabs a[href="#tab-chart"]').tab("show");
 	synthbio.gui.showSimulationTabs(true);
 
 	synthbio.requests.simulate(
@@ -168,9 +168,9 @@ synthbio.gui.simulateHandler = function() {
 			console.log("synthbio.request.simulate called response callback");
 			if(response.message !== '') {
 				synthbio.gui.displayValidation(response.message, false, false);
+				$('#simulation-tabs a[href="#tab-validate"]').tab("show");
 			} else {
 				synthbio.gui.displayValidation("Circuit validates!", true, true);
-				$('#simulation-tabs a[href="#tab-chart"]').tab("show");
 				synthbio.gui.plotOutput(response.data);
 				// Because a new plot is created, it needs to be told to settle in place (instead if leaving default size)
 				synthbio.gui.plotResize();

@@ -33,7 +33,7 @@ synthbio.gui.updateInputEditor = function(){
 	//clear input signals container.
 	$('#input-signals').html('');
 
-	var inputs=synthbio.model.getSimulationSetting();
+	var inputs = synthbio.model.getSimulationSetting();
 
 	//fill advanced settings form fields
 	$('#simulate-length').val(inputs.getLength());
@@ -43,8 +43,11 @@ synthbio.gui.updateInputEditor = function(){
 	$.each(
 		inputs.getValues(),
 		function(name, ticks) {
-			var signalEditor = $('<div class="signal" id="signal' + name + '">' + name + ': <i class="toggle-highlow low icon-resize-vertical" title="Set signal always on, always off or costum"></i> </div>');
-			var levels='<div class="levels">';
+			var signalEditor = $('<tr class="signal" id="signal' + name + '">' +
+				'<td>' + name + '</td>' +
+				'<td><a class="btn toggle-highlow low" href="#" title="Inverts the defined signal (all values are flipped).">' +
+				'<i class="icon-resize-vertical"></i> Flip</a></td></tr>');
+			var levels='<td class="levels">';
 			var currentLevel="L";
 			var i;
 			var cssClass;
@@ -62,7 +65,7 @@ synthbio.gui.updateInputEditor = function(){
 				
 				levels += '<div class="' + cssClass + '" id="tick' + name + '_' + i +  '"></div>';
 			}
-			levels += '</div>';
+			levels += '</td>';
 					
 			signalEditor.append(levels);
 			$('#input-signals').append(signalEditor);
@@ -73,7 +76,7 @@ synthbio.gui.updateInputEditor = function(){
 	$('.toggle-highlow').on('click', function() {
 		var self = $(this);
 		self.toggleClass('high').toggleClass('low');
-		self.parent().find('.levels div').toggleClass('high').toggleClass('low');
+		self.closest("tr").find('.levels div').toggleClass('high').toggleClass('low');
 	});
 	
 	//click listener for each .levels div containing ticks.
@@ -194,7 +197,7 @@ synthbio.gui.saveInputs = function(circuit) {
 	console.log("save inputs...");
 	circuit = circuit || synthbio.model;
 	
-	var simulationSetting=circuit.getSimulationSetting();
+	var simulationSetting = circuit.getSimulationSetting();
 	
 	//copy the options from the form to the object.
 	synthbio.util.form2object(
@@ -207,8 +210,8 @@ synthbio.gui.saveInputs = function(circuit) {
 		]
 	);
 
-	if($('#simulation-csv-textarea').val() !== "") {
-		simulationSetting.setCSV($('#simulation-csv-textarea').val());
+	if($('#input-csv-textarea').val() !== "") {
+		simulationSetting.setCSV($('#input-csv-textarea').val());
 	}else{
 		//copy the values for each input signal 
 		$('.signal').each(function(index, elem) {
@@ -229,37 +232,31 @@ synthbio.gui.saveInputs = function(circuit) {
 
 $(document).ready(function() {
 	/**
-	 * Rebuild the editor on every show of the modal.
+	 * Rebuild the editor on every show of inputs definition tab.
 	 */
-	$('#define-inputs').on('show', function(event) {
+	$('#simulation-tabs li.dropdown a[href="#input-editor"]').tab('show', function(event) {
 		console.log( 'define-inputs (show)', event);
 		var simulationSetting = synthbio.model.getSimulationSetting();
 		//if csv is not empty, bring up that tab.
 		if(simulationSetting.getCSV() !== "") {
-			//This should be possible by calling $('<tab-li>').tab('show'),
-			//but that invokes recursion, since the define-inputs on('show'
-			//is also triggered for the tab...
-			$('.tab-pane').removeClass('active');
-			$('#input-options-tabs li').removeClass('active');
+			$('#input-options-tabs a[href="#input-csv"]').parent().addClass('active');
+			$('#input-csv').addClass('active');
 
-			$('#input-options-tabs a[href="#simulation-csv"]').parent().addClass('active');
-			$('#simulation-csv').addClass('active');
-
-		}else{
+		} else {
 			// build the editor
 			synthbio.gui.updateInputEditor();
 		}
 		
 		$('#simulate-low-level').val(simulationSetting.getLowLevel());
 		$('#simulate-high-level').val(simulationSetting.getHighLevel());
-		$('#simulation-csv-textarea').val(simulationSetting.getCSV());
+		$('#input-csv-textarea').val(simulationSetting.getCSV());
 	});
 
 	/**
-	 * When the simulation-editor tab is clicked, check if csv is active,
+	 * When the input-editor tab is clicked, check if csv is active,
 	 * and warn about loosing data if proceeding.
 	 */
-	$('#input-options-tabs a[href="#simulation-editor"]').on('click', function(event) {
+	$('#simulation-tabs li.dropdown a[href="#input-editor"]').on('click', function(event) {
 		var simulationSetting = synthbio.model.getSimulationSetting();
 		
 		if(simulationSetting.getCSV() !== "") {
@@ -272,8 +269,6 @@ $(document).ready(function() {
 				if(simulationSetting.getTickWidth() == '') {
 					simulationSetting.setTickWidth(10);
 				}
-				
-				synthbio.gui.updateInputEditor();
 			}else{
 				//If the confirm is answered negative, don't go to the tab.
 				event.preventDefault();
@@ -283,17 +278,17 @@ $(document).ready(function() {
 	});
 
 	/**
-	 * When the simulation-csv tab is clicked, check if the editor is active,
+	 * When the input-csv tab is clicked, check if the editor is active,
 	 * and warn about loosing data if proceeding...
 	 */
-	$('#input-options-tabs a[href="#simulation-csv"]').on('click', function(event) {
+	$('#simulation-tabs li.dropdown a[href="#input-csv"]').on('click', function(event) {
 		var simulationSetting = synthbio.model.getSimulationSetting();
 		
 		if(simulationSetting.getCSV() == "") {
 			if(confirm("When using CSV input, the values in the input editor will be lost!")){
 				//Empty the editor, set CSV textarea to
 				simulationSetting.setCSV("t,");
-				$('#simulation-csv-textarea').val('t,');
+				$('#input-csv-textarea').val('t,');
 			}else{
 				//If the confirm is answered negative, don't go to the tab.
 				event.preventDefault();
@@ -302,7 +297,7 @@ $(document).ready(function() {
 		}
 	});
 	// Rebuild the editor it after changing simulation length
-	$('#simulate-length').on('change keyup', function() {
+	$('#simulate-length').on('change', function() {
 		synthbio.gui.saveInputs();
 		synthbio.gui.updateInputEditor();
 	});

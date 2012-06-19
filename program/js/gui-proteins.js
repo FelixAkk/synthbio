@@ -230,6 +230,9 @@ synthbio.gui.selectProtein = function(label, connection, signal) {
 	signal.setProtein(selectedProtein);
 	synthbio.gui.updateConnections();
 
+	// Also add a graph for this one to the inputs editor
+	synthbio.gui.updateInputEditor();
+
 	//Reset the z-Index of wire
 	label.parent().css('z-index', "15");
 };

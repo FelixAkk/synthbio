@@ -91,18 +91,21 @@ synthbio.gui.pingServer = (function () {
 	var date = new Date();
 	var fCount = 0; // Failure count: The amount of times that connection attempts have failed. Resets to 0 on success.
 	var limit = 3; // Amount of times after which a dialog should prompt the user about the failures.
-	var frequency = 750; // The delay between ping calls in milliseconds.
+	var frequency = 750; // The delay between ping calls in milliseconds
+	var pingDOM = $("#ping");
 	return function () {
 		var t = date.getTime();
 		$.ajax("/Ping")
 			.done(function(data) {
-				$('#ping').html('Server status: <b>Connected to server <em class="icon-connected"></em> [latency: '
-					+ (date.getTime() - t) + 'ms]</b>');
+				if($(".icon-connected", pingDOM).length === 0) {
+					pingDOM.html('Server status: <b>Connected to server <em class="icon-connected"></em> [latency: '
+						+ (date.getTime() - t) + 'ms]</b>');
+				}
 				fCount = 0;
 			})
 			.fail(function(data) {
-				$('#ping').html('Server status: <b>Warning: not connected to server! <em class="icon-failed"></em></b>');
-				$('#ping').attr('class', 'failed');
+				pingDOM.html('Server status: <b>Warning: not connected to server! <em class="icon-failed"></em></b>');
+				pingDOM.attr('class', 'failed');
 				if(fCount <= limit+1) {
 					// Keep counting untill the dialog was shown
 					fCount++;

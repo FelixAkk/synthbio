@@ -467,7 +467,7 @@ synthbio.Circuit.prototype.determineProtein = function(from, endpoint) {
 };
 
 /**
- * Update signals origining from the same gate.
+ * Update signals originating from the same gate.
  * @param signal Signal to determine protein and gate.
  * @return List of changed synthbio.Signal.
  */
@@ -527,7 +527,7 @@ synthbio.Circuit.prototype.addSignal = function(signal, from, to, fromEndpoint, 
 
 /**
  * Removes signals based on origin/destination.
- * Calling removeSignal() without parametersremoves all signals.
+ * Calling removeSignal() without parameters removes all signals.
  * 
  * @param origin An instance of synthbio.Signal or an integer. Undefined to accept any origin.
  * @param destination Destination integer (not used if protein is a synthbio.Signal). Undefined to accept any destination.

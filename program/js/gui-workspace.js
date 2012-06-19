@@ -97,7 +97,7 @@ synthbio.gui.resetWorkspace = function() {
 	$(".output").css("right", "10px");
 
 	//Reset tabs
-	$("#tab-validate").html(synthbio.gui.defaultValidityTabHTML);
+	synthbio.gui.displayValidation(synthbio.gui.defaultValidityTabHTML, 4, true);
 	$("#simulation-tabs").css("height", "");
 	$("#simulation-tabs").css("bottom", "-" + $("#simulation-tabs").height() + "px");
 	$("#grid-container").css("bottom", "");
@@ -501,6 +501,7 @@ synthbio.gui.getSignalById = function(id, noException) {
 synthbio.gui.displaySignal = function(signal, connection) {
 	synthbio.util.assert(signal instanceof synthbio.Signal, "Provided signal ojbect must be an instance of 'synthbio.Signal'");
 
+	// If it's a new one
 	if (!connection) {
 		var src = synthbio.gui.getGateIdByIndex(signal.getFrom());
 		var dst = synthbio.gui.getGateIdByIndex(signal.getTo());
@@ -510,10 +511,13 @@ synthbio.gui.displaySignal = function(signal, connection) {
 			parameters: {signal: signal}
 		});
 	}
-
 	var res = {connection: connection, signal: signal};
 	synthbio.model.addSignal(signal);
 	synthbio.gui.displaySignalIdMap[connection.id] = res;
+
+	if(signal.getProtein() !== "") {
+		synthbio.gui.updateInputEditor();
+	}
 	return res;
 };
 
@@ -543,7 +547,7 @@ synthbio.gui.displayConnection = function(connection) {
  * Removes a signal from circuit based on GUI id.
  *
  * @param id String
- * @param allowReconnect Falsy to force deletion of the jsPlumb connection
+ * @param allowReconnect False to force deletion of the jsPlumb connection
  * @return Object Deleted object.
  */
 synthbio.gui.removeDisplaySignal = function(id, allowReconnect) {
@@ -554,6 +558,10 @@ synthbio.gui.removeDisplaySignal = function(id, allowReconnect) {
 		}
 		if (obj.signal) {
 			synthbio.model.removeSignal(obj.signal, undefined, true);
+			// Also remove it from the input editor if a protein was assigned
+			if(obj.signal.getProtein() !== "") {
+				synthbio.gui.updateInputEditor();
+			}
 		}
 		delete synthbio.gui.displaySignalIdMap[id];
 	}
@@ -966,7 +974,8 @@ synthbio.gui.simulationTabsFullscreen = function(fullscreen) {
 		} else {
 			// Clear the overrides, let it return to default
 			tabs.css("top", "");
-			tabs.css("height", "");
+			tabs.css("height", tabs.attr("data-height"));
+			tabs.attr("data-height", "");
 			workspace.css("display", "");
 			tabbar.draggable('enable');
 			chevron.attr("class", chevron.attr("class").replace("down", "up")); // Flip the fullscreen toggle arrow
@@ -1004,11 +1013,6 @@ $(document).ready(function() {
 		var tabbar = $(".nav-tabs.navbar", tabs);
 		var workspace = $("#grid-container");
 
-		// Listen for tab changes
-		$('a[data-toggle="tab"]', tabbar).each(function(index, element) {
-			$(element).on("show", synthbio.gui.tabChange);
-		});
-
 		var currentHeight;
 		// Allow resizing of the simulation tabs space
 		tabbar.draggable({
@@ -1041,7 +1045,7 @@ $(document).ready(function() {
 	})();
 
 	// Save the default validity tab contents for another day (to show again after a reset for example)
-	synthbio.gui.defaultValidityTabHTML = $("#tab-validate").html();
+	synthbio.gui.defaultValidityTabHTML = $("#tab-validate .alert").html();
 	// Bind listener to the simulation tabs close button
 	$("#simulation-tabs .tab-utilities #tabs-close").on("click", function() {
 		synthbio.gui.showSimulationTabs(false);
