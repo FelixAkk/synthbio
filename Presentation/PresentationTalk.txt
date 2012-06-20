@@ -1,0 +1,31 @@
+Hello everyone,
+1. This will be our presentation of Zelula, a modeling environment for synthetic biologists. 
+This program was developed by Felix Akkermans, Niels Doekemeijer, Albert ten Napel, Thomas van Helden and Jan Pieter Waagmeester.
+2. In this presentation we will talk about what this project meant according to us, and how it is relevant to the synthetic biology industry. 
+Secondly we will talk about what we had planned to do, what we initially designed and how we thought it would work.
+Afterwards we will show you the result of our project. You will see that we were pretty conservative, in case of sticking to our design.
+Our fourth point is to explain our future plans meaning: If someone is to further develop this product, what would be the next features to implement. 
+Finally Felix will give a demonstration. We go through some of the features of our program and you will have the possibility to try it out yourself.
+3. So we will give a bit of explanation on what this project was all about and how it is relevant to the synthetic biology industry. 
+Synthetic biology is the science of combining engineering and biology. One of the fields is about the manipulation of cells. 
+By manipulating these cells we can use them similar to how we use small computers. 
+You can make small logical circuits, where the concentrations of proteins represent the amplitudes of signals. This was the basis for our project. 
+We wanted to create a modeling environment in which we can build and validate circuits. Afterwards we should also be able to simulate the outcome.
+This product would be useful for the synthetic biology industry because this would make modeling complex cell systems relatively easy.
+4. So here you see our first design of the program. Our aim was to create an online application with an intuitive GUI. 
+Our user should have a good sense what the application does.
+This program should of course be able to build, save, open and validate circuits. 
+You should also be able to define the inputs, meaning the proteins within the cells and their concentrations, and simulate the outcome.  
+You can see in this GUI, you can build circuits and define the proteins as input signals for the gates. On the top side you see a menu. 
+Clicking on simulate would give all the validation, defining inputs and simulation options. The “Brick” menu would contain options like saving and opening. 
+On the left side are your “building blocks” for you biological circuit. Underneath, we left some space for user defined bricks, a concept which we later started calling compound gates. 
+5. So this is what we eventually built. As you can see, we pretty much stuck to our design. The workspace looks pretty much the same. 
+Another thing we kept in the design was panel on the right side, containing our gates. The top menu has changed. 
+We added a small section where you can set the description and name for your circuit. The brick menu changed to file because this is sort of a standard.
+6. So we built this system within a couple of months. We had a lot of ideas but not all of them are implemented. 
+So if anyone would further develop this product, we have some ideas for future features.
+One of them is to display the compound gates as single gates instead of loading in the complete circuit. You will see in the demonstration on how it works now.
+Another thing is that we would like to have improved zooming functionality. Right now we can zoom in on the site. 
+Instead, we would like to zoom in and out of the workspace. Zooming in on compound gates would show their inner circuit.
+We have a lot more ideas like detaching the simulation panel and groupings of gates but we also want to show our demo.
+7. So I hereby give the floor to Felix for a demonstration of our program.
