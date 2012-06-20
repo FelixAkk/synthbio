@@ -38,7 +38,7 @@
 
 @grStop: darken(@baseColor, @contrast * 20%);
 
-@titleWidth: 180px;
+@titleWidth: 200px;
 
 @tabWidth: @titleWidth + (@iconSize * 0.5)*2 + @iconSize;
 
@@ -428,23 +428,19 @@ body {
 	width: auto;
 	height: auto;
 
-	.mask {
-		width: @gatesWidth;
-		height: @gatesHeight;
-		position: absolute;
-		/**
-		 * This is so that the mask position corresponds with the internal padding of gates and fully covers the SVG.
-		 */
-		left: @gatesPadding;
-		top: @gatesPadding;
-	}
-
 	img {
 		float: left;
 	}
 	
 	p {
 		margin: 0px;
+	}
+
+	&.compound {
+		text-align: center;
+		img {
+			float: none;
+		}
 	}
 }
 

@@ -164,7 +164,7 @@ synthbio.gui.addPlumbEndpoints = function(toId, inputEndpoints, outputEndpoints)
 	
 	// Function to calculate the placement (1/2 if there's only one to place, else 1/total)
 	var placement = function(num, total) {
-		return (total < 1) ? 0.5 : (num / total);
+		return (total < 1) ? 0.5 : (0.3 + (num / total) * 0.4);
 	};
 
 	for (i = 0; i <= inputEndpoints; i++) {
@@ -758,7 +758,7 @@ jsPlumb.ready(function() {
 		//Overlays for wires
 		ConnectionOverlays : [
 			//Arrow overlay
-			[ "Arrow", { location: 0.92 } ],
+			//[ "Arrow", { location: 0.92 } ],
 
 			//Text overlay
 			[ "Label", {
@@ -776,8 +776,10 @@ jsPlumb.ready(function() {
 	},
 	connectorPaintStyle = {
 		lineWidth: 3,
-		strokeStyle: "#deea18",
-		joinstyle: "round"
+		strokeStyle: "white",
+		joinstyle: "round",
+		outlineColor: "black",
+		outlineWidth: 2
 	},
 	// .. and this is the hover style. 
 	connectorHoverStyle = {
