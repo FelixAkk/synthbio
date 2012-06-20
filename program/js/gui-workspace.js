@@ -79,6 +79,7 @@ synthbio.gui.resetWorkspace = function(circuit) {
 
 	var id;
 	for (id in synthbio.gui.displayGateIdMap) {
+		console.log(true);
 		synthbio.gui.removeDisplayGate(id);
 	}
 
@@ -93,9 +94,6 @@ synthbio.gui.resetWorkspace = function(circuit) {
 
 	// Also reset the circuit details display
 	synthbio.gui.setCircuitDetails("","");
-
-	// Update the input edior
-	synthbio.gui.updateInputEditor();
 	
 	//Reset input/output gate positions
 	$(".input, .output").css("top", "");
@@ -109,9 +107,6 @@ synthbio.gui.resetWorkspace = function(circuit) {
 	$("#simulation-tabs").css("bottom", "-" + $("#simulation-tabs").height() + "px");
 	$("#grid-container").css("bottom", "");
 	synthbio.gui.plotResize();
-
-	// Rebuild the editor
-	synthbio.gui.updateInputEditor();
 };
 
 /**
@@ -145,10 +140,9 @@ synthbio.gui.displayValidation = function (message, valid, noTabSwitch) {
 
 	// Oh, phunny double negatives :>
 	if(!noTabSwitch) {
-		$('#simulation-tabs a[href="#tab-validate"]').tab("show");
+		synthbio.gui.toggleSimulationTabs(true, "tab-validate");
 	}
 
-	synthbio.gui.toggleSimulationTabs(true);
 };
 
 /**
@@ -930,11 +924,18 @@ jsPlumb.ready(function() {
  * Toggle simulation tabs block.
  *
  * @param show Optional, true is to show, false is to hide, if none provided, the state is toggled.
- * @param tab Optional, provide the DOM ID
+ * @param tab Optional, provide the DOM ID of the tab you want to open with the fade in of the tabs area.
  */
-synthbio.gui.toggleSimulationTabs = function(show) {
+synthbio.gui.toggleSimulationTabs = function(show, tab) {
 	var tabs = $("#simulation-tabs");
 	var workspace = $("#grid-container");
+
+	if(tab !== undefined) {
+		var focusTab = $('#simulation-tabs a[href="#' + tab + '"]');
+		synthbio.util.assert(focusTab.length !== 0, "No tab could be found with the provided DOM ID.");
+		focusTab.tab("show");
+	}
+
 	// If first argument is of time boolean (can also be used as event object)
 	if(show === true || show === false) {
 		if(show) {
@@ -1049,7 +1050,9 @@ $(document).ready(function() {
 	// Bind listener to the menu item to show simulation tabs
 	$("#show-tabs").on("click", synthbio.gui.toggleSimulationTabs);
 
-	$("#define-inputs").on("click", synthbio.gui.toggleSimulationTabs)
+	$("#define-inputs").on("click", function() {
+		synthbio.gui.toggleSimulationTabs(undefined, "input-editor");
+	});
 
 	// Save the default validity tab contents for another day (to show again after a reset for example)
 	synthbio.gui.defaultValidityTabHTML = $("#tab-validate .alert").html();
