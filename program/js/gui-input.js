@@ -305,15 +305,20 @@ $(document).ready(function() {
 	});
 	
 	// attach action to save button.
-	$('#save-inputs').on('click', function(){
+	$('#save-inputs').on('click', function() {
 		synthbio.gui.saveInputs();
 		synthbio.gui.updateInputEditor();
 	});
 
 	$('#save-inputs-and-simulate').on('click', function() {
-		synthbio.gui.saveInputs();
-		synthbio.gui.updateInputEditor();
+		$('#save-inputs').click();
 		//trigger click on simulation button to start simuation
 		$('#simulate').click();
+	});
+
+	// Reset both protein concentration level definitions and all the other integer settings
+	$('#inputs-reset').on('click', function() {
+		synthbio.model.setSimulationInput(new synthbio.SimulationSetting());
+		synthbio.gui.updateInputEditor();
 	});
 });

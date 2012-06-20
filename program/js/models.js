@@ -305,10 +305,10 @@ synthbio.Circuit.prototype.getSimulationSetting = function(){
 	return this.inputs;
 };
 synthbio.Circuit.prototype.setSimulationInput = function(inputs){
-	if(inputs instanceof synthbio.SimulationSetting){
-		this.inputs=inputs;
-	}else{
-		this.inputs=new synthbio.SimulationSetting(inputs);
+	if(inputs instanceof synthbio.SimulationSetting) {
+		this.inputs = inputs;
+	} else {
+		this.inputs = new synthbio.SimulationSetting(inputs);
 	}
 	this.inputs.bindCircuit(this);
 };
