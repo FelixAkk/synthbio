@@ -1,0 +1,14 @@
+{"name":"final.syn","description":"Teachers final test.",
+"gates":[{"kind":"not","position":{"x":217,"y":274}},{"kind":"and","position":{"x":394,"y":353}},{"kind":"not","position":{"x":557,"y":396}},{"kind":"not","position":{"x":572,"y":517}},{"kind":"and","position":{"x":730,"y":469}},{"kind":"not","position":{"x":204,"y":509}},{"kind":"and","position":{"x":391,"y":570}}],"signals":[{"protein":"N","from":"input","to":0,"fromEndpoint":2,"toEndpoint":0},{"protein":"I","from":"input","to":1,"fromEndpoint":3,"toEndpoint":1},{"protein":"O","from":0,"to":1,"fromEndpoint":0,"toEndpoint":0},{"protein":"E","from":1,"to":2,"fromEndpoint":0,"toEndpoint":0},{"protein":"P","from":2,"to":4,"fromEndpoint":0,"toEndpoint":0},{"protein":"G","from":3,"to":4,"fromEndpoint":0,"toEndpoint":1},{"protein":"C","from":4,"to":"output","fromEndpoint":0,"toEndpoint":2},{"protein":"E","from":1,"to":"output","fromEndpoint":0,"toEndpoint":3},{"protein":"I","from":"input","to":5,"fromEndpoint":3,"toEndpoint":0},{"protein":"N","from":"input","to":6,"fromEndpoint":2,"toEndpoint":1},{"protein":"H","from":5,"to":6,"fromEndpoint":0,"toEndpoint":0},{"protein":"L","from":6,"to":3,"fromEndpoint":0,"toEndpoint":0},{"protein":"L","from":6,"to":"output","fromEndpoint":0,"toEndpoint":4}],"groups":[],
+
+"inputs":{
+	"lowLevel":"0",
+	"highLevel": 200, 
+	"tickWidth": 200, 
+	"length": 5,
+	"values": {
+		"A": "HHLL", 
+		"B": "LHLH"
+	}
+},
+"gateOutputPos":{"x":1037,"y":456}}

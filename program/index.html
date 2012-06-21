@@ -224,18 +224,20 @@
 				</div>
 			</div>
 			<div class="tab-pane stretch" id="input-csv">
-				<form>
-					<div class="control-group" style="text-align: right; margin-bottom: 0px;">
-						<div id="csv-save-inputs-and-simulate" class="btn">Save &amp; simulate</div>
-						<div id="csv-save-inputs" class="btn btn-primary">Save inputs</div>
-					</div>
-				</form>
-				<p class="alert alert-info">
-					Please provide timings for the simulation in the textarea below.
-					Use a CSV format with <code>t,IN1,IN2,...</code> on the first row, the initial values in
-					the second row (<code>0,level,level,...</code>) and row for each transition likewise.
-					The last row will denote the end of the simulation. Spaces and empty rows will be ignored.
-				</p>
+				<div>
+					<form class="well form-inline">
+						<div class="control-group" style="text-align: right; margin-bottom: 0px;">
+							<div id="csv-save-inputs-and-simulate" class="btn">Save &amp; simulate</div>
+							<div id="csv-save-inputs" class="btn btn-primary">Save inputs</div>
+						</div>
+					</form>
+					<p class="alert alert-info">
+						Please provide timings for the simulation in the textarea below.
+						Use a CSV format with <code>t,IN1,IN2,...</code> on the first row, the initial values in
+						the second row (<code>0,level,level,...</code>) and row for each transition likewise.
+						The last row will denote the end of the simulation. Spaces and empty rows will be ignored.
+					</p>
+				</div>
 				<textarea id="input-csv-textarea"></textarea>
 			</div>
 		</div>
